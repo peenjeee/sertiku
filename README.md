@@ -23,7 +23,7 @@ Platform terdepan untuk menerbitkan, mengelola, dan memverifikasi sertifikat dig
 
 ```bash
 # Clone repository
-git clone https://github.com/username/sertiku.git
+git clone https://github.com/peenjeee/sertiku.git
 cd sertiku
 
 # Install dependencies
