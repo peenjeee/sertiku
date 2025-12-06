@@ -583,7 +583,7 @@ md:-left-8 md:-top-8 md:h-16 md:w-16 z-10">
                     <li class="flex items-center gap-2"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M18.1673 8.33332C18.5479 10.2011 18.2767 12.1428 17.3989 13.8348C16.5211 15.5268 15.0897 16.8667 13.3436 17.6311C11.5975 18.3955 9.64203 18.5381 7.80342 18.0353C5.96482 17.5325 4.35417 16.4145 3.24007 14.8678C2.12597 13.3212 1.57577 11.4394 1.68123 9.53615C1.78668 7.63294 2.5414 5.8234 3.81955 4.4093C5.09769 2.9952 6.82199 2.06202 8.70489 1.76537C10.5878 1.46872 12.5155 1.82654 14.1665 2.77916" stroke="#05DF72" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
                             <path d="M7.5 9.16659L10 11.6666L18.3333 3.33325" stroke="#05DF72" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg> Hingga 50 sertifikat/bulan</li>
+                        </svg> Hingga 67 sertifikat/bulan</li>
                     <li class="flex items-center gap-2"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M18.1673 8.33332C18.5479 10.2011 18.2767 12.1428 17.3989 13.8348C16.5211 15.5268 15.0897 16.8667 13.3436 17.6311C11.5975 18.3955 9.64203 18.5381 7.80342 18.0353C5.96482 17.5325 4.35417 16.4145 3.24007 14.8678C2.12597 13.3212 1.57577 11.4394 1.68123 9.53615C1.78668 7.63294 2.5414 5.8234 3.81955 4.4093C5.09769 2.9952 6.82199 2.06202 8.70489 1.76537C10.5878 1.46872 12.5155 1.82654 14.1665 2.77916" stroke="#05DF72" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
                             <path d="M7.5 9.16659L10 11.6666L18.3333 3.33325" stroke="#05DF72" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
@@ -614,7 +614,7 @@ md:-left-8 md:-top-8 md:h-16 md:w-16 z-10">
                     <li class="flex items-center gap-2"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M18.1673 8.33332C18.5479 10.2011 18.2767 12.1428 17.3989 13.8348C16.5211 15.5268 15.0897 16.8667 13.3436 17.6311C11.5975 18.3955 9.64203 18.5381 7.80342 18.0353C5.96482 17.5325 4.35417 16.4145 3.24007 14.8678C2.12597 13.3212 1.57577 11.4394 1.68123 9.53615C1.78668 7.63294 2.5414 5.8234 3.81955 4.4093C5.09769 2.9952 6.82199 2.06202 8.70489 1.76537C10.5878 1.46872 12.5155 1.82654 14.1665 2.77916" stroke="#05DF72" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
                             <path d="M7.5 9.16659L10 11.6666L18.3333 3.33325" stroke="#05DF72" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg> Hingga 1.000 sertifikat/bulan</li>
+                        </svg> Hingga 6.700 sertifikat/bulan</li>
                     <li class="flex items-center gap-2"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M18.1673 8.33332C18.5479 10.2011 18.2767 12.1428 17.3989 13.8348C16.5211 15.5268 15.0897 16.8667 13.3436 17.6311C11.5975 18.3955 9.64203 18.5381 7.80342 18.0353C5.96482 17.5325 4.35417 16.4145 3.24007 14.8678C2.12597 13.3212 1.57577 11.4394 1.68123 9.53615C1.78668 7.63294 2.5414 5.8234 3.81955 4.4093C5.09769 2.9952 6.82199 2.06202 8.70489 1.76537C10.5878 1.46872 12.5155 1.82654 14.1665 2.77916" stroke="#05DF72" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
                             <path d="M7.5 9.16659L10 11.6666L18.3333 3.33325" stroke="#05DF72" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
@@ -738,7 +738,7 @@ md:-left-8 md:-top-8 md:h-16 md:w-16 z-10">
 
             {{-- Subjudul --}}
             <p class="mx-auto mt-3 max-w-xl text-[15px] leading-snug text-[rgba(226,232,240,0.95)]">
-                Bergabunglah dengan 500+ lembaga yang telah mempercayai
+                Bergabunglah dengan 67+ lembaga yang telah mempercayai
                 <br class="hidden md:block">
                 SertiKu untuk kebutuhan sertifikasi digital mereka.
             </p>
@@ -771,7 +771,7 @@ md:-left-8 md:-top-8 md:h-16 md:w-16 z-10">
 
             {{-- Keterangan kecil --}}
             <p class="mt-4 text-[11px] text-[rgba(226,232,240,0.9)]">
-                Gratis untuk 50 sertifikat pertama. Tidak perlu kartu kredit.
+                Gratis untuk 67 sertifikat pertama. Tidak perlu kartu kredit.
             </p>
         </div>
     </section>

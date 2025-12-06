@@ -1,22 +1,6 @@
 {{-- resources/views/verifikasi/index.blade.php --}}
 <x-layouts.app title="Verifikasi Sertifikat – SertiKu">
-    <main
-        class="min-h-screen relative overflow-hidden bg-gradient-to-b from-[#0F172A] via-[#1E293B] to-[#0F172A]">
-
-        {{-- GLOW BULAT KIRI ATAS --}}
-        <div
-            class="pointer-events-none absolute -left-10 top-24 h-[384px] w-[384px] rounded-full
-                   bg-[linear-gradient(90deg,rgba(43,127,255,0.3)_0%,rgba(0,184,219,0.3)_100%)]
-                   blur-[64px]">
-        </div>
-
-        {{-- GLOW BULAT KANAN BAWAH --}}
-        <div
-            class="pointer-events-none absolute right-10 bottom-10 h-[384px] w-[384px] rounded-full
-                   bg-[linear-gradient(90deg,rgba(173,70,255,0.2)_0%,rgba(246,51,154,0.2)_100%)]
-                   blur-[64px]">
-        </div>
-    
+  
 
         {{-- KONTEN UTAMA --}}
         <section class="mx-auto flex max-w-6xl flex-col gap-16 px-4 pb-20 pt-16 lg:flex-row lg:px-0 lg:pt-20">
@@ -29,7 +13,17 @@
                            border border-[rgba(255,255,255,0.2)]
                            bg-[rgba(255,255,255,0.1)] px-4 text-[12px] text-white">
                     <span class="flex h-3 w-3 items-center justify-center">
-                        <span class="h-3 w-3 rounded-full border border-[#FFDF20]"></span>
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_3_1795)">
+<path d="M1.99975 6.99999C1.90513 7.00031 1.81237 6.97378 1.73223 6.92348C1.65209 6.87318 1.58787 6.80117 1.54703 6.71582C1.50618 6.63047 1.4904 6.53528 1.5015 6.44132C1.5126 6.34735 1.55014 6.25847 1.60975 6.18499L6.55975 1.08499C6.59688 1.04213 6.64748 1.01317 6.70324 1.00286C6.759 0.992545 6.81661 1.0015 6.86662 1.02824C6.91662 1.05499 6.95604 1.09794 6.97842 1.15004C7.00079 1.20215 7.00479 1.26031 6.98975 1.31499L6.02975 4.32499C6.00144 4.40075 5.99194 4.48225 6.00205 4.56249C6.01216 4.64274 6.04158 4.71933 6.0878 4.7857C6.13401 4.85208 6.19564 4.90625 6.26739 4.94357C6.33914 4.98089 6.41887 5.00025 6.49975 4.99999H9.99975C10.0944 4.99967 10.1871 5.0262 10.2673 5.0765C10.3474 5.1268 10.4116 5.19881 10.4525 5.28416C10.4933 5.36951 10.5091 5.4647 10.498 5.55866C10.4869 5.65262 10.4494 5.74151 10.3898 5.81499L5.43975 10.915C5.40262 10.9578 5.35202 10.9868 5.29626 10.9971C5.2405 11.0074 5.18289 10.9985 5.13289 10.9717C5.08288 10.945 5.04346 10.902 5.02108 10.8499C4.99871 10.7978 4.99471 10.7397 5.00975 10.685L5.96975 7.67499C5.99806 7.59923 6.00757 7.51773 5.99746 7.43749C5.98735 7.35724 5.95792 7.28065 5.91171 7.21428C5.86549 7.1479 5.80386 7.09373 5.73211 7.05641C5.66036 7.01909 5.58063 6.99973 5.49975 6.99999H1.99975Z" stroke="#FFDF20" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<clipPath id="clip0_3_1795">
+<rect width="12" height="12" fill="white"/>
+</clipPath>
+</defs>
+</svg>
+
                     </span>
                     <span>Verifikasi Instan &amp; Aman</span>
                 </div>
@@ -44,7 +38,7 @@
                         <h2
                             class="bg-[linear-gradient(90deg,#53EAFD_0%,#8EC5FF_100%)]
                                    bg-clip-text text-[40px] leading-[50px] font-normal text-transparent
-                                   md:text-[52px] md:leading-[64px]">
+                                   md:text-[52px] md:leading-[64px] pb-4">
                             Digital Anda
                         </h2>
                     </div>
@@ -116,14 +110,10 @@
                                            shadow-[0_10px_15px_-3px_rgba(43,127,255,0.5),0_4px_6px_-4px_rgba(43,127,255,0.5)]
                                            hover:brightness-110 transition">
                                 <span class="inline-flex h-4 w-4 items-center justify-center">
-                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M2.66602 8H13.3327" stroke="white" stroke-width="1.333"
-                                              stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M8 3.33331L13.3333 7.99998L8 12.6666" stroke="white"
-                                              stroke-width="1.333" stroke-linecap="round"
-                                              stroke-linejoin="round" />
-                                    </svg>
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.328 8.6633C13.328 11.9953 10.9956 13.6614 8.22336 14.6276C8.07819 14.6768 7.9205 14.6745 7.77686 14.621C4.99795 13.6614 2.66553 11.9953 2.66553 8.6633V3.99846C2.66553 3.82172 2.73574 3.65221 2.86071 3.52724C2.98569 3.40226 3.15519 3.33205 3.33193 3.33205C4.66475 3.33205 6.33076 2.53237 7.49031 1.51943C7.63149 1.39881 7.81109 1.33253 7.99678 1.33253C8.18247 1.33253 8.36206 1.39881 8.50325 1.51943C9.66946 2.53903 11.3288 3.33205 12.6616 3.33205C12.8384 3.33205 13.0079 3.40226 13.1328 3.52724C13.2578 3.65221 13.328 3.82172 13.328 3.99846V8.6633Z" stroke="white" stroke-width="1.33281" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
                                 </span>
                                 <span>Verifikasi</span>
                                 {{-- icon panah kecil di kanan --}}
@@ -170,14 +160,11 @@
                         {{-- Helper text --}}
                         <div class="relative mt-3 flex items-center justify-center text-center">
                             <span class="mr-2 inline-flex h-4 w-4 items-center justify-center">
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="8" cy="8" r="6"
-                                            stroke="#BEDBFF" stroke-width="1.333" />
-                                    <path d="M8 5.33331V8.66665" stroke="#BEDBFF" stroke-width="1.333"
-                                          stroke-linecap="round" />
-                                    <circle cx="8" cy="10.6667" r=".6667" fill="#BEDBFF" />
-                                </svg>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M14.5284 6.66406C14.8328 8.15767 14.6159 9.71048 13.9139 11.0635C13.2119 12.4166 12.0673 13.4881 10.6709 14.0994C9.27456 14.7106 7.71084 14.8247 6.24053 14.4226C4.77022 14.0205 3.4822 13.1265 2.59127 11.8896C1.70034 10.6528 1.26036 9.14791 1.34468 7.62594C1.42901 6.10397 2.03256 4.6569 3.05467 3.52606C4.07679 2.39523 5.45569 1.64897 6.96142 1.41174C8.46716 1.17452 10.0087 1.46066 11.329 2.22246" stroke="#BEDBFF" stroke-width="1.33281" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M5.99756 7.33046L7.99678 9.32968L14.6608 2.66562" stroke="#BEDBFF" stroke-width="1.33281" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
                             </span>
                             <p class="text-[13px] leading-[20px] text-[#BEDBFF]">
                                 Kode hash terdapat pada sertifikat digital Anda
@@ -186,21 +173,7 @@
                     </form>
                 </div>
 
-                {{-- Fitur kecil di bawah card: Terenkripsi / Real-time / 100% Aman --}}
-                <div class="mt-6 flex flex-wrap gap-6 text-sm">
-                    <div class="flex items-center gap-2">
-                        <span class="h-2 w-2 rounded-full bg-[#05DF72]"></span>
-                        <span class="text-[14px] text-[rgba(255,255,255,0.9)]">Terenkripsi</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="h-2 w-2 rounded-full bg-[#05DF72]"></span>
-                        <span class="text-[14px] text-[rgba(255,255,255,0.9)]">Verifikasi Real-time</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="h-2 w-2 rounded-full bg-[#05DF72]"></span>
-                        <span class="text-[14px] text-[rgba(255,255,255,0.9)]">100% Aman</span>
-                    </div>
-                </div>
+               
             </div>
 
             {{-- KANAN: KARTU SERTIFIKAT DIGITAL --}}
@@ -232,12 +205,11 @@
                                            bg-[linear-gradient(180deg,#1E3A8F_0%,#3B82F6_100%)]
                                            px-4 pt-4">
                                     <div class="relative h-full w-full">
-                                        <div
-                                            class="absolute bottom-[12%] left-[18%] right-[18%] h-[14px] rounded-full border-[5px] border-white">
-                                        </div>
-                                        <div
-                                            class="absolute top-[18%] left-[25%] right-[25%] bottom-[40%] rounded-full border-[5px] border-white">
-                                        </div>
+                                        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M41.2679 34.37L45.3075 57.1038C45.3528 57.3715 45.3152 57.6466 45.1999 57.8924C45.0845 58.1382 44.8969 58.3429 44.6621 58.4791C44.4272 58.6154 44.1564 58.6767 43.8858 58.6549C43.6152 58.633 43.3577 58.5291 43.1477 58.357L33.602 51.1924C33.1412 50.8481 32.5814 50.6621 32.0061 50.6621C31.4309 50.6621 30.8711 50.8481 30.4103 51.1924L20.8486 58.3543C20.6388 58.5261 20.3816 58.6299 20.1113 58.6518C19.841 58.6736 19.5705 58.6125 19.3358 58.4766C19.1012 58.3408 18.9135 58.1366 18.7979 57.8913C18.6823 57.646 18.6442 57.3713 18.6888 57.1038L22.7257 34.37" stroke="white" stroke-width="5.33281" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M31.997 37.3297C40.8327 37.3297 47.9954 30.1669 47.9954 21.3312C47.9954 12.4956 40.8327 5.33281 31.997 5.33281C23.1613 5.33281 15.9985 12.4956 15.9985 21.3312C15.9985 30.1669 23.1613 37.3297 31.997 37.3297Z" stroke="white" stroke-width="5.33281" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
                                     </div>
                                 </div>
                             </div>
@@ -278,24 +250,40 @@
                         <div
                             class="rounded-[14px] border border-[rgba(255,255,255,0.2)]
                                    bg-[rgba(255,255,255,0.05)] px-4 py-4 text-center">
-                            <div class="text-[24px] leading-[32px] text-white">500+</div>
+                            <div class="text-[24px] leading-[32px] text-white">67+</div>
                             <div class="mt-1 text-[12px] leading-[16px] text-[#BEDBFF]">Lembaga</div>
                         </div>
                         <div
                             class="rounded-[14px] border border-[rgba(255,255,255,0.2)]
                                    bg-[rgba(255,255,255,0.05)] px-4 py-4 text-center">
-                            <div class="text-[24px] leading-[32px] text-white">50K+</div>
+                            <div class="text-[24px] leading-[32px] text-white">67+</div>
                             <div class="mt-1 text-[12px] leading-[16px] text-[#BEDBFF]">Sertifikat</div>
                         </div>
                         <div
                             class="rounded-[14px] border border-[rgba(255,255,255,0.2)]
                                    bg-[rgba(255,255,255,0.05)] px-4 py-4 text-center">
-                            <div class="text-[24px] leading-[32px] text-white">99.9%</div>
+                            <div class="text-[24px] leading-[32px] text-white">96%</div>
                             <div class="mt-1 text-[12px] leading-[16px] text-[#BEDBFF]">Akurasi</div>
                         </div>
                     </div>
+
+                     {{-- Fitur kecil di bawah card: Terenkripsi / Real-time / 100% Aman --}}
+                <div class="mt-20 flex flex-wrap gap-6 justify-between text-sm">
+                    <div class="flex items-center gap-2">
+                        <span class="h-2 w-2 rounded-full bg-[#05DF72]"></span>
+                        <span class="text-[14px] text-[rgba(255,255,255,0.9)]">Terenkripsi</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="h-2 w-2 rounded-full bg-[#05DF72]"></span>
+                        <span class="text-[14px] text-[rgba(255,255,255,0.9)]">Verifikasi Real-time</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="h-2 w-2 rounded-full bg-[#05DF72]"></span>
+                        <span class="text-[14px] text-[rgba(255,255,255,0.9)]">100% Aman</span>
+                    </div>
+                </div>
                 </div>
             </div>
         </section>
-    </main>
+  
 </x-layouts.app>

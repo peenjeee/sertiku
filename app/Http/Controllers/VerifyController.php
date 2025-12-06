@@ -25,10 +25,10 @@ class VerifyController extends Controller
     // Dummy: jika hash cocok, anggap valid
     if ($hash === 'ABC123XYZ') {
         $certificate = [
-            'nama'     => 'Nama Peserta Contoh',
-            'judul'    => 'Pelatihan Laravel & Tailwind',
-            'tanggal'  => '01 Januari 2024',
-            'penerbit' => 'Lembaga Pelatihan Contoh',
+            'nama'     => 'Mr. Ambatukam',
+            'judul'    => 'Penghargaan',
+            'tanggal'  => '06 Juli 2025',
+            'penerbit' => 'Barbershop Ngawi',
         ];
 
         return view('verifikasi.valid', compact('hash', 'certificate'));

@@ -1,37 +1,7 @@
-{{-- resources/views/verifikasi/valid.blade.php --}}
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Hasil Verifikasi Sertifikat - Valid</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    {{-- Tailwind (Laravel + Vite) --}}
-    @vite('resources/css/app.css')
-
-    {{-- Font Arimo --}}
-    <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&display=swap" rel="stylesheet">
-</head>
-<body class="min-h-screen bg-gradient-to-br from-[#F8FAFC] via-[#EFF6FF] to-[#ECFEFF]" style="font-family: 'Arimo', sans-serif;">
-
-    {{-- TOP BAR: Kembali ke Verifikasi --}}
-    <header class="fixed inset-x-0 top-0 z-20 border-b border-[#DBEAFE] bg-white/80 backdrop-blur shadow-sm">
-        <div class="mx-auto flex max-w-6xl items-center justify-between px-8 py-3">
-            <a href="{{ route('verifikasi') }}"
-               class="inline-flex items-center gap-2 rounded-lg border border-[#CBD5F5] bg-white px-4 py-2 text-sm font-normal text-[#1447E6] hover:bg-[#EFF6FF] transition">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
-                    <path d="M15 19l-7-7 7-7" stroke="#1447E6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span>Kembali ke Verifikasi</span>
-            </a>
-
-            {{-- Placeholder kanan (bisa dikosongkan / nanti untuk logo/chat) --}}
-            <div class="h-6 w-6 opacity-0"></div>
-        </div>
-    </header>
+<x-layouts.app title="Hasil Verifikasi – SertiKu">
 
     {{-- MAIN --}}
-    <main class="flex min-h-screen items-center justify-center px-4 pt-[96px] pb-16">
+    <section class="mx-auto max-w-5xl px-4 pt-24 pb-16 flex flex-col items-center">
         <div class="mx-auto flex w-full max-w-5xl flex-col items-center gap-10">
 
             {{-- ICON BESAR DI ATAS --}}
@@ -48,18 +18,23 @@
                 </div>
             </div>
 
-            {{-- TEKS JUDUL DI BAWAH ICON --}}
-            <div class="flex flex-col items-center gap-2 text-center">
-                <p class="text-sm font-normal text-[#15803D]">Sertifikat Valid</p>
-                <p class="text-lg font-normal text-[#166534]">
-                    Sertifikat berhasil diverifikasi dalam sistem kami
-                </p>
-            </div>
+            
+            {{-- JUDUL & SUBJUDUL ATAS --}}
+        <div class="text-center space-y-2 mb-8">
+            <p class="mt-6 text-4xl font-semibold leading-tight text-[#F9FAFB] md:text-5xl lg:text-6xl">
+                Sertifikat <span class=" bg-gradient-to-br from-[#15803D] to-[#166534] bg-clip-text text-transparent">
+                     Valid
+                </span>
+            </p>
+            <p class="mt-6 text-4xl font-semibold leading-tight text-[#F9FAFB] md:text-5xl lg:text-6xl">
+               Sertifikat berhasil diverifikasi dalam sistem kami
+            </p>
+        </div>
 
             {{-- CARD UTAMA --}}
-            <section class="relative w-full max-w-3xl rounded-2xl bg-white shadow-[0_25px_50px_-12px_rgba(15,23,42,0.25)]">
+            <section class="mt-20 relative w-full max-w-3xl rounded-2xl bg-white shadow-[0_25px_50px_-12px_rgba(15,23,42,0.25)]">
                 {{-- Garis gradien di atas kartu --}}
-                <div class="h-1 w-full rounded-t-2xl bg-gradient-to-r from-[#22C55E] via-[#22C55E] to-[#38BDF8]"></div>
+                <div class="h-3 w-full  rounded-t-2xl bg-gradient-to-r from-[#22C55E] via-[#22C55E] to-[#38BDF8]"></div>
 
                 {{-- Icon kecil di tengah atas card --}}
                 <div class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
@@ -93,12 +68,12 @@
                     <div class="mb-8 rounded-2xl border border-[#BBF7D0] bg-gradient-to-br from-[#ECFDF5] via-[#F0FDF4] to-[#E0F2FE] px-6 py-6 max-[640px]:px-4">
                         <div class="mb-4 flex items-start gap-4">
                             {{-- Icon lingkaran hijau --}}
-                            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#22C55E] to-[#16A34A]">
+                            <!-- <div class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#22C55E] to-[#16A34A]">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none">
                                     <circle cx="12" cy="12" r="10" stroke="#FFFFFF" stroke-width="2"/>
                                     <path d="M8 12.5l2.3 2.3L16 9" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
-                            </div>
+                            </div> -->
 
                             <div class="flex flex-col gap-1">
                                 <p class="text-sm font-normal text-[#166534]">
@@ -117,7 +92,7 @@
                                 <p>
                                     <span class="font-semibold text-[#1C398E]">Nama Pemilik:</span>
                                     <span class="ml-1">
-                                        {{ $certificate['nama'] ?? 'Nama Peserta Contoh' }}
+                                        {{ $certificate['nama'] ?? 'Mr. Ambatukam' }}
                                     </span>
                                 </p>
                             </div>
@@ -126,7 +101,7 @@
                                 <p>
                                     <span class="font-semibold text-[#1C398E]">Nama Sertifikat / Acara:</span>
                                     <span class="ml-1">
-                                        {{ $certificate['judul'] ?? 'Pelatihan & Workshop Contoh' }}
+                                        {{ $certificate['judul'] ?? 'Penghargaan' }}
                                     </span>
                                 </p>
                             </div>
@@ -135,7 +110,7 @@
                                 <p>
                                     <span class="font-semibold text-[#1C398E]">Tanggal Diterbitkan:</span>
                                     <span class="ml-1">
-                                        {{ $certificate['tanggal'] ?? '01 Januari 2024' }}
+                                        {{ $certificate['tanggal'] ?? '06 Juli 2025' }}
                                     </span>
                                 </p>
                             </div>
@@ -144,7 +119,7 @@
                                 <p>
                                     <span class="font-semibold text-[#1C398E]">Penerbit Sertifikat:</span>
                                     <span class="ml-1">
-                                        {{ $certificate['penerbit'] ?? 'Nama Lembaga Contoh' }}
+                                        {{ $certificate['penerbit'] ?? 'Barbershop Ngawi' }}
                                     </span>
                                 </p>
                             </div>
@@ -211,30 +186,31 @@
                         </button>
 
                         {{-- Catatan kecil di bawah --}}
-                        <div class="mt-2 flex items-center justify-center gap-2 text-xs text-[#64748B]">
+                        <!-- <div class="mt-2 flex items-center justify-center gap-2 text-xs text-[#64748B]">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
                                 <circle cx="12" cy="12" r="10" stroke="#155DFC" stroke-width="1.5"/>
                                 <path d="M12 8v1.5M12 11v5" stroke="#155DFC" stroke-width="1.5" stroke-linecap="round"/>
                             </svg>
                             <span>Kode hash terdapat pada sertifikat digital Anda.</span>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </section>
         </div>
-    </main>
+        
+        {{-- TOMBOL KEMBALI KE VERIFIKASI --}}
+        <div class="mt-8">
+            <a href="{{ route('verifikasi') }}"
+               class="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-normal text-[white] font-semibold transition-colors duration-200">
+                {{-- Icon panah kiri --}}
+                <svg class="h-5 w-5 text-[white]" viewBox="0 0 16 16" fill="none">
+                    <path d="M6.66667 3.33301L2 7.99967L6.66667 12.6663" stroke="currentColor" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M14 8H2.66667" stroke="currentColor" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="font-semibold">Kembali ke Verifikasi</span>
+            </a>
+        </div>
 
-    {{-- CHAT WIDGET BULAT DI KANAN BAWAH (mirip invalid) --}}
-    <button
-        class="fixed bottom-8 right-8 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-b from-[#1E3A8A] to-[#3B82F6] shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1),0_10px_10px_-5px_rgba(0,0,0,0.1)]">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none">
-            <path d="M5 18l.4-2.8A7 7 0 015 11.5 7.5 7.5 0 1112.5 19a7 7 0 01-3.1-.4L7 19z"
-                  stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="10" cy="11" r="0.75" fill="#FFFFFF"/>
-            <circle cx="13.5" cy="11" r="0.75" fill="#FFFFFF"/>
-            <circle cx="17" cy="11" r="0.75" fill="#FFFFFF"/>
-        </svg>
-    </button>
+    </section>
 
-</body>
-</html>
+</x-layouts.app>
