@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\GoogleController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\VerifyController;
 
 Route::get('/', function () {
     return view('landing');
@@ -24,4 +25,14 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 });
 
-Route::view('/verifikasi', 'welcome')->name('verifikasi');
+Route::view('/verifikasi', 'landing')->name('verifikasi');
+
+
+
+Route::get('/verifikasi', [VerifyController::class, 'index'])->name('verifikasi');
+Route::post('/verifikasi/check', [VerifyController::class, 'check'])->name('verifikasi.check');
+
+// halaman hasil
+Route::get('/verifikasi/valid', [VerifyController::class, 'valid'])->name('verifikasi.valid');
+Route::get('/verifikasi/invalid', [VerifyController::class, 'invalid'])->name('verifikasi.invalid');
+
