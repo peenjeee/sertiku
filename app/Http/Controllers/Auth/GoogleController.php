@@ -22,9 +22,7 @@ class GoogleController extends Controller
         }
 
         try {
-            $googleUser = Socialite::driver('google')
-                ->setHttpClient(new \GuzzleHttp\Client(['verify' => 'C:\\php\\cacert.pem']))
-                ->user();
+            $googleUser = Socialite::driver('google')->user();
 
             $user = User::updateOrCreate(
                 ['google_id' => $googleUser->getId()],
