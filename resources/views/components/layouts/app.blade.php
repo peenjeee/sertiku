@@ -11,6 +11,9 @@
 
     {{-- Alpine JS dari CDN --}}
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    {{-- SweetAlert2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-[#050C1F] text-[#DBEAFE] antialiased">
 
@@ -31,5 +34,54 @@
     </main>
 
     <x-footer />
+
+    {{-- SweetAlert untuk session messages --}}
+    @if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true
+        });
+    </script>
+    @endif
+
+    @if(session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops!',
+            text: '{{ session('error') }}',
+            confirmButtonColor: '#3085d6'
+        });
+    </script>
+    @endif
+
+    @if(session('warning'))
+    <script>
+        Swal.fire({
+            icon: 'warning',
+            title: 'Perhatian!',
+            text: '{{ session('warning') }}',
+            confirmButtonColor: '#f59e0b'
+        });
+    </script>
+    @endif
+
+    @if(session('info'))
+    <script>
+        Swal.fire({
+            icon: 'info',
+            title: 'Informasi',
+            text: '{{ session('info') }}',
+            confirmButtonColor: '#3085d6'
+        });
+    </script>
+    @endif
+
+    @stack('scripts')
 </body>
 </html>
