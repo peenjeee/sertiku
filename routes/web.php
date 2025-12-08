@@ -1,38 +1,103 @@
 <?php
 
-use App\Http\Controllers\Auth\GoogleController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\VerifyController;
+use App\Http\Controllers\Auth\RegisterController;
+
+/*
+|--------------------------------------------------------------------------
+| Landing / Public
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/', function () {
     return view('landing');
-});
+})->name('home');
 
+/*
+|--------------------------------------------------------------------------
+| AUTH ROUTES (Email + Wallet + Google)
+|--------------------------------------------------------------------------
+*/
 
-// Auth Routes
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+// Halaman login utama
+Route::get('/login', [LoginController::class, 'showLoginForm'])
+    ->middleware('guest')
+    ->name('login');
 
-Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('google.redirect');
-Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
-Route::post('/logout', [GoogleController::class, 'logout'])->name('logout')->middleware('auth');
+// Login Email
+Route::post('/login/email', [LoginController::class, 'loginEmail'])
+    ->middleware('guest')
+    ->name('login.email');
 
-// Protected Routes
+// Login Wallet (dipanggil JS/metamask)
+Route::post('/login/wallet', [LoginController::class, 'loginWallet'])
+    ->middleware('guest')
+    ->name('login.wallet');
+
+// Login Google
+Route::get('/auth/google', [GoogleController::class, 'redirect'])
+    ->middleware('guest')
+    ->name('google.redirect');
+
+Route::get('/auth/google/callback', [GoogleController::class, 'callback'])
+    ->middleware('guest')
+    ->name('google.callback');
+
+// Logout (setelah login)
+Route::post('/logout', [GoogleController::class, 'logout'])
+    ->name('logout')
+    ->middleware('auth');
+
+/*
+|--------------------------------------------------------------------------
+| REGISTER (Pengguna & Lembaga – multi-tab)
+|--------------------------------------------------------------------------
+*/
+
+// Halaman form register (tab Pengguna & Lembaga)
+Route::get('/register', [RegisterController::class, 'create'])
+    ->middleware('guest')
+    ->name('register');
+
+// Proses submit register PENGGUNA (tab Pengguna)
+Route::post('/register', [RegisterController::class, 'store'])
+    ->middleware('guest')
+    ->name('register.store');
+
+// Proses submit register LEMBAGA (tab Lembaga)
+// NOTE: path dan name HARUS sama dengan yang dipakai di view:
+// action="{{ route('register.lembaga.store') }}"
+Route::post('/register/lembaga', [RegisterController::class, 'storeLembaga'])
+    ->middleware('guest')
+    ->name('register.lembaga.store');
+
+/*
+|--------------------------------------------------------------------------
+| Protected Routes (Hanya jika login)
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 });
 
-Route::view('/verifikasi', 'landing')->name('verifikasi');
+/*
+|--------------------------------------------------------------------------
+| Verifikasi Sertifikat
+|--------------------------------------------------------------------------
+*/
 
-
-
+// Halaman input kode hash verifikasi
 Route::get('/verifikasi', [VerifyController::class, 'index'])->name('verifikasi');
+
+// Submit form cek hash
 Route::post('/verifikasi/check', [VerifyController::class, 'check'])->name('verifikasi.check');
 
-// halaman hasil
+// Halaman hasil
 Route::get('/verifikasi/valid', [VerifyController::class, 'valid'])->name('verifikasi.valid');
 Route::get('/verifikasi/invalid', [VerifyController::class, 'invalid'])->name('verifikasi.invalid');
-

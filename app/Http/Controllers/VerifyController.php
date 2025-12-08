@@ -23,7 +23,7 @@ class VerifyController extends Controller
     $hash = $data['hash'];
 
     // Dummy: jika hash cocok, anggap valid
-    if ($hash === 'ABC123XYZ') {
+    if ($hash === 'SERT-AMBA123') {
         $certificate = [
             'nama'     => 'Mr. Ambatukam',
             'judul'    => 'Penghargaan',
