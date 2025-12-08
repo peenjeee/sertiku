@@ -129,8 +129,8 @@
                                 </span>
                             </button>
 
-                            {{-- Tombol SCAN QR (bisa diarahkan ke fitur lain nanti) --}}
-                            <a href="#"
+                            {{-- Tombol SCAN QR --}}
+                            <button type="button" onclick="openQRScanner()"
                                class="inline-flex flex-1 items-center justify-center gap-2 rounded-[8px]
                                       border border-[rgba(255,255,255,0.2)]
                                       bg-[rgba(255,255,255,0.05)]
@@ -154,7 +154,7 @@
                                     </svg>
                                 </span>
                                 <span>Scan QR</span>
-                            </a>
+                            </button>
                         </div>
 
                         {{-- Helper text --}}
@@ -285,5 +285,172 @@
                 </div>
             </div>
         </section>
+
+    {{-- Modal QR Scanner --}}
+    <div id="qrScannerModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm">
+        <div class="relative w-full max-w-md mx-4">
+            {{-- Card Scanner --}}
+            <div class="rounded-[20px] border border-[rgba(255,255,255,0.2)] bg-[#0a1628] p-6 shadow-2xl">
+                {{-- Header --}}
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="2.66602" y="2.66669" width="4" height="4" rx="1.2" stroke="#3B82F6" stroke-width="1.333"/>
+                            <rect x="9.33398" y="2.66669" width="4" height="4" rx="1.2" stroke="#3B82F6" stroke-width="1.333"/>
+                            <rect x="2.66602" y="9.33331" width="4" height="4" rx="1.2" stroke="#3B82F6" stroke-width="1.333"/>
+                            <path d="M9.33398 9.33331H13.334" stroke="#3B82F6" stroke-width="1.333" stroke-linecap="round"/>
+                            <path d="M9.33398 12H10.6673" stroke="#3B82F6" stroke-width="1.333" stroke-linecap="round"/>
+                            <path d="M12 10.6667V13.3333" stroke="#3B82F6" stroke-width="1.333" stroke-linecap="round"/>
+                        </svg>
+                        Scan QR Code
+                    </h3>
+                    <button onclick="closeQRScanner()" class="text-gray-400 hover:text-white transition">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+
+                {{-- Scanner Area --}}
+                <div id="qr-reader" class="rounded-lg overflow-hidden bg-black"></div>
+
+                {{-- Status --}}
+                <div id="scanStatus" class="mt-4 text-center text-sm text-[#BEDBFF]">
+                    Arahkan kamera ke QR Code sertifikat
+                </div>
+
+                {{-- Tombol Switch Camera --}}
+                <div class="mt-4 flex gap-3">
+                    <button onclick="switchCamera()" 
+                            class="flex-1 inline-flex items-center justify-center gap-2 rounded-lg border border-[rgba(255,255,255,0.2)] bg-[rgba(255,255,255,0.05)] px-4 py-2 text-sm text-white hover:bg-[rgba(255,255,255,0.1)] transition">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        </svg>
+                        Ganti Kamera
+                    </button>
+                    <button onclick="closeQRScanner()" 
+                            class="flex-1 inline-flex items-center justify-center gap-2 rounded-lg bg-red-500/20 border border-red-500/30 px-4 py-2 text-sm text-red-400 hover:bg-red-500/30 transition">
+                        Batal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@push('scripts')
+{{-- HTML5 QR Code Scanner Library --}}
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script>
+    let html5QrCode = null;
+    let currentCamera = 'environment'; // 'environment' = back camera, 'user' = front camera
+
+    function openQRScanner() {
+        const modal = document.getElementById('qrScannerModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        startScanner();
+    }
+
+    function closeQRScanner() {
+        const modal = document.getElementById('qrScannerModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        stopScanner();
+    }
+
+    function startScanner() {
+        html5QrCode = new Html5Qrcode("qr-reader");
+        
+        const config = {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+            aspectRatio: 1.0
+        };
+
+        html5QrCode.start(
+            { facingMode: currentCamera },
+            config,
+            onScanSuccess,
+            onScanFailure
+        ).catch((err) => {
+            console.error("Camera error:", err);
+            document.getElementById('scanStatus').innerHTML = 
+                '<span class="text-red-400">Tidak dapat mengakses kamera. Pastikan izin kamera diberikan.</span>';
+        });
+    }
+
+    function stopScanner() {
+        if (html5QrCode && html5QrCode.isScanning) {
+            html5QrCode.stop().catch(err => console.log("Stop error:", err));
+        }
+    }
+
+    function switchCamera() {
+        stopScanner();
+        currentCamera = currentCamera === 'environment' ? 'user' : 'environment';
+        setTimeout(() => startScanner(), 500);
+    }
+
+    function onScanSuccess(decodedText, decodedResult) {
+        // Stop scanner
+        stopScanner();
+        
+        // Update status
+        document.getElementById('scanStatus').innerHTML = 
+            '<span class="text-green-400">QR Code terdeteksi! Memproses...</span>';
+
+        // Cek apakah hasil scan adalah URL atau kode hash
+        let hashCode = decodedText;
+        
+        // Jika hasil scan adalah URL, ekstrak hash dari URL
+        if (decodedText.includes('/verifikasi/')) {
+            const urlParts = decodedText.split('/');
+            hashCode = urlParts[urlParts.length - 1];
+        } else if (decodedText.includes('hash=')) {
+            const urlParams = new URLSearchParams(decodedText.split('?')[1]);
+            hashCode = urlParams.get('hash');
+        }
+
+        // Isi form dengan hasil scan
+        document.querySelector('input[name="hash"]').value = hashCode;
+        
+        // Tutup modal
+        closeQRScanner();
+
+        // Tampilkan notifikasi
+        Swal.fire({
+            icon: 'success',
+            title: 'QR Code Terdeteksi!',
+            text: 'Kode: ' + hashCode,
+            showConfirmButton: true,
+            confirmButtonText: 'Verifikasi Sekarang',
+            confirmButtonColor: '#3B82F6'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Submit form
+                document.querySelector('form').submit();
+            }
+        });
+    }
+
+    function onScanFailure(error) {
+        // Ignore scan failures (normal saat belum ada QR code)
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('qrScannerModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeQRScanner();
+        }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeQRScanner();
+        }
+    });
+</script>
+@endpush
   
 </x-layouts.app>
