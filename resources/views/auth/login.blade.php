@@ -1,7 +1,16 @@
 {{-- resources/views/auth/login.blade.php --}}
 <x-layouts.app title="SertiKu – Login">
 
-    {{-- Script tab + wallet connect (ethers.js) --}}
+    {{-- WalletConnect Project ID meta tag (read by web3modal.js) --}}
+    <meta name="walletconnect-project-id" content="{{ config('services.walletconnect.project_id', '') }}">
+
+    {{-- Set global variables --}}
+    <script>
+        window.walletConnectProjectId = '{{ config("services.walletconnect.project_id", "") }}';
+        window.web3ModalReady = false;
+    </script>
+
+    {{-- Script tab + wallet connect --}}
     <script>
         function switchTab(tab) {
             const emailTab = document.getElementById('emailTab');
@@ -34,33 +43,172 @@
             }
         }
 
-        // Wallet connect (ethers.js)
-        async function connectWallet(event) {
-            event.preventDefault();
+        // Wallet connect status
+        let connectedAddress = null;
 
-            if (!window.ethereum) {
-                alert('MetaMask tidak terdeteksi. Silakan install MetaMask terlebih dahulu.');
-                window.open('https://metamask.io/download/', '_blank');
+        // Connect wallet using specific provider
+        async function connectWallet(walletType, event) {
+            if (event) event.preventDefault();
+            
+            const statusEl = document.getElementById('wallet-status');
+            const errorEl = document.getElementById('wallet-error');
+            
+            // Reset status
+            if (statusEl) statusEl.classList.add('hidden');
+            if (errorEl) errorEl.classList.add('hidden');
+
+            try {
+                let provider = null;
+                let accounts = null;
+
+                if (walletType === 'metamask') {
+                    if (!window.ethereum) {
+                        throw new Error('MetaMask tidak terdeteksi. Silakan install MetaMask terlebih dahulu.');
+                    }
+                    // Check if MetaMask is the provider
+                    if (window.ethereum.isMetaMask) {
+                        provider = window.ethereum;
+                    } else if (window.ethereum.providers) {
+                        provider = window.ethereum.providers.find(p => p.isMetaMask);
+                    }
+                    if (!provider) {
+                        throw new Error('MetaMask tidak ditemukan. Pastikan extension MetaMask sudah terinstall.');
+                    }
+                    accounts = await provider.request({ method: 'eth_requestAccounts' });
+                } else if (walletType === 'coinbase') {
+                    if (window.ethereum && window.ethereum.isCoinbaseWallet) {
+                        provider = window.ethereum;
+                    } else if (window.ethereum && window.ethereum.providers) {
+                        provider = window.ethereum.providers.find(p => p.isCoinbaseWallet);
+                    }
+                    if (!provider) {
+                        window.open('https://www.coinbase.com/wallet', '_blank');
+                        throw new Error('Coinbase Wallet tidak terdeteksi. Silakan install Coinbase Wallet.');
+                    }
+                    accounts = await provider.request({ method: 'eth_requestAccounts' });
+                } else if (walletType === 'trust') {
+                    if (window.ethereum && window.ethereum.isTrust) {
+                        provider = window.ethereum;
+                    } else if (window.trustwallet) {
+                        provider = window.trustwallet;
+                    }
+                    if (!provider) {
+                        window.open('https://trustwallet.com/download', '_blank');
+                        throw new Error('Trust Wallet tidak terdeteksi. Buka di Trust Wallet browser atau install aplikasi.');
+                    }
+                    accounts = await provider.request({ method: 'eth_requestAccounts' });
+                } else if (walletType === 'walletconnect') {
+                    // Use Web3Modal for WalletConnect
+                    await connectWithWeb3Modal();
+                    return;
+                } else {
+                    // Generic - try window.ethereum
+                    if (!window.ethereum) {
+                        throw new Error('Wallet tidak terdeteksi. Silakan install crypto wallet terlebih dahulu.');
+                    }
+                    provider = window.ethereum;
+                    accounts = await provider.request({ method: 'eth_requestAccounts' });
+                }
+
+                if (accounts && accounts.length > 0) {
+                    handleWalletConnected(accounts[0]);
+                }
+            } catch (error) {
+                console.error('Wallet connection error:', error);
+                if (errorEl) {
+                    errorEl.textContent = error.message || 'Gagal menghubungkan wallet.';
+                    errorEl.classList.remove('hidden');
+                }
+            }
+        }
+
+        // Connect using Web3Modal (for WalletConnect)
+        async function connectWithWeb3Modal() {
+            const errorEl = document.getElementById('wallet-error');
+            const statusEl = document.getElementById('wallet-status');
+
+            if (!window.walletConnectProjectId) {
+                if (errorEl) {
+                    errorEl.innerHTML = 'WalletConnect belum dikonfigurasi. Tambahkan <code>WALLETCONNECT_PROJECT_ID</code> di file .env';
+                    errorEl.classList.remove('hidden');
+                }
+                return;
+            }
+
+            // Show loading while waiting for Web3Modal
+            if (statusEl) {
+                statusEl.innerHTML = '<span class="text-[#8EC5FF]">⏳ Memuat WalletConnect...</span>';
+                statusEl.classList.remove('hidden');
+            }
+
+            // Wait for Web3Modal to be ready (max 10 seconds)
+            let attempts = 0;
+            while (!window.web3ModalReady && !window.web3ModalError && attempts < 20) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                attempts++;
+            }
+
+            if (window.web3ModalError) {
+                if (statusEl) statusEl.classList.add('hidden');
+                if (errorEl) {
+                    errorEl.textContent = 'Gagal memuat Web3Modal: ' + window.web3ModalError;
+                    errorEl.classList.remove('hidden');
+                }
+                return;
+            }
+
+            if (!window.web3Modal) {
+                if (statusEl) statusEl.classList.add('hidden');
+                if (errorEl) {
+                    errorEl.textContent = 'Web3Modal masih dimuat. Silakan coba lagi dalam beberapa detik.';
+                    errorEl.classList.remove('hidden');
+                }
                 return;
             }
 
             try {
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
-                await provider.send('eth_requestAccounts', []);
-                const signer = provider.getSigner();
-                const address = await signer.getAddress();
+                // Show loading
+                if (statusEl) {
+                    statusEl.innerHTML = '<span class="text-[#8EC5FF]">⏳ Membuka WalletConnect...</span>';
+                    statusEl.classList.remove('hidden');
+                }
 
-                document.getElementById('wallet_address').value = address;
-                document.getElementById('walletLoginForm').submit();
+                // Open modal
+                await window.web3Modal.open();
+
+                // Subscribe to provider changes
+                window.web3Modal.subscribeProvider(async ({ address, isConnected }) => {
+                    if (isConnected && address) {
+                        handleWalletConnected(address);
+                    }
+                });
             } catch (error) {
-                console.error(error);
-                alert('Gagal menghubungkan wallet.');
+                console.error('Web3Modal error:', error);
+                if (statusEl) statusEl.classList.add('hidden');
+                if (errorEl) {
+                    errorEl.textContent = error.message || 'Gagal membuka WalletConnect.';
+                    errorEl.classList.remove('hidden');
+                }
             }
         }
-    </script>
 
-    {{-- CDN ethers.js --}}
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+        // Handle successful wallet connection
+        function handleWalletConnected(address) {
+            const statusEl = document.getElementById('wallet-status');
+            
+            connectedAddress = address;
+            
+            // Show success status
+            if (statusEl) {
+                statusEl.innerHTML = `<span class="text-[#05DF72]">✓ Connected:</span> ${address.slice(0, 6)}...${address.slice(-4)}`;
+                statusEl.classList.remove('hidden');
+            }
+            
+            // Submit form
+            document.getElementById('wallet_address').value = address;
+            document.getElementById('walletLoginForm').submit();
+        }
+    </script>
 
     <!-- MAIN CONTENT – pakai tema/background seperti landing/verifikasi -->
     <div class="mx-auto flex max-w-6xl flex-col gap-16 px-4 pb-20 pt-16 lg:flex-row lg:px-0 lg:pt-20">
@@ -310,32 +458,84 @@
                         <div class="space-y-6" id="walletTab" style="display:none;">
                             <div class="text-center space-y-2">
                                 <h3 class="text-xl text-white">Connect Your Wallet</h3>
-                                <p class="text-base text-[#BEDBFF]/70">Connect untuk login dengan Web3</p>
+                                <p class="text-base text-[#BEDBFF]/70">Pilih wallet untuk login dengan Web3</p>
                             </div>
 
-                            <div class="space-y-3">
+                            {{-- Status & Error messages --}}
+                            <div id="wallet-status" class="hidden text-center text-sm text-white bg-[#05DF72]/20 border border-[#05DF72]/30 rounded-lg p-3"></div>
+                            <div id="wallet-error" class="hidden text-center text-sm text-red-400 bg-red-500/20 border border-red-500/30 rounded-lg p-3"></div>
+
+                            <div class="grid grid-cols-2 gap-3">
                                 <!-- MetaMask -->
                                 <button
-                                    class="w-full bg-white/5 border border-[#FF6900]/30 rounded-lg p-4 hover:bg-white/10 transition-all group"
-                                    onclick="connectWallet(event)">
-                                    <div class="flex items-center gap-4">
-                                        <div class="flex-shrink-0 w-12 h-12 rounded-[14px] flex items-center justify-center"
-                                             style="background: linear-gradient(135deg, #FF6900 0%, #FB2C36 100%);">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M19 7V4C19 3.73478 18.8946 3.48043 18.7071 3.29289C18.5196 3.10536 18.2652 3 18 3H5C4.46957 3 3.96086 3.21071 3.58579 3.58579C3.21071 3.96086 3 4.46957 3 5C3 5.53043 3.21071 6.03914 3.58579 6.41421C3.96086 6.78929 4.46957 7 5 7H20C20.2652 7 20.5196 7.10536 20.7071 7.29289C20.8946 7.48043 21 7.73478 21 8V12M21 12H18C17.4696 12 16.9609 12.2107 16.5858 12.5858C16.2107 12.9609 16 13.4696 16 14C16 14.5304 16.2107 15.0391 16.5858 15.4142C16.9609 15.7893 17.4696 16 18 16H21C21.2652 16 21.5196 15.8946 21.7071 15.7071C21.8946 15.5196 22 15.2652 22 15V13C22 12.7348 21.8946 12.4804 21.7071 12.2929C21.5196 12.1054 21.2652 12 21 12Z"
-                                                      stroke="white" stroke-width="2" stroke-linecap="round"
-                                                      stroke-linejoin="round"/>
-                                                <path d="M3 5V19C3 19.5304 3.21071 20.0391 3.58579 20.4142C3.96086 20.7893 4.46957 21 5 21H20C20.2652 21 20.5196 20.8946 20.7071 20.7071C20.8946 20.5196 21 20.2652 21 20V16"
-                                                      stroke="white" stroke-width="2" stroke-linecap="round"
-                                                      stroke-linejoin="round"/>
+                                    class="bg-white/5 border border-[#F6851B]/30 rounded-xl p-4 hover:bg-[#F6851B]/10 hover:border-[#F6851B]/50 transition-all group"
+                                    onclick="connectWallet('metamask', event)">
+                                    <div class="flex flex-col items-center gap-3">
+                                        <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br from-[#F6851B] to-[#E2761B]">
+                                            <svg width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M35.5 5L22 15L24.5 9L35.5 5Z" fill="#E17726" stroke="#E17726" stroke-width="0.5"/>
+                                                <path d="M4.5 5L17.9 15.1L15.5 9L4.5 5Z" fill="#E27625" stroke="#E27625" stroke-width="0.5"/>
+                                                <path d="M30.5 27.5L27 33L35 35.5L37 27.5L30.5 27.5Z" fill="#E27625" stroke="#E27625" stroke-width="0.5"/>
+                                                <path d="M3 27.5L5 35.5L13 33L9.5 27.5H3Z" fill="#E27625" stroke="#E27625" stroke-width="0.5"/>
                                             </svg>
                                         </div>
-                                        <div class="flex-1 text-left">
-                                            <p class="text-sm text-white font-semibold">Connect MetaMask</p>
-                                            <p class="text-sm text-[#BEDBFF]/70">
-                                                Klik untuk menghubungkan wallet Anda
-                                            </p>
+                                        <div class="text-center">
+                                            <p class="text-sm text-white font-semibold">MetaMask</p>
+                                            <p class="text-xs text-[#BEDBFF]/60 mt-0.5">Browser Extension</p>
+                                        </div>
+                                    </div>
+                                </button>
+
+                                <!-- Coinbase Wallet -->
+                                <button
+                                    class="bg-white/5 border border-[#0052FF]/30 rounded-xl p-4 hover:bg-[#0052FF]/10 hover:border-[#0052FF]/50 transition-all group"
+                                    onclick="connectWallet('coinbase', event)">
+                                    <div class="flex flex-col items-center gap-3">
+                                        <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br from-[#0052FF] to-[#0040CC]">
+                                            <svg width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="20" cy="20" r="16" fill="white"/>
+                                                <rect x="14" y="14" width="12" height="12" rx="2" fill="#0052FF"/>
+                                            </svg>
+                                        </div>
+                                        <div class="text-center">
+                                            <p class="text-sm text-white font-semibold">Coinbase</p>
+                                            <p class="text-xs text-[#BEDBFF]/60 mt-0.5">Coinbase Wallet</p>
+                                        </div>
+                                    </div>
+                                </button>
+
+                                <!-- Trust Wallet -->
+                                <button
+                                    class="bg-white/5 border border-[#3375BB]/30 rounded-xl p-4 hover:bg-[#3375BB]/10 hover:border-[#3375BB]/50 transition-all group"
+                                    onclick="connectWallet('trust', event)">
+                                    <div class="flex flex-col items-center gap-3">
+                                        <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br from-[#3375BB] to-[#1A5C9E]">
+                                            <svg width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M20 6C20 6 8 10 8 20C8 30 20 34 20 34C20 34 32 30 32 20C32 10 20 6 20 6Z" fill="white"/>
+                                                <path d="M20 10C20 10 12 13 12 20C12 27 20 30 20 30C20 30 28 27 28 20C28 13 20 10 20 10Z" fill="#3375BB"/>
+                                            </svg>
+                                        </div>
+                                        <div class="text-center">
+                                            <p class="text-sm text-white font-semibold">Trust Wallet</p>
+                                            <p class="text-xs text-[#BEDBFF]/60 mt-0.5">Mobile Wallet</p>
+                                        </div>
+                                    </div>
+                                </button>
+
+                                <!-- WalletConnect -->
+                                <button
+                                    class="bg-white/5 border border-[#3B99FC]/30 rounded-xl p-4 hover:bg-[#3B99FC]/10 hover:border-[#3B99FC]/50 transition-all group"
+                                    onclick="connectWallet('walletconnect', event)">
+                                    <div class="flex flex-col items-center gap-3">
+                                        <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br from-[#3B99FC] to-[#2B7FE0]">
+                                            <svg width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12 16C16.5 12 23.5 12 28 16L29.5 17.5C29.7 17.7 29.7 18 29.5 18.2L27.5 20C27.4 20.1 27.2 20.1 27.1 20L26 19C22.5 15.5 17.5 15.5 14 19L12.8 20.2C12.7 20.3 12.5 20.3 12.4 20.2L10.4 18.4C10.2 18.2 10.2 17.9 10.4 17.7L12 16Z" fill="white"/>
+                                                <path d="M32 20L34 22C34.2 22.2 34.2 22.5 34 22.7L26 30.5C25.8 30.7 25.4 30.7 25.2 30.5L20 25.5C19.95 25.45 19.85 25.45 19.8 25.5L14.6 30.5C14.4 30.7 14 30.7 13.8 30.5L6 22.7C5.8 22.5 5.8 22.2 6 22L8 20C8.2 19.8 8.5 19.8 8.7 20L14 25C14.05 25.05 14.15 25.05 14.2 25L19.4 20C19.6 19.8 20 19.8 20.2 20L25.4 25C25.45 25.05 25.55 25.05 25.6 25L30.9 20C31.1 19.8 31.4 19.8 31.6 20L32 20Z" fill="white"/>
+                                            </svg>
+                                        </div>
+                                        <div class="text-center">
+                                            <p class="text-sm text-white font-semibold">WalletConnect</p>
+                                            <p class="text-xs text-[#BEDBFF]/60 mt-0.5">Scan QR Code</p>
                                         </div>
                                     </div>
                                 </button>
@@ -352,8 +552,7 @@
                                     <div class="flex-1">
                                         <p class="text-sm text-white mb-1">Tentang Web3 Login</p>
                                         <p class="text-xs text-[#BEDBFF]/70 leading-relaxed">
-                                            Login dengan wallet memberikan keamanan ekstra dan kontrol penuh
-                                            atas identitas digital Anda.
+                                            Login dengan wallet memberikan keamanan ekstra. Pilih wallet yang sudah terinstall di browser atau device Anda.
                                         </p>
                                     </div>
                                 </div>

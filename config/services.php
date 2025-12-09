@@ -41,4 +41,8 @@ return [
         'redirect' => env('APP_URL') . '/auth/google/callback',
     ],
 
+    'walletconnect' => [
+        'project_id' => env('WALLETCONNECT_PROJECT_ID'),
+    ],
+
 ];
