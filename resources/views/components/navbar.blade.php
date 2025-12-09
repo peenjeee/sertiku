@@ -74,7 +74,7 @@
                                      class="h-10 w-10 rounded-full object-cover">
                                 <div>
                                     <p class="text-sm font-semibold text-[#0F172A]">{{ Auth::user()->name }}</p>
-                                    <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
+                                    <p class="text-xs text-gray-500">@if(str_contains(Auth::user()->email, '@wallet.local')){{ substr(Auth::user()->email, 0, 6) }}...{{ substr(Auth::user()->wallet_address ?? Auth::user()->email, -4) }}@wallet.local @else{{ Auth::user()->email }}@endif</p>
                                 </div>
                             </div>
                         </div>
@@ -160,7 +160,7 @@
                          class="h-10 w-10 rounded-full object-cover">
                     <div>
                         <p class="text-sm font-semibold text-[#0F172A]">{{ Auth::user()->name }}</p>
-                        <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
+                        <p class="text-xs text-gray-500">@if(str_contains(Auth::user()->email, '@wallet.local')){{ substr(Auth::user()->email, 0, 6) }}...{{ substr(Auth::user()->wallet_address ?? Auth::user()->email, -4) }}@wallet.local @else{{ Auth::user()->email }}@endif</p>
                     </div>
                 </div>
                 
