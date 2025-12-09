@@ -449,19 +449,14 @@
                                     </svg>
                                     <span class="text-gray-700 font-medium text-base">Login dengan Google</span>
                                 </a>
-
-                                <div class="mt-1 text-center text-xs text-gray-400">
-                                    <p>Dengan login, Anda menyetujui</p>
-                                    <p>
-                                        <a href="#" class="text-white hover:text-blue-600 hover:underline">
-                                            Syarat &amp; Ketentuan
-                                        </a>
-                                        dan
-                                        <a href="#" class="text-white hover:text-blue-600 hover:underline">
-                                            Kebijakan Privasi
-                                        </a>
-                                    </p>
-                                </div>
+                                
+                                {{-- Legal Consent Text --}}
+                                <p class="mt-3 text-xs text-[#BEDBFF]/70 text-center">
+                                    Dengan login, Anda menyetujui<br>
+                                    <button type="button" onclick="showLegalPopup('syarat')" class="text-white hover:underline font-medium">Syarat & Ketentuan</button>
+                                    dan
+                                    <button type="button" onclick="showLegalPopup('privasi')" class="text-white hover:underline font-medium">Kebijakan Privasi</button>
+                                </p>
                             </div>
                         </div>
 
@@ -591,5 +586,89 @@
         @csrf
         <input type="hidden" id="wallet_address" name="wallet_address">
     </form>
+
+    {{-- Legal Popup Script --}}
+    <script>
+        function showLegalPopup(type) {
+            let title, content;
+            
+            if (type === 'privasi') {
+                title = 'Kebijakan Privasi';
+                content = `
+                    <div class="text-left text-sm space-y-4 max-h-96 overflow-y-auto">
+                        <p><strong>1. Informasi yang Kami Kumpulkan</strong><br>
+                        Nama, email, Google ID, alamat wallet blockchain, dan data sertifikat.</p>
+                        
+                        <p><strong>2. Penggunaan Informasi</strong><br>
+                        Untuk menyediakan layanan verifikasi sertifikat dan mengelola akun Anda.</p>
+                        
+                        <p><strong>3. Keamanan Data</strong><br>
+                        Kami menggunakan enkripsi dan teknologi blockchain untuk melindungi data.</p>
+                        
+                        <p><strong>4. Berbagi Informasi</strong><br>
+                        Kami tidak menjual data Anda. Berbagi hanya dengan persetujuan atau kewajiban hukum.</p>
+                        
+                        <p><strong>5. Hak Anda</strong><br>
+                        Anda dapat mengakses, memperbarui, atau menghapus data pribadi kapan saja.</p>
+                        
+                        <p class="text-xs text-gray-400 mt-4">Lihat selengkapnya di <a href="${'{{ route("privasi") }}'}" class="text-blue-400 hover:underline">halaman Privasi</a>.</p>
+                    </div>
+                `;
+            } else if (type === 'syarat') {
+                title = 'Syarat & Ketentuan';
+                content = `
+                    <div class="text-left text-sm space-y-4 max-h-96 overflow-y-auto">
+                        <p><strong>1. Penerimaan Syarat</strong><br>
+                        Dengan menggunakan SertiKu, Anda menyetujui syarat dan ketentuan ini.</p>
+                        
+                        <p><strong>2. Deskripsi Layanan</strong><br>
+                        Platform penerbitan dan verifikasi sertifikat digital berbasis blockchain.</p>
+                        
+                        <p><strong>3. Akun Pengguna</strong><br>
+                        Anda bertanggung jawab menjaga kerahasiaan kredensial akun.</p>
+                        
+                        <p><strong>4. Penggunaan yang Dilarang</strong><br>
+                        Dilarang membuat sertifikat palsu atau menggunakan layanan untuk aktivitas ilegal.</p>
+                        
+                        <p><strong>5. Hak Kekayaan Intelektual</strong><br>
+                        Semua konten platform dilindungi hak cipta SertiKu.</p>
+                        
+                        <p class="text-xs text-gray-400 mt-4">Lihat selengkapnya di <a href="${'{{ route("syarat") }}'}" class="text-blue-400 hover:underline">halaman Syarat & Ketentuan</a>.</p>
+                    </div>
+                `;
+            } else if (type === 'cookie') {
+                title = 'Kebijakan Cookie';
+                content = `
+                    <div class="text-left text-sm space-y-4 max-h-96 overflow-y-auto">
+                        <p><strong>Apa itu Cookie?</strong><br>
+                        File teks kecil yang disimpan di perangkat untuk mengingat preferensi Anda.</p>
+                        
+                        <p><strong>Cookie yang Kami Gunakan:</strong></p>
+                        <ul class="list-disc list-inside ml-2 space-y-1">
+                            <li><strong>Esensial</strong> - Untuk login dan keamanan</li>
+                            <li><strong>Analitik</strong> - Untuk memahami penggunaan website</li>
+                            <li><strong>Fungsional</strong> - Untuk mengingat preferensi</li>
+                        </ul>
+                        
+                        <p><strong>Mengelola Cookie</strong><br>
+                        Anda dapat mengontrol cookie melalui pengaturan browser.</p>
+                        
+                        <p class="text-xs text-gray-400 mt-4">Lihat selengkapnya di <a href="${'{{ route("cookie") }}'}" class="text-blue-400 hover:underline">halaman Kebijakan Cookie</a>.</p>
+                    </div>
+                `;
+            }
+            
+            Swal.fire({
+                title: title,
+                html: content,
+                confirmButtonText: 'Tutup',
+                confirmButtonColor: '#3B82F6',
+                width: '500px',
+                customClass: {
+                    popup: 'rounded-2xl'
+                }
+            });
+        }
+    </script>
 
 </x-layouts.app>

@@ -132,3 +132,8 @@ Route::get('/dokumentasi', [\App\Http\Controllers\PageController::class, 'dokume
 Route::get('/status', [\App\Http\Controllers\PageController::class, 'status'])->name('status');
 Route::get('/kontak', [\App\Http\Controllers\PageController::class, 'kontak'])->name('kontak');
 Route::post('/kontak', [\App\Http\Controllers\PageController::class, 'sendKontak'])->name('kontak.send');
+
+// Legal Pages
+Route::get('/privasi', [\App\Http\Controllers\PageController::class, 'privasi'])->name('privasi');
+Route::get('/syarat', [\App\Http\Controllers\PageController::class, 'syarat'])->name('syarat');
+Route::get('/cookie', [\App\Http\Controllers\PageController::class, 'cookie'])->name('cookie');

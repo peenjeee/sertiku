@@ -49,4 +49,9 @@ class PageController extends Controller
     {
         return view('pages.syarat');
     }
+
+    public function cookie()
+    {
+        return view('pages.cookie');
+    }
 }
