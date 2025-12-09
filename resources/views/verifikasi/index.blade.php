@@ -362,15 +362,31 @@
     function startScanner() {
         html5QrCode = new Html5Qrcode("qr-reader");
         
+        // Optimized config for laptop webcams
         const config = {
-            fps: 10,
-            qrbox: { width: 250, height: 250 },
-            aspectRatio: 1.0
+            fps: 15, // Higher FPS for faster detection
+            qrbox: function(viewfinderWidth, viewfinderHeight) {
+                // Dynamic qrbox - 70% of the smaller dimension for better detection
+                let minEdge = Math.min(viewfinderWidth, viewfinderHeight);
+                let qrboxSize = Math.floor(minEdge * 0.7);
+                return { width: qrboxSize, height: qrboxSize };
+            },
+            aspectRatio: 1.333, // 4:3 ratio works better for most laptop webcams
+            formatsToSupport: [ Html5QrcodeSupportedFormats.QR_CODE ],
+            experimentalFeatures: {
+                useBarCodeDetectorIfSupported: true // Use native detector if available
+            }
         };
+
+        // Update status
+        document.getElementById('scanStatus').innerHTML = 
+            '<span class="text-yellow-400">Mengaktifkan kamera...</span>';
 
         // First try to get available cameras
         Html5Qrcode.getCameras().then(cameras => {
             if (cameras && cameras.length > 0) {
+                console.log("Available cameras:", cameras);
+                
                 // Use first available camera (or specified one)
                 let cameraId = cameras[0].id;
                 
@@ -391,13 +407,18 @@
                     if (frontCamera) cameraId = frontCamera.id;
                 }
 
+                console.log("Using camera:", cameraId);
+
                 // Start with camera ID instead of facingMode
                 html5QrCode.start(
                     cameraId,
                     config,
                     onScanSuccess,
                     onScanFailure
-                ).catch((err) => {
+                ).then(() => {
+                    document.getElementById('scanStatus').innerHTML = 
+                        'Arahkan kamera ke QR Code sertifikat';
+                }).catch((err) => {
                     console.error("Camera start error:", err);
                     document.getElementById('scanStatus').innerHTML = 
                         '<span class="text-red-400">Gagal mengakses kamera: ' + err + '</span>';
@@ -414,7 +435,10 @@
                 config,
                 onScanSuccess,
                 onScanFailure
-            ).catch((err2) => {
+            ).then(() => {
+                document.getElementById('scanStatus').innerHTML = 
+                    'Arahkan kamera ke QR Code sertifikat';
+            }).catch((err2) => {
                 console.error("Fallback camera error:", err2);
                 document.getElementById('scanStatus').innerHTML = 
                     '<span class="text-red-400">Tidak dapat mengakses kamera. Pastikan izin kamera diberikan.</span>';
