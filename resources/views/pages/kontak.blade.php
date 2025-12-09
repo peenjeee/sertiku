@@ -1,7 +1,7 @@
 {{-- resources/views/pages/kontak.blade.php --}}
 <x-layouts.app title="SertiKu – Hubungi Kami">
 
-    <main class="min-h-screen bg-gradient-to-b from-[#0F172A] via-[#1E293B] to-[#0F172A]">
+    
         {{-- Hero --}}
         <section class="relative overflow-hidden py-16 md:py-20">
             <div class="pointer-events-none absolute -right-32 top-0 h-96 w-96 rounded-full bg-gradient-to-r from-[#2B7FFF4D] to-[#00B8DB4D] blur-3xl opacity-60"></div>
@@ -138,6 +138,6 @@
                 </div>
             </div>
         </section>
-    </main>
+
 
 </x-layouts.app>
