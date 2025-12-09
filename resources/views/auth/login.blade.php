@@ -8,6 +8,12 @@
     <script>
         window.walletConnectProjectId = '{{ config("services.walletconnect.project_id", "") }}';
         window.web3ModalReady = false;
+        window.walletConnectPending = false;
+        
+        // Set flag if user came from logout
+        @if(session('success') && str_contains(session('success'), 'logout'))
+        sessionStorage.setItem('wallet_logged_out', 'true');
+        @endif
     </script>
 
     {{-- Script tab + wallet connect --}}
@@ -173,17 +179,22 @@
                     statusEl.classList.remove('hidden');
                 }
 
-                // Open modal
+                // Set flag to indicate user explicitly initiated connection
+                window.walletConnectPending = true;
+                
+                // Clear logged out flag
+                sessionStorage.removeItem('wallet_logged_out');
+
+                // Open modal - the subscription in web3modal.js will handle the connection
                 await window.web3Modal.open();
 
-                // Subscribe to provider changes
-                window.web3Modal.subscribeProvider(async ({ address, isConnected }) => {
-                    if (isConnected && address) {
-                        handleWalletConnected(address);
-                    }
-                });
+                // Hide loading after modal opens (connection will be handled by subscribeProvider in web3modal.js)
+                if (statusEl) {
+                    statusEl.innerHTML = '<span class="text-[#8EC5FF]">Pilih wallet Anda...</span>';
+                }
             } catch (error) {
                 console.error('Web3Modal error:', error);
+                window.walletConnectPending = false;
                 if (statusEl) statusEl.classList.add('hidden');
                 if (errorEl) {
                     errorEl.textContent = error.message || 'Gagal membuka WalletConnect.';
