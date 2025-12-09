@@ -597,9 +597,9 @@ md:-left-8 md:-top-8 md:h-16 md:w-16 z-10">
                             <path d="M7.5 9.16659L10 11.6666L18.3333 3.33325" stroke="#05DF72" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
                         </svg> Email support</li>
                 </ul>
-                <button class="mt-6 rounded-[12px] border border-[rgba(255,255,255,0.2)] px-4 py-2 text-sm font-semibold text-[#F9FAFB] hover:bg-[rgba(15,23,42,1)] transition">
+                <a href="{{ route('checkout', 'starter') }}" class="mt-6 inline-block text-center rounded-[12px] border border-[rgba(255,255,255,0.2)] px-4 py-2 text-sm font-semibold text-[#F9FAFB] hover:bg-[rgba(15,23,42,1)] transition">
                     Mulai Gratis
-                </button>
+                </a>
             </div>
 
             {{-- Professional (highlight) --}}
@@ -636,9 +636,9 @@ md:-left-8 md:-top-8 md:h-16 md:w-16 z-10">
                             <path d="M7.5 9.16659L10 11.6666L18.3333 3.33325" stroke="#05DF72" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
                         </svg> White-label option</li>
                 </ul>
-                <button class="mt-6 rounded-[12px] bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-4 py-2 text-sm font-semibold text-white hover:brightness-110 transition">
+                <a href="{{ route('checkout', 'professional') }}" class="mt-6 inline-block text-center rounded-[12px] bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-4 py-2 text-sm font-semibold text-white hover:brightness-110 transition">
                     Mulai Sekarang
-                </button>
+                </a>
             </div>
 
             {{-- Enterprise --}}
@@ -672,9 +672,9 @@ md:-left-8 md:-top-8 md:h-16 md:w-16 z-10">
                             <path d="M7.5 9.16659L10 11.6666L18.3333 3.33325" stroke="#05DF72" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
                         </svg> SLA guarantee</li>
                 </ul>
-                <button class="mt-6 rounded-[12px] border border-[rgba(255,255,255,0.2)] px-4 py-2 text-sm font-semibold text-[#F9FAFB] hover:bg-[rgba(15,23,42,1)] transition">
+                <a href="{{ route('contact.enterprise') }}" class="mt-6 inline-block text-center rounded-[12px] border border-[rgba(255,255,255,0.2)] px-4 py-2 text-sm font-semibold text-[#F9FAFB] hover:bg-[rgba(15,23,42,1)] transition">
                     Hubungi Sales
-                </button>
+                </a>
             </div>
         </div>
     </section>

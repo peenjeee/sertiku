@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\VerifyController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -101,3 +102,16 @@ Route::post('/verifikasi/check', [VerifyController::class, 'check'])->name('veri
 // Halaman hasil
 Route::get('/verifikasi/valid', [VerifyController::class, 'valid'])->name('verifikasi.valid');
 Route::get('/verifikasi/invalid', [VerifyController::class, 'invalid'])->name('verifikasi.invalid');
+
+/*
+|--------------------------------------------------------------------------
+| Payment Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/checkout/{slug}', [PaymentController::class, 'checkout'])->name('checkout');
+Route::post('/checkout/process', [PaymentController::class, 'process'])->name('checkout.process');
+Route::get('/payment/success/{orderNumber}', [PaymentController::class, 'success'])->name('payment.success');
+Route::post('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
+Route::get('/contact-enterprise', [PaymentController::class, 'contactEnterprise'])->name('contact.enterprise');
+Route::post('/contact-enterprise', [PaymentController::class, 'sendContactEnterprise'])->name('contact.enterprise.send');
