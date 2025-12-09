@@ -36,6 +36,11 @@ class GoogleController extends Controller
 
             Auth::login($user);
 
+            // Check if profile is completed
+            if (!$user->isProfileCompleted()) {
+                return redirect()->route('onboarding')->with('info', 'Silakan lengkapi profil Anda.');
+            }
+
             return redirect()->intended('/dashboard')->with('success', 'Selamat datang, ' . $user->name . '!');
         } catch (\Exception $e) {
             \Log::error('Google Login Error: ' . $e->getMessage());

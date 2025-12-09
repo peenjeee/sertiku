@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\VerifyController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\OnboardingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,6 +83,11 @@ Route::post('/register/lembaga', [RegisterController::class, 'storeLembaga'])
 */
 
 Route::middleware('auth')->group(function () {
+    // Onboarding - complete profile after Google/Wallet login
+    Route::get('/onboarding', [OnboardingController::class, 'show'])->name('onboarding');
+    Route::post('/onboarding', [OnboardingController::class, 'store'])->name('onboarding.store');
+    Route::get('/onboarding/skip', [OnboardingController::class, 'skip'])->name('onboarding.skip');
+
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -115,3 +121,15 @@ Route::get('/payment/success/{orderNumber}', [PaymentController::class, 'success
 Route::post('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
 Route::get('/contact-enterprise', [PaymentController::class, 'contactEnterprise'])->name('contact.enterprise');
 Route::post('/contact-enterprise', [PaymentController::class, 'sendContactEnterprise'])->name('contact.enterprise.send');
+
+/*
+|--------------------------------------------------------------------------
+| Support Pages
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/bantuan', [\App\Http\Controllers\PageController::class, 'bantuan'])->name('bantuan');
+Route::get('/dokumentasi', [\App\Http\Controllers\PageController::class, 'dokumentasi'])->name('dokumentasi');
+Route::get('/status', [\App\Http\Controllers\PageController::class, 'status'])->name('status');
+Route::get('/kontak', [\App\Http\Controllers\PageController::class, 'kontak'])->name('kontak');
+Route::post('/kontak', [\App\Http\Controllers\PageController::class, 'sendKontak'])->name('kontak.send');

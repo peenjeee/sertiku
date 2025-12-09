@@ -96,10 +96,10 @@
             <div>
                 <h4 class="text-sm font-semibold tracking-wide text-[#F9FAFB] uppercase">Dukungan</h4>
                 <ul class="mt-4 space-y-3 text-sm text-[rgba(219,234,254,0.8)]">
-                    <li><a href="#bantuan" class="hover:text-white transition">Bantuan</a></li>
-                    <li><a href="#dokumentasi" class="hover:text-white transition">Dokumentasi</a></li>
-                    <li><a href="#status" class="hover:text-white transition">Status</a></li>
-                    <li><a href="#kontak" class="hover:text-white transition">Hubungi Kami</a></li>
+                    <li><a href="{{ route('bantuan') }}" class="hover:text-white transition">Bantuan</a></li>
+                    <li><a href="{{ route('dokumentasi') }}" class="hover:text-white transition">Dokumentasi</a></li>
+                    <li><a href="{{ route('status') }}" class="hover:text-white transition">Status</a></li>
+                    <li><a href="{{ route('kontak') }}" class="hover:text-white transition">Hubungi Kami</a></li>
                 </ul>
             </div>
         </div>

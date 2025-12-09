@@ -62,6 +62,11 @@ class LoginController extends Controller
             Auth::login($user, true);
             $request->session()->regenerate();
 
+            // Check if profile is completed
+            if (!$user->isProfileCompleted()) {
+                return redirect()->route('onboarding');
+            }
+
             return redirect()->intended(route('dashboard'));
         }
 
@@ -71,6 +76,12 @@ class LoginController extends Controller
          */
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
+
+            // Check if profile is completed
+            $user = Auth::user();
+            if (!$user->isProfileCompleted()) {
+                return redirect()->route('onboarding');
+            }
 
             return redirect()->intended(route('dashboard'));
         }
@@ -107,6 +118,11 @@ class LoginController extends Controller
 
         Auth::login($user, true);
         $request->session()->regenerate();
+
+        // Check if profile is completed
+        if (!$user->isProfileCompleted()) {
+            return redirect()->route('onboarding');
+        }
 
         return redirect()->intended(route('dashboard'));
     }
