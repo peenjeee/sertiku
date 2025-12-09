@@ -4,33 +4,7 @@
     <section class="mx-auto max-w-5xl px-4 pt-24 pb-16 flex flex-col items-center">
         <div class="mx-auto flex w-full max-w-5xl flex-col items-center gap-10">
 
-            {{-- ICON BESAR DI ATAS --}}
-            <div class="relative h-40 w-40">
-                <div class="absolute inset-0 rounded-full bg-gradient-to-br from-[#00C950]/60 to-[#00BC7D]/60 blur-3xl"></div>
-
-                <div class="relative flex h-40 w-40 items-center justify-center rounded-full bg-gradient-to-br from-[#00C950] to-[#00BC7D] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)]">
-                    <div class="flex h-24 w-24 items-center justify-center rounded-full border-[8px] border-white/95 bg-white/5">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14" viewBox="0 0 24 24" fill="none">
-                            <circle cx="12" cy="12" r="11" stroke="#FFFFFF" stroke-width="2.5"/>
-                            <path d="M8 12.5l2.5 2.5L16 9" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
             
-            {{-- JUDUL & SUBJUDUL ATAS --}}
-        <div class="text-center space-y-2 mb-8">
-            <p class="mt-6 text-4xl font-semibold leading-tight text-[#F9FAFB] md:text-5xl lg:text-6xl">
-                Sertifikat <span class=" bg-gradient-to-br from-[#15803D] to-[#166534] bg-clip-text text-transparent">
-                     Valid
-                </span>
-            </p>
-            <p class="mt-6 text-4xl font-semibold leading-tight text-[#F9FAFB] md:text-5xl lg:text-6xl">
-               Sertifikat berhasil diverifikasi dalam sistem kami
-            </p>
-        </div>
-
             {{-- CARD UTAMA --}}
             <section class="mt-20 relative w-full max-w-3xl rounded-2xl bg-white shadow-[0_25px_50px_-12px_rgba(15,23,42,0.25)]">
                 {{-- Garis gradien di atas kartu --}}

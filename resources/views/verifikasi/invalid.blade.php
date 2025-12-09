@@ -4,33 +4,6 @@
     {{-- KONTEN UTAMA --}}
     <section class="mx-auto max-w-5xl px-4 pt-24 pb-16 flex flex-col items-center">
 
-        {{-- ICON BESAR DI ATAS --}}
-        <div class="relative mb-10">
-            {{-- Glow effect --}}
-            <div class="absolute inset-0 rounded-full bg-gradient-to-br from-[#FF6467] to-[#FF8904] opacity-40 blur-[64px]"></div>
-
-            {{-- Icon circle --}}
-            <div class="relative flex h-40 w-40 items-center justify-center rounded-full bg-gradient-to-br from-[#FB2C36] to-[#F54900] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)]">
-                <div class="relative flex h-24 w-24 items-center justify-center rounded-full">
-                    <span class="absolute inset-[8px] rounded-full border-[8px] border-white opacity-75"></span>
-                    <span class="absolute h-8 w-[3px] rotate-45 rounded-full bg-white"></span>
-                    <span class="absolute h-8 w-[3px] -rotate-45 rounded-full bg-white"></span>
-                </div>
-            </div>
-        </div>
-
-        {{-- JUDUL & SUBJUDUL ATAS --}}
-        <div class="text-center space-y-2 mb-8">
-            <p class="mt-6 text-4xl font-semibold leading-tight text-[#F9FAFB] md:text-5xl lg:text-6xl">
-                Sertifikat <span class=" bg-gradient-to-br from-[#FB2C36] to-[#F54900] bg-clip-text text-transparent">
-                    Tidak Valid
-                </span>
-            </p>
-            <p class="mt-6 text-4xl font-semibold leading-tight text-[#F9FAFB] md:text-5xl lg:text-6xl">
-                Sertifikat tidak ditemukan dalam sistem kami
-            </p>
-        </div>
-
         {{-- KARTU PUTIH BESAR --}}
         <div class="w-full mt-20 max-w-3xl rounded-[14px] bg-white shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] overflow-hidden">
 
