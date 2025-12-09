@@ -367,15 +367,57 @@
             aspectRatio: 1.0
         };
 
-        html5QrCode.start(
-            { facingMode: currentCamera },
-            config,
-            onScanSuccess,
-            onScanFailure
-        ).catch((err) => {
-            console.error("Camera error:", err);
-            document.getElementById('scanStatus').innerHTML = 
-                '<span class="text-red-400">Tidak dapat mengakses kamera. Pastikan izin kamera diberikan.</span>';
+        // First try to get available cameras
+        Html5Qrcode.getCameras().then(cameras => {
+            if (cameras && cameras.length > 0) {
+                // Use first available camera (or specified one)
+                let cameraId = cameras[0].id;
+                
+                // Try to find back camera on mobile, or just use first camera on laptop
+                if (currentCamera === 'environment') {
+                    const backCamera = cameras.find(c => 
+                        c.label.toLowerCase().includes('back') || 
+                        c.label.toLowerCase().includes('rear') ||
+                        c.label.toLowerCase().includes('environment')
+                    );
+                    if (backCamera) cameraId = backCamera.id;
+                } else {
+                    const frontCamera = cameras.find(c => 
+                        c.label.toLowerCase().includes('front') || 
+                        c.label.toLowerCase().includes('user') ||
+                        c.label.toLowerCase().includes('facetime')
+                    );
+                    if (frontCamera) cameraId = frontCamera.id;
+                }
+
+                // Start with camera ID instead of facingMode
+                html5QrCode.start(
+                    cameraId,
+                    config,
+                    onScanSuccess,
+                    onScanFailure
+                ).catch((err) => {
+                    console.error("Camera start error:", err);
+                    document.getElementById('scanStatus').innerHTML = 
+                        '<span class="text-red-400">Gagal mengakses kamera: ' + err + '</span>';
+                });
+            } else {
+                document.getElementById('scanStatus').innerHTML = 
+                    '<span class="text-red-400">Tidak ada kamera yang terdeteksi.</span>';
+            }
+        }).catch(err => {
+            console.error("Camera enumeration error:", err);
+            // Fallback: try with facingMode
+            html5QrCode.start(
+                { facingMode: "user" },
+                config,
+                onScanSuccess,
+                onScanFailure
+            ).catch((err2) => {
+                console.error("Fallback camera error:", err2);
+                document.getElementById('scanStatus').innerHTML = 
+                    '<span class="text-red-400">Tidak dapat mengakses kamera. Pastikan izin kamera diberikan.</span>';
+            });
         });
     }
 
