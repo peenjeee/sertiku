@@ -58,7 +58,7 @@
 
 
                     {{-- FORM --}}
-                    <form action="{{ route('verifikasi.check') }}" method="POST" class="space-y-5">
+                    <form id="verifyForm" class="space-y-5">
                         @csrf
 
                         {{-- Label --}}
@@ -88,6 +88,7 @@
                                 <input
                                     type="text"
                                     name="hash"
+                                    id="hashInput"
                                     value="{{ old('hash') }}"
                                     class="w-full bg-transparent text-sm text-white placeholder:text-[rgba(255,255,255,0.5)] focus:outline-none"
                                     placeholder="Contoh: ABC123XYZ"
@@ -103,7 +104,7 @@
                         {{-- Tombol Verifikasi & Scan QR --}}
                         <div class="relative mt-2 flex flex-col gap-3 sm:flex-row sm:items-center">
                             {{-- Tombol VERIFIKASI --}}
-                            <button type="submit"
+                            <button type="submit" id="verifyBtn"
                                     class="inline-flex flex-1 items-center justify-center gap-2 rounded-[8px]
                                            bg-[linear-gradient(180deg,#1E3A8F_0%,#3B82F6_100%)]
                                            px-4 py-3 text-sm font-medium text-white
@@ -469,8 +470,8 @@
             confirmButtonColor: '#3B82F6'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Submit form
-                document.querySelector('form').submit();
+                // Submit via AJAX
+                verifyHash(hashCode);
             }
         });
     }
@@ -492,6 +493,100 @@
             closeQRScanner();
         }
     });
+
+    // Form submission handler
+    document.getElementById('verifyForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const hash = document.getElementById('hashInput').value.trim();
+        if (hash) {
+            verifyHash(hash);
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Kode Hash Kosong',
+                text: 'Silakan masukkan kode hash sertifikat',
+                confirmButtonColor: '#3B82F6'
+            });
+        }
+    });
+
+    // AJAX verification function
+    function verifyHash(hash) {
+        const btn = document.getElementById('verifyBtn');
+        const originalText = btn.innerHTML;
+        
+        // Loading state
+        btn.disabled = true;
+        btn.innerHTML = `
+            <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>Memverifikasi...</span>
+        `;
+
+        fetch('{{ route("verifikasi.check") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({ hash: hash })
+        })
+        .then(response => response.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+
+            if (data.valid) {
+                // Show success notification then redirect
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Verifikasi Berhasil!',
+                    html: `<p>Data sertifikat ditemukan dalam sistem kami</p>
+                           <p class="text-sm text-gray-500 mt-2">Kode: <b>${data.hash}</b></p>`,
+                    showConfirmButton: true,
+                    confirmButtonText: 'Lihat Detail',
+                    confirmButtonColor: '#10B981',
+                    timer: 3000,
+                    timerProgressBar: true
+                }).then(() => {
+                    // Redirect to valid page with hash
+                    window.location.href = `{{ url('/verifikasi') }}/${hash}`;
+                });
+            } else {
+                // Show error notification then redirect
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Verifikasi Gagal!',
+                    html: `<p>Data sertifikat tidak ditemukan dalam sistem kami</p>
+                           <p class="text-sm text-gray-500 mt-2">Kode: <b>${data.hash}</b></p>`,
+                    showConfirmButton: true,
+                    confirmButtonText: 'Lihat Detail',
+                    confirmButtonColor: '#EF4444',
+                    timer: 3000,
+                    timerProgressBar: true
+                }).then(() => {
+                    // Redirect to invalid page with hash
+                    window.location.href = `{{ url('/verifikasi') }}/${hash}`;
+                });
+            }
+        })
+        .catch(error => {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+            console.error('Verification error:', error);
+            
+            Swal.fire({
+                icon: 'error',
+                title: 'Terjadi Kesalahan',
+                text: 'Tidak dapat memverifikasi sertifikat. Silakan coba lagi.',
+                confirmButtonColor: '#3B82F6'
+            });
+        });
+    }
 </script>
 @endpush
   

@@ -102,12 +102,11 @@ Route::middleware('auth')->group(function () {
 // Halaman input kode hash verifikasi
 Route::get('/verifikasi', [VerifyController::class, 'index'])->name('verifikasi');
 
-// Submit form cek hash
+// Submit form cek hash (untuk AJAX)
 Route::post('/verifikasi/check', [VerifyController::class, 'check'])->name('verifikasi.check');
 
-// Halaman hasil
-Route::get('/verifikasi/valid', [VerifyController::class, 'valid'])->name('verifikasi.valid');
-Route::get('/verifikasi/invalid', [VerifyController::class, 'invalid'])->name('verifikasi.invalid');
+// Halaman hasil dengan hash di URL
+Route::get('/verifikasi/{hash}', [VerifyController::class, 'show'])->name('verifikasi.show');
 
 /*
 |--------------------------------------------------------------------------
