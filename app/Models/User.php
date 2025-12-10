@@ -37,6 +37,7 @@ class User extends Authenticatable
         'admin_position',
         'wallet_address',
         'profile_completed',
+        'package_id',
     ];
 
     /**

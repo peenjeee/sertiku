@@ -41,6 +41,92 @@ class PaymentController extends Controller
     }
 
     /**
+     * Quick upgrade - create order and return Snap token for inline payment
+     */
+    public function quickUpgrade(Request $request)
+    {
+        $user = auth()->user();
+        
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $validated = $request->validate([
+            'package_slug' => 'required|string',
+        ]);
+
+        $package = Package::where('slug', $validated['package_slug'])
+            ->where('is_active', true)
+            ->first();
+
+        if (!$package) {
+            return response()->json(['error' => 'Paket tidak ditemukan'], 404);
+        }
+
+        if ($package->price == 0) {
+            return response()->json(['error' => 'Paket gratis tidak perlu pembayaran'], 400);
+        }
+
+        // Create pending order
+        $order = Order::create([
+            'user_id' => $user->id,
+            'package_id' => $package->id,
+            'order_number' => Order::generateOrderNumber(),
+            'name' => $user->name ?? $user->institution_name,
+            'email' => $user->email,
+            'phone' => $user->phone ?? $user->admin_phone,
+            'institution' => $user->institution_name,
+            'amount' => $package->price,
+            'status' => 'pending',
+            'expired_at' => now()->addHours(24),
+        ]);
+
+        // Create Midtrans Snap token
+        $params = [
+            'transaction_details' => [
+                'order_id' => $order->order_number,
+                'gross_amount' => (int) $order->amount,
+            ],
+            'customer_details' => [
+                'first_name' => $order->name,
+                'email' => $order->email,
+                'phone' => $order->phone ?? '',
+            ],
+            'item_details' => [
+                [
+                    'id' => $package->slug,
+                    'price' => (int) $package->price,
+                    'quantity' => 1,
+                    'name' => 'Upgrade ke ' . $package->name,
+                ],
+            ],
+            'callbacks' => [
+                'finish' => route('lembaga.dashboard'),
+            ],
+        ];
+
+        try {
+            $snapToken = Snap::getSnapToken($params);
+            
+            $order->update(['snap_token' => $snapToken]);
+
+            return response()->json([
+                'success' => true,
+                'snap_token' => $snapToken,
+                'order_number' => $order->order_number,
+                'package_name' => $package->name,
+                'amount' => $package->formatted_price,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Quick Upgrade Midtrans Error: ' . $e->getMessage());
+            
+            return response()->json([
+                'error' => 'Gagal memproses pembayaran. Silakan coba lagi.',
+            ], 500);
+        }
+    }
+
+    /**
      * Process checkout and create Snap token
      */
     public function process(Request $request)

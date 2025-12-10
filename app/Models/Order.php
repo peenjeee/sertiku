@@ -74,5 +74,12 @@ class Order extends Model
             'transaction_id' => $transactionId,
             'paid_at' => now(),
         ]);
+
+        // Update user's package to the purchased package
+        if ($this->user && $this->package_id) {
+            $this->user->update([
+                'package_id' => $this->package_id,
+            ]);
+        }
     }
 }
