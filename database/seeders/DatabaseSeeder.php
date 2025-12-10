@@ -14,10 +14,11 @@ class DatabaseSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'admin@sertiku.my.id'],
             [
-                'name'     => 'Admin SertiKu',
-                'password' => Hash::make('Admin123!'),
-                // kalau punya kolom role:
-                // 'role' => 'admin',
+                'name'              => 'Admin SertiKu',
+                'password'          => Hash::make('Admin123!'),
+                'account_type'      => 'personal',
+                'profile_completed' => true,
+                'country'           => 'Indonesia',
             ]
         );
 
@@ -25,9 +26,15 @@ class DatabaseSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'lembaga@sertiku.my.id'],
             [
-                'name'     => 'Akun Lembaga',
-                'password' => Hash::make('Lembaga123!'),
-                // 'role' => 'lembaga',
+                'name'              => 'Lembaga SertiKu',
+                'password'          => Hash::make('Lembaga123!'),
+                'account_type'      => 'institution',
+                'profile_completed' => true,
+                'institution_name'  => 'Lembaga SertiKu',
+                'institution_type'  => 'company',
+                'city'              => 'Sleman',
+                'country'           => 'Indonesia',
+                'admin_name'        => 'Admin Lembaga',
             ]
         );
 
@@ -35,10 +42,17 @@ class DatabaseSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'user@sertiku.my.id'],
             [
-                'name'     => 'Pengguna Umum',
-                'password' => Hash::make('User123!'),
-                // 'role' => 'user',
+                'name'              => 'Pengguna Umum',
+                'password'          => Hash::make('User123!'),
+                'account_type'      => 'personal',
+                'profile_completed' => true,
+                'country'           => 'Indonesia',
             ]
         );
+
+        // Run other seeders
+        $this->call([
+            PackageSeeder::class,
+        ]);
     }
 }
