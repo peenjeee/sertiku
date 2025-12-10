@@ -26,45 +26,43 @@
 
         <!-- Upgrade Banner for Starter Plan -->
         @if($isStarterPlan)
-        <div class="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl lg:rounded-2xl p-4 lg:p-6">
-            <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
-                <div class="flex items-start gap-4">
-                    <div class="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl p-3 lg:p-6">
+            <div class="flex flex-col gap-3">
+                <!-- Header -->
+                <div class="flex items-start gap-3">
+                    <div class="hidden sm:flex w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-lg lg:rounded-xl items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                         </svg>
                     </div>
-                    <div>
-                        <h3 class="text-[#92400E] font-bold text-lg mb-1">Anda sedang menggunakan Paket Starter</h3>
-                        <p class="text-[#B45309] text-sm mb-3">
-                            Paket Starter memiliki batas <strong>{{ $certificateLimit }} sertifikat/bulan</strong>.
-                            Upgrade ke <strong>Professional</strong> untuk mendapatkan hingga 6.700 sertifikat/bulan!
+                    <div class="flex-1 min-w-0">
+                        <h3 class="text-[#92400E] font-bold text-sm lg:text-lg">Paket Starter</h3>
+                        <p class="text-[#B45309] text-xs lg:text-sm">
+                            Upgrade ke <strong>Professional</strong> untuk mendapatkan hingga 6.700 sertifikat/bulan
                         </p>
-
-                        <!-- Usage Progress -->
-                        <div class="mb-4">
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-[#92400E] text-sm font-medium">Penggunaan Bulan Ini</span>
-                                <span class="text-[#B45309] text-sm font-bold">{{ $certificatesUsed }} / {{ $certificateLimit }} sertifikat</span>
-                            </div>
-                            <div class="w-full h-3 bg-amber-200 rounded-full overflow-hidden">
-                                <div class="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full transition-all" style="width: {{ $usagePercentage }}%"></div>
-                            </div>
-                            <p class="text-[#B45309] text-xs mt-1">
-                                @if($remainingCerts <= 10)
-                                    <span class="text-red-600 font-bold">⚠️ Sisa {{ $remainingCerts }} sertifikat! Segera upgrade untuk menghindari pembatasan.</span>
-                                @else
-                                    Sisa {{ $remainingCerts }} sertifikat tersedia bulan ini
-                                @endif
-                            </p>
-                        </div>
                     </div>
                 </div>
-                <a href="{{ url('/#harga') }}" class="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold rounded-xl hover:from-amber-600 hover:to-orange-600 transition shadow-lg shadow-amber-500/30">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                <!-- Usage Progress -->
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[#92400E] text-xs lg:text-sm font-medium">Penggunaan</span>
+                        <span class="text-[#B45309] text-xs lg:text-sm font-bold">{{ $certificatesUsed }} / {{ $certificateLimit }} sertifikat</span>
+                    </div>
+                    <div class="w-full h-2 lg:h-3 bg-amber-200 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full" style="width: {{ $usagePercentage }}%"></div>
+                    </div>
+                    @if($remainingCerts <= 10)
+                    <p class="text-red-600 text-xs font-bold mt-1">⚠️ Sisa {{ $remainingCerts }} sertifikat!</p>
+                    @endif
+                </div>
+
+                <!-- Upgrade Button -->
+                <a href="{{ url('/#harga') }}" class="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 lg:py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-bold rounded-lg hover:from-amber-600 hover:to-orange-600 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
                     </svg>
-                    Upgrade Sekarang
+                    Upgrade
                 </a>
             </div>
         </div>
