@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -55,9 +54,122 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
             'profile_completed' => 'boolean',
         ];
+    }
+
+    /**
+     * Get user's orders
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Get the active package for this user
+     * Returns Starter package if no paid subscription
+     */
+    public function getActivePackage()
+    {
+        // Check for active paid order
+        $activeOrder = $this->orders()
+            ->where('status', 'paid')
+            ->whereHas('package', function ($q) {
+                $q->where('slug', '!=', 'starter');
+            })
+            ->latest('paid_at')
+            ->first();
+
+        if ($activeOrder) {
+            return $activeOrder->package;
+        }
+
+        // Default to Starter package
+        return Package::where('slug', 'starter')->first();
+    }
+
+    /**
+     * Get certificate limit for current package
+     */
+    public function getCertificateLimit(): int
+    {
+        $package = $this->getActivePackage();
+        return $package ? $package->certificates_limit : 67;
+    }
+
+    /**
+     * Get certificates issued this month (dummy for now)
+     */
+    public function getCertificatesUsedThisMonth(): int
+    {
+        // TODO: Replace with actual certificate count from database
+        // For now return dummy value
+        return 45;
+    }
+
+    /**
+     * Get remaining certificates this month
+     */
+    public function getRemainingCertificates(): int
+    {
+        $limit = $this->getCertificateLimit();
+        if ($limit === 0) {
+            return PHP_INT_MAX; // Unlimited
+        }
+        return max(0, $limit - $this->getCertificatesUsedThisMonth());
+    }
+
+    /**
+     * Check if user can issue more certificates
+     */
+    public function canIssueCertificate(): bool
+    {
+        $limit = $this->getCertificateLimit();
+        if ($limit === 0) {
+            return true; // Unlimited
+        }
+        return $this->getCertificatesUsedThisMonth() < $limit;
+    }
+
+    /**
+     * Check if user is on Starter plan
+     */
+    public function isStarterPlan(): bool
+    {
+        $package = $this->getActivePackage();
+        return $package && $package->slug === 'starter';
+    }
+
+    /**
+     * Check if user is on Professional plan
+     */
+    public function isProfessionalPlan(): bool
+    {
+        $package = $this->getActivePackage();
+        return $package && $package->slug === 'professional';
+    }
+
+    /**
+     * Check if user is on Enterprise plan
+     */
+    public function isEnterprisePlan(): bool
+    {
+        $package = $this->getActivePackage();
+        return $package && $package->slug === 'enterprise';
+    }
+
+    /**
+     * Get package usage percentage
+     */
+    public function getUsagePercentage(): int
+    {
+        $limit = $this->getCertificateLimit();
+        if ($limit === 0) {
+            return 0; // Unlimited
+        }
+        return min(100, round(($this->getCertificatesUsedThisMonth() / $limit) * 100));
     }
 
     /**
@@ -89,7 +201,7 @@ class User extends Authenticatable
      */
     public function hasGoogleLogin(): bool
     {
-        return !empty($this->google_id);
+        return ! empty($this->google_id);
     }
 
     /**
@@ -97,7 +209,7 @@ class User extends Authenticatable
      */
     public function hasWalletLogin(): bool
     {
-        return !empty($this->wallet_address);
+        return ! empty($this->wallet_address);
     }
 
     /**
@@ -105,6 +217,6 @@ class User extends Authenticatable
      */
     public function hasPasswordLogin(): bool
     {
-        return !empty($this->password);
+        return ! empty($this->password);
     }
 }

@@ -124,11 +124,11 @@
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div>
                             <p class="text-[#64748B] text-xs mb-1">ID Kredensial</p>
-                            <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-xs">CERT-2024-001</code>
+                            <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-xs">CERT-2025-001</code>
                         </div>
                         <div>
                             <p class="text-[#64748B] text-xs mb-1">Tanggal Terbit</p>
-                            <p class="text-[#1E293B] text-sm font-medium">10 Des 2024</p>
+                            <p class="text-[#1E293B] text-sm font-medium">10 Des 2025</p>
                         </div>
                     </div>
 
@@ -191,11 +191,11 @@
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div>
                             <p class="text-[#64748B] text-xs mb-1">ID Kredensial</p>
-                            <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-xs">CERT-2024-002</code>
+                            <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-xs">CERT-2025-002</code>
                         </div>
                         <div>
                             <p class="text-[#64748B] text-xs mb-1">Tanggal Terbit</p>
-                            <p class="text-[#1E293B] text-sm font-medium">9 Des 2024</p>
+                            <p class="text-[#1E293B] text-sm font-medium">9 Des 2025</p>
                         </div>
                     </div>
 
@@ -258,11 +258,11 @@
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div>
                             <p class="text-[#64748B] text-xs mb-1">ID Kredensial</p>
-                            <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-xs">CERT-2024-003</code>
+                            <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-xs">CERT-2025-003</code>
                         </div>
                         <div>
                             <p class="text-[#64748B] text-xs mb-1">Tanggal Terbit</p>
-                            <p class="text-[#1E293B] text-sm font-medium">8 Des 2024</p>
+                            <p class="text-[#1E293B] text-sm font-medium">8 Des 2025</p>
                         </div>
                     </div>
 
@@ -325,11 +325,11 @@
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div>
                             <p class="text-[#64748B] text-xs mb-1">ID Kredensial</p>
-                            <code class="text-[#94A3B8] bg-[#F1F5F9] px-2 py-1 rounded text-xs line-through">CERT-2024-004</code>
+                            <code class="text-[#94A3B8] bg-[#F1F5F9] px-2 py-1 rounded text-xs line-through">CERT-2025-004</code>
                         </div>
                         <div>
                             <p class="text-[#64748B] text-xs mb-1">Tanggal Terbit</p>
-                            <p class="text-[#94A3B8] text-sm font-medium">7 Des 2024</p>
+                            <p class="text-[#94A3B8] text-sm font-medium">7 Des 2025</p>
                         </div>
                     </div>
 
@@ -382,11 +382,11 @@
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div>
                             <p class="text-[#64748B] text-xs mb-1">ID Kredensial</p>
-                            <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-xs">CERT-2024-005</code>
+                            <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-xs">CERT-2025-005</code>
                         </div>
                         <div>
                             <p class="text-[#64748B] text-xs mb-1">Tanggal Terbit</p>
-                            <p class="text-[#1E293B] text-sm font-medium">6 Des 2024</p>
+                            <p class="text-[#1E293B] text-sm font-medium">6 Des 2025</p>
                         </div>
                     </div>
 
@@ -449,11 +449,11 @@
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div>
                             <p class="text-[#64748B] text-xs mb-1">ID Kredensial</p>
-                            <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-xs">CERT-2024-006</code>
+                            <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-xs">CERT-2025-006</code>
                         </div>
                         <div>
                             <p class="text-[#64748B] text-xs mb-1">Tanggal Terbit</p>
-                            <p class="text-[#1E293B] text-sm font-medium">5 Des 2024</p>
+                            <p class="text-[#1E293B] text-sm font-medium">5 Des 2025</p>
                         </div>
                     </div>
 

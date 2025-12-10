@@ -15,6 +15,61 @@
             </div>
         </div>
 
+        @php
+            $user = Auth::user();
+            $isStarterPlan = $user->isStarterPlan();
+            $certificateLimit = $user->getCertificateLimit();
+            $certificatesUsed = $user->getCertificatesUsedThisMonth();
+            $usagePercentage = $user->getUsagePercentage();
+            $remainingCerts = $user->getRemainingCertificates();
+        @endphp
+
+        <!-- Upgrade Banner for Starter Plan -->
+        @if($isStarterPlan)
+        <div class="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-2xl p-6">
+            <div class="flex items-start justify-between">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-[#92400E] font-bold text-lg mb-1">Anda sedang menggunakan Paket Starter</h3>
+                        <p class="text-[#B45309] text-sm mb-3">
+                            Paket Starter memiliki batas <strong>{{ $certificateLimit }} sertifikat/bulan</strong>.
+                            Upgrade ke <strong>Professional</strong> untuk mendapatkan hingga 6.700 sertifikat/bulan!
+                        </p>
+
+                        <!-- Usage Progress -->
+                        <div class="mb-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[#92400E] text-sm font-medium">Penggunaan Bulan Ini</span>
+                                <span class="text-[#B45309] text-sm font-bold">{{ $certificatesUsed }} / {{ $certificateLimit }} sertifikat</span>
+                            </div>
+                            <div class="w-full h-3 bg-amber-200 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full transition-all" style="width: {{ $usagePercentage }}%"></div>
+                            </div>
+                            <p class="text-[#B45309] text-xs mt-1">
+                                @if($remainingCerts <= 10)
+                                    <span class="text-red-600 font-bold">⚠️ Sisa {{ $remainingCerts }} sertifikat! Segera upgrade untuk menghindari pembatasan.</span>
+                                @else
+                                    Sisa {{ $remainingCerts }} sertifikat tersedia bulan ini
+                                @endif
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <a href="{{ url('/#harga') }}" class="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold rounded-xl hover:from-amber-600 hover:to-orange-600 transition shadow-lg shadow-amber-500/30">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                    </svg>
+                    Upgrade Sekarang
+                </a>
+            </div>
+        </div>
+        @endif
+
         <!-- Quick Action Cards -->
         <div class="grid grid-cols-3 gap-4">
             <!-- Terbitkan Sertifikat -->
@@ -191,9 +246,9 @@
                                 </td>
                                 <td class="py-4 px-4 text-[#1E293B]">Web Development Bootcamp</td>
                                 <td class="py-4 px-4">
-                                    <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">CERT-2024-001</code>
+                                    <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">CERT-2025-001</code>
                                 </td>
-                                <td class="py-4 px-4 text-[#64748B]">10 Des 2024</td>
+                                <td class="py-4 px-4 text-[#64748B]">10 Des 2025</td>
                                 <td class="py-4 px-4">
                                     <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#ECFDF5] text-[#059669] text-sm rounded-full font-medium">
                                         <span class="w-1.5 h-1.5 bg-[#059669] rounded-full"></span>
@@ -217,9 +272,9 @@
                                 </td>
                                 <td class="py-4 px-4 text-[#1E293B]">UI/UX Design Fundamentals</td>
                                 <td class="py-4 px-4">
-                                    <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">CERT-2024-002</code>
+                                    <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">CERT-2025-002</code>
                                 </td>
-                                <td class="py-4 px-4 text-[#64748B]">9 Des 2024</td>
+                                <td class="py-4 px-4 text-[#64748B]">9 Des 2025</td>
                                 <td class="py-4 px-4">
                                     <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#ECFDF5] text-[#059669] text-sm rounded-full font-medium">
                                         <span class="w-1.5 h-1.5 bg-[#059669] rounded-full"></span>
@@ -243,9 +298,9 @@
                                 </td>
                                 <td class="py-4 px-4 text-[#1E293B]">Data Science Workshop</td>
                                 <td class="py-4 px-4">
-                                    <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">CERT-2024-003</code>
+                                    <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">CERT-2025-003</code>
                                 </td>
-                                <td class="py-4 px-4 text-[#64748B]">8 Des 2024</td>
+                                <td class="py-4 px-4 text-[#64748B]">8 Des 2025</td>
                                 <td class="py-4 px-4">
                                     <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#ECFDF5] text-[#059669] text-sm rounded-full font-medium">
                                         <span class="w-1.5 h-1.5 bg-[#059669] rounded-full"></span>
@@ -269,9 +324,9 @@
                                 </td>
                                 <td class="py-4 px-4 text-[#1E293B]">Digital Marketing Certification</td>
                                 <td class="py-4 px-4">
-                                    <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">CERT-2024-004</code>
+                                    <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">CERT-2025-004</code>
                                 </td>
-                                <td class="py-4 px-4 text-[#64748B]">7 Des 2024</td>
+                                <td class="py-4 px-4 text-[#64748B]">7 Des 2025</td>
                                 <td class="py-4 px-4">
                                     <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FEF2F2] text-[#DC2626] text-sm rounded-full font-medium">
                                         <span class="w-1.5 h-1.5 bg-[#DC2626] rounded-full"></span>
@@ -295,9 +350,9 @@
                                 </td>
                                 <td class="py-4 px-4 text-[#1E293B]">Cloud Computing Essentials</td>
                                 <td class="py-4 px-4">
-                                    <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">CERT-2024-005</code>
+                                    <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">CERT-2025-005</code>
                                 </td>
-                                <td class="py-4 px-4 text-[#64748B]">6 Des 2024</td>
+                                <td class="py-4 px-4 text-[#64748B]">6 Des 2025</td>
                                 <td class="py-4 px-4">
                                     <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#ECFDF5] text-[#059669] text-sm rounded-full font-medium">
                                         <span class="w-1.5 h-1.5 bg-[#059669] rounded-full"></span>
