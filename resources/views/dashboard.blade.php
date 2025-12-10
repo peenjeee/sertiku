@@ -1,4 +1,7 @@
 <x-layouts.app title="Dashboard – SertiKu">
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-3"></div>
+
     <main class="max-w-4xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
         <!-- Welcome Card -->
         <div class="rounded-3xl border border-white/10 bg-gradient-to-br from-[#0F172A] to-[#1E293B] p-8 shadow-2xl">
@@ -141,7 +144,7 @@
                     <h2 class="text-white font-bold text-xl">Lengkapi Profil Personal</h2>
                 </div>
 
-                <form action="{{ route('onboarding.store') }}" method="POST" class="space-y-5">
+                <form id="form-personal" class="space-y-5">
                     @csrf
                     <input type="hidden" name="account_type" value="personal">
 
@@ -177,13 +180,20 @@
                                class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
                     </div>
 
-                    <button type="submit"
-                            class="w-full py-4 px-6 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold text-center rounded-xl shadow-lg shadow-emerald-500/25 transition">
-                        <span class="flex items-center justify-center gap-2">
+                    <button type="submit" id="btn-submit-personal"
+                            class="w-full py-4 px-6 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold text-center rounded-xl shadow-lg shadow-emerald-500/25 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span class="btn-text flex items-center justify-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                             </svg>
                             Simpan & Lanjutkan ke Dashboard
+                        </span>
+                        <span class="btn-loading hidden flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Menyimpan...
                         </span>
                     </button>
                 </form>
@@ -200,7 +210,7 @@
                     <h2 class="text-white font-bold text-xl">Lengkapi Profil Lembaga</h2>
                 </div>
 
-                <form action="{{ route('onboarding.store') }}" method="POST" class="space-y-5">
+                <form id="form-institution" class="space-y-5">
                     @csrf
                     <input type="hidden" name="account_type" value="institution">
 
@@ -273,13 +283,20 @@
                         </div>
                     </div>
 
-                    <button type="submit"
-                            class="w-full py-4 px-6 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-center rounded-xl shadow-lg shadow-blue-500/25 transition">
-                        <span class="flex items-center justify-center gap-2">
+                    <button type="submit" id="btn-submit-institution"
+                            class="w-full py-4 px-6 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-center rounded-xl shadow-lg shadow-blue-500/25 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span class="btn-text flex items-center justify-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                             </svg>
                             Simpan & Lanjutkan ke Dashboard Lembaga
+                        </span>
+                        <span class="btn-loading hidden flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Menyimpan...
                         </span>
                     </button>
                 </form>
@@ -293,6 +310,133 @@
 
     <script>
         let selectedType = null;
+
+        // Toast notification function
+        function showToast(type, message, countdown = 0, redirectUrl = null) {
+            const container = document.getElementById('toast-container');
+            const toastId = 'toast-' + Date.now();
+            
+            const bgColor = type === 'success' 
+                ? 'bg-gradient-to-r from-emerald-500 to-green-600' 
+                : 'bg-gradient-to-r from-red-500 to-rose-600';
+            
+            const icon = type === 'success' 
+                ? `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                   </svg>`
+                : `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                   </svg>`;
+            
+            const countdownHtml = countdown > 0 
+                ? `<div class="mt-2 text-sm opacity-90">
+                       Mengarahkan ke dashboard dalam <span id="${toastId}-countdown" class="font-bold">${countdown}</span> detik...
+                   </div>`
+                : '';
+            
+            const toast = document.createElement('div');
+            toast.id = toastId;
+            toast.className = `${bgColor} text-white px-5 py-4 rounded-xl shadow-2xl flex items-start gap-3 min-w-[320px] max-w-[400px] transform translate-x-full transition-transform duration-300`;
+            toast.innerHTML = `
+                <div class="flex-shrink-0">${icon}</div>
+                <div class="flex-1">
+                    <div class="font-bold">${message}</div>
+                    ${countdownHtml}
+                </div>
+                <button onclick="removeToast('${toastId}')" class="flex-shrink-0 opacity-70 hover:opacity-100">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 10);
+            
+            // Handle countdown
+            if (countdown > 0 && redirectUrl) {
+                let remaining = countdown;
+                const countdownEl = document.getElementById(`${toastId}-countdown`);
+                
+                const interval = setInterval(() => {
+                    remaining--;
+                    if (countdownEl) countdownEl.textContent = remaining;
+                    
+                    if (remaining <= 0) {
+                        clearInterval(interval);
+                        window.location.href = redirectUrl;
+                    }
+                }, 1000);
+            }
+        }
+        
+        function removeToast(toastId) {
+            const toast = document.getElementById(toastId);
+            if (toast) {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => toast.remove(), 300);
+            }
+        }
+
+        // Handle form submission
+        async function submitForm(form, buttonId) {
+            const button = document.getElementById(buttonId);
+            const btnText = button.querySelector('.btn-text');
+            const btnLoading = button.querySelector('.btn-loading');
+            
+            // Show loading state
+            button.disabled = true;
+            btnText.classList.add('hidden');
+            btnLoading.classList.remove('hidden');
+            
+            try {
+                const formData = new FormData(form);
+                
+                const response = await fetch('{{ route("onboarding.store") }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                    },
+                    body: formData,
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Show success toast with countdown
+                    showToast('success', data.message || 'Profil berhasil disimpan!', 5, data.redirect_url);
+                } else {
+                    showToast('error', data.message || 'Terjadi kesalahan. Silakan coba lagi.');
+                    resetButton(button, btnText, btnLoading);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('error', 'Terjadi kesalahan. Silakan coba lagi.');
+                resetButton(button, btnText, btnLoading);
+            }
+        }
+        
+        function resetButton(button, btnText, btnLoading) {
+            button.disabled = false;
+            btnText.classList.remove('hidden');
+            btnLoading.classList.add('hidden');
+        }
+        
+        // Attach form handlers
+        document.getElementById('form-personal').addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitForm(this, 'btn-submit-personal');
+        });
+        
+        document.getElementById('form-institution').addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitForm(this, 'btn-submit-institution');
+        });
 
         function selectAccountType(type) {
             selectedType = type;

@@ -132,8 +132,19 @@ class OnboardingController extends Controller
 
         $user->update($updateData);
 
+        // Check if AJAX request
+        if ($request->ajax() || $request->wantsJson()) {
+            $redirectUrl = $user->isInstitution() ? route('lembaga.dashboard') : route('user.dashboard');
+            return response()->json([
+                'success' => true,
+                'message' => 'Profil berhasil disimpan!',
+                'redirect_url' => $redirectUrl,
+                'account_type' => $accountType,
+            ]);
+        }
+
         // Redirect to appropriate dashboard based on account type
-        $redirectRoute = $user->isInstitution() ? 'lembaga.dashboard' : 'dashboard';
+        $redirectRoute = $user->isInstitution() ? 'lembaga.dashboard' : 'user.dashboard';
         return redirect()->route($redirectRoute)->with('success', 'Profil berhasil dilengkapi! Selamat datang di SertiKu.');
     }
 
