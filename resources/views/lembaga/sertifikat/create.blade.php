@@ -86,7 +86,7 @@
         @else
 
         <!-- Tab List -->
-        <div class="bg-[#F1F5F9] border border-[#8EC5FF]/30 rounded-lg p-1.5 flex items-center justify-center gap-2">
+        <div class="bg-[#F1F5F9] border border-[#8EC5FF]/30 rounded-lg p-1.5 flex items-center justify-center gap-2 overflow-x-auto">
             <button class="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#155DFC] to-[#4F39F6] text-white text-sm font-bold rounded-md shadow">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
@@ -102,10 +102,10 @@
         </div>
 
         <!-- Mode Penerbitan Card -->
-        <div class="glass-card rounded-2xl p-6">
+        <div class="glass-card rounded-xl lg:rounded-2xl p-4 lg:p-6">
             <div class="space-y-4">
                 <label class="text-[#1C398E] text-sm font-bold">Mode Penerbitan</label>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
                     <button class="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[#155DFC] to-[#4F39F6] text-white font-bold rounded-lg">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2zM12 11v4"/>
@@ -123,7 +123,7 @@
         </div>
 
         <!-- Form Card - Informasi Program -->
-        <div class="glass-card rounded-2xl p-6 space-y-10">
+        <div class="glass-card rounded-xl lg:rounded-2xl p-4 lg:p-6 space-y-6 lg:space-y-10">
             <!-- Section Header -->
             <div class="flex items-center gap-2 pb-3 border-b border-[#8EC5FF]">
                 <svg class="w-5 h-5 text-[#1C398E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,7 +133,7 @@
             </div>
 
             <!-- Form Fields -->
-            <div class="grid grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
                 <!-- Nama Kursus -->
                 <div class="space-y-2">
                     <label class="text-[#1C398E] text-sm font-bold">
@@ -167,7 +167,7 @@
             </div>
 
             <!-- Tanggal -->
-            <div class="grid grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
                 <div class="space-y-2">
                     <label class="text-[#1C398E] text-sm font-bold">Tanggal Penerbitan</label>
                     <input type="date" class="w-full px-4 py-3 bg-[#F8FAFC] border border-[#8EC5FF] rounded-lg text-sm text-[#64748B] focus:outline-none focus:ring-2 focus:ring-blue-500">

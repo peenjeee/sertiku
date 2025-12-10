@@ -1,14 +1,14 @@
 <x-layouts.lembaga>
-    <div class="space-y-8">
+    <div class="space-y-6 lg:space-y-8">
         <!-- Welcome Banner -->
-        <div class="welcome-banner relative rounded-3xl p-8 overflow-hidden">
-            <div class="relative z-10 flex items-center justify-between">
+        <div class="welcome-banner relative rounded-2xl lg:rounded-3xl p-5 lg:p-8 overflow-hidden">
+            <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 class="text-3xl text-white font-bold mb-2">Selamat Datang, {{ Auth::user()->institution_name ?? Auth::user()->name }}! 👋</h1>
-                    <p class="text-[#DBEAFE] text-lg">Kelola dan terbitkan sertifikat digital dengan mudah</p>
+                    <h1 class="text-xl sm:text-2xl lg:text-3xl text-white font-bold mb-1 lg:mb-2">Selamat Datang, {{ Auth::user()->institution_name ?? Auth::user()->name }}! 👋</h1>
+                    <p class="text-[#DBEAFE] text-sm lg:text-lg">Kelola dan terbitkan sertifikat digital dengan mudah</p>
                 </div>
-                <div class="opacity-30">
-                    <svg class="w-24 h-24" fill="none" stroke="white" viewBox="0 0 24 24" stroke-width="1">
+                <div class="opacity-30 hidden sm:block">
+                    <svg class="w-16 h-16 lg:w-24 lg:h-24" fill="none" stroke="white" viewBox="0 0 24 24" stroke-width="1">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
                     </svg>
                 </div>
@@ -26,8 +26,8 @@
 
         <!-- Upgrade Banner for Starter Plan -->
         @if($isStarterPlan)
-        <div class="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-2xl p-6">
-            <div class="flex items-start justify-between">
+        <div class="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl lg:rounded-2xl p-4 lg:p-6">
+            <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
                 <div class="flex items-start gap-4">
                     <div class="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center flex-shrink-0">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -71,7 +71,7 @@
         @endif
 
         <!-- Quick Action Cards -->
-        <div class="grid grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <!-- Terbitkan Sertifikat -->
             <a href="{{ route('lembaga.sertifikat.create') }}" class="gradient-card-blue rounded-2xl p-6 hover:scale-[1.02] transition cursor-pointer">
                 <div class="flex items-center gap-4">
@@ -119,7 +119,7 @@
         </div>
 
         <!-- Stats Cards -->
-        <div class="grid grid-cols-4 gap-6">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
             <!-- Total Sertifikat -->
             <div class="stat-card-blue rounded-2xl p-6">
                 <div class="flex items-center justify-between">

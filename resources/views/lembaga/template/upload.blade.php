@@ -1,9 +1,9 @@
 <x-layouts.lembaga>
-    <div class="space-y-6">
+    <div class="space-y-4 lg:space-y-6">
         <!-- Header -->
         <div>
-            <h1 class="text-white text-2xl font-normal">Upload Sertifikat</h1>
-            <p class="text-[#BEDBFF]/70 text-base mt-1">Upload dan proses sertifikat secara massal atau individual</p>
+            <h1 class="text-white text-lg sm:text-xl lg:text-2xl font-normal">Upload Sertifikat</h1>
+            <p class="text-[#BEDBFF]/70 text-sm lg:text-base mt-1">Upload dan proses sertifikat secara massal atau individual</p>
         </div>
 
         <!-- Upload Mode Tabs -->
@@ -17,7 +17,7 @@
         </div>
 
         <!-- Stats Cards -->
-        <div class="grid grid-cols-5 gap-4">
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-4">
             <!-- Total File -->
             <div class="bg-[#3B82F6] rounded-xl p-4 flex items-center gap-3">
                 <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
@@ -100,10 +100,10 @@
             </div>
 
             <!-- Upload Zone -->
-            <div class="p-8">
-                <div class="border-2 border-dashed border-[#64748B]/30 rounded-2xl p-12 text-center bg-[#1E293B]/30 hover:bg-[#1E293B]/50 transition cursor-pointer" 
+            <div class="p-4 lg:p-8">
+                <div class="border-2 border-dashed border-[#64748B]/30 rounded-xl lg:rounded-2xl p-6 lg:p-12 text-center bg-[#1E293B]/30 hover:bg-[#1E293B]/50 transition cursor-pointer"
                      id="dropzone"
-                     ondragover="event.preventDefault(); this.classList.add('border-[#155DFC]')" 
+                     ondragover="event.preventDefault(); this.classList.add('border-[#155DFC]')"
                      ondragleave="this.classList.remove('border-[#155DFC]')"
                      ondrop="event.preventDefault(); this.classList.remove('border-[#155DFC]')">
                     <!-- Upload Icon -->

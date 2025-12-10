@@ -1,10 +1,10 @@
 <x-layouts.lembaga>
-    <div class="space-y-6">
+    <div class="space-y-4 lg:space-y-6">
         <!-- Header -->
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-                <h1 class="text-[#1E293B] text-2xl font-bold">Galeri Template Sertifikat</h1>
-                <p class="text-[#64748B] text-base mt-1">Kelola template sertifikat yang telah diupload (3 template)</p>
+                <h1 class="text-[#1E293B] text-lg sm:text-xl lg:text-2xl font-bold">Galeri Template Sertifikat</h1>
+                <p class="text-[#64748B] text-sm lg:text-base mt-1">Kelola template sertifikat yang telah diupload (3 template)</p>
             </div>
             <div class="flex items-center gap-2">
                 <button class="w-10 h-10 bg-[#1E3A8F] rounded-lg flex items-center justify-center text-white">
@@ -17,11 +17,12 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
                     </svg>
                 </button>
-                <a href="{{ route('lembaga.template.upload') }}" class="flex items-center gap-2 px-4 py-2.5 btn-primary-gradient rounded-lg text-white text-sm font-bold ml-2">
+                <a href="{{ route('lembaga.template.upload') }}" class="flex items-center gap-2 px-3 lg:px-4 py-2.5 btn-primary-gradient rounded-lg text-white text-sm font-bold ml-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                     </svg>
-                    Upload Template
+                    <span class="hidden sm:inline">Upload Template</span>
+                    <span class="sm:hidden">Upload</span>
                 </a>
             </div>
         </div>
@@ -56,7 +57,7 @@
         </div>
 
         <!-- Template Grid -->
-        <div class="grid grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
             <!-- Template 1 -->
             <div class="glass-card rounded-2xl overflow-hidden group hover:shadow-lg transition">
                 <div class="relative aspect-[4/3] bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">

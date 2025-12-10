@@ -1,13 +1,13 @@
 <x-layouts.lembaga>
-    <div class="space-y-6">
+    <div class="space-y-4 lg:space-y-6">
         <!-- Header -->
-        <div class="info-box rounded-2xl p-6">
-            <h1 class="text-[#1E3A8A] text-2xl font-bold mb-2">Daftar Sertifikat Terbit</h1>
-            <p class="text-[#3B82F6] text-base">Kelola semua sertifikat yang telah diterbitkan oleh lembaga Anda</p>
+        <div class="info-box rounded-xl lg:rounded-2xl p-4 lg:p-6">
+            <h1 class="text-[#1E3A8A] text-lg sm:text-xl lg:text-2xl font-bold mb-1 lg:mb-2">Daftar Sertifikat Terbit</h1>
+            <p class="text-[#3B82F6] text-sm lg:text-base">Kelola semua sertifikat yang telah diterbitkan oleh lembaga Anda</p>
         </div>
 
         <!-- Stats Cards -->
-        <div class="grid grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
             <!-- Total Sertifikat -->
             <div class="glass-card rounded-2xl p-5">
                 <div class="flex items-center justify-between">
@@ -95,7 +95,7 @@
         </div>
 
         <!-- Certificate Cards Grid -->
-        <div class="grid grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
             <!-- Card 1 -->
             <div class="glass-card rounded-2xl overflow-hidden hover:shadow-lg transition group">
                 <div class="p-5">
@@ -490,16 +490,16 @@
         </div>
 
         <!-- Pagination -->
-        <div class="glass-card rounded-2xl p-4 flex items-center justify-between">
-            <p class="text-[#64748B] text-sm">Menampilkan 1-6 dari 127 sertifikat</p>
-            <div class="flex items-center gap-2">
-                <button class="px-4 py-2 text-[#64748B] text-sm hover:bg-[#F1F5F9] rounded-lg border border-[#E2E8F0]">Sebelumnya</button>
-                <button class="px-4 py-2 bg-[#1E3A8F] text-white text-sm rounded-lg font-medium">1</button>
-                <button class="px-4 py-2 text-[#64748B] text-sm hover:bg-[#F1F5F9] rounded-lg">2</button>
-                <button class="px-4 py-2 text-[#64748B] text-sm hover:bg-[#F1F5F9] rounded-lg">3</button>
-                <span class="text-[#64748B]">...</span>
-                <button class="px-4 py-2 text-[#64748B] text-sm hover:bg-[#F1F5F9] rounded-lg">22</button>
-                <button class="px-4 py-2 text-[#64748B] text-sm hover:bg-[#F1F5F9] rounded-lg border border-[#E2E8F0]">Selanjutnya</button>
+        <div class="glass-card rounded-xl lg:rounded-2xl p-3 lg:p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p class="text-[#64748B] text-xs sm:text-sm">Menampilkan 1-6 dari 127 sertifikat</p>
+            <div class="flex items-center gap-1 sm:gap-2 overflow-x-auto">
+                <button class="px-2 sm:px-4 py-2 text-[#64748B] text-xs sm:text-sm hover:bg-[#F1F5F9] rounded-lg border border-[#E2E8F0]">Prev</button>
+                <button class="px-3 sm:px-4 py-2 bg-[#1E3A8F] text-white text-xs sm:text-sm rounded-lg font-medium">1</button>
+                <button class="px-3 sm:px-4 py-2 text-[#64748B] text-xs sm:text-sm hover:bg-[#F1F5F9] rounded-lg">2</button>
+                <button class="hidden sm:block px-4 py-2 text-[#64748B] text-sm hover:bg-[#F1F5F9] rounded-lg">3</button>
+                <span class="text-[#64748B] hidden sm:inline">...</span>
+                <button class="hidden sm:block px-4 py-2 text-[#64748B] text-sm hover:bg-[#F1F5F9] rounded-lg">22</button>
+                <button class="px-2 sm:px-4 py-2 text-[#64748B] text-xs sm:text-sm hover:bg-[#F1F5F9] rounded-lg border border-[#E2E8F0]">Next</button>
             </div>
         </div>
     </div>
