@@ -236,9 +236,9 @@
         }
 
         .info-box {
-            background: linear-gradient(90deg, rgba(43, 127, 255, 0.1) 0%, rgba(97, 95, 255, 0.1) 100%);
-            border: 1px solid rgba(43, 127, 255, 0.3);
-            box-shadow: 0px 10px 20px -5px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(90deg, #EFF6FF 0%, #DBEAFE 100%);
+            border: 1px solid #BFDBFE;
+            box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         .chat-widget {

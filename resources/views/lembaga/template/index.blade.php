@@ -3,16 +3,16 @@
         <!-- Header -->
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-white text-2xl font-normal">Galeri Template Sertifikat</h1>
-                <p class="text-[#BEDBFF]/70 text-base mt-1">Kelola template sertifikat yang telah diupload</p>
+                <h1 class="text-[#1E293B] text-2xl font-bold">Galeri Template Sertifikat</h1>
+                <p class="text-[#64748B] text-base mt-1">Kelola template sertifikat yang telah diupload</p>
             </div>
             <div class="flex items-center gap-2">
-                <button class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-white/70 hover:bg-white/20 transition">
+                <button class="w-10 h-10 bg-white border border-[#E2E8F0] rounded-lg flex items-center justify-center text-[#64748B] hover:bg-gray-50 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
                     </svg>
                 </button>
-                <button class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-white/70 hover:bg-white/20 transition">
+                <button class="w-10 h-10 bg-white border border-[#E2E8F0] rounded-lg flex items-center justify-center text-[#64748B] hover:bg-gray-50 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
                     </svg>
@@ -31,7 +31,7 @@
                 <div>
                     <h3 class="text-[#1C398E] font-bold mb-1">Tentang Galeri Template</h3>
                     <p class="text-[#193CB8] text-sm">
-                        Galeri ini menampilkan template "License Sertifikat". Template ini adalah desain kosong yang siap digunakan untuk menerbitkan sertifikat kepada penerima. Untuk melihat sertifikat yang sudah diterbitkan kepada peserta, kunjungi menu 
+                        Galeri ini menampilkan template "License Sertifikat". Template ini adalah desain kosong yang siap digunakan untuk menerbitkan sertifikat kepada penerima. Untuk melihat sertifikat yang sudah diterbitkan kepada peserta, kunjungi menu
                         <a href="{{ route('lembaga.sertifikat.index') }}" class="font-bold hover:underline">"Daftar Sertifikat"</a>.
                     </p>
                 </div>
@@ -44,7 +44,7 @@
                 <svg class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-[#BEDBFF]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
-                <input type="text" placeholder="Cari template..." 
+                <input type="text" placeholder="Cari template..."
                        class="w-full pl-12 pr-4 py-3 bg-transparent border-0 text-white text-sm focus:outline-none placeholder-[#BEDBFF]/50">
             </div>
         </div>
