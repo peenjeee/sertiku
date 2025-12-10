@@ -33,8 +33,9 @@ class RegisterController extends Controller
             'institution' => ['nullable', 'string', 'max:255'],
 
             // Step 2
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'phone' => ['required', 'string', 'max:50'],
+            'email'   => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'phone'   => ['required', 'string', 'max:50'],
+            'country' => ['required', 'string', 'max:100'],
 
             // Step 3
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -49,6 +50,7 @@ class RegisterController extends Controller
             'email'       => $validated['email'],
             'password'    => Hash::make($validated['password']),
             'phone'       => $validated['phone'],
+            'country'     => $validated['country'],
             'occupation'  => $validated['occupation'] ?? null,
             'institution' => $validated['institution'] ?? null,
             'interests'   => isset($validated['interests'])

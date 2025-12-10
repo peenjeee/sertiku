@@ -284,6 +284,31 @@
                                     @enderror
                                 </div>
 
+                                {{-- Negara --}}
+                                <div class="space-y-2">
+                                    <label class="text-sm">Negara <span class="text-red-400">*</span></label>
+                                    <select
+                                        name="country"
+                                        data-step="2" data-required="true"
+                                        class="w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white
+                                               focus:outline-none focus:ring-2 focus:ring-[#2563EB]/70
+                                               @error('country') border-red-400/80 focus:ring-red-400/80 @else border-white/20 @enderror">
+                                        <option value="" class="bg-[#1E293B]">Pilih negara</option>
+                                        <option value="Indonesia" class="bg-[#1E293B]" {{ old('country') == 'Indonesia' ? 'selected' : '' }}>Indonesia</option>
+                                        <option value="Malaysia" class="bg-[#1E293B]" {{ old('country') == 'Malaysia' ? 'selected' : '' }}>Malaysia</option>
+                                        <option value="Singapore" class="bg-[#1E293B]" {{ old('country') == 'Singapore' ? 'selected' : '' }}>Singapore</option>
+                                        <option value="Thailand" class="bg-[#1E293B]" {{ old('country') == 'Thailand' ? 'selected' : '' }}>Thailand</option>
+                                        <option value="Vietnam" class="bg-[#1E293B]" {{ old('country') == 'Vietnam' ? 'selected' : '' }}>Vietnam</option>
+                                        <option value="Philippines" class="bg-[#1E293B]" {{ old('country') == 'Philippines' ? 'selected' : '' }}>Philippines</option>
+                                        <option value="Brunei" class="bg-[#1E293B]" {{ old('country') == 'Brunei' ? 'selected' : '' }}>Brunei</option>
+                                        <option value="Other" class="bg-[#1E293B]" {{ old('country') == 'Other' ? 'selected' : '' }}>Lainnya</option>
+                                    </select>
+                                    <p class="mt-1 text-xs text-red-300 hidden" data-error-for="country"></p>
+                                    @error('country')
+                                    <p class="mt-1 text-xs text-red-300">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
                                 <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-4">
                                     <button type="button"
                                             class="inline-flex items-center rounded-lg border border-white/30 bg-white/5 px-5 py-2 text-sm hover:bg-white/10"
@@ -594,11 +619,21 @@
 
                                         <div class="space-y-2">
                                             <label class="text-sm">Negara <span class="text-red-400">*</span></label>
-                                            <input type="text" name="country" value="{{ old('country', 'Indonesia') }}"
+                                            <select name="country"
                                                    data-org-step="2" data-required="true"
-                                                   class="w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40
+                                                   class="w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white
                                                           focus:outline-none focus:ring-2 focus:ring-[#2563EB]/70
                                                           @error('country') border-red-400/80 focus:ring-red-400/80 @else border-white/20 @enderror">
+                                                <option value="" class="bg-[#1E293B]">Pilih negara</option>
+                                                <option value="Indonesia" class="bg-[#1E293B]" {{ old('country', 'Indonesia') == 'Indonesia' ? 'selected' : '' }}>Indonesia</option>
+                                                <option value="Malaysia" class="bg-[#1E293B]" {{ old('country') == 'Malaysia' ? 'selected' : '' }}>Malaysia</option>
+                                                <option value="Singapore" class="bg-[#1E293B]" {{ old('country') == 'Singapore' ? 'selected' : '' }}>Singapore</option>
+                                                <option value="Thailand" class="bg-[#1E293B]" {{ old('country') == 'Thailand' ? 'selected' : '' }}>Thailand</option>
+                                                <option value="Vietnam" class="bg-[#1E293B]" {{ old('country') == 'Vietnam' ? 'selected' : '' }}>Vietnam</option>
+                                                <option value="Philippines" class="bg-[#1E293B]" {{ old('country') == 'Philippines' ? 'selected' : '' }}>Philippines</option>
+                                                <option value="Brunei" class="bg-[#1E293B]" {{ old('country') == 'Brunei' ? 'selected' : '' }}>Brunei</option>
+                                                <option value="Other" class="bg-[#1E293B]" {{ old('country') == 'Other' ? 'selected' : '' }}>Lainnya</option>
+                                            </select>
                                             <p class="mt-1 text-xs text-red-300 hidden" data-org-error-for="country"></p>
                                             @error('country')
                                             <p class="mt-1 text-xs text-red-300">{{ $message }}</p>
