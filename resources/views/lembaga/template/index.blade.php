@@ -3,8 +3,8 @@
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-                <h1 class="text-[#1E293B] text-lg sm:text-xl lg:text-2xl font-bold">Galeri Template Sertifikat</h1>
-                <p class="text-[#64748B] text-sm lg:text-base mt-1">Kelola template sertifikat yang telah diupload (3 template)</p>
+                <h1 class="text-white text-lg sm:text-xl lg:text-2xl font-bold">Galeri Template Sertifikat</h1>
+                <p class="text-white/70 text-sm lg:text-base mt-1">Kelola template sertifikat yang telah diupload (3 template)</p>
             </div>
             <div class="flex items-center gap-2">
                 <button class="w-10 h-10 bg-[#1E3A8F] rounded-lg flex items-center justify-center text-white">
