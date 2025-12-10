@@ -108,7 +108,7 @@ class OnboardingController extends Controller
                 'city'             => $validated['city'],
                 'province'         => $validated['province'] ?? null,
                 'postal_code'      => $validated['postal_code'] ?? null,
-                'country'          => $validated['country'] ?? null,
+                'country'          => $validated['country'] ?? 'Indonesia',
                 'admin_name'       => $validated['admin_name'],
                 'admin_phone'      => $validated['admin_phone'] ?? null,
                 'admin_position'   => $validated['admin_position'] ?? null,
