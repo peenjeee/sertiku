@@ -51,12 +51,14 @@
                 </div>
             </div>
 
-            <!-- Account Type Selection -->
-            <div class="mb-8">
+            <!-- Step 1: Account Type Selection -->
+            <div id="step1">
                 <h2 class="text-white font-bold text-xl mb-4 text-center">Pilih Jenis Akun Anda</h2>
-                <div class="grid md:grid-cols-2 gap-4">
+                <div class="grid md:grid-cols-2 gap-4 mb-6">
                     <!-- Personal Account -->
-                    <div class="bg-gradient-to-br from-emerald-500/10 to-green-600/5 border border-emerald-500/30 rounded-2xl p-6 hover:border-emerald-400/50 transition cursor-pointer group">
+                    <div onclick="selectAccountType('personal')"
+                         id="card-personal"
+                         class="account-card bg-gradient-to-br from-emerald-500/10 to-green-600/5 border-2 border-emerald-500/30 rounded-2xl p-6 hover:border-emerald-400 transition cursor-pointer group">
                         <div class="flex items-center gap-4 mb-4">
                             <div class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full flex items-center justify-center group-hover:scale-110 transition">
                                 <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -66,6 +68,11 @@
                             <div>
                                 <h3 class="text-emerald-400 font-bold text-lg">Akun Personal</h3>
                                 <p class="text-emerald-300/60 text-sm">Untuk individu</p>
+                            </div>
+                            <div class="ml-auto hidden" id="check-personal">
+                                <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
                             </div>
                         </div>
                         <p class="text-[#BEDBFF]/70 text-sm mb-4">
@@ -79,7 +86,9 @@
                     </div>
 
                     <!-- Institution Account -->
-                    <div class="bg-gradient-to-br from-blue-500/10 to-indigo-600/5 border border-blue-500/30 rounded-2xl p-6 hover:border-blue-400/50 transition cursor-pointer group">
+                    <div onclick="selectAccountType('institution')"
+                         id="card-institution"
+                         class="account-card bg-gradient-to-br from-blue-500/10 to-indigo-600/5 border-2 border-blue-500/30 rounded-2xl p-6 hover:border-blue-400 transition cursor-pointer group">
                         <div class="flex items-center gap-4 mb-4">
                             <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center group-hover:scale-110 transition">
                                 <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -89,6 +98,11 @@
                             <div>
                                 <h3 class="text-blue-400 font-bold text-lg">Akun Lembaga</h3>
                                 <p class="text-blue-300/60 text-sm">Untuk organisasi</p>
+                            </div>
+                            <div class="ml-auto hidden" id="check-institution">
+                                <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
                             </div>
                         </div>
                         <p class="text-[#BEDBFF]/70 text-sm mb-4">
@@ -101,40 +115,240 @@
                         </ul>
                     </div>
                 </div>
+
+                <!-- Continue Button -->
+                <button onclick="goToStep2()"
+                        id="btn-continue"
+                        disabled
+                        class="w-full py-4 px-6 bg-gradient-to-r from-gray-600 to-gray-700 text-white/50 font-bold text-center rounded-xl transition cursor-not-allowed">
+                    <span class="flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                        Pilih jenis akun terlebih dahulu
+                    </span>
+                </button>
             </div>
 
-            <!-- Current Account Info -->
-            <div class="bg-white/5 border border-white/10 rounded-xl p-4 mb-6">
-                <h3 class="text-white/60 text-sm font-medium mb-2">Informasi Akun Saat Ini:</h3>
-                <div class="flex items-center gap-3">
-                    @if(auth()->user()->avatar)
-                        <img src="{{ auth()->user()->avatar }}" alt="Avatar" class="w-10 h-10 rounded-full">
-                    @else
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
-                            {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
-                        </div>
-                    @endif
-                    <div>
-                        <p class="text-white font-medium">{{ auth()->user()->name }}</p>
-                        <p class="text-white/50 text-sm">{{ auth()->user()->email }}</p>
-                    </div>
+            <!-- Step 2: Personal Form -->
+            <div id="step2-personal" class="hidden">
+                <div class="flex items-center gap-3 mb-6">
+                    <button onclick="goBackToStep1()" class="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-lg transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <h2 class="text-white font-bold text-xl">Lengkapi Profil Personal</h2>
                 </div>
+
+                <form action="{{ route('onboarding.store') }}" method="POST" class="space-y-5">
+                    @csrf
+                    <input type="hidden" name="account_type" value="personal">
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-white/80 text-sm font-medium mb-2">Nama Lengkap *</label>
+                            <input type="text" name="name" value="{{ auth()->user()->name }}" required
+                                   class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-white/80 text-sm font-medium mb-2">Nomor Telepon</label>
+                            <input type="tel" name="phone" placeholder="08xxxxxxxxxx"
+                                   class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-white/80 text-sm font-medium mb-2">Pekerjaan</label>
+                            <input type="text" name="occupation" placeholder="Contoh: Software Engineer"
+                                   class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-white/80 text-sm font-medium mb-2">Instansi/Perusahaan</label>
+                            <input type="text" name="user_institution" placeholder="Nama tempat Anda bekerja/belajar"
+                                   class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-white/80 text-sm font-medium mb-2">Kota</label>
+                        <input type="text" name="city" placeholder="Kota tempat tinggal"
+                               class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                    </div>
+
+                    <button type="submit"
+                            class="w-full py-4 px-6 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold text-center rounded-xl shadow-lg shadow-emerald-500/25 transition">
+                        <span class="flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Simpan & Lanjutkan ke Dashboard
+                        </span>
+                    </button>
+                </form>
             </div>
 
-            <!-- CTA Button -->
-            <a href="{{ route('onboarding') }}"
-               class="block w-full py-4 px-6 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-center rounded-xl shadow-lg shadow-blue-500/25 transition">
-                <span class="flex items-center justify-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                    </svg>
-                    Lengkapi Profil Sekarang
-                </span>
-            </a>
+            <!-- Step 2: Institution Form -->
+            <div id="step2-institution" class="hidden">
+                <div class="flex items-center gap-3 mb-6">
+                    <button onclick="goBackToStep1()" class="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-lg transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <h2 class="text-white font-bold text-xl">Lengkapi Profil Lembaga</h2>
+                </div>
+
+                <form action="{{ route('onboarding.store') }}" method="POST" class="space-y-5">
+                    @csrf
+                    <input type="hidden" name="account_type" value="institution">
+
+                    <!-- Institution Info -->
+                    <div class="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 mb-4">
+                        <h3 class="text-blue-400 font-bold mb-3 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5"/>
+                            </svg>
+                            Informasi Lembaga
+                        </h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-white/80 text-sm font-medium mb-2">Nama Lembaga *</label>
+                                <input type="text" name="institution_name" placeholder="Nama resmi lembaga" required
+                                       class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-white/80 text-sm font-medium mb-2">Jenis Lembaga *</label>
+                                <select name="institution_type" required
+                                        class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white focus:outline-none focus:border-blue-500">
+                                    <option value="" class="bg-gray-800">Pilih jenis</option>
+                                    <option value="university" class="bg-gray-800">Universitas/Perguruan Tinggi</option>
+                                    <option value="school" class="bg-gray-800">Sekolah</option>
+                                    <option value="company" class="bg-gray-800">Perusahaan</option>
+                                    <option value="organization" class="bg-gray-800">Organisasi/Komunitas</option>
+                                    <option value="government" class="bg-gray-800">Instansi Pemerintah</option>
+                                    <option value="other" class="bg-gray-800">Lainnya</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <label class="block text-white/80 text-sm font-medium mb-2">Website</label>
+                                <input type="url" name="website" placeholder="https://contoh.com"
+                                       class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-white/80 text-sm font-medium mb-2">Kota *</label>
+                                <input type="text" name="city" placeholder="Kota lokasi lembaga" required
+                                       class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Admin Info -->
+                    <div class="bg-purple-500/10 border border-purple-500/20 rounded-xl p-4">
+                        <h3 class="text-purple-400 font-bold mb-3 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                            Informasi Admin/PIC
+                        </h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-white/80 text-sm font-medium mb-2">Nama Admin *</label>
+                                <input type="text" name="admin_name" value="{{ auth()->user()->name }}" required
+                                       class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-white/80 text-sm font-medium mb-2">Jabatan</label>
+                                <input type="text" name="admin_position" placeholder="Contoh: Manager HRD"
+                                       class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <label class="block text-white/80 text-sm font-medium mb-2">Nomor Telepon Admin</label>
+                            <input type="tel" name="admin_phone" placeholder="08xxxxxxxxxx"
+                                   class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                            class="w-full py-4 px-6 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-center rounded-xl shadow-lg shadow-blue-500/25 transition">
+                        <span class="flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Simpan & Lanjutkan ke Dashboard Lembaga
+                        </span>
+                    </button>
+                </form>
+            </div>
 
             <p class="text-center text-white/40 text-sm mt-4">
                 Proses ini hanya membutuhkan 2-3 menit
             </p>
         </div>
     </main>
+
+    <script>
+        let selectedType = null;
+
+        function selectAccountType(type) {
+            selectedType = type;
+
+            // Reset all cards
+            document.querySelectorAll('.account-card').forEach(card => {
+                card.classList.remove('ring-2', 'ring-offset-2', 'ring-offset-[#0F172A]');
+            });
+            document.getElementById('check-personal').classList.add('hidden');
+            document.getElementById('check-institution').classList.add('hidden');
+
+            // Highlight selected card
+            if (type === 'personal') {
+                document.getElementById('card-personal').classList.add('ring-2', 'ring-emerald-400', 'ring-offset-2', 'ring-offset-[#0F172A]');
+                document.getElementById('check-personal').classList.remove('hidden');
+            } else {
+                document.getElementById('card-institution').classList.add('ring-2', 'ring-blue-400', 'ring-offset-2', 'ring-offset-[#0F172A]');
+                document.getElementById('check-institution').classList.remove('hidden');
+            }
+
+            // Enable continue button
+            const btn = document.getElementById('btn-continue');
+            btn.disabled = false;
+            btn.classList.remove('bg-gradient-to-r', 'from-gray-600', 'to-gray-700', 'text-white/50', 'cursor-not-allowed');
+            btn.classList.add('bg-gradient-to-r', 'from-blue-500', 'to-indigo-600', 'hover:from-blue-600', 'hover:to-indigo-700', 'text-white', 'shadow-lg', 'shadow-blue-500/25', 'cursor-pointer');
+            btn.innerHTML = `
+                <span class="flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                    </svg>
+                    Lanjutkan ke Pengisian Profil
+                </span>
+            `;
+        }
+
+        function goToStep2() {
+            if (!selectedType) return;
+
+            // Hide step 1
+            document.getElementById('step1').classList.add('hidden');
+
+            // Show appropriate form
+            if (selectedType === 'personal') {
+                document.getElementById('step2-personal').classList.remove('hidden');
+            } else {
+                document.getElementById('step2-institution').classList.remove('hidden');
+            }
+        }
+
+        function goBackToStep1() {
+            // Hide both forms
+            document.getElementById('step2-personal').classList.add('hidden');
+            document.getElementById('step2-institution').classList.add('hidden');
+
+            // Show step 1
+            document.getElementById('step1').classList.remove('hidden');
+        }
+    </script>
 </x-layouts.app>

@@ -50,28 +50,29 @@ class OnboardingController extends Controller
         if ($accountType === 'personal') {
             $rules = array_merge($rules, [
                 'name'             => 'required|string|max:255',
-                'phone'            => 'required|string|max:20',
-                'occupation'       => 'required|string|max:255',
+                'phone'            => 'nullable|string|max:20',
+                'occupation'       => 'nullable|string|max:255',
                 'user_institution' => 'nullable|string|max:255',
+                'city'             => 'nullable|string|max:100',
             ]);
         } else {
             $rules = array_merge($rules, [
                 // Institution info
                 'institution_name' => 'required|string|max:255',
                 'institution_type' => 'required|string|max:255',
-                'sector'           => 'required|string|max:255',
+                'sector'           => 'nullable|string|max:255',
                 'website'          => 'nullable|url|max:255',
                 'description'      => 'nullable|string|max:1000',
-                // Address
-                'address_line'     => 'required|string|max:500',
+                // Address (simplified)
+                'address_line'     => 'nullable|string|max:500',
                 'city'             => 'required|string|max:100',
-                'province'         => 'required|string|max:100',
-                'postal_code'      => 'required|string|max:10',
-                'country'          => 'required|string|max:100',
+                'province'         => 'nullable|string|max:100',
+                'postal_code'      => 'nullable|string|max:10',
+                'country'          => 'nullable|string|max:100',
                 // Admin info
                 'admin_name'       => 'required|string|max:255',
-                'admin_phone'      => 'required|string|max:20',
-                'admin_position'   => 'required|string|max:255',
+                'admin_phone'      => 'nullable|string|max:20',
+                'admin_position'   => 'nullable|string|max:255',
             ]);
         }
 
@@ -95,25 +96,26 @@ class OnboardingController extends Controller
         if ($accountType === 'personal') {
             $updateData = array_merge($updateData, [
                 'name'             => $validated['name'],
-                'phone'            => $validated['phone'],
-                'occupation'       => $validated['occupation'],
+                'phone'            => $validated['phone'] ?? null,
+                'occupation'       => $validated['occupation'] ?? null,
                 'user_institution' => $validated['user_institution'] ?? null,
+                'city'             => $validated['city'] ?? null,
             ]);
         } else {
             $updateData = array_merge($updateData, [
                 'institution_name' => $validated['institution_name'],
                 'institution_type' => $validated['institution_type'],
-                'sector'           => $validated['sector'],
+                'sector'           => $validated['sector'] ?? null,
                 'website'          => $validated['website'] ?? null,
                 'description'      => $validated['description'] ?? null,
-                'address_line'     => $validated['address_line'],
+                'address_line'     => $validated['address_line'] ?? null,
                 'city'             => $validated['city'],
-                'province'         => $validated['province'],
-                'postal_code'      => $validated['postal_code'],
-                'country'          => $validated['country'],
+                'province'         => $validated['province'] ?? null,
+                'postal_code'      => $validated['postal_code'] ?? null,
+                'country'          => $validated['country'] ?? null,
                 'admin_name'       => $validated['admin_name'],
-                'admin_phone'      => $validated['admin_phone'],
-                'admin_position'   => $validated['admin_position'],
+                'admin_phone'      => $validated['admin_phone'] ?? null,
+                'admin_position'   => $validated['admin_position'] ?? null,
                 'name'             => $validated['admin_name'], // Use admin name as user name
             ]);
         }
