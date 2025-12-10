@@ -76,11 +76,7 @@ class OnboardingController extends Controller
             ]);
         }
 
-        // Optional email/password (only if not already set)
-        if (! $user->hasGoogleLogin() && ! $user->hasWalletLogin()) {
-            $rules['email'] = 'required|email|unique:users,email,' . $user->id;
-        }
-
+        // Optional password (only if user wants to set/change it)
         if ($request->filled('password')) {
             $rules['password'] = ['required', 'confirmed', Password::min(8)];
         }
@@ -118,11 +114,6 @@ class OnboardingController extends Controller
                 'admin_position'   => $validated['admin_position'] ?? null,
                 'name'             => $validated['admin_name'], // Use admin name as user name
             ]);
-        }
-
-        // Handle optional email
-        if (isset($validated['email'])) {
-            $updateData['email'] = $validated['email'];
         }
 
         // Handle optional password
