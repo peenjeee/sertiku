@@ -478,11 +478,36 @@
                                     onclick="connectWallet('metamask', event)">
                                     <div class="flex flex-col items-center gap-3">
                                         <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br from-[#F6851B] to-[#E2761B]">
-                                            <svg width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M35.5 5L22 15L24.5 9L35.5 5Z" fill="#E17726" stroke="#E17726" stroke-width="0.5"/>
-                                                <path d="M4.5 5L17.9 15.1L15.5 9L4.5 5Z" fill="#E27625" stroke="#E27625" stroke-width="0.5"/>
-                                                <path d="M30.5 27.5L27 33L35 35.5L37 27.5L30.5 27.5Z" fill="#E27625" stroke="#E27625" stroke-width="0.5"/>
-                                                <path d="M3 27.5L5 35.5L13 33L9.5 27.5H3Z" fill="#E27625" stroke="#E27625" stroke-width="0.5"/>
+                                            <svg width="32" height="32" viewBox="0 0 318 318" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M274.1 35.5L174.6 109.4L193 65.8L274.1 35.5Z" fill="#E2761B" stroke="#E2761B" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M44.4 35.5L143.1 110.1L125.6 65.8L44.4 35.5Z" fill="#E4761B" stroke="#E4761B" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M238.3 206.8L211.8 247.4L268.5 262.9L284.8 207.7L238.3 206.8Z" fill="#E4761B" stroke="#E4761B" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M33.9 207.7L50.1 262.9L106.8 247.4L80.3 206.8L33.9 207.7Z" fill="#E4761B" stroke="#E4761B" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M103.6 138.2L87.8 162.1L143.8 164.6L141.7 104.2L103.6 138.2Z" fill="#E4761B" stroke="#E4761B" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M214.9 138.2L176.3 103.4L174.6 164.6L230.5 162.1L214.9 138.2Z" fill="#E4761B" stroke="#E4761B" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M106.8 247.4L140.1 230.9L111.4 208.1L106.8 247.4Z" fill="#E4761B" stroke="#E4761B" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M178.4 230.9L211.8 247.4L207.1 208.1L178.4 230.9Z" fill="#E4761B" stroke="#E4761B" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M211.8 247.4L178.4 230.9L181.1 253.3L180.8 262.1L211.8 247.4Z" fill="#D7C1B3" stroke="#D7C1B3" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M106.8 247.4L137.8 262.1L137.6 253.3L140.1 230.9L106.8 247.4Z" fill="#D7C1B3" stroke="#D7C1B3" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M138.3 193.5L110.6 185.3L130.5 176.1L138.3 193.5Z" fill="#233447" stroke="#233447" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M180.2 193.5L188 176.1L208 185.3L180.2 193.5Z" fill="#233447" stroke="#233447" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M106.8 247.4L111.6 206.8L80.3 207.7L106.8 247.4Z" fill="#CD6116" stroke="#CD6116" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M207 206.8L211.8 247.4L238.3 207.7L207 206.8Z" fill="#CD6116" stroke="#CD6116" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M230.5 162.1L174.6 164.6L180.3 193.5L188.1 176.1L208.1 185.3L230.5 162.1Z" fill="#CD6116" stroke="#CD6116" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M110.6 185.3L130.6 176.1L138.3 193.5L144 164.6L87.8 162.1L110.6 185.3Z" fill="#CD6116" stroke="#CD6116" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M87.8 162.1L111.4 208.1L110.6 185.3L87.8 162.1Z" fill="#E4751F" stroke="#E4751F" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M208.1 185.3L207.1 208.1L230.5 162.1L208.1 185.3Z" fill="#E4751F" stroke="#E4751F" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M144 164.6L138.3 193.5L145.4 229.6L147 182.6L144 164.6Z" fill="#E4751F" stroke="#E4751F" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M174.6 164.6L171.7 182.4L173.1 229.6L180.3 193.5L174.6 164.6Z" fill="#E4751F" stroke="#E4751F" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M180.3 193.5L173.1 229.6L178.4 230.9L207.1 208.1L208.1 185.3L180.3 193.5Z" fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M110.6 185.3L111.4 208.1L140.1 230.9L145.4 229.6L138.3 193.5L110.6 185.3Z" fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M180.8 262.1L181.1 253.3L178.6 251.1H139.9L137.6 253.3L137.8 262.1L106.8 247.4L117.8 256.4L139.5 271.6H178.9L200.8 256.4L211.8 247.4L180.8 262.1Z" fill="#C0AD9E" stroke="#C0AD9E" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M178.4 230.9L173.1 229.6H145.4L140.1 230.9L137.6 253.3L139.9 251.1H178.6L181.1 253.3L178.4 230.9Z" fill="#161616" stroke="#161616" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M278.3 114.2L287.9 67L274.1 35.5L178.4 106.8L214.9 138.2L267.2 152.5L278.8 139L273.8 135.4L281.8 128.1L275.6 123.3L283.6 117.2L278.3 114.2Z" fill="#763D16" stroke="#763D16" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M30.8 67L40.4 114.2L34.9 117.2L42.9 123.3L36.8 128.1L44.8 135.4L39.8 139L51.3 152.5L103.6 138.2L140.1 106.8L44.4 35.5L30.8 67Z" fill="#763D16" stroke="#763D16" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M267.2 152.5L214.9 138.2L230.5 162.1L207.1 208.1L238.3 207.7H284.8L267.2 152.5Z" fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M103.6 138.2L51.3 152.5L33.9 207.7H80.3L111.4 208.1L87.8 162.1L103.6 138.2Z" fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M174.6 164.6L178.4 106.8L193.1 65.8H125.6L140.1 106.8L144 164.6L145.3 182.8L145.4 229.6H173.1L173.3 182.8L174.6 164.6Z" fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round"/>
                                             </svg>
                                         </div>
                                         <div class="text-center">
