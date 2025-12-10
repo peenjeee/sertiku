@@ -53,6 +53,23 @@ Route::post('/logout', [GoogleController::class, 'logout'])
     ->name('logout')
     ->middleware('auth');
 
+// Password Reset
+Route::get('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetController::class, 'showForgotForm'])
+    ->middleware('guest')
+    ->name('password.request');
+
+Route::post('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetController::class, 'sendResetLink'])
+    ->middleware('guest')
+    ->name('password.email');
+
+Route::get('/reset-password/{token}', [\App\Http\Controllers\Auth\PasswordResetController::class, 'showResetForm'])
+    ->middleware('guest')
+    ->name('password.reset');
+
+Route::post('/reset-password', [\App\Http\Controllers\Auth\PasswordResetController::class, 'reset'])
+    ->middleware('guest')
+    ->name('password.update');
+
 /*
 |--------------------------------------------------------------------------
 | REGISTER (Pengguna & Lembaga – multi-tab)
@@ -105,6 +122,12 @@ Route::middleware('auth')->group(function () {
         // Personal users stay on this dashboard
         return view('dashboard');
     })->name('dashboard');
+
+    // Settings
+    Route::get('/settings', [\App\Http\Controllers\SettingsController::class, 'index'])->name('settings');
+    Route::put('/settings/profile', [\App\Http\Controllers\SettingsController::class, 'updateProfile'])->name('settings.profile');
+    Route::put('/settings/password', [\App\Http\Controllers\SettingsController::class, 'updatePassword'])->name('settings.password');
+    Route::delete('/settings/account', [\App\Http\Controllers\SettingsController::class, 'deleteAccount'])->name('settings.delete');
 });
 
 /*
