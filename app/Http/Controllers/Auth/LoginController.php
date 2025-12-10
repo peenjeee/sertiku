@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -9,6 +8,17 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+    /**
+     * Get the appropriate dashboard route based on account type
+     */
+    protected function getDashboardRoute($user)
+    {
+        if ($user->isInstitution()) {
+            return route('lembaga.dashboard');
+        }
+        return route('dashboard');
+    }
+
     public function showLoginForm()
     {
         return view('auth.login');
@@ -35,7 +45,7 @@ class LoginController extends Controller
          * user@sertiku.my.id    / user123
          */
         $dummyUsers = [
-            'admin@sertiku.my.id' => [
+            'admin@sertiku.my.id'   => [
                 'name'     => 'Admin SertiKu',
                 'password' => 'admin123',
             ],
@@ -43,7 +53,7 @@ class LoginController extends Controller
                 'name'     => 'Lembaga SertiKu',
                 'password' => 'lembaga123',
             ],
-            'user@sertiku.my.id' => [
+            'user@sertiku.my.id'    => [
                 'name'     => 'User SertiKu',
                 'password' => 'user123',
             ],
@@ -63,11 +73,11 @@ class LoginController extends Controller
             $request->session()->regenerate();
 
             // Check if profile is completed
-            if (!$user->isProfileCompleted()) {
+            if (! $user->isProfileCompleted()) {
                 return redirect()->route('onboarding');
             }
 
-            return redirect()->intended(route('dashboard'));
+            return redirect()->intended($this->getDashboardRoute($user));
         }
 
         /**
@@ -79,11 +89,11 @@ class LoginController extends Controller
 
             // Check if profile is completed
             $user = Auth::user();
-            if (!$user->isProfileCompleted()) {
+            if (! $user->isProfileCompleted()) {
                 return redirect()->route('onboarding');
             }
 
-            return redirect()->intended(route('dashboard'));
+            return redirect()->intended($this->getDashboardRoute($user));
         }
 
         return back()
@@ -110,7 +120,7 @@ class LoginController extends Controller
         if (! $user) {
             $user = User::create([
                 'name'           => 'User Web3',
-                'email'          => $wallet.'@wallet.local',
+                'email'          => $wallet . '@wallet.local',
                 'password'       => bcrypt(str()->random(32)),
                 'wallet_address' => $wallet,
             ]);
@@ -120,11 +130,11 @@ class LoginController extends Controller
         $request->session()->regenerate();
 
         // Check if profile is completed
-        if (!$user->isProfileCompleted()) {
+        if (! $user->isProfileCompleted()) {
             return redirect()->route('onboarding');
         }
 
-        return redirect()->intended(route('dashboard'));
+        return redirect()->intended($this->getDashboardRoute($user));
     }
 
     // === GOOGLE LOGIN (kalau nanti mau pakai Socialite di sini) ===

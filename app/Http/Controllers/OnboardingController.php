@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -10,17 +9,28 @@ use Illuminate\Validation\Rules\Password;
 class OnboardingController extends Controller
 {
     /**
+     * Get the appropriate dashboard route based on account type
+     */
+    protected function getDashboardRoute($user)
+    {
+        if ($user->isInstitution()) {
+            return route('lembaga.dashboard');
+        }
+        return route('dashboard');
+    }
+
+    /**
      * Show the onboarding form
      */
     public function show()
     {
         $user = Auth::user();
-        
-        // If profile is already completed, redirect to dashboard
+
+        // If profile is already completed, redirect to appropriate dashboard
         if ($user->isProfileCompleted()) {
-            return redirect()->route('dashboard');
+            return redirect($this->getDashboardRoute($user));
         }
-        
+
         return view('onboarding.index', compact('user'));
     }
 
@@ -29,7 +39,7 @@ class OnboardingController extends Controller
      */
     public function store(Request $request)
     {
-        $user = Auth::user();
+        $user        = Auth::user();
         $accountType = $request->input('account_type');
 
         // Base validation rules
@@ -39,9 +49,9 @@ class OnboardingController extends Controller
 
         if ($accountType === 'personal') {
             $rules = array_merge($rules, [
-                'name' => 'required|string|max:255',
-                'phone' => 'required|string|max:20',
-                'occupation' => 'required|string|max:255',
+                'name'             => 'required|string|max:255',
+                'phone'            => 'required|string|max:20',
+                'occupation'       => 'required|string|max:255',
                 'user_institution' => 'nullable|string|max:255',
             ]);
         } else {
@@ -49,27 +59,27 @@ class OnboardingController extends Controller
                 // Institution info
                 'institution_name' => 'required|string|max:255',
                 'institution_type' => 'required|string|max:255',
-                'sector' => 'required|string|max:255',
-                'website' => 'nullable|url|max:255',
-                'description' => 'nullable|string|max:1000',
+                'sector'           => 'required|string|max:255',
+                'website'          => 'nullable|url|max:255',
+                'description'      => 'nullable|string|max:1000',
                 // Address
-                'address_line' => 'required|string|max:500',
-                'city' => 'required|string|max:100',
-                'province' => 'required|string|max:100',
-                'postal_code' => 'required|string|max:10',
-                'country' => 'required|string|max:100',
+                'address_line'     => 'required|string|max:500',
+                'city'             => 'required|string|max:100',
+                'province'         => 'required|string|max:100',
+                'postal_code'      => 'required|string|max:10',
+                'country'          => 'required|string|max:100',
                 // Admin info
-                'admin_name' => 'required|string|max:255',
-                'admin_phone' => 'required|string|max:20',
-                'admin_position' => 'required|string|max:255',
+                'admin_name'       => 'required|string|max:255',
+                'admin_phone'      => 'required|string|max:20',
+                'admin_position'   => 'required|string|max:255',
             ]);
         }
 
         // Optional email/password (only if not already set)
-        if (!$user->hasGoogleLogin() && !$user->hasWalletLogin()) {
+        if (! $user->hasGoogleLogin() && ! $user->hasWalletLogin()) {
             $rules['email'] = 'required|email|unique:users,email,' . $user->id;
         }
-        
+
         if ($request->filled('password')) {
             $rules['password'] = ['required', 'confirmed', Password::min(8)];
         }
@@ -78,33 +88,33 @@ class OnboardingController extends Controller
 
         // Update user data
         $updateData = [
-            'account_type' => $accountType,
+            'account_type'      => $accountType,
             'profile_completed' => true,
         ];
 
         if ($accountType === 'personal') {
             $updateData = array_merge($updateData, [
-                'name' => $validated['name'],
-                'phone' => $validated['phone'],
-                'occupation' => $validated['occupation'],
+                'name'             => $validated['name'],
+                'phone'            => $validated['phone'],
+                'occupation'       => $validated['occupation'],
                 'user_institution' => $validated['user_institution'] ?? null,
             ]);
         } else {
             $updateData = array_merge($updateData, [
                 'institution_name' => $validated['institution_name'],
                 'institution_type' => $validated['institution_type'],
-                'sector' => $validated['sector'],
-                'website' => $validated['website'] ?? null,
-                'description' => $validated['description'] ?? null,
-                'address_line' => $validated['address_line'],
-                'city' => $validated['city'],
-                'province' => $validated['province'],
-                'postal_code' => $validated['postal_code'],
-                'country' => $validated['country'],
-                'admin_name' => $validated['admin_name'],
-                'admin_phone' => $validated['admin_phone'],
-                'admin_position' => $validated['admin_position'],
-                'name' => $validated['admin_name'], // Use admin name as user name
+                'sector'           => $validated['sector'],
+                'website'          => $validated['website'] ?? null,
+                'description'      => $validated['description'] ?? null,
+                'address_line'     => $validated['address_line'],
+                'city'             => $validated['city'],
+                'province'         => $validated['province'],
+                'postal_code'      => $validated['postal_code'],
+                'country'          => $validated['country'],
+                'admin_name'       => $validated['admin_name'],
+                'admin_phone'      => $validated['admin_phone'],
+                'admin_position'   => $validated['admin_position'],
+                'name'             => $validated['admin_name'], // Use admin name as user name
             ]);
         }
 
@@ -120,7 +130,9 @@ class OnboardingController extends Controller
 
         $user->update($updateData);
 
-        return redirect()->route('dashboard')->with('success', 'Profil berhasil dilengkapi! Selamat datang di SertiKu.');
+        // Redirect to appropriate dashboard based on account type
+        $redirectRoute = $user->isInstitution() ? 'lembaga.dashboard' : 'dashboard';
+        return redirect()->route($redirectRoute)->with('success', 'Profil berhasil dilengkapi! Selamat datang di SertiKu.');
     }
 
     /**
@@ -129,10 +141,10 @@ class OnboardingController extends Controller
     public function skip()
     {
         $user = Auth::user();
-        
+
         // Set a default account type and mark as completed
         $user->update([
-            'account_type' => 'personal',
+            'account_type'      => 'personal',
             'profile_completed' => true,
         ]);
 

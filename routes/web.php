@@ -1,12 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\VerifyController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\VerifyController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -88,7 +88,21 @@ Route::middleware('auth')->group(function () {
     Route::post('/onboarding', [OnboardingController::class, 'store'])->name('onboarding.store');
     Route::get('/onboarding/skip', [OnboardingController::class, 'skip'])->name('onboarding.skip');
 
+    // Dashboard - redirect based on account type
     Route::get('/dashboard', function () {
+        $user = auth()->user();
+
+        // If profile not completed, go to onboarding
+        if (! $user->isProfileCompleted()) {
+            return redirect()->route('onboarding');
+        }
+
+        // Redirect based on account type
+        if ($user->isInstitution()) {
+            return redirect()->route('lembaga.dashboard');
+        }
+
+        // Personal users stay on this dashboard
         return view('dashboard');
     })->name('dashboard');
 });
@@ -137,3 +151,24 @@ Route::post('/kontak', [\App\Http\Controllers\PageController::class, 'sendKontak
 Route::get('/privasi', [\App\Http\Controllers\PageController::class, 'privasi'])->name('privasi');
 Route::get('/syarat', [\App\Http\Controllers\PageController::class, 'syarat'])->name('syarat');
 Route::get('/cookie', [\App\Http\Controllers\PageController::class, 'cookie'])->name('cookie');
+
+/*
+|--------------------------------------------------------------------------
+| Lembaga Dashboard Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth'])->prefix('lembaga')->name('lembaga.')->group(function () {
+    // Dashboard
+    Route::get('/', [\App\Http\Controllers\LembagaController::class, 'dashboard'])->name('dashboard');
+
+    // Sertifikat
+    Route::get('/sertifikat', [\App\Http\Controllers\LembagaController::class, 'indexSertifikat'])->name('sertifikat.index');
+    Route::get('/sertifikat/create', [\App\Http\Controllers\LembagaController::class, 'createSertifikat'])->name('sertifikat.create');
+    Route::post('/sertifikat', [\App\Http\Controllers\LembagaController::class, 'storeSertifikat'])->name('sertifikat.store');
+
+    // Template
+    Route::get('/template', [\App\Http\Controllers\LembagaController::class, 'indexTemplate'])->name('template.index');
+    Route::get('/template/upload', [\App\Http\Controllers\LembagaController::class, 'uploadTemplate'])->name('template.upload');
+    Route::post('/template', [\App\Http\Controllers\LembagaController::class, 'storeTemplate'])->name('template.store');
+});

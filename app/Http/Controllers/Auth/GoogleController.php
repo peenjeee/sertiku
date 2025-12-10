@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -27,9 +26,9 @@ class GoogleController extends Controller
             $user = User::updateOrCreate(
                 ['google_id' => $googleUser->getId()],
                 [
-                    'name' => $googleUser->getName(),
-                    'email' => $googleUser->getEmail(),
-                    'avatar' => $googleUser->getAvatar(),
+                    'name'              => $googleUser->getName(),
+                    'email'             => $googleUser->getEmail(),
+                    'avatar'            => $googleUser->getAvatar(),
                     'email_verified_at' => now(),
                 ]
             );
@@ -37,11 +36,13 @@ class GoogleController extends Controller
             Auth::login($user);
 
             // Check if profile is completed
-            if (!$user->isProfileCompleted()) {
+            if (! $user->isProfileCompleted()) {
                 return redirect()->route('onboarding')->with('info', 'Silakan lengkapi profil Anda.');
             }
 
-            return redirect()->intended('/dashboard')->with('success', 'Selamat datang, ' . $user->name . '!');
+            // Redirect to appropriate dashboard based on account type
+            $redirectRoute = $user->isInstitution() ? 'lembaga.dashboard' : 'dashboard';
+            return redirect()->route($redirectRoute)->with('success', 'Selamat datang, ' . $user->name . '!');
         } catch (\Exception $e) {
             \Log::error('Google Login Error: ' . $e->getMessage());
             return redirect('/login')->with('error', 'Error: ' . $e->getMessage());
