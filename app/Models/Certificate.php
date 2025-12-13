@@ -85,7 +85,7 @@ class Certificate extends Model
      */
     public static function generateCertificateNumber(): string
     {
-        $prefix = 'CERT';
+        $prefix = 'SERT';
         $year   = date('Y');
         $month  = date('m');
         $random = strtoupper(Str::random(6));

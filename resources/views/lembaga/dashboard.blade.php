@@ -220,12 +220,12 @@
                         <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                         </svg>
-                        <input type="text" placeholder="Cari nama atau ID..." class="w-full pl-10 pr-4 py-2.5 lg:py-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg text-sm text-[#1E293B] placeholder-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input type="text" id="search-input" placeholder="Cari nama atau ID..." onkeyup="filterTable()" class="w-full pl-10 pr-4 py-2.5 lg:py-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg text-sm text-[#1E293B] placeholder-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     </div>
-                    <div class="flex items-center gap-2 overflow-x-auto">
-                        <button class="px-3 lg:px-4 py-2 lg:py-3 bg-[#1E3A8F] text-white text-xs lg:text-sm rounded-lg font-medium whitespace-nowrap">Semua</button>
-                        <button class="px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg hover:bg-gray-50 whitespace-nowrap">Aktif</button>
-                        <button class="px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg hover:bg-gray-50 whitespace-nowrap">Dicabut</button>
+                    <div class="flex items-center gap-2 overflow-x-auto" id="filter-buttons">
+                        <button onclick="setFilter('all')" data-filter="all" class="filter-btn active px-3 lg:px-4 py-2 lg:py-3 bg-[#1E3A8F] text-white text-xs lg:text-sm rounded-lg font-medium whitespace-nowrap">Semua</button>
+                        <button onclick="setFilter('active')" data-filter="active" class="filter-btn px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg hover:bg-gray-50 whitespace-nowrap">Aktif</button>
+                        <button onclick="setFilter('revoked')" data-filter="revoked" class="filter-btn px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg hover:bg-gray-50 whitespace-nowrap">Dicabut</button>
                     </div>
                 </div>
 
@@ -242,14 +242,14 @@
                                 <th class="text-right py-3 px-4 text-[#64748B] text-sm font-medium">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="certificate-tbody">
                             @forelse($stats['recent_certificates'] ?? [] as $cert)
                             @php
                                 $colors = ['from-blue-500 to-indigo-600', 'from-emerald-500 to-teal-600', 'from-purple-500 to-pink-600', 'from-orange-500 to-red-600', 'from-cyan-500 to-blue-600'];
                                 $colorIndex = $loop->index % count($colors);
                                 $initials = collect(explode(' ', $cert->recipient_name))->map(fn($n) => strtoupper(substr($n, 0, 1)))->take(2)->join('');
                             @endphp
-                            <tr class="border-b border-[#F1F5F9] hover:bg-[#F8FAFC]">
+                            <tr class="border-b border-[#F1F5F9] hover:bg-[#F8FAFC] cert-row" data-status="{{ $cert->status }}" data-name="{{ strtolower($cert->recipient_name) }}" data-cert="{{ strtolower($cert->certificate_number) }}">
                                 <td class="py-4 px-4">
                                     <div class="flex items-center gap-3">
                                         <div class="w-10 h-10 rounded-full bg-gradient-to-br {{ $colors[$colorIndex] }} flex items-center justify-center text-white font-bold text-sm">{{ $initials }}</div>
@@ -303,6 +303,54 @@
             </div>
         </div>
     </div>
+
+    {{-- Filter and Search JavaScript --}}
+    <script>
+        let currentFilter = 'all';
+
+        function setFilter(filter) {
+            currentFilter = filter;
+
+            // Update button styles
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.dataset.filter === filter) {
+                    btn.classList.remove('bg-white', 'border', 'border-[#E2E8F0]', 'text-[#1E293B]');
+                    btn.classList.add('bg-[#1E3A8F]', 'text-white');
+                } else {
+                    btn.classList.remove('bg-[#1E3A8F]', 'text-white');
+                    btn.classList.add('bg-white', 'border', 'border-[#E2E8F0]', 'text-[#1E293B]');
+                }
+            });
+
+            filterTable();
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('search-input')?.value.toLowerCase() || '';
+            const rows = document.querySelectorAll('.cert-row');
+
+            rows.forEach(row => {
+                const status = row.dataset.status;
+                const name = row.dataset.name || '';
+                const cert = row.dataset.cert || '';
+
+                // Check filter
+                let matchesFilter = currentFilter === 'all' || status === currentFilter;
+
+                // Check search
+                let matchesSearch = searchTerm === '' ||
+                    name.includes(searchTerm) ||
+                    cert.includes(searchTerm);
+
+                // Show/hide row
+                if (matchesFilter && matchesSearch) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
 
     @if($isStarterPlan)
     <!-- Midtrans Snap.js -->
