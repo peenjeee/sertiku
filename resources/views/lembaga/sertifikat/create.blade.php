@@ -126,18 +126,18 @@
         <div class="glass-card rounded-xl lg:rounded-2xl p-4 lg:p-6 space-y-6 lg:space-y-10">
             <!-- Section Header -->
             <div class="flex items-center gap-2 pb-3 border-b border-[#8EC5FF]">
-                <svg class="w-5 h-5 text-[#1C398E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                 </svg>
-                <span class="text-[#1C398E] text-base font-bold">Informasi Program</span>
+                <span class="text-white text-base font-bold">Informasi Program</span>
             </div>
 
             <!-- Form Fields -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
                 <!-- Nama Kursus -->
                 <div class="space-y-2">
-                    <label class="text-[#1C398E] text-sm font-bold">
-                        Nama Kursus/Program<span class="text-[#E7000B]">*</span>
+                    <label class="text-white text-sm font-bold">
+                        Nama Kursus/Program<span class="text-red-400">*</span>
                     </label>
                     <input type="text" placeholder="Contoh: Web Development Bootcamp 2024"
                            class="w-full px-4 py-3 bg-[#F8FAFC] border border-[#8EC5FF] rounded-lg text-sm text-[#64748B] focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -145,8 +145,8 @@
 
                 <!-- Kategori Event -->
                 <div class="space-y-2">
-                    <label class="text-[#1C398E] text-sm font-bold">
-                        Kategori Event<span class="text-[#E7000B]">*</span>
+                    <label class="text-white text-sm font-bold">
+                        Kategori Event<span class="text-red-400">*</span>
                     </label>
                     <select class="w-full px-4 py-3 bg-[#F8FAFC] border border-[#8EC5FF] rounded-lg text-sm text-[#64748B] focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option>Pilih kategori event</option>
@@ -161,7 +161,7 @@
 
             <!-- Deskripsi -->
             <div class="space-y-2">
-                <label class="text-[#1C398E] text-sm font-bold">Deskripsi</label>
+                <label class="text-white text-sm font-bold">Deskripsi</label>
                 <textarea placeholder="Deskripsi singkat tentang program/kursus (opsional)" rows="2"
                           class="w-full px-4 py-3 bg-[#F8FAFC] border border-[#8EC5FF] rounded-lg text-sm text-[#64748B] focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
             </div>
@@ -169,11 +169,11 @@
             <!-- Tanggal -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
                 <div class="space-y-2">
-                    <label class="text-[#1C398E] text-sm font-bold">Tanggal Penerbitan</label>
+                    <label class="text-white text-sm font-bold">Tanggal Penerbitan</label>
                     <input type="date" class="w-full px-4 py-3 bg-[#F8FAFC] border border-[#8EC5FF] rounded-lg text-sm text-[#64748B] focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <div class="space-y-2">
-                    <label class="text-[#1C398E] text-sm font-bold">Tanggal Kadaluarsa (Opsional)</label>
+                    <label class="text-white text-sm font-bold">Tanggal Kadaluarsa (Opsional)</label>
                     <input type="date" class="w-full px-4 py-3 bg-[#F8FAFC] border border-[#8EC5FF] rounded-lg text-sm text-[#64748B] focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
             </div>
@@ -183,18 +183,18 @@
         <div class="glass-card rounded-2xl p-6 space-y-10">
             <!-- Section Header -->
             <div class="flex items-center gap-2 pb-3 border-b border-[#8EC5FF]">
-                <svg class="w-5 h-5 text-[#1C398E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
                 </svg>
-                <span class="text-[#1C398E] text-base font-bold">Informasi Penerima</span>
+                <span class="text-white text-base font-bold">Informasi Penerima</span>
             </div>
 
             <!-- Form Fields -->
             <div class="grid grid-cols-2 gap-6">
                 <!-- Nama Penerima -->
                 <div class="space-y-2">
-                    <label class="text-[#1C398E] text-sm font-bold">
-                        Nama Penerima<span class="text-[#E7000B]">*</span>
+                    <label class="text-white text-sm font-bold">
+                        Nama Penerima<span class="text-red-400">*</span>
                     </label>
                     <input type="text" placeholder="Contoh: John Doe"
                            class="w-full px-4 py-3 bg-[#F8FAFC] border border-[#8EC5FF] rounded-lg text-sm text-[#64748B] focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -202,7 +202,7 @@
 
                 <!-- Email Penerima -->
                 <div class="space-y-2">
-                    <label class="text-[#1C398E] text-sm font-bold">Email Penerima</label>
+                    <label class="text-white text-sm font-bold">Email Penerima</label>
                     <input type="email" placeholder="Contoh: john@example.com"
                            class="w-full px-4 py-3 bg-[#F8FAFC] border border-[#8EC5FF] rounded-lg text-sm text-[#64748B] focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
@@ -211,7 +211,7 @@
             <!-- ID Sertifikat -->
             <div class="pt-4 border-t border-[#BEDBFF]">
                 <div class="flex items-center justify-between">
-                    <label class="text-[#1C398E] text-sm font-bold">ID Sertifikat</label>
+                    <label class="text-white text-sm font-bold">ID Sertifikat</label>
                     <button class="px-4 py-2.5 bg-white border border-[#8EC5FF] rounded-lg text-[#1C398E] text-sm font-bold hover:bg-gray-50 transition">
                         Auto Generate
                     </button>
@@ -226,8 +226,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
                 <div>
-                    <p class="text-[#1C398E] text-sm font-bold mb-1">Informasi Penting:</p>
-                    <ul class="text-[#1C398E] text-sm space-y-1">
+                    <p class="text-white text-sm font-bold mb-1">Informasi Penting:</p>
+                    <ul class="text-white/90 text-sm space-y-1">
                         <li>• ID sertifikat akan dibuat secara otomatis</li>
                         <li>• Sertifikat akan langsung aktif setelah diterbitkan</li>
                         <li>• Penerima dapat memverifikasi sertifikat menggunakan QR code</li>

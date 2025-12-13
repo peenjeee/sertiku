@@ -410,7 +410,7 @@
                                 </button>
 
                                 <div class="flex justify-between text-xs md:text-sm pt-2">
-                                    <a href="#"
+                                    <a href="{{ route('password.request') }}"
                                        class="text-[#8EC5FF] hover:text-[#BEDBFF] transition-colors">
                                         Lupa Password?
                                     </a>

@@ -58,12 +58,24 @@
                 </div>
 
                 <!-- Upgrade Button -->
-                <a href="{{ url('/#harga') }}" class="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 lg:py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-bold rounded-lg hover:from-amber-600 hover:to-orange-600 transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
-                    </svg>
-                    Upgrade
-                </a>
+                <button type="button" 
+                        id="btn-upgrade" 
+                        onclick="initiateUpgrade()"
+                        class="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 lg:py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-bold rounded-lg hover:from-amber-600 hover:to-orange-600 transition disabled:opacity-50">
+                    <span id="btn-upgrade-text" class="flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                        </svg>
+                        Upgrade ke Professional
+                    </span>
+                    <span id="btn-upgrade-loading" class="hidden flex items-center gap-2">
+                        <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Memproses...
+                    </span>
+                </button>
             </div>
         </div>
         @endif
@@ -367,4 +379,83 @@
             </div>
         </div>
     </div>
+
+    @if($isStarterPlan)
+    <!-- Midtrans Snap.js -->
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
+    
+    <script>
+        function initiateUpgrade() {
+            const btn = document.getElementById('btn-upgrade');
+            const btnText = document.getElementById('btn-upgrade-text');
+            const btnLoading = document.getElementById('btn-upgrade-loading');
+            
+            // Show loading state
+            btn.disabled = true;
+            btnText.classList.add('hidden');
+            btnLoading.classList.remove('hidden');
+            
+            // Request snap token from server
+            fetch('{{ route("payment.quick-upgrade") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    package_slug: 'professional'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    resetButton();
+                    return;
+                }
+                
+                if (data.snap_token) {
+                    // Open Midtrans Snap popup
+                    window.snap.pay(data.snap_token, {
+                        onSuccess: function(result) {
+                            // Payment success - redirect to dashboard
+                            alert('Pembayaran berhasil! Kuota sertifikat Anda telah ditingkatkan.');
+                            window.location.reload();
+                        },
+                        onPending: function(result) {
+                            // Payment pending
+                            alert('Pembayaran dalam proses. Silakan selesaikan pembayaran Anda.');
+                            resetButton();
+                        },
+                        onError: function(result) {
+                            // Payment failed
+                            alert('Pembayaran gagal. Silakan coba lagi.');
+                            resetButton();
+                        },
+                        onClose: function() {
+                            // User closed popup without finishing
+                            resetButton();
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan. Silakan coba lagi.');
+                resetButton();
+            });
+        }
+        
+        function resetButton() {
+            const btn = document.getElementById('btn-upgrade');
+            const btnText = document.getElementById('btn-upgrade-text');
+            const btnLoading = document.getElementById('btn-upgrade-loading');
+            
+            btn.disabled = false;
+            btnText.classList.remove('hidden');
+            btnLoading.classList.add('hidden');
+        }
+    </script>
+    @endif
 </x-layouts.lembaga>
