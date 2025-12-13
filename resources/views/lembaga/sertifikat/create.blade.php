@@ -73,23 +73,81 @@
         <form action="{{ route('lembaga.sertifikat.store') }}" method="POST" class="space-y-6">
             @csrf
 
-            <!-- Template Selection -->
-            @if(isset($templates) && $templates->count() > 0)
+            <!-- Template Selection Section -->
             <div class="glass-card rounded-2xl p-6">
-                <div class="flex items-center gap-2 pb-3 border-b border-gray-200 mb-4">
-                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                    <span class="text-gray-800 text-base font-bold">Pilih Template (Opsional)</span>
+                <div class="flex items-center justify-between pb-3 border-b border-gray-200 mb-4">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span class="text-gray-800 text-base font-bold">Pilih Template</span>
+                    </div>
+                    <a href="{{ route('lembaga.template.upload') }}" class="text-blue-600 text-sm font-medium hover:underline">
+                        + Upload Template Baru
+                    </a>
                 </div>
-                <select name="template_id" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="">Tanpa Template</option>
+
+                @if(isset($templates) && $templates->count() > 0)
+                <!-- Template Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <!-- No Template Option -->
+                    <label class="cursor-pointer">
+                        <input type="radio" name="template_id" value="" class="hidden peer" checked>
+                        <div class="border-2 border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-50 rounded-xl p-4 text-center transition hover:border-blue-300">
+                            <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </div>
+                            <p class="text-gray-700 text-sm font-medium">Tanpa Template</p>
+                            <p class="text-gray-400 text-xs">Default</p>
+                        </div>
+                    </label>
+
+                    <!-- Template Cards -->
                     @foreach($templates as $template)
-                    <option value="{{ $template->id }}">{{ $template->name }}</option>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="template_id" value="{{ $template->id }}" class="hidden peer">
+                        <div class="border-2 border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-50 rounded-xl overflow-hidden transition hover:border-blue-300">
+                            <!-- Template Preview -->
+                            <div class="aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                @if($template->thumbnail_path)
+                                <img src="{{ asset('storage/' . $template->thumbnail_path) }}" alt="{{ $template->name }}" class="w-full h-full object-cover">
+                                @else
+                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                                @endif
+                            </div>
+                            <!-- Template Info -->
+                            <div class="p-2 text-center">
+                                <p class="text-gray-700 text-xs font-medium truncate">{{ $template->name }}</p>
+                                <p class="text-gray-400 text-xs">{{ $template->orientation == 'landscape' ? 'Landscape' : 'Portrait' }}</p>
+                            </div>
+                        </div>
+                    </label>
                     @endforeach
-                </select>
+                </div>
+                @else
+                <!-- No Templates - Empty State -->
+                <div class="text-center py-8">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <p class="text-gray-600 font-medium mb-1">Belum ada template</p>
+                    <p class="text-gray-400 text-sm mb-4">Upload template untuk membuat sertifikat lebih menarik</p>
+                    <a href="{{ route('lembaga.template.upload') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-lg hover:bg-blue-700 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                        </svg>
+                        Upload Template
+                    </a>
+                </div>
+                <input type="hidden" name="template_id" value="">
+                @endif
             </div>
-            @endif
 
             <!-- Form Card - Informasi Program -->
             <div class="glass-card rounded-2xl p-6 space-y-6">
