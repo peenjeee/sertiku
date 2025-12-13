@@ -122,7 +122,7 @@
                         </p>
 
                         {{-- Button 1: Unduh Sertifikat --}}
-                        <button type="button"
+                        <button type="button" onclick="window.print()"
                             class="group relative flex w-full items-center gap-3 rounded-lg border border-[#22C55E]/30 bg-[rgba(15,23,42,0.5)] px-6 py-4 text-left hover:bg-[rgba(34,197,94,0.1)] transition">
                             <div class="flex h-11 w-11 items-center justify-center rounded-[14px] bg-[#22C55E]/20">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none">
@@ -144,7 +144,7 @@
                         </button>
 
                         {{-- Button 2: Bagikan Sertifikat --}}
-                        <button type="button"
+                        <button type="button" onclick="shareCertificate()"
                             class="group relative flex w-full items-center gap-3 rounded-lg border border-[rgba(255,255,255,0.14)] bg-[rgba(15,23,42,0.5)] px-6 py-4 text-left hover:bg-[rgba(59,130,246,0.1)] transition">
                             <div class="flex h-11 w-11 items-center justify-center rounded-[14px] bg-[#3B82F6]/20">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none">
@@ -164,11 +164,33 @@
                                 <p class="text-sm font-normal text-white">
                                     Bagikan Sertifikat
                                 </p>
-                                <p class="text-sm font-normal text-[#3B82F6]">
+                                <p class="text-sm font-normal text-[#3B82F6]" id="share-text">
                                     Kirim tautan verifikasi kepada pihak lain.
                                 </p>
                             </div>
                         </button>
+
+                        <script>
+                            function shareCertificate() {
+                                const url = window.location.href;
+                                const shareText = document.getElementById('share-text');
+
+                                if (navigator.share) {
+                                    navigator.share({
+                                        title: 'Verifikasi Sertifikat',
+                                        text: 'Lihat sertifikat yang terverifikasi ini',
+                                        url: url
+                                    });
+                                } else {
+                                    navigator.clipboard.writeText(url).then(() => {
+                                        shareText.textContent = '✓ Link berhasil disalin!';
+                                        setTimeout(() => {
+                                            shareText.textContent = 'Kirim tautan verifikasi kepada pihak lain.';
+                                        }, 2000);
+                                    });
+                                }
+                            }
+                        </script>
 
                         {{-- Catatan kecil di bawah --}}
                         <!-- <div class="mt-2 flex items-center justify-center gap-2 text-xs text-[#64748B]">
