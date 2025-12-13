@@ -36,30 +36,30 @@
 
             <!-- Template Info Card -->
             <div class="glass-card rounded-2xl p-6 space-y-6">
-                <div class="flex items-center gap-2 pb-3 border-b border-white/10">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex items-center gap-2 pb-3 border-b border-gray-200">
+                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    <span class="text-white text-base font-bold">Informasi Template</span>
+                    <span class="text-gray-800 text-base font-bold">Informasi Template</span>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Nama Template -->
                     <div class="space-y-2">
-                        <label class="text-white text-sm font-bold">
-                            Nama Template<span class="text-red-400">*</span>
+                        <label class="text-gray-700 text-sm font-bold">
+                            Nama Template<span class="text-red-500">*</span>
                         </label>
                         <input type="text" name="name" value="{{ old('name') }}" required
                                placeholder="Contoh: Template Sertifikat Workshop"
-                               class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                               class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
 
                     <!-- Orientasi -->
                     <div class="space-y-2">
-                        <label class="text-white text-sm font-bold">
-                            Orientasi<span class="text-red-400">*</span>
+                        <label class="text-gray-700 text-sm font-bold">
+                            Orientasi<span class="text-red-500">*</span>
                         </label>
-                        <select name="orientation" required class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select name="orientation" required class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="landscape" {{ old('orientation') == 'landscape' ? 'selected' : '' }}>Landscape (Horizontal)</option>
                             <option value="portrait" {{ old('orientation') == 'portrait' ? 'selected' : '' }}>Portrait (Vertikal)</option>
                         </select>
@@ -68,46 +68,46 @@
 
                 <!-- Deskripsi -->
                 <div class="space-y-2">
-                    <label class="text-white text-sm font-bold">Deskripsi (Opsional)</label>
+                    <label class="text-gray-700 text-sm font-bold">Deskripsi (Opsional)</label>
                     <textarea name="description" rows="2" placeholder="Deskripsi singkat tentang template ini"
-                              class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500">{{ old('description') }}</textarea>
+                              class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">{{ old('description') }}</textarea>
                 </div>
             </div>
 
             <!-- Upload Area Card -->
             <div class="glass-card rounded-2xl p-6">
-                <div class="flex items-center gap-2 pb-3 border-b border-white/10 mb-6">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex items-center gap-2 pb-3 border-b border-gray-200 mb-6">
+                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
                     </svg>
-                    <span class="text-white text-base font-bold">File Template</span>
+                    <span class="text-gray-800 text-base font-bold">File Template</span>
                 </div>
 
                 <!-- File Input -->
-                <div class="border-2 border-dashed border-white/20 rounded-2xl p-8 text-center hover:border-blue-500/50 transition cursor-pointer"
+                <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer bg-gray-50"
                      onclick="document.getElementById('template-file').click()">
-                    <div class="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
                         </svg>
                     </div>
 
-                    <h3 class="text-white text-lg font-bold mb-2">Pilih File Template</h3>
-                    <p class="text-white/60 text-sm mb-4">Klik atau drag & drop file ke area ini</p>
+                    <h3 class="text-gray-800 text-lg font-bold mb-2">Pilih File Template</h3>
+                    <p class="text-gray-500 text-sm mb-4">Klik atau drag & drop file ke area ini</p>
 
                     <input type="file" name="template_file" id="template-file" required accept=".png,.jpg,.jpeg,.pdf"
                            class="hidden" onchange="updateFileName(this)">
 
-                    <p id="file-name" class="text-blue-400 text-sm font-medium mb-4 hidden"></p>
+                    <p id="file-name" class="text-blue-600 text-sm font-medium mb-4 hidden"></p>
 
                     <!-- Supported formats -->
                     <div class="flex items-center justify-center gap-2">
-                        <span class="px-3 py-1 bg-white/10 text-white/70 text-xs rounded">PNG</span>
-                        <span class="px-3 py-1 bg-white/10 text-white/70 text-xs rounded">JPG</span>
-                        <span class="px-3 py-1 bg-white/10 text-white/70 text-xs rounded">PDF</span>
+                        <span class="px-3 py-1 bg-gray-200 text-gray-600 text-xs rounded">PNG</span>
+                        <span class="px-3 py-1 bg-gray-200 text-gray-600 text-xs rounded">JPG</span>
+                        <span class="px-3 py-1 bg-gray-200 text-gray-600 text-xs rounded">PDF</span>
                     </div>
 
-                    <p class="text-white/50 text-xs mt-4">Maksimal ukuran file: 10MB</p>
+                    <p class="text-gray-400 text-xs mt-4">Maksimal ukuran file: 10MB</p>
                 </div>
             </div>
 
