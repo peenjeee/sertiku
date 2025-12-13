@@ -135,7 +135,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-[#1E40AF] text-xs lg:text-sm font-medium">Total Sertifikat</p>
-                        <p class="text-[#1E3A8A] text-xl lg:text-3xl font-bold mt-1">127</p>
+                        <p class="text-[#1E3A8A] text-xl lg:text-3xl font-bold mt-1">{{ number_format($stats['total_certificates'] ?? 0) }}</p>
                     </div>
                     <div class="stat-icon-blue w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
                         <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#3B82F6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,7 +150,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-[#166534] text-xs lg:text-sm font-medium">Sertifikat Aktif</p>
-                        <p class="text-[#15803D] text-xl lg:text-3xl font-bold mt-1">124</p>
+                        <p class="text-[#15803D] text-xl lg:text-3xl font-bold mt-1">{{ number_format($stats['active_certificates'] ?? 0) }}</p>
                     </div>
                     <div class="stat-icon-green w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
                         <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#22C55E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -165,7 +165,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-[#9A3412] text-xs lg:text-sm font-medium">Bulan Ini</p>
-                        <p class="text-[#C2410C] text-xl lg:text-3xl font-bold mt-1">28</p>
+                        <p class="text-[#C2410C] text-xl lg:text-3xl font-bold mt-1">{{ number_format($stats['certificates_this_month'] ?? 0) }}</p>
                     </div>
                     <div class="stat-icon-orange w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
                         <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#F97316]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -180,7 +180,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-[#6B21A8] text-xs lg:text-sm font-medium">Total Verifikasi</p>
-                        <p class="text-[#7C3AED] text-xl lg:text-3xl font-bold mt-1">1,847</p>
+                        <p class="text-[#7C3AED] text-xl lg:text-3xl font-bold mt-1">{{ number_format($stats['total_verifications'] ?? 0) }}</p>
                     </div>
                     <div class="stat-icon-purple w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
                         <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#A855F7]" fill="none" stroke="currentColor" viewBox="0 0 24 24">

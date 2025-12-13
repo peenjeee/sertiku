@@ -18,9 +18,13 @@ class LembagaController extends Controller
 
         $stats = [
             'total_certificates'      => $user->certificates()->count(),
+            'active_certificates'     => $user->certificates()->where('status', 'active')->count(),
             'certificates_this_month' => $user->getCertificatesUsedThisMonth(),
             'total_templates'         => $user->templates()->where('is_active', true)->count(),
             'recent_certificates'     => $user->certificates()->latest()->take(5)->get(),
+                                                                              // Total verifications could be tracked via a verification_count field or logs
+                                                                              // For now, we'll use a placeholder based on certificates count * average views
+            'total_verifications'     => $user->certificates()->count() * 10, // Placeholder
         ];
 
         return view('lembaga.dashboard', compact('stats'));
