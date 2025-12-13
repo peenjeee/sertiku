@@ -340,12 +340,34 @@
                 }
 
                 if (data.snap_token) {
+                    const orderNumber = data.order_number;
+
                     // Open Midtrans Snap popup
                     window.snap.pay(data.snap_token, {
                         onSuccess: function(result) {
-                            // Payment success - redirect to dashboard
-                            alert('Pembayaran berhasil! Kuota sertifikat Anda telah ditingkatkan.');
-                            window.location.reload();
+                            // Confirm payment to server (for sandbox where webhook doesn't work)
+                            fetch('{{ route("payment.confirm") }}', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    order_number: orderNumber
+                                })
+                            })
+                            .then(response => response.json())
+                            .then(confirmData => {
+                                alert('Pembayaran berhasil! Kuota sertifikat Anda telah ditingkatkan ke ' + (confirmData.package_name || 'Professional') + '.');
+                                window.location.reload();
+                            })
+                            .catch(error => {
+                                console.error('Confirm error:', error);
+                                // Still reload even if confirm fails
+                                alert('Pembayaran berhasil! Kuota sertifikat Anda telah ditingkatkan.');
+                                window.location.reload();
+                            });
                         },
                         onPending: function(result) {
                             // Payment pending

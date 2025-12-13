@@ -176,6 +176,7 @@ Route::get('/verifikasi/{hash}', [VerifyController::class, 'show'])->name('verif
 Route::get('/checkout/{slug}', [PaymentController::class, 'checkout'])->name('checkout');
 Route::post('/checkout/process', [PaymentController::class, 'process'])->name('checkout.process');
 Route::post('/payment/quick-upgrade', [PaymentController::class, 'quickUpgrade'])->middleware('auth')->name('payment.quick-upgrade');
+Route::post('/payment/confirm', [PaymentController::class, 'confirmPayment'])->middleware('auth')->name('payment.confirm');
 Route::get('/payment/success/{orderNumber}', [PaymentController::class, 'success'])->name('payment.success');
 Route::post('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
 Route::get('/contact-enterprise', [PaymentController::class, 'contactEnterprise'])->name('contact.enterprise');
