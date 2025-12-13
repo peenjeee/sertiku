@@ -82,19 +82,26 @@ class VerifyController extends Controller
         if ($certificate) {
             $isValid = $certificate->isValid();
 
+            // Get template image if exists
+            $templateImage = null;
+            if ($certificate->template && $certificate->template->file_path) {
+                $templateImage = asset('storage/' . $certificate->template->file_path);
+            }
+
             $certificateData = [
-                'id'         => $certificate->id,
-                'nama'       => $certificate->recipient_name,
-                'email'      => $certificate->recipient_email,
-                'judul'      => $certificate->course_name,
-                'kategori'   => $certificate->category,
-                'deskripsi'  => $certificate->description,
-                'tanggal'    => $certificate->issue_date->format('d F Y'),
-                'kadaluarsa' => $certificate->expire_date?->format('d F Y'),
-                'nomor'      => $certificate->certificate_number,
-                'penerbit'   => $certificate->issuer->institution_name ?? $certificate->issuer->name,
-                'status'     => $certificate->status,
-                'is_valid'   => $isValid,
+                'id'             => $certificate->id,
+                'nama'           => $certificate->recipient_name,
+                'email'          => $certificate->recipient_email,
+                'judul'          => $certificate->course_name,
+                'kategori'       => $certificate->category,
+                'deskripsi'      => $certificate->description,
+                'tanggal'        => $certificate->issue_date->format('d F Y'),
+                'kadaluarsa'     => $certificate->expire_date?->format('d F Y'),
+                'nomor'          => $certificate->certificate_number,
+                'penerbit'       => $certificate->issuer->institution_name ?? $certificate->issuer->name,
+                'status'         => $certificate->status,
+                'is_valid'       => $isValid,
+                'template_image' => $templateImage,
             ];
 
             return view('verifikasi.valid', [

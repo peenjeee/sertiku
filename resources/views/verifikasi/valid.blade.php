@@ -41,7 +41,17 @@
                     </div>
 
                     {{-- Garis pemisah --}}
-                    <div class="mb-6 h-px w-full bg-[rgba(255,255,255,0.1)]"></div>
+                    <div class="mb-6 h-px w-full bg-[rgba(255,255,255,0.1)] no-print"></div>
+
+                    {{-- GAMBAR SERTIFIKAT (jika ada template) --}}
+                    @if($certificate['template_image'] ?? null)
+                    <div class="mb-8 print-only-cert">
+                        <p class="text-sm font-normal text-[#8EC5FF] mb-3 no-print text-center">Preview Sertifikat</p>
+                        <div class="rounded-xl overflow-hidden border border-[rgba(255,255,255,0.2)] bg-white">
+                            <img src="{{ $certificate['template_image'] }}" alt="Sertifikat" class="w-full h-auto">
+                        </div>
+                    </div>
+                    @endif
 
                     {{-- PANEL DETAIL SERTIFIKAT (mirip box penyebab di halaman invalid) --}}
                     <div
@@ -221,5 +231,59 @@
         </div>
 
     </section>
+
+    {{-- Print-only styles --}}
+    <style>
+        @media print {
+            /* Hide everything */
+            body * {
+                visibility: hidden;
+            }
+
+            /* Show only the certificate parts */
+            .print-only-cert,
+            .print-only-cert *,
+            .print-info,
+            .print-info * {
+                visibility: visible !important;
+            }
+
+            /* Hide elements with no-print class */
+            .no-print {
+                display: none !important;
+            }
+
+            /* Position certificate at top */
+            .print-only-cert {
+                position: absolute;
+                left: 50%;
+                top: 20px;
+                transform: translateX(-50%);
+                width: 90%;
+                max-width: 800px;
+            }
+
+            /* Position info below certificate */
+            .print-info {
+                position: absolute;
+                left: 50%;
+                top: auto;
+                transform: translateX(-50%);
+                width: 90%;
+                max-width: 800px;
+                padding-top: 20px;
+            }
+
+            /* Clean background for print */
+            body {
+                background: white !important;
+            }
+
+            /* Remove shadows and borders for print */
+            .print-only-cert img {
+                box-shadow: none !important;
+            }
+        }
+    </style>
 
 </x-layouts.app>
