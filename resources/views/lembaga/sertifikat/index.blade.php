@@ -105,24 +105,24 @@
                 <!-- Certificate Body -->
                 <div class="p-4 space-y-3">
                     <div>
-                        <p class="text-white/60 text-xs">Program/Kursus</p>
-                        <p class="text-white font-medium truncate">{{ $certificate->course_name }}</p>
+                        <p class="text-gray-500 text-xs">Program/Kursus</p>
+                        <p class="text-gray-800 font-medium truncate">{{ $certificate->course_name }}</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <p class="text-white/60 text-xs">Nomor</p>
-                            <p class="text-white text-sm font-mono">{{ Str::limit($certificate->certificate_number, 15) }}</p>
+                            <p class="text-gray-500 text-xs">Nomor</p>
+                            <p class="text-gray-700 text-sm font-mono">{{ Str::limit($certificate->certificate_number, 15) }}</p>
                         </div>
                         <div>
-                            <p class="text-white/60 text-xs">Tanggal</p>
-                            <p class="text-white text-sm">{{ $certificate->issue_date->format('d M Y') }}</p>
+                            <p class="text-gray-500 text-xs">Tanggal</p>
+                            <p class="text-gray-700 text-sm">{{ $certificate->issue_date->format('d M Y') }}</p>
                         </div>
                     </div>
 
                     @if($certificate->category)
                     <div>
-                        <span class="px-2 py-1 bg-blue-500/20 text-blue-400 text-xs rounded">{{ $certificate->category }}</span>
+                        <span class="px-2 py-1 bg-blue-100 text-blue-600 text-xs rounded">{{ $certificate->category }}</span>
                     </div>
                     @endif
                 </div>
@@ -130,7 +130,7 @@
                 <!-- Certificate Actions -->
                 <div class="p-4 pt-0 flex items-center gap-2">
                     <a href="{{ route('verifikasi.show', $certificate->hash) }}" target="_blank"
-                       class="flex-1 flex items-center justify-center gap-1 py-2 bg-white/10 rounded-lg text-white text-xs font-medium hover:bg-white/20 transition">
+                       class="flex-1 flex items-center justify-center gap-1 py-2 bg-gray-100 rounded-lg text-gray-700 text-xs font-medium hover:bg-gray-200 transition">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -140,7 +140,7 @@
                     @if($certificate->status === 'active')
                     <form action="{{ route('lembaga.sertifikat.revoke', $certificate) }}" method="POST" class="flex-1" onsubmit="return confirm('Cabut sertifikat ini?')">
                         @csrf
-                        <button type="submit" class="w-full flex items-center justify-center gap-1 py-2 bg-red-500/20 rounded-lg text-red-400 text-xs font-medium hover:bg-red-500/30 transition">
+                        <button type="submit" class="w-full flex items-center justify-center gap-1 py-2 bg-red-100 rounded-lg text-red-600 text-xs font-medium hover:bg-red-200 transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
                             </svg>
