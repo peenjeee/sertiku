@@ -1,3 +1,16 @@
+<style>
+    /* Force hide desktop-only elements on mobile */
+    @media (max-width: 1023px) {
+        .desktop-only-menu {
+            display: none !important;
+        }
+    }
+    @media (min-width: 1024px) {
+        .desktop-only-menu {
+            display: flex !important;
+        }
+    }
+</style>
 <nav x-data="{ open: false }" class="fixed inset-x-0 top-0 z-40">
     {{-- Bar terang paling atas --}}
     <div class="border-b border-[#CBD5E1] bg-[#F9FAFB]">
@@ -26,7 +39,7 @@
             </a>
 
             {{-- Menu desktop (hidden on mobile) --}}
-            <div class="hidden lg:flex items-center gap-8 text-sm font-medium text-[#0F172A]">
+            <div class="desktop-only-menu hidden lg:flex items-center gap-8 text-sm font-medium text-[#0F172A]">
                 <a href="#beranda" class="hover:text-[#2563EB] transition">Beranda</a>
                 <a href="#fitur" class="hover:text-[#2563EB] transition">Fitur</a>
                 <a href="#harga" class="hover:text-[#2563EB] transition">Harga</a>
@@ -34,7 +47,7 @@
             </div>
 
             {{-- Kanan desktop (hidden on mobile) --}}
-            <div class="hidden lg:flex items-center gap-3">
+            <div class="desktop-only-menu hidden lg:flex items-center gap-3">
                 {{-- Tombol Verifikasi --}}
                 <a href="{{ route('verifikasi') }}"
                     class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#0F172A] hover:bg-[#E5E7EB] transition">
