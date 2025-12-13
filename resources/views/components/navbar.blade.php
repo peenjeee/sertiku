@@ -25,16 +25,16 @@
                 </span>
             </a>
 
-            {{-- Menu desktop --}}
-            <div class="hidden items-center gap-8 text-sm font-medium text-[#0F172A] lg:flex">
+            {{-- Menu desktop (hidden on mobile) --}}
+            <div class="hidden lg:flex items-center gap-8 text-sm font-medium text-[#0F172A]">
                 <a href="#beranda" class="hover:text-[#2563EB] transition">Beranda</a>
                 <a href="#fitur" class="hover:text-[#2563EB] transition">Fitur</a>
                 <a href="#harga" class="hover:text-[#2563EB] transition">Harga</a>
                 <a href="#faq" class="hover:text-[#2563EB] transition">FAQ</a>
             </div>
 
-            {{-- Kanan desktop (dengan icon) --}}
-            <div class="hidden items-center gap-3 lg:flex">
+            {{-- Kanan desktop (hidden on mobile) --}}
+            <div class="hidden lg:flex items-center gap-3">
                 {{-- Tombol Verifikasi --}}
                 <a href="{{ route('verifikasi') }}"
                     class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#0F172A] hover:bg-[#E5E7EB] transition">
@@ -50,15 +50,15 @@
                 {{-- Dropdown Profile jika sudah login --}}
                 <div x-data="{ dropdownOpen: false }" class="relative">
                     <button @click="dropdownOpen = !dropdownOpen" class="flex items-center gap-2 rounded-full focus:outline-none">
-                        <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) }}" 
-                             alt="Profile" 
+                        <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) }}"
+                             alt="Profile"
                              class="h-10 w-10 rounded-full border-2 border-[#3B82F6] object-cover">
                         <svg class="h-4 w-4 text-[#0F172A]" :class="{ 'rotate-180': dropdownOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
-                    
-                    <div x-show="dropdownOpen" 
+
+                    <div x-show="dropdownOpen"
                          @click.away="dropdownOpen = false"
                          x-transition:enter="transition ease-out duration-100"
                          x-transition:enter-start="transform opacity-0 scale-95"
@@ -69,8 +69,8 @@
                          class="absolute right-0 mt-2 w-56 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
                         <div class="p-4 border-b border-gray-100">
                             <div class="flex items-center gap-3">
-                                <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) }}" 
-                                     alt="Profile" 
+                                <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) }}"
+                                     alt="Profile"
                                      class="h-10 w-10 rounded-full object-cover">
                                 <div>
                                     <p class="text-sm font-semibold text-[#0F172A]">{{ Auth::user()->name }}</p>
@@ -163,15 +163,15 @@
                 @auth
                 {{-- Profile info mobile --}}
                 <div class="flex items-center gap-3 rounded-[10px] border border-[#CBD5E1] bg-white px-4 py-3">
-                    <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) }}" 
-                         alt="Profile" 
+                    <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) }}"
+                         alt="Profile"
                          class="h-10 w-10 rounded-full object-cover">
                     <div>
                         <p class="text-sm font-semibold text-[#0F172A]">{{ Auth::user()->name }}</p>
                         <p class="text-xs text-gray-500">@if(str_contains(Auth::user()->email, '@wallet.local')){{ substr(Auth::user()->email, 0, 6) }}...{{ substr(Auth::user()->wallet_address ?? Auth::user()->email, -4) }}@wallet.local @else{{ Auth::user()->email }}@endif</p>
                     </div>
                 </div>
-                
+
                 {{-- Dashboard mobile --}}
                 <a href="{{ route('dashboard') }}"
                     class="inline-flex w-full items-center justify-center gap-2 rounded-[10px] border border-[#CBD5E1] bg-white px-4 py-2 text-center text-sm font-medium text-[#0F172A]">
@@ -179,7 +179,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                     </svg>Dashboard
                 </a>
-                
+
                 {{-- Logout mobile --}}
                 <form method="POST" action="{{ route('logout') }}" id="logout-form-mobile">
                     @csrf

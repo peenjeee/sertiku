@@ -59,20 +59,20 @@
             </div>
 
             {{-- Stats --}}
-            <div class="mt-8 grid grid-cols-4 gap-3 text-xs text-[rgba(190,219,255,0.9)] sm:text-sm">
-                <div class="col-span-2 sm:col-span-1">
+            <div class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-3 text-xs sm:text-sm text-[rgba(190,219,255,0.9)]">
+                <div>
                     <div class="text-lg font-semibold text-white sm:text-xl">67K+</div>
                     <p class="mt-1 leading-snug">Sertifikat<br>Terbit</p>
                 </div>
-                <div class="col-span-2 sm:col-span-1">
+                <div>
                     <div class="text-lg font-semibold text-white sm:text-xl">67+</div>
                     <p class="mt-1 leading-snug">Lembaga<br>Terdaftar</p>
                 </div>
-                <div class="col-span-2 sm:col-span-1">
+                <div>
                     <div class="text-lg font-semibold text-white sm:text-xl">96%</div>
                     <p class="mt-1 leading-snug">Tingkat<br>Keamanan</p>
                 </div>
-                <div class="col-span-2 sm:col-span-1">
+                <div>
                     <div class="text-lg font-semibold text-white sm:text-xl">24/7</div>
                     <p class="mt-1 leading-snug">Dukungan<br>Aktif</p>
                 </div>
