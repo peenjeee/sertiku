@@ -58,8 +58,8 @@
                 </div>
 
                 <!-- Upgrade Button -->
-                <button type="button" 
-                        id="btn-upgrade" 
+                <button type="button"
+                        id="btn-upgrade"
                         onclick="initiateUpgrade()"
                         class="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 lg:py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-bold rounded-lg hover:from-amber-600 hover:to-orange-600 transition disabled:opacity-50">
                     <span id="btn-upgrade-text" class="flex items-center gap-2">
@@ -243,136 +243,60 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Row 1 -->
+                            @forelse($stats['recent_certificates'] ?? [] as $cert)
+                            @php
+                                $colors = ['from-blue-500 to-indigo-600', 'from-emerald-500 to-teal-600', 'from-purple-500 to-pink-600', 'from-orange-500 to-red-600', 'from-cyan-500 to-blue-600'];
+                                $colorIndex = $loop->index % count($colors);
+                                $initials = collect(explode(' ', $cert->recipient_name))->map(fn($n) => strtoupper(substr($n, 0, 1)))->take(2)->join('');
+                            @endphp
                             <tr class="border-b border-[#F1F5F9] hover:bg-[#F8FAFC]">
                                 <td class="py-4 px-4">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm">AS</div>
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-br {{ $colors[$colorIndex] }} flex items-center justify-center text-white font-bold text-sm">{{ $initials }}</div>
                                         <div>
-                                            <p class="text-[#1E293B] font-medium">Andi Setiawan</p>
-                                            <p class="text-[#94A3B8] text-sm">andi.setiawan@email.com</p>
+                                            <p class="text-[#1E293B] font-medium">{{ $cert->recipient_name }}</p>
+                                            <p class="text-[#94A3B8] text-sm">{{ $cert->recipient_email ?? 'Email tidak tersedia' }}</p>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="py-4 px-4 text-[#1E293B]">Web Development Bootcamp</td>
+                                <td class="py-4 px-4 text-[#1E293B]">{{ $cert->course_name }}</td>
                                 <td class="py-4 px-4">
-                                    <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">CERT-2025-001</code>
+                                    <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">{{ Str::limit($cert->certificate_number, 14) }}</code>
                                 </td>
-                                <td class="py-4 px-4 text-[#64748B]">10 Des 2025</td>
+                                <td class="py-4 px-4 text-[#64748B]">{{ $cert->issue_date->format('d M Y') }}</td>
                                 <td class="py-4 px-4">
+                                    @if($cert->status === 'active')
                                     <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#ECFDF5] text-[#059669] text-sm rounded-full font-medium">
                                         <span class="w-1.5 h-1.5 bg-[#059669] rounded-full"></span>
                                         Aktif
                                     </span>
-                                </td>
-                                <td class="py-4 px-4 text-right">
-                                    <button class="text-[#3B82F6] hover:text-[#1D4ED8] text-sm font-medium">Lihat</button>
-                                </td>
-                            </tr>
-                            <!-- Row 2 -->
-                            <tr class="border-b border-[#F1F5F9] hover:bg-[#F8FAFC]">
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold text-sm">SP</div>
-                                        <div>
-                                            <p class="text-[#1E293B] font-medium">Siti Putri</p>
-                                            <p class="text-[#94A3B8] text-sm">siti.putri@email.com</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4 text-[#1E293B]">UI/UX Design Fundamentals</td>
-                                <td class="py-4 px-4">
-                                    <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">CERT-2025-002</code>
-                                </td>
-                                <td class="py-4 px-4 text-[#64748B]">9 Des 2025</td>
-                                <td class="py-4 px-4">
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#ECFDF5] text-[#059669] text-sm rounded-full font-medium">
-                                        <span class="w-1.5 h-1.5 bg-[#059669] rounded-full"></span>
-                                        Aktif
-                                    </span>
-                                </td>
-                                <td class="py-4 px-4 text-right">
-                                    <button class="text-[#3B82F6] hover:text-[#1D4ED8] text-sm font-medium">Lihat</button>
-                                </td>
-                            </tr>
-                            <!-- Row 3 -->
-                            <tr class="border-b border-[#F1F5F9] hover:bg-[#F8FAFC]">
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-white font-bold text-sm">BR</div>
-                                        <div>
-                                            <p class="text-[#1E293B] font-medium">Budi Raharjo</p>
-                                            <p class="text-[#94A3B8] text-sm">budi.raharjo@email.com</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4 text-[#1E293B]">Data Science Workshop</td>
-                                <td class="py-4 px-4">
-                                    <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">CERT-2025-003</code>
-                                </td>
-                                <td class="py-4 px-4 text-[#64748B]">8 Des 2025</td>
-                                <td class="py-4 px-4">
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#ECFDF5] text-[#059669] text-sm rounded-full font-medium">
-                                        <span class="w-1.5 h-1.5 bg-[#059669] rounded-full"></span>
-                                        Aktif
-                                    </span>
-                                </td>
-                                <td class="py-4 px-4 text-right">
-                                    <button class="text-[#3B82F6] hover:text-[#1D4ED8] text-sm font-medium">Lihat</button>
-                                </td>
-                            </tr>
-                            <!-- Row 4 -->
-                            <tr class="border-b border-[#F1F5F9] hover:bg-[#F8FAFC]">
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-white font-bold text-sm">DW</div>
-                                        <div>
-                                            <p class="text-[#1E293B] font-medium">Dewi Wulandari</p>
-                                            <p class="text-[#94A3B8] text-sm">dewi.wulandari@email.com</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4 text-[#1E293B]">Digital Marketing Certification</td>
-                                <td class="py-4 px-4">
-                                    <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">CERT-2025-004</code>
-                                </td>
-                                <td class="py-4 px-4 text-[#64748B]">7 Des 2025</td>
-                                <td class="py-4 px-4">
+                                    @else
                                     <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FEF2F2] text-[#DC2626] text-sm rounded-full font-medium">
                                         <span class="w-1.5 h-1.5 bg-[#DC2626] rounded-full"></span>
                                         Dicabut
                                     </span>
+                                    @endif
                                 </td>
                                 <td class="py-4 px-4 text-right">
-                                    <button class="text-[#3B82F6] hover:text-[#1D4ED8] text-sm font-medium">Lihat</button>
+                                    <a href="{{ route('verifikasi.show', $cert->hash) }}" target="_blank" class="text-[#3B82F6] hover:text-[#1D4ED8] text-sm font-medium">Lihat</a>
                                 </td>
                             </tr>
-                            <!-- Row 5 -->
-                            <tr class="hover:bg-[#F8FAFC]">
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold text-sm">MH</div>
-                                        <div>
-                                            <p class="text-[#1E293B] font-medium">Muhammad Hasan</p>
-                                            <p class="text-[#94A3B8] text-sm">m.hasan@email.com</p>
+                            @empty
+                            <tr>
+                                <td colspan="6" class="py-12 text-center">
+                                    <div class="flex flex-col items-center">
+                                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                            </svg>
                                         </div>
+                                        <p class="text-gray-600 font-medium mb-1">Belum ada sertifikat</p>
+                                        <p class="text-gray-400 text-sm mb-4">Mulai terbitkan sertifikat pertama Anda</p>
+                                        <a href="{{ route('lembaga.sertifikat.create') }}" class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition">Terbitkan Sekarang</a>
                                     </div>
                                 </td>
-                                <td class="py-4 px-4 text-[#1E293B]">Cloud Computing Essentials</td>
-                                <td class="py-4 px-4">
-                                    <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">CERT-2025-005</code>
-                                </td>
-                                <td class="py-4 px-4 text-[#64748B]">6 Des 2025</td>
-                                <td class="py-4 px-4">
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#ECFDF5] text-[#059669] text-sm rounded-full font-medium">
-                                        <span class="w-1.5 h-1.5 bg-[#059669] rounded-full"></span>
-                                        Aktif
-                                    </span>
-                                </td>
-                                <td class="py-4 px-4 text-right">
-                                    <button class="text-[#3B82F6] hover:text-[#1D4ED8] text-sm font-medium">Lihat</button>
-                                </td>
                             </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -383,18 +307,18 @@
     @if($isStarterPlan)
     <!-- Midtrans Snap.js -->
     <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
-    
+
     <script>
         function initiateUpgrade() {
             const btn = document.getElementById('btn-upgrade');
             const btnText = document.getElementById('btn-upgrade-text');
             const btnLoading = document.getElementById('btn-upgrade-loading');
-            
+
             // Show loading state
             btn.disabled = true;
             btnText.classList.add('hidden');
             btnLoading.classList.remove('hidden');
-            
+
             // Request snap token from server
             fetch('{{ route("payment.quick-upgrade") }}', {
                 method: 'POST',
@@ -414,7 +338,7 @@
                     resetButton();
                     return;
                 }
-                
+
                 if (data.snap_token) {
                     // Open Midtrans Snap popup
                     window.snap.pay(data.snap_token, {
@@ -446,12 +370,12 @@
                 resetButton();
             });
         }
-        
+
         function resetButton() {
             const btn = document.getElementById('btn-upgrade');
             const btnText = document.getElementById('btn-upgrade-text');
             const btnLoading = document.getElementById('btn-upgrade-loading');
-            
+
             btn.disabled = false;
             btnText.classList.remove('hidden');
             btnLoading.classList.add('hidden');
