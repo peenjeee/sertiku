@@ -53,18 +53,9 @@
                     </div>
                     @endif
 
-                    {{-- PANEL DETAIL SERTIFIKAT (mirip box penyebab di halaman invalid) --}}
-                    <div
-                        class="mb-8 rounded-2xl border border-[#22C55E]/30 bg-[rgba(15,23,42,0.5)] px-6 py-6 max-[640px]:px-4">
+                    {{-- PANEL DETAIL SERTIFIKAT --}}
+                    <div class="mb-8 rounded-2xl border border-[#22C55E]/30 bg-[rgba(15,23,42,0.5)] px-6 py-6 max-[640px]:px-4 print-info">
                         <div class="mb-4 flex items-start gap-4">
-                            {{-- Icon lingkaran hijau --}}
-                            <!-- <div class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#22C55E] to-[#16A34A]">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none">
-                                    <circle cx="12" cy="12" r="10" stroke="#FFFFFF" stroke-width="2"/>
-                                    <path d="M8 12.5l2.3 2.3L16 9" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </div> -->
-
                             <div class="flex flex-col gap-1">
                                 <p class="text-sm font-normal text-[#22C55E]">
                                     Detail Sertifikat
@@ -75,10 +66,10 @@
                             </div>
                         </div>
 
-                        {{-- List detail (dummy / dari controller bisa diisi dinamis) --}}
-                        <div class="mt-3 grid gap-3 text-sm text-[rgba(190,219,255,0.8)] max-[640px]:gap-2">
+                        {{-- List detail --}}
+                        <div class="mt-3 grid gap-3 text-sm text-[rgba(190,219,255,0.8)] max-[640px]:gap-2 print-detail-list">
                             <div class="flex items-start gap-3">
-                                <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E]"></span>
+                                <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E] print-bullet"></span>
                                 <p>
                                     <span class="font-semibold text-[#8EC5FF]">Nama Pemilik:</span>
                                     <span class="ml-1">
@@ -87,7 +78,7 @@
                                 </p>
                             </div>
                             <div class="flex items-start gap-3">
-                                <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E]"></span>
+                                <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E] print-bullet"></span>
                                 <p>
                                     <span class="font-semibold text-[#8EC5FF]">Nama Sertifikat / Acara:</span>
                                     <span class="ml-1">
@@ -96,7 +87,7 @@
                                 </p>
                             </div>
                             <div class="flex items-start gap-3">
-                                <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E]"></span>
+                                <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E] print-bullet"></span>
                                 <p>
                                     <span class="font-semibold text-[#8EC5FF]">Tanggal Diterbitkan:</span>
                                     <span class="ml-1">
@@ -105,7 +96,7 @@
                                 </p>
                             </div>
                             <div class="flex items-start gap-3">
-                                <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E]"></span>
+                                <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E] print-bullet"></span>
                                 <p>
                                     <span class="font-semibold text-[#8EC5FF]">Penerbit Sertifikat:</span>
                                     <span class="ml-1">
@@ -114,13 +105,32 @@
                                 </p>
                             </div>
                             <div class="flex items-start gap-3">
-                                <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E]"></span>
+                                <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E] print-bullet"></span>
+                                <p>
+                                    <span class="font-semibold text-[#8EC5FF]">Nomor Sertifikat:</span>
+                                    <span class="ml-1">
+                                        {{ $certificate['nomor'] ?? '-' }}
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E] print-bullet"></span>
                                 <p>
                                     <span class="font-semibold text-[#8EC5FF]">Status:</span>
                                     <span class="ml-1 text-[#15803D]">
                                         Aktif &amp; Terverifikasi
                                     </span>
                                 </p>
+                            </div>
+                        </div>
+
+                        {{-- Verification Badge --}}
+                        <div class="mt-6 pt-4 border-t border-[rgba(255,255,255,0.1)] print-verification-badge">
+                            <div class="flex items-center justify-center gap-2 bg-[#22C55E]/20 rounded-lg py-3 px-4">
+                                <svg class="w-5 h-5 text-[#22C55E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                </svg>
+                                <span class="text-[#22C55E] font-semibold text-sm">Terverifikasi di sertiku.web.id</span>
                             </div>
                         </div>
                     </div>
@@ -235,12 +245,12 @@
     {{-- Print-only styles --}}
     <style>
         @media print {
-            /* Hide everything */
+            /* Hide everything except printable content */
             body * {
                 visibility: hidden;
             }
 
-            /* Show only the certificate parts */
+            /* Show certificate image and info */
             .print-only-cert,
             .print-only-cert *,
             .print-info,
@@ -253,35 +263,93 @@
                 display: none !important;
             }
 
-            /* Position certificate at top */
+            /* Clean background for print */
+            body {
+                background: white !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            /* Position certificate at top center */
             .print-only-cert {
-                position: absolute;
-                left: 50%;
-                top: 20px;
-                transform: translateX(-50%);
-                width: 90%;
-                max-width: 800px;
+                position: fixed !important;
+                left: 50% !important;
+                top: 20px !important;
+                transform: translateX(-50%) !important;
+                width: 95% !important;
+                max-width: 700px !important;
+            }
+
+            .print-only-cert img {
+                width: 100% !important;
+                height: auto !important;
+                box-shadow: none !important;
+                border: 1px solid #e5e7eb !important;
             }
 
             /* Position info below certificate */
             .print-info {
-                position: absolute;
-                left: 50%;
-                top: auto;
-                transform: translateX(-50%);
-                width: 90%;
-                max-width: 800px;
-                padding-top: 20px;
+                position: fixed !important;
+                left: 50% !important;
+                bottom: 20px !important;
+                transform: translateX(-50%) !important;
+                width: 95% !important;
+                max-width: 700px !important;
+                background: #f8fafc !important;
+                border: 1px solid #e5e7eb !important;
+                border-radius: 12px !important;
+                padding: 16px !important;
             }
 
-            /* Clean background for print */
-            body {
-                background: white !important;
+            /* Print-friendly text colors */
+            .print-info p,
+            .print-info span {
+                color: #1e293b !important;
             }
 
-            /* Remove shadows and borders for print */
-            .print-only-cert img {
-                box-shadow: none !important;
+            .print-info .text-\[#8EC5FF\] {
+                color: #1e40af !important;
+            }
+
+            .print-info .text-\[#22C55E\] {
+                color: #16a34a !important;
+            }
+
+            .print-info .text-\[#15803D\] {
+                color: #16a34a !important;
+            }
+
+            /* Style bullets for print */
+            .print-bullet {
+                background: #16a34a !important;
+            }
+
+            /* Verification badge print style */
+            .print-verification-badge {
+                border-top: 1px solid #e5e7eb !important;
+            }
+
+            .print-verification-badge > div {
+                background: #dcfce7 !important;
+                border-radius: 8px !important;
+            }
+
+            .print-verification-badge span {
+                color: #16a34a !important;
+            }
+
+            .print-verification-badge svg {
+                color: #16a34a !important;
+            }
+
+            /* Detail list styling */
+            .print-detail-list {
+                font-size: 11px !important;
+            }
+
+            /* Hide header text in print */
+            .print-info > div:first-child {
+                display: none !important;
             }
         }
     </style>
