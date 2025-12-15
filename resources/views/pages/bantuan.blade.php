@@ -8,8 +8,8 @@
             class="pointer-events-none absolute -left-32 top-0 h-96 w-96 rounded-full bg-gradient-to-r from-[#2B7FFF4D] to-[#00B8DB4D] blur-3xl opacity-60">
         </div>
         <div class="mx-auto max-w-4xl px-4 text-center relative z-10">
-            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Pusat Bantuan</h1>
-            <p class="text-lg text-[#BEDBFF]/80 max-w-2xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 animate-fade-in-up">Pusat Bantuan</h1>
+            <p class="text-lg text-[#BEDBFF]/80 max-w-2xl mx-auto animate-fade-in-up stagger-1">
                 Temukan jawaban untuk pertanyaan Anda atau hubungi tim support kami
             </p>
 
@@ -33,7 +33,7 @@
         <div class="mx-auto max-w-5xl">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {{-- Getting Started --}}
-                <div class="rounded-2xl bg-white/5 border border-white/10 p-6 hover:border-[#3B82F6]/50 transition">
+                <div class="rounded-2xl bg-white/5 border border-white/10 p-6 hover:border-[#3B82F6]/50 transition hover-lift animate-fade-in-up stagger-1">
                     <div class="w-12 h-12 rounded-xl bg-[#3B82F6]/20 flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-[#3B82F6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -50,7 +50,7 @@
                 </div>
 
                 {{-- Account --}}
-                <div class="rounded-2xl bg-white/5 border border-white/10 p-6 hover:border-[#3B82F6]/50 transition">
+                <div class="rounded-2xl bg-white/5 border border-white/10 p-6 hover:border-[#3B82F6]/50 transition hover-lift animate-fade-in-up stagger-2">
                     <div class="w-12 h-12 rounded-xl bg-[#10B981]/20 flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-[#10B981]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -67,7 +67,7 @@
                 </div>
 
                 {{-- Billing --}}
-                <div class="rounded-2xl bg-white/5 border border-white/10 p-6 hover:border-[#3B82F6]/50 transition">
+                <div class="rounded-2xl bg-white/5 border border-white/10 p-6 hover:border-[#3B82F6]/50 transition hover-lift animate-fade-in-up stagger-3">
                     <div class="w-12 h-12 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-[#F59E0B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -89,7 +89,7 @@
     {{-- FAQ --}}
     <section class="py-12 px-4">
         <div class="mx-auto max-w-3xl">
-            <h2 class="text-2xl font-bold text-white text-center mb-8">Pertanyaan Umum</h2>
+            <h2 class="text-2xl font-bold text-white text-center mb-8 animate-fade-in">Pertanyaan Umum</h2>
 
             <div class="space-y-4">
                 @php
@@ -120,7 +120,7 @@
     {{-- Contact CTA --}}
     <section class="py-12 px-4">
         <div class="mx-auto max-w-3xl text-center">
-            <div class="rounded-2xl bg-gradient-to-r from-[#1E3A8F]/30 to-[#3B82F6]/30 border border-[#3B82F6]/30 p-8">
+            <div class="rounded-2xl bg-gradient-to-r from-[#1E3A8F]/30 to-[#3B82F6]/30 border border-[#3B82F6]/30 p-8 animate-fade-in-up hover-glow">
                 <h3 class="text-xl font-semibold text-white mb-2">Masih butuh bantuan?</h3>
                 <p class="text-[#BEDBFF]/80 mb-6">Tim support kami siap membantu Anda</p>
                 <a href="{{ route('kontak') }}"

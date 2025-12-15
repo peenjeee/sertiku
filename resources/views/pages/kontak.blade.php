@@ -1,13 +1,13 @@
 {{-- resources/views/pages/kontak.blade.php --}}
 <x-layouts.app title="SertiKu – Hubungi Kami">
 
-    
+
         {{-- Hero --}}
         <section class="overflow-hidden py-10 md:py-16 lg:py-20">
             <div class="pointer-events-none absolute -right-32 top-0 h-96 w-96 rounded-full bg-gradient-to-r from-[#2B7FFF4D] to-[#00B8DB4D] blur-3xl opacity-60"></div>
             <div class="mx-auto max-w-4xl px-4 text-center relative z-10">
-                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 md:mb-4">Hubungi Kami</h1>
-                <p class="text-sm sm:text-base lg:text-lg text-[#BEDBFF]/80 max-w-2xl mx-auto">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 md:mb-4 animate-fade-in-up">Hubungi Kami</h1>
+                <p class="text-sm sm:text-base lg:text-lg text-[#BEDBFF]/80 max-w-2xl mx-auto animate-fade-in-up stagger-1">
                     Ada pertanyaan atau butuh bantuan? Kami siap membantu Anda
                 </p>
             </div>
@@ -18,9 +18,9 @@
             <div class="mx-auto max-w-5xl">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
                     {{-- Contact Form - First on mobile --}}
-                    <div class="rounded-xl lg:rounded-2xl bg-white/5 border border-white/10 p-5 sm:p-6 lg:p-8 order-1 lg:order-2">
+                    <div class="rounded-xl lg:rounded-2xl bg-white/5 border border-white/10 p-5 sm:p-6 lg:p-8 order-1 lg:order-2 animate-fade-in-up hover-lift">
                         <h2 class="text-lg sm:text-xl font-bold text-white mb-5 lg:mb-6">Kirim Pesan</h2>
-                        
+
                         @if(session('success'))
                         <div class="mb-5 lg:mb-6 rounded-lg bg-[#10B981]/20 border border-[#10B981]/30 p-3 lg:p-4 text-sm text-[#10B981]">
                             {{ session('success') }}
@@ -29,7 +29,7 @@
 
                         <form action="{{ route('kontak.send') }}" method="POST" class="space-y-4 lg:space-y-5">
                             @csrf
-                            
+
                             <div class="space-y-1.5 lg:space-y-2">
                                 <label class="text-xs lg:text-sm text-white">Nama Lengkap</label>
                                 <input type="text" name="name" value="{{ old('name') }}" required
@@ -62,7 +62,7 @@
                                 @error('message')<p class="text-xs text-red-400 mt-1">{{ $message }}</p>@enderror
                             </div>
 
-                            <button type="submit" 
+                            <button type="submit"
                                     class="w-full rounded-lg bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-5 lg:px-6 py-2.5 lg:py-3 text-sm font-medium text-white shadow-lg hover:brightness-110 transition">
                                 Kirim Pesan
                             </button>
@@ -70,7 +70,7 @@
                     </div>
 
                     {{-- Contact Info - Second on mobile --}}
-                    <div class="space-y-6 lg:space-y-8 order-2 lg:order-1">
+                    <div class="space-y-6 lg:space-y-8 order-2 lg:order-1 animate-slide-in-left">
                         <div>
                             <h2 class="text-xl lg:text-2xl font-bold text-white mb-4 lg:mb-6">Informasi Kontak</h2>
                             <div class="space-y-4 lg:space-y-6">

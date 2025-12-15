@@ -6,7 +6,7 @@
     <section class="mx-auto flex max-w-6xl flex-col gap-16 px-4 pb-20 pt-16 lg:flex-row lg:px-0 lg:pt-20">
 
         {{-- KIRI: TEKS + FORM VERIFIKASI --}}
-        <div class="relative w-full max-w-xl">
+        <div class="relative w-full max-w-xl animate-fade-in-up">
             {{-- Badge "Verifikasi instan & aman" --}}
             <div class="inline-flex h-[34px] items-center gap-2 rounded-[8px]
                            border border-[rgba(255,255,255,0.2)]
@@ -52,7 +52,7 @@
             <div class="mt-10 rounded-[16px] border border-[rgba(255,255,255,0.14)]
                            bg-[rgba(15,23,42,0.9)]
                            px-6 pb-3 pt-6 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)]
-                           backdrop-blur-xl sm:px-7 sm:pt-7">
+                           backdrop-blur-xl sm:px-7 sm:pt-7 hover-lift animate-fade-in-up stagger-2">
 
 
                 {{-- FORM --}}
@@ -177,7 +177,7 @@
         </div>
 
         {{-- KANAN: KARTU SERTIFIKAT DIGITAL --}}
-        <div class="relative flex flex-1 justify-center lg:justify-end">
+        <div class="relative flex flex-1 justify-center lg:justify-end animate-slide-in-right">
             {{-- glow belakang --}}
             <div class="pointer-events-none absolute top-16 h-[320px] w-[320px] rounded-full
                            bg-[linear-gradient(135deg,rgba(0,211,242,0.3)_0%,rgba(43,127,255,0.3)_100%)]
