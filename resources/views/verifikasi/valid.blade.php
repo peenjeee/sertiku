@@ -135,6 +135,21 @@
                         </div>
                     </div>
 
+                    {{-- QR CODE SECTION --}}
+                    @if($certificate['qr_code_url'] ?? null)
+                    <div class="mb-8 rounded-2xl border border-[#3B82F6]/30 bg-[rgba(15,23,42,0.5)] px-6 py-6 max-[640px]:px-4 print-qr-section">
+                        <div class="text-center">
+                            <p class="text-sm font-semibold text-[#8EC5FF] mb-4">Scan QR Code untuk Verifikasi</p>
+                            <div class="inline-block bg-white p-4 rounded-xl">
+                                <img src="{{ $certificate['qr_code_url'] }}" alt="QR Code Verifikasi" class="w-40 h-40 mx-auto">
+                            </div>
+                            <p class="text-xs text-[rgba(190,219,255,0.6)] mt-3">
+                                Kode: {{ $certificate['nomor'] ?? '' }}
+                            </p>
+                        </div>
+                    </div>
+                    @endif
+
                     {{-- LANGKAH SELANJUTNYA (layout mirip invalid) --}}
                     <div class="space-y-4">
                         <p class="text-sm font-normal text-white">

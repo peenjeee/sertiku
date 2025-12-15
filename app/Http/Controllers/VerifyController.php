@@ -102,6 +102,7 @@ class VerifyController extends Controller
                 'status'         => $certificate->status,
                 'is_valid'       => $isValid,
                 'template_image' => $templateImage,
+                'qr_code_url'    => $certificate->qr_code_url,
             ];
 
             return view('verifikasi.valid', [

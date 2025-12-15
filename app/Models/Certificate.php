@@ -146,6 +146,47 @@ class Certificate extends Model
     }
 
     /**
+     * Get the full URL to the QR code image.
+     */
+    public function getQrCodeUrlAttribute(): ?string
+    {
+        return $this->qr_code_path ? asset('storage/' . $this->qr_code_path) : null;
+    }
+
+    /**
+     * Generate and save QR code for this certificate.
+     * The QR contains verification URL with hash.
+     */
+    public function generateQrCode(): string
+    {
+        // Create qrcodes directory if not exists
+        $directory = 'qrcodes';
+        if (! Storage::disk('public')->exists($directory)) {
+            Storage::disk('public')->makeDirectory($directory);
+        }
+
+        // Generate filename based on certificate number
+        $filename = $directory . '/' . $this->certificate_number . '.png';
+
+        // Generate QR code with verification URL
+        $verificationUrl = $this->verification_url;
+
+        $qrCode = QrCode::format('png')
+            ->size(300)
+            ->margin(2)
+            ->errorCorrection('H')
+            ->generate($verificationUrl);
+
+        // Save QR code to storage
+        Storage::disk('public')->put($filename, $qrCode);
+
+        // Update certificate with QR code path
+        $this->update(['qr_code_path' => $filename]);
+
+        return $filename;
+    }
+
+    /**
      * Find certificate by hash.
      */
     public static function findByHash(string $hash): ?self

@@ -67,6 +67,9 @@ class LembagaController extends Controller
         // Create certificate
         $certificate = $user->certificates()->create($validated);
 
+        // Generate QR code for the certificate
+        $certificate->generateQrCode();
+
         // Increment template usage if template was used
         if ($certificate->template_id) {
             $certificate->template->incrementUsage();
