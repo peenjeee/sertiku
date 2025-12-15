@@ -3,16 +3,16 @@
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-                <h1 class="text-white text-xl lg:text-2xl font-bold">Galeri Template Sertifikat</h1>
+                <h1 class="text-white text-xl lg:text-2xl font-bold">Galeri Sertifikat</h1>
                 <p class="text-white/70 text-sm lg:text-base mt-1">
-                    Kelola template sertifikat yang telah diupload ({{ $stats['total'] ?? 0 }} template)
+                    Kelola Sertifikat sertifikat yang telah diupload ({{ $stats['total'] ?? 0 }} Sertifikat)
                 </p>
             </div>
             <a href="{{ route('lembaga.template.upload') }}" class="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg text-white text-sm font-bold hover:from-blue-700 hover:to-indigo-700 transition">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                 </svg>
-                Upload Template
+                Upload Sertifikat
             </a>
         </div>
 
@@ -39,7 +39,7 @@
                 </div>
                 <div>
                     <p class="text-white text-xl font-bold">{{ $stats['total'] ?? 0 }}</p>
-                    <p class="text-white/60 text-xs">Total Template</p>
+                    <p class="text-white/60 text-xs">Total Sertifikat</p>
                 </div>
             </div>
             <div class="bg-emerald-500/20 border border-emerald-500/30 rounded-xl p-4 flex items-center gap-3">
@@ -50,12 +50,12 @@
                 </div>
                 <div>
                     <p class="text-white text-xl font-bold">{{ $stats['active'] ?? 0 }}</p>
-                    <p class="text-white/60 text-xs">Template Aktif</p>
+                    <p class="text-white/60 text-xs">Sertifikat Aktif</p>
                 </div>
             </div>
         </div>
 
-        <!-- Template Grid -->
+        <!-- Sertifikat Grid -->
         @if(isset($templates) && $templates->count() > 0)
         <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
             @foreach($templates as $template)
@@ -99,7 +99,7 @@
                                 </svg>
                             </button>
                         </form>
-                        <form action="{{ route('lembaga.template.destroy', $template) }}" method="POST" class="inline" onsubmit="return confirm('Hapus template ini?')">
+                        <form action="{{ route('lembaga.template.destroy', $template) }}" method="POST" class="inline" onsubmit="return confirm('Hapus Sertifikat ini?')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white hover:bg-red-600 transition">
@@ -113,11 +113,11 @@
 
                 <!-- Template Info -->
                 <div class="p-4">
-                    <h3 class="text-white font-bold truncate">{{ $template->name }}</h3>
-                    <p class="text-white/60 text-sm mt-1">{{ $template->orientation == 'landscape' ? 'Landscape' : 'Portrait' }}</p>
-                    <div class="flex items-center justify-between mt-3 pt-3 border-t border-white/10">
-                        <span class="text-white/50 text-xs">Digunakan {{ $template->usage_count }}x</span>
-                        <span class="text-white/50 text-xs">{{ $template->created_at->diffForHumans() }}</span>
+                    <h3 class="text-black font-bold truncate">{{ $template->name }}</h3>
+                    <p class="text-black/60 text-sm mt-1">{{ $template->orientation == 'landscape' ? 'Landscape' : 'Portrait' }}</p>
+                    <div class="flex items-center justify-between mt-3 pt-3 border-t border-black/10">
+                        <span class="text-black/50 text-xs">Digunakan {{ $template->usage_count }}x</span>
+                        <span class="text-black/50 text-xs">{{ $template->created_at->diffForHumans() }}</span>
                     </div>
                 </div>
             </div>

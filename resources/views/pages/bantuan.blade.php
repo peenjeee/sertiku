@@ -94,7 +94,7 @@
             <div class="space-y-4">
                 @php
                     $faqs = [
-                        ['q' => 'Bagaimana cara membuat sertifikat?', 'a' => 'Setelah login, masuk ke dashboard dan klik "Buat Sertifikat Baru". Isi detail sertifikat, upload template, dan klik simpan.'],
+                        ['q' => 'Bagaimana cara membuat sertifikat?', 'a' => 'Setelah login, masuk ke dashboard dan klik "Buat Sertifikat Baru". Isi detail sertifikat, Upload Sertifikat, dan klik simpan.'],
                         ['q' => 'Apakah sertifikat saya aman?', 'a' => 'Ya, semua sertifikat disimpan dengan enkripsi dan dapat diverifikasi melalui teknologi blockchain.'],
                         ['q' => 'Berapa biaya untuk menggunakan SertiKu?', 'a' => 'Kami menyediakan paket gratis untuk pengguna personal. Untuk institusi, silakan lihat halaman harga.'],
                         ['q' => 'Bagaimana cara menghubungi support?', 'a' => 'Anda bisa menghubungi kami melalui halaman Hubungi Kami atau email ke support@sertiku.my.id'],

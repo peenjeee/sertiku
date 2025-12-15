@@ -2,8 +2,8 @@
     <div class="space-y-6">
         <!-- Header -->
         <div class="info-box rounded-2xl p-6">
-            <h1 class="text-white text-xl lg:text-2xl font-bold mb-2">Daftar Sertifikat Terbit</h1>
-            <p class="text-white/70 text-sm lg:text-base">Kelola semua sertifikat yang telah diterbitkan oleh lembaga Anda</p>
+            <h1 class="text-black text-xl lg:text-2xl font-bold mb-2">Daftar Sertifikat Terbit</h1>
+            <p class="text-black/70 text-sm lg:text-base">Kelola semua sertifikat yang telah diterbitkan oleh lembaga Anda</p>
         </div>
 
         <!-- Success/Error Messages -->
@@ -29,7 +29,7 @@
                 </div>
                 <div>
                     <p class="text-white text-xl font-bold">{{ $stats['total'] ?? 0 }}</p>
-                    <p class="text-white/60 text-xs">Total</p>
+                    <p class="text-white font-bold/60 text-xs">Total</p>
                 </div>
             </div>
             <div class="bg-emerald-500/20 border border-emerald-500/30 rounded-xl p-4 flex items-center gap-3">
@@ -40,7 +40,7 @@
                 </div>
                 <div>
                     <p class="text-white text-xl font-bold">{{ $stats['active'] ?? 0 }}</p>
-                    <p class="text-white/60 text-xs">Aktif</p>
+                    <p class="text-white font-bold/60 text-xs">Aktif</p>
                 </div>
             </div>
             <div class="bg-red-500/20 border border-red-500/30 rounded-xl p-4 flex items-center gap-3">
@@ -51,7 +51,7 @@
                 </div>
                 <div>
                     <p class="text-white text-xl font-bold">{{ $stats['revoked'] ?? 0 }}</p>
-                    <p class="text-white/60 text-xs">Dicabut</p>
+                    <p class="text-white font-bold/60 text-xs">Dicabut</p>
                 </div>
             </div>
         </div>
@@ -63,9 +63,9 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
                 <input type="text" placeholder="Cari berdasarkan nama, course, atau ID..."
-                       class="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                       class="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/20 rounded-lg text-black text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
-            <a href="{{ route('lembaga.sertifikat.create') }}" class="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg text-white text-sm font-bold hover:from-blue-700 hover:to-indigo-700 transition">
+            <a href="{{ route('lembaga.sertifikat.create') }}" class="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg text-black text-sm font-bold hover:from-blue-700 hover:to-indigo-700 transition">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                 </svg>
@@ -105,18 +105,18 @@
                 <!-- Certificate Body -->
                 <div class="p-4 space-y-3">
                     <div>
-                        <p class="text-white/60 text-xs">Program/Kursus</p>
-                        <p class="text-white font-medium truncate">{{ $certificate->course_name }}</p>
+                        <p class="text-black/60 text-xs">Program/Kursus</p>
+                        <p class="text-black font-medium truncate">{{ $certificate->course_name }}</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <p class="text-white/60 text-xs">Nomor</p>
-                            <p class="text-white text-sm font-mono">{{ Str::limit($certificate->certificate_number, 15) }}</p>
+                            <p class="text-black/60 text-xs">Nomor</p>
+                            <p class="text-black text-sm font-mono">{{ Str::limit($certificate->certificate_number, 15) }}</p>
                         </div>
                         <div>
-                            <p class="text-white/60 text-xs">Tanggal</p>
-                            <p class="text-white text-sm">{{ $certificate->issue_date->format('d M Y') }}</p>
+                            <p class="text-black/60 text-xs">Tanggal</p>
+                            <p class="text-black text-sm">{{ $certificate->issue_date->format('d M Y') }}</p>
                         </div>
                     </div>
 
@@ -130,7 +130,7 @@
                 <!-- Certificate Actions -->
                 <div class="p-4 pt-0 flex items-center gap-2">
                     <a href="{{ route('verifikasi.show', $certificate->hash) }}" target="_blank"
-                       class="flex-1 flex items-center justify-center gap-1 py-2 bg-white/10 rounded-lg text-white text-xs font-medium hover:bg-white/20 transition">
+                       class="flex-1 flex items-center justify-center gap-1 py-2 bg-green/10 rounded-lg text-black font-bold text-xs hover:bg-gray/20 transition">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>

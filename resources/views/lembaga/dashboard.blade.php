@@ -106,7 +106,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-[#166534] font-bold text-sm lg:text-lg">Galeri Template</h3>
+                        <h3 class="text-[#166534] font-bold text-sm lg:text-lg">Galeri Sertifikat</h3>
                         <p class="text-[#22C55E] text-xs lg:text-sm">3 template tersimpan</p>
                     </div>
                 </div>
