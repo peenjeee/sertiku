@@ -254,6 +254,199 @@
         </script>
     @endif
 
+    {{-- Scroll Animation Script --}}
+    <style>
+        /* Scroll Animation - Hidden by default */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .scroll-animate.animate-left {
+            transform: translateX(-30px);
+        }
+
+        .scroll-animate.animate-right {
+            transform: translateX(30px);
+        }
+
+        .scroll-animate.animate-scale {
+            transform: scale(0.9);
+        }
+
+        .scroll-animate.animate-rotate {
+            transform: rotate(-5deg) scale(0.95);
+        }
+
+        /* When element is visible */
+        .scroll-animate.is-visible {
+            opacity: 1;
+            transform: translateY(0) translateX(0) scale(1) rotate(0);
+        }
+
+        /* Stagger delays for scroll animations */
+        .scroll-delay-1 { transition-delay: 0.1s; }
+        .scroll-delay-2 { transition-delay: 0.2s; }
+        .scroll-delay-3 { transition-delay: 0.3s; }
+        .scroll-delay-4 { transition-delay: 0.4s; }
+        .scroll-delay-5 { transition-delay: 0.5s; }
+        .scroll-delay-6 { transition-delay: 0.6s; }
+
+        /* Counter Animation */
+        .count-up {
+            transition: all 0.3s ease;
+        }
+
+        /* Parallax Effect */
+        .parallax {
+            will-change: transform;
+        }
+
+        /* Bounce Animation */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-15px); }
+            60% { transform: translateY(-8px); }
+        }
+
+        .animate-bounce-slow {
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        /* Shimmer Effect for loading states */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        /* Glow Pulse */
+        @keyframes glow-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
+        }
+
+        .animate-glow-pulse {
+            animation: glow-pulse 2s ease-in-out infinite;
+        }
+
+        /* Text Gradient Animate */
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .animate-gradient-text {
+            background: linear-gradient(90deg, #3B82F6, #8B5CF6, #EC4899, #3B82F6);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-shift 3s ease infinite;
+        }
+
+        /* Card 3D Tilt on Hover */
+        .card-3d {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: transform 0.3s ease;
+        }
+
+        .card-3d:hover {
+            transform: rotateY(5deg) rotateX(5deg);
+        }
+
+        /* Ripple Effect */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .ripple:active::after {
+            width: 300px;
+            height: 300px;
+        }
+    </style>
+
+    <script>
+        // Intersection Observer for Scroll Animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const scrollElements = document.querySelectorAll('.scroll-animate');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            scrollElements.forEach(el => observer.observe(el));
+
+            // Counter Animation for stats
+            const counters = document.querySelectorAll('.count-up');
+            const counterObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = entry.target;
+                        const endValue = parseInt(target.getAttribute('data-count'));
+                        const suffix = target.getAttribute('data-suffix') || '';
+                        const duration = 2000;
+                        const startTime = performance.now();
+
+                        function updateCounter(currentTime) {
+                            const elapsed = currentTime - startTime;
+                            const progress = Math.min(elapsed / duration, 1);
+                            const easeOut = 1 - Math.pow(1 - progress, 3);
+                            const currentValue = Math.floor(endValue * easeOut);
+                            target.textContent = currentValue.toLocaleString() + suffix;
+
+                            if (progress < 1) {
+                                requestAnimationFrame(updateCounter);
+                            }
+                        }
+
+                        requestAnimationFrame(updateCounter);
+                        counterObserver.unobserve(target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            counters.forEach(counter => counterObserver.observe(counter));
+
+            // Smooth parallax on scroll
+            const parallaxElements = document.querySelectorAll('.parallax');
+            window.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                parallaxElements.forEach(el => {
+                    const speed = el.getAttribute('data-speed') || 0.5;
+                    el.style.transform = `translateY(${scrollY * speed}px)`;
+                });
+            });
+        });
+    </script>
+
     @stack('scripts')
 </body>
 

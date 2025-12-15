@@ -5,7 +5,8 @@
         class="mx-auto max-w-6xl px-4 pb-30 pt-12 lg:flex lg:items-center lg:gap-16 lg:px-0 lg:pt-24">
         {{-- Kiri --}}
         <div class="max-w-xl">
-            <div class="inline-flex items-center gap-2 rounded-full border border-[rgba(255,255,255,0.2)] bg-[rgba(255,255,255,0.08)] px-4 py-1 text-xs font-medium text-[rgba(219,234,254,0.9)]">
+            {{-- Badge with animation --}}
+            <div class="inline-flex items-center gap-2 rounded-full border border-[rgba(255,255,255,0.2)] bg-[rgba(255,255,255,0.08)] px-4 py-1 text-xs font-medium text-[rgba(219,234,254,0.9)] animate-fade-in-down">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g clip-path="url(#clip0_31_1015)">
                         <path d="M6.62301 10.3308C6.56351 10.1002 6.44328 9.88965 6.27484 9.72121C6.1064 9.55277 5.8959 9.43255 5.66524 9.37304L1.57624 8.31863C1.50648 8.29883 1.44508 8.25682 1.40136 8.19896C1.35764 8.1411 1.33398 8.07056 1.33398 7.99804C1.33398 7.92553 1.35764 7.85499 1.40136 7.79713C1.44508 7.73927 1.50648 7.69726 1.57624 7.67746L5.66524 6.62238C5.89582 6.56293 6.10626 6.44281 6.2747 6.27449C6.44313 6.10618 6.5634 5.89582 6.62301 5.66528L7.67742 1.57628C7.69702 1.50624 7.73899 1.44454 7.79694 1.40059C7.85488 1.35663 7.92561 1.33284 7.99834 1.33284C8.07107 1.33284 8.1418 1.35663 8.19974 1.40059C8.25769 1.44454 8.29966 1.50624 8.31926 1.57628L9.373 5.66528C9.43251 5.89594 9.55273 6.10644 9.72117 6.27488C9.88961 6.44332 10.1001 6.56354 10.3308 6.62305L14.4198 7.67679C14.4901 7.69619 14.5521 7.73811 14.5963 7.79615C14.6405 7.85418 14.6644 7.9251 14.6644 7.99804C14.6644 8.07099 14.6405 8.14191 14.5963 8.19994C14.5521 8.25798 14.4901 8.2999 14.4198 8.3193L10.3308 9.37304C10.1001 9.43255 9.88961 9.55277 9.72117 9.72121C9.55273 9.88965 9.43251 10.1002 9.373 10.3308L8.3186 14.4198C8.299 14.4898 8.25702 14.5516 8.19908 14.5955C8.14113 14.6395 8.0704 14.6633 7.99767 14.6633C7.92495 14.6633 7.85421 14.6395 7.79627 14.5955C7.73833 14.5516 7.69635 14.4898 7.67675 14.4198L6.62301 10.3308Z" stroke="#FFDF20" stroke-width="1.33301" stroke-linecap="round" stroke-linejoin="round" />
@@ -24,18 +25,18 @@
                 Platform Sertifikat Digital Terpercaya
             </div>
 
-            <h1 class="mt-6 text-4xl font-semibold leading-tight text-[#F9FAFB] md:text-5xl lg:text-6xl">
+            <h1 class="mt-6 text-4xl font-semibold leading-tight text-[#F9FAFB] md:text-5xl lg:text-6xl animate-fade-in-up stagger-1">
                 Verifikasi Sertifikat <br>
-                <span class="bg-gradient-to-r from-[#2B7FFF] to-[#00B8DB] bg-clip-text text-transparent">
+                <span class="bg-gradient-to-r from-[#2B7FFF] to-[#00B8DB] bg-clip-text text-transparent animate-gradient-text">
                     Jadi Mudah
                 </span>
             </h1>
 
-            <p class="mt-5 text-sm leading-relaxed text-[rgba(190,219,255,0.7)] md:text-base">
+            <p class="mt-5 text-sm leading-relaxed text-[rgba(190,219,255,0.7)] md:text-base animate-fade-in-up stagger-2">
                 Platform terdepan untuk menerbitkan, mengelola, dan memverifikasi sertifikat digital dengan teknologi QR Code dan blockchain
             </p>
 
-            <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center animate-fade-in-up stagger-3">
                 <a href="#harga"
                     class="inline-flex items-center justify-center gap-2 rounded-[12px] bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-7 py-3 text-sm font-semibold text-white shadow-[0_20px_40px_-20px_rgba(37,99,235,0.9)] hover:brightness-110 transition">
                     Mulai Sekarang
@@ -59,17 +60,17 @@
             </div>
 
             {{-- Stats --}}
-            <div class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-3 text-xs sm:text-sm text-[rgba(190,219,255,0.9)]">
-                <div>
-                    <div class="text-lg font-semibold text-white sm:text-xl">67K+</div>
+            <div class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-3 text-xs sm:text-sm text-[rgba(190,219,255,0.9)] animate-fade-in-up stagger-4">
+                <div class="hover-lift">
+                    <div class="text-lg font-semibold text-white sm:text-xl count-up" data-count="67000" data-suffix="+">0</div>
                     <p class="mt-1 leading-snug">Sertifikat<br>Terbit</p>
                 </div>
-                <div>
-                    <div class="text-lg font-semibold text-white sm:text-xl">67+</div>
+                <div class="hover-lift">
+                    <div class="text-lg font-semibold text-white sm:text-xl count-up" data-count="67" data-suffix="+">0</div>
                     <p class="mt-1 leading-snug">Lembaga<br>Terdaftar</p>
                 </div>
-                <div>
-                    <div class="text-lg font-semibold text-white sm:text-xl">96%</div>
+                <div class="hover-lift">
+                    <div class="text-lg font-semibold text-white sm:text-xl count-up" data-count="96" data-suffix="%">0</div>
                     <p class="mt-1 leading-snug">Tingkat<br>Keamanan</p>
                 </div>
                 <div>
@@ -80,8 +81,8 @@
         </div>
 
         {{-- Kanan hero: kartu sertifikat terverifikasi --}}
-        <div class="mt-10 flex flex-1 justify-center lg:mt-0">
-            <div class="relative w-full max-w-xl mx-auto">
+        <div class="mt-10 flex flex-1 justify-center lg:mt-0 animate-slide-in-right stagger-2">
+            <div class="relative w-full max-w-xl mx-auto hover-lift">
 
                 {{-- Tag ungu di pojok kiri atas --}}
                 <div
@@ -251,7 +252,7 @@ md:-left-8 md:-top-8 md:h-16 md:w-16 z-10">
 
     {{-- Lembaga Terdaftar --}}
     <section class="mx-auto max-w-6xl px-4 pb-20 lg:px-0">
-        <div class="text-center">
+        <div class="text-center scroll-animate">
             <div class="inline-flex rounded-full border border-[rgba(255,255,255,0.2)] bg-[rgba(15,23,42,0.9)] px-4 py-1 text-[10px] uppercase tracking-[0.24em] text-[rgba(190,219,255,0.7)]">
                 Dipercaya oleh
             </div>
@@ -272,9 +273,9 @@ md:-left-8 md:-top-8 md:h-16 md:w-16 z-10">
             ];
             @endphp
 
-            @foreach($orgs as $org)
+            @foreach($orgs as $index => $org)
             <div
-                class="rounded-[24px] border border-[rgba(255,255,255,0.12)] bg-[rgba(15,23,42,0.9)] px-6 py-5 shadow-[0_18px_40px_-30px_rgba(15,23,42,1)]">
+                class="rounded-[24px] border border-[rgba(255,255,255,0.12)] bg-[rgba(15,23,42,0.9)] px-6 py-5 shadow-[0_18px_40px_-30px_rgba(15,23,42,1)] scroll-animate scroll-delay-{{ ($index % 3) + 1 }} hover-lift card-3d">
                 <div class="flex items-center gap-4">
                     {{-- Icon biru --}}
                     <div
@@ -331,12 +332,12 @@ md:-left-8 md:-top-8 md:h-16 md:w-16 z-10">
 
     {{-- Kenapa Memilih SertiKu --}}
     <section id="fitur" class="mx-auto max-w-6xl px-4 pb-20 lg:px-0">
-        <div class="text-center">
+        <div class="text-center scroll-animate">
             <div class="inline-flex rounded-full border border-[rgba(255,255,255,0.2)] bg-[rgba(15,23,42,0.9)] px-4 py-1 text-[10px] uppercase tracking-[0.24em] text-[rgba(190,219,255,0.7)]">
                 Fitur Unggulan
             </div>
             <h2 class="mt-3 text-2xl font-semibold text-white md:text-3xl">
-                Kenapa Memilih <span class="text-[#8EC5FF]">SertiKu</span> ?
+                Kenapa Memilih <span class="text-[#8EC5FF] animate-gradient-text">SertiKu</span> ?
             </h2>
             <p class="mt-3 text-sm text-[rgba(190,219,255,0.7)]">
                 Platform dengan teknologi terdepan untuk kebutuhan sertifikasi digital Anda.

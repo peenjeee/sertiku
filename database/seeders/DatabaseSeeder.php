@@ -1,22 +1,37 @@
 <?php
-
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // Master Admin (Super Admin)
+        User::updateOrCreate(
+            ['email' => 'master@sertiku.web.id'],
+            [
+                'name'              => 'Master SertiKu',
+                'password'          => Hash::make('Master123'),
+                'is_admin'          => true,
+                'is_master'         => true,
+                'account_type'      => 'admin',
+                'profile_completed' => true,
+                'country'           => 'Indonesia',
+            ]
+        );
+
         // Admin
         User::updateOrCreate(
-            ['email' => 'admin@sertiku.my.id'],
+            ['email' => 'admin@sertiku.web.id'],
             [
                 'name'              => 'Admin SertiKu',
-                'password'          => Hash::make('Admin123!'),
-                'account_type'      => 'personal',
+                'password'          => Hash::make('Admin123'),
+                'is_admin'          => true,
+                'is_master'         => false,
+                'account_type'      => 'admin',
                 'profile_completed' => true,
                 'country'           => 'Indonesia',
             ]
@@ -24,27 +39,31 @@ class DatabaseSeeder extends Seeder
 
         // Lembaga
         User::updateOrCreate(
-            ['email' => 'lembaga@sertiku.my.id'],
+            ['email' => 'lembaga@sertiku.web.id'],
             [
                 'name'              => 'Lembaga SertiKu',
-                'password'          => Hash::make('Lembaga123!'),
-                'account_type'      => 'institution',
+                'password'          => Hash::make('lembaga123'),
+                'is_admin'          => false,
+                'is_master'         => false,
+                'account_type'      => 'lembaga',
                 'profile_completed' => true,
                 'institution_name'  => 'Lembaga SertiKu',
                 'institution_type'  => 'company',
-                'city'              => 'Sleman',
+                'city'              => 'Jakarta',
                 'country'           => 'Indonesia',
                 'admin_name'        => 'Admin Lembaga',
             ]
         );
 
-        // User biasa
+        // User biasa (Pengguna)
         User::updateOrCreate(
-            ['email' => 'user@sertiku.my.id'],
+            ['email' => 'user@sertiku.web.id'],
             [
-                'name'              => 'Pengguna Umum',
-                'password'          => Hash::make('User123!'),
-                'account_type'      => 'personal',
+                'name'              => 'User SertiKu',
+                'password'          => Hash::make('user123'),
+                'is_admin'          => false,
+                'is_master'         => false,
+                'account_type'      => 'pengguna',
                 'profile_completed' => true,
                 'country'           => 'Indonesia',
             ]
