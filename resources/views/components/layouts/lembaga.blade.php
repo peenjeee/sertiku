@@ -429,14 +429,100 @@
         </main>
 
         <!-- Chat Widget -->
-        <button class="chat-widget fixed bottom-6 right-6 w-14 h-14 rounded-full flex items-center justify-center text-white z-50 hover:scale-105 transition group">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-            </svg>
-            <span class="absolute bottom-full right-0 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
-                Butuh bantuan? Chat dengan kami! 💬
-            </span>
-        </button>
+        <div id="chatWidget" class="fixed bottom-6 right-6 z-50">
+            <!-- Chat Popup -->
+            <div id="chatPopup" class="hidden absolute bottom-16 right-0 w-80 max-h-[480px] bg-[#0F172A] rounded-2xl shadow-2xl border border-white/10 overflow-hidden flex flex-col">
+                <!-- Chat Header -->
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-3 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-white font-bold text-sm">SertiKu Support</p>
+                            <p class="text-white/70 text-xs">Bantuan Cepat 24/7</p>
+                        </div>
+                    </div>
+                    <button onclick="toggleChatPopup()" class="text-white/70 hover:text-white transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Chat Messages -->
+                <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-3" style="min-height: 200px; max-height: 280px;">
+                    <!-- Welcome Message -->
+                    <div class="flex gap-2">
+                        <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 2L3 7l7 5 7-5-7-5z"/>
+                                <path d="M3 12l7 5 7-5"/>
+                            </svg>
+                        </div>
+                        <div class="bg-white/10 rounded-lg rounded-tl-none px-3 py-2 max-w-[85%]">
+                            <p class="text-white text-sm">Halo! 👋 Saya asisten virtual SertiKu. Pilih topik di bawah atau ketik pertanyaan Anda.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Templates -->
+                <div id="quickTemplates" class="px-4 pb-3 space-y-2">
+                    <p class="text-white/50 text-xs mb-2">Pertanyaan Populer:</p>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="askQuestion('cara_verifikasi')" class="chat-template-btn px-3 py-1.5 bg-blue-500/20 border border-blue-500/30 rounded-lg text-blue-300 text-xs hover:bg-blue-500/30 transition">
+                            🔍 Cara Verifikasi
+                        </button>
+                        <button onclick="askQuestion('upload_sertifikat')" class="chat-template-btn px-3 py-1.5 bg-green-500/20 border border-green-500/30 rounded-lg text-green-300 text-xs hover:bg-green-500/30 transition">
+                            📤 Upload Sertifikat
+                        </button>
+                        <button onclick="askQuestion('upgrade_paket')" class="chat-template-btn px-3 py-1.5 bg-purple-500/20 border border-purple-500/30 rounded-lg text-purple-300 text-xs hover:bg-purple-500/30 transition">
+                            ⭐ Upgrade Paket
+                        </button>
+                        <button onclick="askQuestion('qr_code')" class="chat-template-btn px-3 py-1.5 bg-cyan-500/20 border border-cyan-500/30 rounded-lg text-cyan-300 text-xs hover:bg-cyan-500/30 transition">
+                            📱 QR Code
+                        </button>
+                        <button onclick="askQuestion('tips_keamanan')" class="chat-template-btn px-3 py-1.5 bg-yellow-500/20 border border-yellow-500/30 rounded-lg text-yellow-300 text-xs hover:bg-yellow-500/30 transition">
+                            🔒 Tips Keamanan
+                        </button>
+                        <button onclick="askQuestion('hubungi_admin')" class="chat-template-btn px-3 py-1.5 bg-red-500/20 border border-red-500/30 rounded-lg text-red-300 text-xs hover:bg-red-500/30 transition">
+                            📞 Hubungi Admin
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="p-3 border-t border-white/10">
+                    <div class="flex gap-2">
+                        <input type="text" id="chatInput" placeholder="Ketik pesan..."
+                               onkeypress="if(event.key==='Enter')sendCustomMessage()"
+                               class="flex-1 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm placeholder:text-white/40 focus:outline-none focus:border-blue-500">
+                        <button onclick="sendCustomMessage()" class="bg-blue-600 hover:bg-blue-700 rounded-lg px-3 py-2 text-white transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Button -->
+            <button onclick="toggleChatPopup()" id="chatButton" class="chat-widget w-14 h-14 rounded-full flex items-center justify-center text-white hover:scale-105 transition group relative">
+                <svg id="chatIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                </svg>
+                <svg id="closeIcon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+                <span class="absolute bottom-full right-0 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none">
+                    Butuh bantuan? Chat dengan kami! 💬
+                </span>
+                <!-- Notification dot -->
+                <span class="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-[#0F172A]"></span>
+            </button>
+        </div>
     </div>
 
     <script>
@@ -489,6 +575,145 @@
                 }
             }
         });
+
+        // ========== CHAT WIDGET FUNCTIONS ==========
+        let isChatOpen = false;
+
+        const chatResponses = {
+            'cara_verifikasi': {
+                question: 'Bagaimana cara verifikasi sertifikat?',
+                answer: '🔍 <strong>Cara Verifikasi Sertifikat:</strong><br><br>1️⃣ Buka halaman <a href="/verifikasi" class="text-blue-400 underline">Verifikasi</a><br>2️⃣ Masukkan kode hash atau nomor sertifikat (SERT-XXXXXX)<br>3️⃣ Klik tombol "Verifikasi"<br>4️⃣ Sistem akan menampilkan informasi sertifikat jika valid<br><br>💡 <em>Tip: Anda juga bisa scan QR Code pada sertifikat!</em>'
+            },
+            'upload_sertifikat': {
+                question: 'Cara upload sertifikat baru?',
+                answer: '📤 <strong>Cara Upload Sertifikat:</strong><br><br>1️⃣ Pergi ke menu "Upload Sertifikat"<br>2️⃣ Upload gambar template sertifikat (JPG/PNG)<br>3️⃣ Isi data penerima (nama, email, dll)<br>4️⃣ Pilih tanggal terbit<br>5️⃣ Klik "Terbitkan Sertifikat"<br><br>✅ Sertifikat akan otomatis diberi nomor unik dan QR Code!'
+            },
+            'upgrade_paket': {
+                question: 'Bagaimana cara upgrade paket?',
+                answer: '⭐ <strong>Upgrade ke Professional:</strong><br><br>Keuntungan Paket Professional:<br>• ♾️ Unlimited sertifikat/bulan<br>• 🎨 Template kustom<br>• 📊 Analytics lengkap<br>• 🎯 Priority support<br><br>💰 Harga: Rp 399.000/bulan<br><br>Klik tombol "Upgrade" di dashboard atau hubungi admin untuk promo khusus!'
+            },
+            'qr_code': {
+                question: 'Tentang QR Code sertifikat',
+                answer: '📱 <strong>QR Code Sertifikat:</strong><br><br>Setiap sertifikat yang diterbitkan akan otomatis mendapat QR Code yang berisi:<br>• Link verifikasi langsung<br>• Nomor sertifikat unik<br><br>🔒 QR Code dapat discan menggunakan HP untuk memverifikasi keaslian sertifikat secara instan!<br><br>💡 QR Code akan muncul di halaman verifikasi dan PDF download.'
+            },
+            'tips_keamanan': {
+                question: 'Tips keamanan sertifikat',
+                answer: '🔒 <strong>Tips Keamanan:</strong><br><br>1️⃣ <strong>Jaga kerahasiaan akun</strong> - Jangan bagikan password<br>2️⃣ <strong>Verifikasi rutin</strong> - Cek sertifikat Anda secara berkala<br>3️⃣ <strong>Backup data</strong> - Download PDF sertifikat penting<br>4️⃣ <strong>Laporkan pemalsuan</strong> - Hubungi admin jika menemukan sertifikat palsu<br><br>🛡️ SertiKu menggunakan enkripsi untuk melindungi data Anda!'
+            },
+            'hubungi_admin': {
+                question: 'Hubungi Admin',
+                answer: '📞 <strong>Hubungi Kami:</strong><br><br>📧 Email: <a href="mailto:support@sertiku.web.id" class="text-blue-400 underline">support@sertiku.web.id</a><br>📱 WhatsApp: <a href="https://wa.me/6281234567890" class="text-blue-400 underline">+62 812-3456-7890</a><br>🕐 Jam Operasional: Senin-Jumat, 09:00-17:00 WIB<br><br>💬 Atau kirim pesan langsung di chat ini dan kami akan segera merespons!'
+            }
+        };
+
+        function toggleChatPopup() {
+            const popup = document.getElementById('chatPopup');
+            const chatIcon = document.getElementById('chatIcon');
+            const closeIcon = document.getElementById('closeIcon');
+
+            isChatOpen = !isChatOpen;
+            popup.classList.toggle('hidden');
+            chatIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+        }
+
+        function askQuestion(key) {
+            const response = chatResponses[key];
+            if (!response) return;
+
+            const messagesDiv = document.getElementById('chatMessages');
+
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'flex gap-2 justify-end';
+            userMsg.innerHTML = `
+                <div class="bg-blue-600 rounded-lg rounded-tr-none px-3 py-2 max-w-[85%]">
+                    <p class="text-white text-sm">${response.question}</p>
+                </div>
+            `;
+            messagesDiv.appendChild(userMsg);
+
+            // Scroll to bottom
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            // Add typing indicator
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'flex gap-2 typing-indicator';
+            typingIndicator.innerHTML = `
+                <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2L3 7l7 5 7-5-7-5z"/>
+                    </svg>
+                </div>
+                <div class="bg-white/10 rounded-lg rounded-tl-none px-3 py-2">
+                    <div class="flex gap-1">
+                        <span class="w-2 h-2 bg-white/50 rounded-full animate-bounce" style="animation-delay: 0ms"></span>
+                        <span class="w-2 h-2 bg-white/50 rounded-full animate-bounce" style="animation-delay: 150ms"></span>
+                        <span class="w-2 h-2 bg-white/50 rounded-full animate-bounce" style="animation-delay: 300ms"></span>
+                    </div>
+                </div>
+            `;
+            messagesDiv.appendChild(typingIndicator);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            // Simulate typing delay then show response
+            setTimeout(() => {
+                messagesDiv.removeChild(typingIndicator);
+
+                const botMsg = document.createElement('div');
+                botMsg.className = 'flex gap-2';
+                botMsg.innerHTML = `
+                    <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 2L3 7l7 5 7-5-7-5z"/>
+                        </svg>
+                    </div>
+                    <div class="bg-white/10 rounded-lg rounded-tl-none px-3 py-2 max-w-[85%]">
+                        <p class="text-white text-sm leading-relaxed">${response.answer}</p>
+                    </div>
+                `;
+                messagesDiv.appendChild(botMsg);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }, 1000);
+        }
+
+        function sendCustomMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const messagesDiv = document.getElementById('chatMessages');
+
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'flex gap-2 justify-end';
+            userMsg.innerHTML = `
+                <div class="bg-blue-600 rounded-lg rounded-tr-none px-3 py-2 max-w-[85%]">
+                    <p class="text-white text-sm">${message}</p>
+                </div>
+            `;
+            messagesDiv.appendChild(userMsg);
+            input.value = '';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            // Auto-response after delay
+            setTimeout(() => {
+                const botMsg = document.createElement('div');
+                botMsg.className = 'flex gap-2';
+                botMsg.innerHTML = `
+                    <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 2L3 7l7 5 7-5-7-5z"/>
+                        </svg>
+                    </div>
+                    <div class="bg-white/10 rounded-lg rounded-tl-none px-3 py-2 max-w-[85%]">
+                        <p class="text-white text-sm">Terima kasih atas pertanyaan Anda! 😊<br><br>Untuk pertanyaan khusus, silakan hubungi admin kami melalui email <a href="mailto:support@sertiku.web.id" class="text-blue-400 underline">support@sertiku.web.id</a> atau pilih topik di atas untuk bantuan cepat.</p>
+                    </div>
+                `;
+                messagesDiv.appendChild(botMsg);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }, 1000);
+        }
     </script>
 </body>
 </html>
