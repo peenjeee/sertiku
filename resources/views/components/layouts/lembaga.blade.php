@@ -522,6 +522,17 @@
                     <span class="text-sm">Pengaturan</span>
                 </a>
 
+                <!-- Hubungi Admin Button -->
+                <a href="{{ route('contact.admin') }}"
+                    class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-green-500/10 border border-green-500/30 rounded-lg text-green-400 hover:bg-green-500/20 transition mb-3"
+                    title="Hubungi Admin">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67"
+                            d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <span class="text-sm">Hubungi Admin</span>
+                </a>
+
                 <!-- Logout Button -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
