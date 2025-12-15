@@ -747,11 +747,12 @@ md:-left-8 md:-top-8 md:h-16 md:w-16 z-10">
 
             {{-- Form input + tombol --}}
             <div class="mt-8 flex justify-center">
-                <form class="w-full max-w-md">
+                <form action="{{ route('register') }}" method="GET" class="w-full max-w-md">
                     <div class="flex gap-3">
                         {{-- Input email --}}
                         <input
                             type="email"
+                            name="email"
                             placeholder="Masukkan email Anda"
                             class="flex-1 rounded-[10px] border border-[rgba(255,255,255,0.6)] bg-[rgba(255,255,255,0.15)] px-4 py-2.5 text-sm text-white placeholder:text-[rgba(226,232,240,0.8)] focus:border-white focus:outline-none focus:ring-2 focus:ring-white/70">
 

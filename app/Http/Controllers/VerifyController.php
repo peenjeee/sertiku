@@ -42,18 +42,20 @@ class VerifyController extends Controller
             }
 
             $certificateData = [
-                'id'         => $certificate->id,
-                'nama'       => $certificate->recipient_name,
-                'email'      => $certificate->recipient_email,
-                'judul'      => $certificate->course_name,
-                'kategori'   => $certificate->category,
-                'deskripsi'  => $certificate->description,
-                'tanggal'    => $certificate->issue_date->format('d F Y'),
-                'kadaluarsa' => $certificate->expire_date?->format('d F Y'),
-                'nomor'      => $certificate->certificate_number,
-                'penerbit'   => $certificate->issuer->institution_name ?? $certificate->issuer->name,
-                'status'     => $certificate->status,
-                'is_valid'   => $isValid,
+                'id'                 => $certificate->id,
+                'nama'               => $certificate->recipient_name,
+                'email'              => $certificate->recipient_email,
+                'judul'              => $certificate->course_name,
+                'kategori'           => $certificate->category,
+                'deskripsi'          => $certificate->description,
+                'tanggal'            => $certificate->issue_date->format('d F Y'),
+                'kadaluarsa'         => $certificate->expire_date?->format('d F Y'),
+                'nomor'              => $certificate->certificate_number,
+                'penerbit'           => $certificate->issuer->institution_name ?? $certificate->issuer->name,
+                'status'             => $certificate->status,
+                'is_valid'           => $isValid,
+                'blockchain_tx_hash' => $certificate->blockchain_tx_hash,
+                'blockchain_status'  => $certificate->blockchain_status,
             ];
 
             // Return JSON for AJAX request
@@ -103,20 +105,22 @@ class VerifyController extends Controller
             }
 
             $certificateData = [
-                'id'             => $certificate->id,
-                'nama'           => $certificate->recipient_name,
-                'email'          => $certificate->recipient_email,
-                'judul'          => $certificate->course_name,
-                'kategori'       => $certificate->category,
-                'deskripsi'      => $certificate->description,
-                'tanggal'        => $certificate->issue_date->format('d F Y'),
-                'kadaluarsa'     => $certificate->expire_date?->format('d F Y'),
-                'nomor'          => $certificate->certificate_number,
-                'penerbit'       => $certificate->issuer->institution_name ?? $certificate->issuer->name,
-                'status'         => $certificate->status,
-                'is_valid'       => $isValid,
-                'template_image' => $templateImage,
-                'qr_code_url'    => $certificate->qr_code_url,
+                'id'                 => $certificate->id,
+                'nama'               => $certificate->recipient_name,
+                'email'              => $certificate->recipient_email,
+                'judul'              => $certificate->course_name,
+                'kategori'           => $certificate->category,
+                'deskripsi'          => $certificate->description,
+                'tanggal'            => $certificate->issue_date->format('d F Y'),
+                'kadaluarsa'         => $certificate->expire_date?->format('d F Y'),
+                'nomor'              => $certificate->certificate_number,
+                'penerbit'           => $certificate->issuer->institution_name ?? $certificate->issuer->name,
+                'status'             => $certificate->status,
+                'is_valid'           => $isValid,
+                'template_image'     => $templateImage,
+                'qr_code_url'        => $certificate->qr_code_url,
+                'blockchain_tx_hash' => $certificate->blockchain_tx_hash,
+                'blockchain_status'  => $certificate->blockchain_status,
             ];
 
             return view('verifikasi.valid', [
