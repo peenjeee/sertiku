@@ -53,75 +53,93 @@
                     </div>
                     @endif
 
-                    {{-- PANEL DETAIL SERTIFIKAT --}}
+                    {{-- PANEL DETAIL SERTIFIKAT DENGAN QR CODE --}}
                     <div class="mb-8 rounded-2xl border border-[#22C55E]/30 bg-[rgba(15,23,42,0.5)] px-6 py-6 max-[640px]:px-4 print-info">
-                        <div class="mb-4 flex items-start gap-4">
-                            <div class="flex flex-col gap-1">
-                                <p class="text-sm font-normal text-[#22C55E]">
-                                    Detail Sertifikat
-                                </p>
-                                <p class="text-sm font-normal leading-relaxed text-[rgba(190,219,255,0.7)]">
-                                    Berikut informasi utama dari sertifikat yang berhasil diverifikasi.
-                                </p>
-                            </div>
-                        </div>
+                        <div class="flex flex-col lg:flex-row gap-6">
+                            {{-- Left: Certificate Details --}}
+                            <div class="flex-1">
+                                <div class="mb-4 flex flex-col gap-1">
+                                    <p class="text-sm font-normal text-[#22C55E]">
+                                        Detail Sertifikat
+                                    </p>
+                                    <p class="text-sm font-normal leading-relaxed text-[rgba(190,219,255,0.7)]">
+                                        Berikut informasi utama dari sertifikat yang berhasil diverifikasi.
+                                    </p>
+                                </div>
 
-                        {{-- List detail --}}
-                        <div class="mt-3 grid gap-3 text-sm text-[rgba(190,219,255,0.8)] max-[640px]:gap-2 print-detail-list">
-                            <div class="flex items-start gap-3">
-                                <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E] print-bullet"></span>
-                                <p>
-                                    <span class="font-semibold text-[#8EC5FF]">Nama Pemilik:</span>
-                                    <span class="ml-1">
-                                        {{ $certificate['nama'] ?? 'Mr. Ambatukam' }}
-                                    </span>
-                                </p>
+                                {{-- List detail --}}
+                                <div class="mt-3 grid gap-3 text-sm text-[rgba(190,219,255,0.8)] max-[640px]:gap-2 print-detail-list">
+                                    <div class="flex items-start gap-3">
+                                        <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E] print-bullet"></span>
+                                        <p>
+                                            <span class="font-semibold text-[#8EC5FF]">Nama Pemilik:</span>
+                                            <span class="ml-1">
+                                                {{ $certificate['nama'] ?? 'Mr. Ambatukam' }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E] print-bullet"></span>
+                                        <p>
+                                            <span class="font-semibold text-[#8EC5FF]">Nama Sertifikat / Acara:</span>
+                                            <span class="ml-1">
+                                                {{ $certificate['judul'] ?? 'Penghargaan' }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E] print-bullet"></span>
+                                        <p>
+                                            <span class="font-semibold text-[#8EC5FF]">Tanggal Diterbitkan:</span>
+                                            <span class="ml-1">
+                                                {{ $certificate['tanggal'] ?? '06 Juli 2025' }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E] print-bullet"></span>
+                                        <p>
+                                            <span class="font-semibold text-[#8EC5FF]">Penerbit Sertifikat:</span>
+                                            <span class="ml-1">
+                                                {{ $certificate['penerbit'] ?? 'Barbershop Ngawi' }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E] print-bullet"></span>
+                                        <p>
+                                            <span class="font-semibold text-[#8EC5FF]">Nomor Sertifikat:</span>
+                                            <span class="ml-1">
+                                                {{ $certificate['nomor'] ?? '-' }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E] print-bullet"></span>
+                                        <p>
+                                            <span class="font-semibold text-[#8EC5FF]">Status:</span>
+                                            <span class="ml-1 text-[#15803D]">
+                                                Aktif &amp; Terverifikasi
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flex items-start gap-3">
-                                <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E] print-bullet"></span>
-                                <p>
-                                    <span class="font-semibold text-[#8EC5FF]">Nama Sertifikat / Acara:</span>
-                                    <span class="ml-1">
-                                        {{ $certificate['judul'] ?? 'Penghargaan' }}
-                                    </span>
-                                </p>
+
+                            {{-- Right: QR Code --}}
+                            @if($certificate['qr_code_url'] ?? null)
+                            <div class="lg:w-48 flex-shrink-0">
+                                <div class="text-center p-4 bg-[rgba(15,23,42,0.8)] rounded-xl border border-[#3B82F6]/30">
+                                    <p class="text-xs font-semibold text-[#8EC5FF] mb-3">Scan untuk Verifikasi</p>
+                                    <div class="bg-white p-3 rounded-lg inline-block">
+                                        <img src="{{ $certificate['qr_code_url'] }}" alt="QR Code" class="w-28 h-28">
+                                    </div>
+                                    <p class="text-[10px] text-[rgba(190,219,255,0.5)] mt-2 break-all">
+                                        {{ $certificate['nomor'] ?? '' }}
+                                    </p>
+                                </div>
                             </div>
-                            <div class="flex items-start gap-3">
-                                <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E] print-bullet"></span>
-                                <p>
-                                    <span class="font-semibold text-[#8EC5FF]">Tanggal Diterbitkan:</span>
-                                    <span class="ml-1">
-                                        {{ $certificate['tanggal'] ?? '06 Juli 2025' }}
-                                    </span>
-                                </p>
-                            </div>
-                            <div class="flex items-start gap-3">
-                                <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E] print-bullet"></span>
-                                <p>
-                                    <span class="font-semibold text-[#8EC5FF]">Penerbit Sertifikat:</span>
-                                    <span class="ml-1">
-                                        {{ $certificate['penerbit'] ?? 'Barbershop Ngawi' }}
-                                    </span>
-                                </p>
-                            </div>
-                            <div class="flex items-start gap-3">
-                                <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E] print-bullet"></span>
-                                <p>
-                                    <span class="font-semibold text-[#8EC5FF]">Nomor Sertifikat:</span>
-                                    <span class="ml-1">
-                                        {{ $certificate['nomor'] ?? '-' }}
-                                    </span>
-                                </p>
-                            </div>
-                            <div class="flex items-start gap-3">
-                                <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E] print-bullet"></span>
-                                <p>
-                                    <span class="font-semibold text-[#8EC5FF]">Status:</span>
-                                    <span class="ml-1 text-[#15803D]">
-                                        Aktif &amp; Terverifikasi
-                                    </span>
-                                </p>
-                            </div>
+                            @endif
                         </div>
 
                         {{-- Verification Badge --}}
@@ -134,21 +152,6 @@
                             </div>
                         </div>
                     </div>
-
-                    {{-- QR CODE SECTION --}}
-                    @if($certificate['qr_code_url'] ?? null)
-                    <div class="mb-8 rounded-2xl border border-[#3B82F6]/30 bg-[rgba(15,23,42,0.5)] px-6 py-6 max-[640px]:px-4 print-qr-section">
-                        <div class="text-center">
-                            <p class="text-sm font-semibold text-[#8EC5FF] mb-4">Scan QR Code untuk Verifikasi</p>
-                            <div class="inline-block bg-white p-4 rounded-xl">
-                                <img src="{{ $certificate['qr_code_url'] }}" alt="QR Code Verifikasi" class="w-40 h-40 mx-auto">
-                            </div>
-                            <p class="text-xs text-[rgba(190,219,255,0.6)] mt-3">
-                                Kode: {{ $certificate['nomor'] ?? '' }}
-                            </p>
-                        </div>
-                    </div>
-                    @endif
 
                     {{-- LANGKAH SELANJUTNYA (layout mirip invalid) --}}
                     <div class="space-y-4">
