@@ -30,12 +30,20 @@ class Certificate extends Model
         'status',
         'revoked_at',
         'revoked_reason',
+        // Blockchain fields
+        'blockchain_enabled',
+        'blockchain_tx_hash',
+        'blockchain_hash',
+        'blockchain_verified_at',
+        'blockchain_status',
     ];
 
     protected $casts = [
-        'issue_date'  => 'date',
-        'expire_date' => 'date',
-        'revoked_at'  => 'datetime',
+        'issue_date'             => 'date',
+        'expire_date'            => 'date',
+        'revoked_at'             => 'datetime',
+        'blockchain_enabled'     => 'boolean',
+        'blockchain_verified_at' => 'datetime',
     ];
 
     /**
@@ -153,6 +161,55 @@ class Certificate extends Model
     public function getQrCodeUrlAttribute(): ?string
     {
         return $this->qr_code_path ? asset('storage/' . $this->qr_code_path) : null;
+    }
+
+    /**
+     * Check if certificate is stored on blockchain.
+     */
+    public function isOnBlockchain(): bool
+    {
+        return $this->blockchain_enabled
+        && ! empty($this->blockchain_tx_hash)
+        && $this->blockchain_status === 'confirmed';
+    }
+
+    /**
+     * Get blockchain explorer URL for the transaction.
+     */
+    public function getBlockchainExplorerUrlAttribute(): ?string
+    {
+        if (empty($this->blockchain_tx_hash)) {
+            return null;
+        }
+
+        $explorerUrl = config('blockchain.explorer_url', 'https://amoy.polygonscan.com');
+        return "{$explorerUrl}/tx/{$this->blockchain_tx_hash}";
+    }
+
+    /**
+     * Get blockchain status badge class.
+     */
+    public function getBlockchainBadgeClass(): string
+    {
+        return match ($this->blockchain_status) {
+            'confirmed' => 'bg-emerald-500/20 text-emerald-400',
+            'pending'   => 'bg-yellow-500/20 text-yellow-400',
+            'failed'    => 'bg-red-500/20 text-red-400',
+            default     => 'bg-gray-500/20 text-gray-400',
+        };
+    }
+
+    /**
+     * Get blockchain status text.
+     */
+    public function getBlockchainStatusText(): string
+    {
+        return match ($this->blockchain_status) {
+            'confirmed' => 'Terverifikasi di Blockchain',
+            'pending'   => 'Menunggu Konfirmasi',
+            'failed'    => 'Gagal Upload ke Blockchain',
+            default     => 'Tidak di Blockchain',
+        };
     }
 
     /**

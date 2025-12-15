@@ -230,6 +230,50 @@
                 </div>
             </div>
 
+            <!-- Blockchain Option -->
+            @if(config('blockchain.enabled'))
+            <div class="glass-card rounded-2xl p-6">
+                <div class="flex items-center pb-3 border-b border-gray-200 mb-4">
+                    <svg class="w-5 h-5 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                    </svg>
+                    <span class="text-gray-800 text-base font-bold">Blockchain Verification</span>
+                    <span class="ml-2 px-2 py-0.5 bg-purple-100 text-purple-600 text-xs font-medium rounded-full">GRATIS</span>
+                </div>
+
+                <div class="flex items-start gap-4">
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" name="blockchain_enabled" value="1" class="sr-only peer" {{ old('blockchain_enabled') ? 'checked' : '' }}>
+                        <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                    </label>
+                    <div class="flex-1">
+                        <p class="text-gray-800 font-medium text-sm">Upload ke Blockchain (Polygon)</p>
+                        <p class="text-gray-500 text-xs mt-1">Simpan hash sertifikat ke jaringan Polygon untuk verifikasi tambahan yang tidak dapat dipalsukan.</p>
+                        <div class="flex items-center gap-4 mt-3 text-xs">
+                            <span class="flex items-center gap-1 text-emerald-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Immutable
+                            </span>
+                            <span class="flex items-center gap-1 text-emerald-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Terverifikasi
+                            </span>
+                            <span class="flex items-center gap-1 text-purple-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101"/>
+                                </svg>
+                                PolygonScan
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <!-- Info Box -->
             <div class="bg-blue-100 border border-blue-300 rounded-xl p-5">
                 <div class="flex gap-3">

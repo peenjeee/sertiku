@@ -54,15 +54,19 @@ class LembagaController extends Controller
         }
 
         $validated = $request->validate([
-            'template_id'     => 'nullable|exists:templates,id',
-            'recipient_name'  => 'required|string|max:255',
-            'recipient_email' => 'nullable|email|max:255',
-            'course_name'     => 'required|string|max:255',
-            'category'        => 'nullable|string|max:100',
-            'description'     => 'nullable|string|max:1000',
-            'issue_date'      => 'required|date',
-            'expire_date'     => 'nullable|date|after:issue_date',
+            'template_id'        => 'nullable|exists:templates,id',
+            'recipient_name'     => 'required|string|max:255',
+            'recipient_email'    => 'nullable|email|max:255',
+            'course_name'        => 'required|string|max:255',
+            'category'           => 'nullable|string|max:100',
+            'description'        => 'nullable|string|max:1000',
+            'issue_date'         => 'required|date',
+            'expire_date'        => 'nullable|date|after:issue_date',
+            'blockchain_enabled' => 'nullable|boolean',
         ]);
+
+        // Set blockchain_enabled flag
+        $validated['blockchain_enabled'] = $request->has('blockchain_enabled') && $request->blockchain_enabled == '1';
 
         // Create certificate
         $certificate = $user->certificates()->create($validated);
@@ -73,6 +77,32 @@ class LembagaController extends Controller
         // Increment template usage if template was used
         if ($certificate->template_id) {
             $certificate->template->incrementUsage();
+        }
+
+        // If blockchain upload requested, store hash on chain
+        if ($validated['blockchain_enabled']) {
+            try {
+                $blockchainService = new \App\Services\BlockchainService();
+
+                if ($blockchainService->isEnabled()) {
+                    $txHash = $blockchainService->storeCertificateHash($certificate);
+
+                    if ($txHash) {
+                        return redirect()->route('lembaga.sertifikat.index')
+                            ->with('success', 'Sertifikat berhasil diterbitkan dan disimpan ke Blockchain! TX: ' . substr($txHash, 0, 20) . '...');
+                    }
+                } else {
+                    // Blockchain not configured, mark as failed
+                    $certificate->update([
+                        'blockchain_status' => 'failed',
+                    ]);
+                }
+            } catch (\Exception $e) {
+                \Log::error('Blockchain upload failed: ' . $e->getMessage());
+                $certificate->update([
+                    'blockchain_status' => 'failed',
+                ]);
+            }
         }
 
         return redirect()->route('lembaga.sertifikat.index')

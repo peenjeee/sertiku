@@ -121,8 +121,30 @@
                     </div>
 
                     @if($certificate->category)
-                    <div>
+                    <div class="flex items-center gap-2 flex-wrap">
                         <span class="px-2 py-1 bg-blue-100 text-blue-600 text-xs rounded">{{ $certificate->category }}</span>
+
+                        @if($certificate->blockchain_tx_hash)
+                        <a href="{{ $certificate->blockchain_explorer_url }}" target="_blank"
+                           class="flex items-center gap-1 px-2 py-1 {{ $certificate->getBlockchainBadgeClass() }} text-xs rounded hover:opacity-80 transition"
+                           title="{{ $certificate->getBlockchainStatusText() }}">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101"/>
+                            </svg>
+                            Blockchain
+                        </a>
+                        @endif
+                    </div>
+                    @elseif($certificate->blockchain_tx_hash)
+                    <div>
+                        <a href="{{ $certificate->blockchain_explorer_url }}" target="_blank"
+                           class="flex items-center gap-1 px-2 py-1 {{ $certificate->getBlockchainBadgeClass() }} text-xs rounded hover:opacity-80 transition"
+                           title="{{ $certificate->getBlockchainStatusText() }}">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101"/>
+                            </svg>
+                            Blockchain
+                        </a>
                     </div>
                     @endif
                 </div>

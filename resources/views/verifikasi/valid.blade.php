@@ -123,6 +123,24 @@
                                             </span>
                                         </p>
                                     </div>
+
+                                    {{-- Blockchain Verification --}}
+                                    @if(isset($certificate['blockchain_tx_hash']) && $certificate['blockchain_tx_hash'])
+                                    <div class="flex items-start gap-3 mt-2 pt-2 border-t border-[#3B82F6]/20">
+                                        <span class="mt-1 h-1.5 w-1.5 rounded-full bg-purple-500 print-bullet"></span>
+                                        <div>
+                                            <span class="font-semibold text-purple-400">Blockchain Verified:</span>
+                                            <a href="{{ config('blockchain.explorer_url', 'https://amoy.polygonscan.com') }}/tx/{{ $certificate['blockchain_tx_hash'] }}"
+                                               target="_blank"
+                                               class="ml-1 text-purple-300 hover:text-purple-200 underline transition">
+                                                Lihat di PolygonScan →
+                                            </a>
+                                            <p class="text-xs text-purple-400/60 mt-1 font-mono break-all">
+                                                TX: {{ Str::limit($certificate['blockchain_tx_hash'], 30) }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
 
