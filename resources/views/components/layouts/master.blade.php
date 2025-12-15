@@ -187,6 +187,9 @@
         {{ $slot }}
     </main>
 
+    {{-- Admin Support Widget --}}
+    <x-admin-support-widget />
+
     @stack('scripts')
 </body>
 </html>

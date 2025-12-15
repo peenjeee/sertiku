@@ -252,31 +252,6 @@ class BlockchainService
     }
 
     /**
-     * Get wallet balance in MATIC/POL
-     */
-    public function getWalletBalance(): ?string
-    {
-        if (! $this->isEnabled()) {
-            return null;
-        }
-
-        $response = Http::timeout(30)->post($this->rpcUrl, [
-            'jsonrpc' => '2.0',
-            'method'  => 'eth_getBalance',
-            'params'  => [$this->walletAddress, 'latest'],
-            'id'      => 1,
-        ]);
-
-        if ($response->successful() && isset($response['result'])) {
-            $balanceWei   = hexdec($response['result']);
-            $balanceMatic = $balanceWei / 1e18;
-            return number_format($balanceMatic, 6);
-        }
-
-        return null;
-    }
-
-    /**
      * Check transaction status
      */
     public function getTransactionStatus(string $txHash): ?string

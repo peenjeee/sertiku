@@ -77,7 +77,7 @@
 
                 {{-- Hubungi Admin Button --}}
                 @auth
-                <button onclick="showContactAdminModal()"
+                <button onclick="startSupportChat()"
                     class="w-full text-left px-3 py-2 rounded-lg bg-green-500/10 border border-green-500/20 text-green-300 text-xs hover:bg-green-500/20 transition flex items-center gap-2 mt-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
@@ -230,51 +230,17 @@
         }
     }
 
-    // ======== HUBUNGI ADMIN FEATURE ========
-    function showContactAdminModal() {
-        const modal = document.createElement('div');
-        modal.id = 'contactAdminModal';
-        modal.className = 'fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm';
-        modal.innerHTML = `
-            <div class="bg-gradient-to-b from-[#0c1829] to-[#0f1f35] rounded-2xl p-6 w-80 sm:w-96 border border-white/10 shadow-2xl">
-                <h3 class="text-white font-semibold text-lg mb-4 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
-                    </svg>
-                    Hubungi Admin
-                </h3>
-                <p class="text-white/60 text-sm mb-4">Jelaskan masalah Anda dan tim kami akan segera membalas.</p>
-                <input type="text" id="ticketSubject" placeholder="Subjek (contoh: Masalah login)"
-                    class="w-full px-4 py-2.5 rounded-xl bg-white/10 border border-white/10 text-white text-sm placeholder:text-white/40 focus:outline-none focus:border-blue-500 mb-3">
-                <textarea id="ticketMessage" placeholder="Jelaskan masalah Anda..."
-                    class="w-full px-4 py-2.5 rounded-xl bg-white/10 border border-white/10 text-white text-sm placeholder:text-white/40 focus:outline-none focus:border-blue-500 h-24 resize-none mb-4"></textarea>
-                <div class="flex gap-2">
-                    <button onclick="closeContactAdminModal()" class="flex-1 px-4 py-2.5 rounded-xl bg-white/10 text-white/70 text-sm hover:bg-white/20 transition">
-                        Batal
-                    </button>
-                    <button onclick="submitSupportTicket()" class="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white text-sm hover:opacity-90 transition">
-                        Kirim
-                    </button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(modal);
-    }
+    // ======== HUBUNGI ADMIN FEATURE (INLINE CHAT) ========
+    let isSupportMode = false;
 
-    function closeContactAdminModal() {
-        document.getElementById('contactAdminModal')?.remove();
-    }
+    async function startSupportChat() {
+        // Hide FAQ and show support mode
+        document.getElementById('faqButtons').style.display = 'none';
 
-    async function submitSupportTicket() {
-        const subject = document.getElementById('ticketSubject').value.trim();
-        const message = document.getElementById('ticketMessage').value.trim();
-
-        if (!subject || !message) {
-            alert('Mohon isi subjek dan pesan');
-            return;
-        }
+        addBotMessage('🎫 Memulai chat dengan Admin...');
 
         try {
+            // Create new ticket automatically
             const response = await fetch('/support/ticket', {
                 method: 'POST',
                 headers: {
@@ -282,23 +248,83 @@
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
                     'Accept': 'application/json',
                 },
-                body: JSON.stringify({ subject, message }),
+                body: JSON.stringify({
+                    subject: 'Chat Support - ' + new Date().toLocaleString('id-ID'),
+                    message: 'Memulai percakapan dengan admin'
+                }),
             });
 
+            console.log('Response status:', response.status);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Response error:', errorText);
+                addBotMessage(`❌ Gagal membuat tiket (${response.status}). Pastikan Anda sudah login.`);
+                return;
+            }
+
             const data = await response.json();
-            closeContactAdminModal();
+            console.log('Response data:', data);
 
             if (data.success) {
                 supportTicketId = data.ticket.id;
-                addBotMessage('✅ Tiket support berhasil dibuat! Admin akan segera membalas. Anda akan menerima notifikasi saat ada balasan.');
+                isSupportMode = true;
+
+                // Show ticket number
+                addBotMessage(`✅ **Tiket #${supportTicketId}** berhasil dibuat!\n\nSilakan ketik pesan Anda. Admin akan membalas secepatnya.\n\n_Simpan nomor tiket ini untuk referensi._`);
+
+                // Change input placeholder
+                document.getElementById('chatInput').placeholder = 'Ketik pesan ke admin...';
+
+                // Start polling for admin replies
                 startSupportPolling();
                 saveChatToStorage();
             } else {
-                addBotMessage('❌ Gagal membuat tiket. Silakan coba lagi.');
+                addBotMessage('❌ Gagal membuat tiket: ' + (data.message || 'Unknown error'));
             }
         } catch (error) {
             console.error('Ticket error:', error);
-            addBotMessage('❌ Terjadi kesalahan. Silakan coba lagi.');
+            addBotMessage('❌ Terjadi kesalahan jaringan. Pastikan Anda sudah login.');
+        }
+    }
+
+    // Override sendChatMessage when in support mode
+    const originalSendChatMessage = sendChatMessage;
+    sendChatMessage = async function() {
+        if (isSupportMode && supportTicketId) {
+            await sendSupportMessage();
+        } else {
+            await originalSendChatMessage();
+        }
+    };
+
+    async function sendSupportMessage() {
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+
+        if (!text || !supportTicketId) return;
+
+        addUserMessage(text);
+        input.value = '';
+
+        try {
+            const response = await fetch('/support/message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ ticket_id: supportTicketId, message: text }),
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                saveChatToStorage();
+            }
+        } catch (e) {
+            console.error('Send message error:', e);
+            addBotMessage('❌ Gagal mengirim pesan. Coba lagi.');
         }
     }
 

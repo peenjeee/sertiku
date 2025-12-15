@@ -97,11 +97,36 @@ class MasterController extends Controller
     }
 
     /**
-     * Activity logs (placeholder)
+     * Activity logs
      */
-    public function logs()
+    public function logs(Request $request)
     {
-        return view('master.logs');
+        $query = \App\Models\ActivityLog::with('user')
+            ->latest();
+
+        // Filter by action
+        if ($request->action) {
+            $query->where('action', $request->action);
+        }
+
+        // Filter by user
+        if ($request->user_id) {
+            $query->where('user_id', $request->user_id);
+        }
+
+        // Filter by date
+        if ($request->date) {
+            $query->whereDate('created_at', $request->date);
+        }
+
+        $logs = $query->paginate(25);
+
+        // Get unique actions for filter dropdown
+        $actions = \App\Models\ActivityLog::select('action')
+            ->distinct()
+            ->pluck('action');
+
+        return view('master.logs', compact('logs', 'actions'));
     }
 
     /**

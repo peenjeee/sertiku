@@ -37,7 +37,7 @@
                     <span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-sm font-medium">👑 Master</span>
                     @else
                     <span class="px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 text-sm">Admin</span>
-                    <form action="{{ route('master.demote', $admin) }}" method="POST" class="inline"
+                    <form action="{{ route('master.admins.demote', $admin) }}" method="POST" class="inline"
                           onsubmit="return confirm('Yakin ingin menurunkan {{ $admin->name }} dari Admin?')">
                         @csrf
                         <button type="submit" class="px-3 py-1 rounded-lg bg-red-500/20 text-red-400 text-sm hover:bg-red-500/30 transition">
@@ -72,7 +72,7 @@
                     @if($user->account_type === 'lembaga') bg-green-500/20 text-green-400
                     @else bg-gray-500/20 text-gray-400 @endif
                 ">{{ ucfirst($user->account_type ?? 'user') }}</span>
-                <form action="{{ route('master.promote', $user) }}" method="POST" class="inline"
+                <form action="{{ route('master.admins.promote', $user) }}" method="POST" class="inline"
                       onsubmit="return confirm('Yakin ingin menjadikan {{ $user->name }} sebagai Admin?')">
                     @csrf
                     <button type="submit" class="px-3 py-1 rounded-lg bg-blue-500/20 text-blue-400 text-sm hover:bg-blue-500/30 transition">
