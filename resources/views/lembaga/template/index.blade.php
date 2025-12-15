@@ -113,11 +113,11 @@
 
                 <!-- Template Info -->
                 <div class="p-4">
-                    <h3 class="text-white font-bold truncate">{{ $template->name }}</h3>
-                    <p class="text-white/60 text-sm mt-1">{{ $template->orientation == 'landscape' ? 'Landscape' : 'Portrait' }}</p>
-                    <div class="flex items-center justify-between mt-3 pt-3 border-t border-white/10">
-                        <span class="text-white/50 text-xs">Digunakan {{ $template->usage_count }}x</span>
-                        <span class="text-white/50 text-xs">{{ $template->created_at->diffForHumans() }}</span>
+                    <h3 class="text-gray-800 font-bold truncate">{{ $template->name }}</h3>
+                    <p class="text-gray-500 text-sm mt-1">{{ $template->orientation == 'landscape' ? 'Landscape' : 'Portrait' }}</p>
+                    <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-200">
+                        <span class="text-gray-400 text-xs">Digunakan {{ $template->usage_count }}x</span>
+                        <span class="text-gray-400 text-xs">{{ $template->created_at->diffForHumans() }}</span>
                     </div>
                 </div>
             </div>
