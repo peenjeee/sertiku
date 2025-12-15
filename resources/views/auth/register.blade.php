@@ -725,6 +725,30 @@
                                         @enderror
                                     </div>
 
+                                    <div class="space-y-2">
+                                        <label class="text-sm">Password <span class="text-red-400">*</span></label>
+                                        <input type="password" name="admin_password"
+                                               data-org-step="3" data-required="true"
+                                               class="w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40
+                                                      focus:outline-none focus:ring-2 focus:ring-[#2563EB]/70
+                                                      @error('admin_password') border-red-400/80 focus:ring-red-400/80 @else border-white/20 @enderror"
+                                               placeholder="Minimal 8 karakter">
+                                        <p class="mt-1 text-xs text-red-300 hidden" data-org-error-for="admin_password"></p>
+                                        @error('admin_password')
+                                        <p class="mt-1 text-xs text-red-300">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label class="text-sm">Konfirmasi Password <span class="text-red-400">*</span></label>
+                                        <input type="password" name="admin_password_confirmation"
+                                               data-org-step="3" data-required="true"
+                                               class="w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40
+                                                      focus:outline-none focus:ring-2 focus:ring-[#2563EB]/70
+                                                      border-white/20"
+                                               placeholder="Ulangi password">
+                                    </div>
+
                                     <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-4">
                                         <button type="button"
                                                 class="inline-flex items-center rounded-lg border border-white/30 bg-white/5 px-5 py-2 text-sm hover:bg-white/10"
