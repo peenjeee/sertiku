@@ -1,8 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Models\Certificate;
+use App\Models\Template;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class LembagaController extends Controller
 {
@@ -11,7 +14,16 @@ class LembagaController extends Controller
      */
     public function dashboard()
     {
-        return view('lembaga.dashboard');
+        $user = Auth::user();
+
+        $stats = [
+            'total_certificates'      => $user->certificates()->count(),
+            'certificates_this_month' => $user->getCertificatesUsedThisMonth(),
+            'total_templates'         => $user->templates()->where('is_active', true)->count(),
+            'recent_certificates'     => $user->certificates()->latest()->take(5)->get(),
+        ];
+
+        return view('lembaga.dashboard', compact('stats'));
     }
 
     /**
@@ -19,7 +31,10 @@ class LembagaController extends Controller
      */
     public function createSertifikat()
     {
-        return view('lembaga.sertifikat.create');
+        $user      = Auth::user();
+        $templates = $user->templates()->where('is_active', true)->get();
+
+        return view('lembaga.sertifikat.create', compact('templates'));
     }
 
     /**
@@ -27,7 +42,32 @@ class LembagaController extends Controller
      */
     public function storeSertifikat(Request $request)
     {
-        // TODO: Implement certificate creation logic
+        $user = Auth::user();
+
+        // Check certificate limit
+        if (! $user->canIssueCertificate()) {
+            return back()->with('error', 'Kuota sertifikat bulan ini sudah habis. Silakan upgrade paket Anda.');
+        }
+
+        $validated = $request->validate([
+            'template_id'     => 'nullable|exists:templates,id',
+            'recipient_name'  => 'required|string|max:255',
+            'recipient_email' => 'nullable|email|max:255',
+            'course_name'     => 'required|string|max:255',
+            'category'        => 'nullable|string|max:100',
+            'description'     => 'nullable|string|max:1000',
+            'issue_date'      => 'required|date',
+            'expire_date'     => 'nullable|date|after:issue_date',
+        ]);
+
+        // Create certificate
+        $certificate = $user->certificates()->create($validated);
+
+        // Increment template usage if template was used
+        if ($certificate->template_id) {
+            $certificate->template->incrementUsage();
+        }
+
         return redirect()->route('lembaga.sertifikat.index')
             ->with('success', 'Sertifikat berhasil diterbitkan!');
     }
@@ -35,9 +75,74 @@ class LembagaController extends Controller
     /**
      * Show the list of certificates.
      */
-    public function indexSertifikat()
+    public function indexSertifikat(Request $request)
     {
-        return view('lembaga.sertifikat.index');
+        $user = Auth::user();
+
+        $query = $user->certificates()->with('template');
+
+        // Search
+        if ($request->has('search') && $request->search) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('recipient_name', 'like', "%{$search}%")
+                    ->orWhere('course_name', 'like', "%{$search}%")
+                    ->orWhere('certificate_number', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by status
+        if ($request->has('status') && $request->status) {
+            $query->where('status', $request->status);
+        }
+
+        // Filter by category
+        if ($request->has('category') && $request->category) {
+            $query->where('category', $request->category);
+        }
+
+        $certificates = $query->latest()->paginate(12);
+
+        // Get stats
+        $stats = [
+            'total'   => $user->certificates()->count(),
+            'active'  => $user->certificates()->where('status', 'active')->count(),
+            'revoked' => $user->certificates()->where('status', 'revoked')->count(),
+        ];
+
+        return view('lembaga.sertifikat.index', compact('certificates', 'stats'));
+    }
+
+    /**
+     * Show a single certificate.
+     */
+    public function showSertifikat(Certificate $certificate)
+    {
+        // Ensure user owns this certificate
+        if ($certificate->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        return view('lembaga.sertifikat.show', compact('certificate'));
+    }
+
+    /**
+     * Revoke a certificate.
+     */
+    public function revokeSertifikat(Request $request, Certificate $certificate)
+    {
+        // Ensure user owns this certificate
+        if ($certificate->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'reason' => 'nullable|string|max:500',
+        ]);
+
+        $certificate->revoke($validated['reason'] ?? null);
+
+        return back()->with('success', 'Sertifikat berhasil dicabut.');
     }
 
     /**
@@ -45,7 +150,15 @@ class LembagaController extends Controller
      */
     public function indexTemplate()
     {
-        return view('lembaga.template.index');
+        $user      = Auth::user();
+        $templates = $user->templates()->latest()->paginate(12);
+
+        $stats = [
+            'total'  => $user->templates()->count(),
+            'active' => $user->templates()->where('is_active', true)->count(),
+        ];
+
+        return view('lembaga.template.index', compact('templates', 'stats'));
     }
 
     /**
@@ -61,8 +174,83 @@ class LembagaController extends Controller
      */
     public function storeTemplate(Request $request)
     {
-        // TODO: Implement template upload logic
+        $validated = $request->validate([
+            'name'          => 'required|string|max:255',
+            'description'   => 'nullable|string|max:1000',
+            'template_file' => 'required|file|mimes:png,jpg,jpeg,pdf|max:10240', // Max 10MB
+            'orientation'   => 'required|in:landscape,portrait',
+        ]);
+
+        $user = Auth::user();
+
+        // Store the template file
+        $file = $request->file('template_file');
+        $path = $file->store('templates/' . $user->id, 'public');
+
+        // Create thumbnail (for images)
+        $thumbnailPath = null;
+        if (in_array($file->getClientOriginalExtension(), ['png', 'jpg', 'jpeg'])) {
+            $thumbnailPath = $path; // Use same path for now, could generate actual thumbnail
+        }
+
+        // Get image dimensions
+        $width  = null;
+        $height = null;
+        if (in_array($file->getClientOriginalExtension(), ['png', 'jpg', 'jpeg'])) {
+            list($width, $height) = getimagesize($file->getRealPath());
+        }
+
+        // Create template record
+        $template = $user->templates()->create([
+            'name'           => $validated['name'],
+            'description'    => $validated['description'],
+            'file_path'      => $path,
+            'thumbnail_path' => $thumbnailPath,
+            'orientation'    => $validated['orientation'],
+            'width'          => $width,
+            'height'         => $height,
+        ]);
+
         return redirect()->route('lembaga.template.index')
             ->with('success', 'Template berhasil diupload!');
+    }
+
+    /**
+     * Delete a template.
+     */
+    public function destroyTemplate(Template $template)
+    {
+        // Ensure user owns this template
+        if ($template->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        // Delete file from storage
+        if ($template->file_path) {
+            Storage::disk('public')->delete($template->file_path);
+        }
+        if ($template->thumbnail_path && $template->thumbnail_path !== $template->file_path) {
+            Storage::disk('public')->delete($template->thumbnail_path);
+        }
+
+        $template->delete();
+
+        return back()->with('success', 'Template berhasil dihapus.');
+    }
+
+    /**
+     * Toggle template active status.
+     */
+    public function toggleTemplate(Template $template)
+    {
+        // Ensure user owns this template
+        if ($template->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $template->update(['is_active' => ! $template->is_active]);
+
+        $status = $template->is_active ? 'diaktifkan' : 'dinonaktifkan';
+        return back()->with('success', "Template berhasil {$status}.");
     }
 }

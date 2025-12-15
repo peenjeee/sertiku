@@ -69,6 +69,22 @@ class User extends Authenticatable
     }
 
     /**
+     * Get user's templates
+     */
+    public function templates()
+    {
+        return $this->hasMany(Template::class);
+    }
+
+    /**
+     * Get user's issued certificates
+     */
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class);
+    }
+
+    /**
      * Get the active package for this user
      * Returns Starter package if no paid subscription
      */
@@ -105,9 +121,10 @@ class User extends Authenticatable
      */
     public function getCertificatesUsedThisMonth(): int
     {
-        // TODO: Replace with actual certificate count from database
-        // For now return dummy value
-        return 45;
+        return $this->certificates()
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
     }
 
     /**

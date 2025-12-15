@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
 
 class SettingsController extends Controller
@@ -35,6 +36,49 @@ class SettingsController extends Controller
         $user->update($validated);
 
         return back()->with('success', 'Profil berhasil diperbarui!');
+    }
+
+    /**
+     * Update avatar/profile photo
+     */
+    public function updateAvatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
+        $user = Auth::user();
+
+        // Delete old avatar if exists and is local file
+        if ($user->avatar && !str_starts_with($user->avatar, 'http')) {
+            Storage::disk('public')->delete($user->avatar);
+        }
+
+        // Store new avatar
+        $path = $request->file('avatar')->store('avatars', 'public');
+
+        $user->update([
+            'avatar' => '/storage/' . $path,
+        ]);
+
+        return back()->with('success', 'Foto profil berhasil diperbarui!');
+    }
+
+    /**
+     * Remove avatar
+     */
+    public function removeAvatar()
+    {
+        $user = Auth::user();
+
+        // Delete avatar file if exists and is local
+        if ($user->avatar && !str_starts_with($user->avatar, 'http')) {
+            Storage::disk('public')->delete(str_replace('/storage/', '', $user->avatar));
+        }
+
+        $user->update(['avatar' => null]);
+
+        return back()->with('success', 'Foto profil berhasil dihapus!');
     }
 
     /**

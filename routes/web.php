@@ -126,8 +126,30 @@ Route::middleware('auth')->group(function () {
     // Settings
     Route::get('/settings', [\App\Http\Controllers\SettingsController::class, 'index'])->name('settings');
     Route::put('/settings/profile', [\App\Http\Controllers\SettingsController::class, 'updateProfile'])->name('settings.profile');
+    Route::post('/settings/avatar', [\App\Http\Controllers\SettingsController::class, 'updateAvatar'])->name('settings.avatar');
+    Route::delete('/settings/avatar', [\App\Http\Controllers\SettingsController::class, 'removeAvatar'])->name('settings.avatar.remove');
     Route::put('/settings/password', [\App\Http\Controllers\SettingsController::class, 'updatePassword'])->name('settings.password');
     Route::delete('/settings/account', [\App\Http\Controllers\SettingsController::class, 'deleteAccount'])->name('settings.delete');
+
+    // Lembaga (Institution) Routes
+    Route::prefix('lembaga')->name('lembaga.')->group(function () {
+        // Dashboard
+        Route::get('/', [\App\Http\Controllers\LembagaController::class, 'dashboard'])->name('dashboard');
+
+        // Certificates
+        Route::get('/sertifikat', [\App\Http\Controllers\LembagaController::class, 'indexSertifikat'])->name('sertifikat.index');
+        Route::get('/sertifikat/create', [\App\Http\Controllers\LembagaController::class, 'createSertifikat'])->name('sertifikat.create');
+        Route::post('/sertifikat', [\App\Http\Controllers\LembagaController::class, 'storeSertifikat'])->name('sertifikat.store');
+        Route::get('/sertifikat/{certificate}', [\App\Http\Controllers\LembagaController::class, 'showSertifikat'])->name('sertifikat.show');
+        Route::post('/sertifikat/{certificate}/revoke', [\App\Http\Controllers\LembagaController::class, 'revokeSertifikat'])->name('sertifikat.revoke');
+
+        // Templates
+        Route::get('/template', [\App\Http\Controllers\LembagaController::class, 'indexTemplate'])->name('template.index');
+        Route::get('/template/upload', [\App\Http\Controllers\LembagaController::class, 'uploadTemplate'])->name('template.upload');
+        Route::post('/template', [\App\Http\Controllers\LembagaController::class, 'storeTemplate'])->name('template.store');
+        Route::delete('/template/{template}', [\App\Http\Controllers\LembagaController::class, 'destroyTemplate'])->name('template.destroy');
+        Route::post('/template/{template}/toggle', [\App\Http\Controllers\LembagaController::class, 'toggleTemplate'])->name('template.toggle');
+    });
 });
 
 /*

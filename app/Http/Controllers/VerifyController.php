@@ -1,7 +1,7 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Models\Certificate;
 use Illuminate\Http\Request;
 
 class VerifyController extends Controller
@@ -17,35 +17,52 @@ class VerifyController extends Controller
             'hash' => 'required|string',
         ]);
 
-        $hash = $data['hash'];
+        $hash = trim($data['hash']);
 
-        // Dummy: jika hash cocok, anggap valid
-        if ($hash === 'SERT-AMBA123') {
-            $certificate = [
-                'nama'     => 'Mr. Ambatukam',
-                'judul'    => 'Penghargaan',
-                'tanggal'  => '06 Juli 2025',
-                'penerbit' => 'Barbershop Ngawi',
+        // Try to find certificate by hash or certificate number
+        $certificate = Certificate::where('hash', $hash)
+            ->orWhere('certificate_number', $hash)
+            ->first();
+
+        if ($certificate) {
+            $isValid = $certificate->isValid();
+
+            $certificateData = [
+                'id'         => $certificate->id,
+                'nama'       => $certificate->recipient_name,
+                'email'      => $certificate->recipient_email,
+                'judul'      => $certificate->course_name,
+                'kategori'   => $certificate->category,
+                'deskripsi'  => $certificate->description,
+                'tanggal'    => $certificate->issue_date->format('d F Y'),
+                'kadaluarsa' => $certificate->expire_date?->format('d F Y'),
+                'nomor'      => $certificate->certificate_number,
+                'penerbit'   => $certificate->issuer->institution_name ?? $certificate->issuer->name,
+                'status'     => $certificate->status,
+                'is_valid'   => $isValid,
             ];
 
             // Return JSON for AJAX request
             if ($request->ajax() || $request->wantsJson()) {
                 return response()->json([
-                    'valid' => true,
-                    'hash' => $hash,
-                    'certificate' => $certificate
+                    'valid'       => $isValid,
+                    'hash'        => $certificate->hash,
+                    'certificate' => $certificateData,
                 ]);
             }
 
-            return view('verifikasi.valid', compact('hash', 'certificate'));
+            return view('verifikasi.valid', [
+                'hash'        => $certificate->hash,
+                'certificate' => $certificateData,
+            ]);
         }
 
-        // Invalid certificate
+        // Certificate not found
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
-                'valid' => false,
-                'hash' => $hash,
-                'message' => 'Sertifikat tidak ditemukan dalam sistem kami'
+                'valid'   => false,
+                'hash'    => $hash,
+                'message' => 'Sertifikat tidak ditemukan dalam sistem kami',
             ]);
         }
 
@@ -57,19 +74,36 @@ class VerifyController extends Controller
      */
     public function show($hash)
     {
-        // Dummy: jika hash cocok, anggap valid
-        if ($hash === 'SERT-AMBA123') {
-            $certificate = [
-                'nama'     => 'Mr. Ambatukam',
-                'judul'    => 'Penghargaan',
-                'tanggal'  => '06 Juli 2025',
-                'penerbit' => 'Barbershop Ngawi',
+        // Try to find certificate by hash or certificate number
+        $certificate = Certificate::where('hash', $hash)
+            ->orWhere('certificate_number', $hash)
+            ->first();
+
+        if ($certificate) {
+            $isValid = $certificate->isValid();
+
+            $certificateData = [
+                'id'         => $certificate->id,
+                'nama'       => $certificate->recipient_name,
+                'email'      => $certificate->recipient_email,
+                'judul'      => $certificate->course_name,
+                'kategori'   => $certificate->category,
+                'deskripsi'  => $certificate->description,
+                'tanggal'    => $certificate->issue_date->format('d F Y'),
+                'kadaluarsa' => $certificate->expire_date?->format('d F Y'),
+                'nomor'      => $certificate->certificate_number,
+                'penerbit'   => $certificate->issuer->institution_name ?? $certificate->issuer->name,
+                'status'     => $certificate->status,
+                'is_valid'   => $isValid,
             ];
 
-            return view('verifikasi.valid', compact('hash', 'certificate'));
+            return view('verifikasi.valid', [
+                'hash'        => $certificate->hash,
+                'certificate' => $certificateData,
+            ]);
         }
 
-        // Invalid certificate
+        // Certificate not found
         return view('verifikasi.invalid', compact('hash'));
     }
 }
