@@ -209,6 +209,19 @@ Route::middleware('auth')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
+| Contact Admin (Support Tickets Page)
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/contact-admin', [\App\Http\Controllers\SupportController::class, 'contactAdmin'])->name('contact.admin');
+    Route::post('/contact-admin/create', [\App\Http\Controllers\SupportController::class, 'createTicketWeb'])->name('contact.admin.create');
+    Route::get('/contact-admin/{ticket}', [\App\Http\Controllers\SupportController::class, 'showTicket'])->name('contact.admin.show');
+    Route::post('/contact-admin/{ticket}/send', [\App\Http\Controllers\SupportController::class, 'sendMessageWeb'])->name('contact.admin.send');
+});
+
+/*
+|--------------------------------------------------------------------------
 | Verifikasi Sertifikat
 |--------------------------------------------------------------------------
 */

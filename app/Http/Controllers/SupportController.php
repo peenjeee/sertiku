@@ -260,4 +260,105 @@ class SupportController extends Controller
 
         return response()->json(['count' => $count]);
     }
+
+    // ===== CONTACT ADMIN PAGE (USER/LEMBAGA WEB INTERFACE) =====
+
+    /**
+     * Show Contact Admin page with user's tickets
+     */
+    public function contactAdmin()
+    {
+        $tickets = SupportTicket::where('user_id', Auth::id())
+            ->with(['messages' => function ($q) {
+                $q->latest()->take(1);
+            }])
+            ->withCount(['messages as unread_count' => function ($q) {
+                $q->whereNull('read_at')
+                    ->where('is_from_admin', true);
+            }])
+            ->latest('last_message_at')
+            ->get();
+
+        // Determine layout based on user type
+        $layout = Auth::user()->account_type === 'lembaga' ? 'lembaga' : 'user';
+
+        return view('contact-admin.index', compact('tickets', 'layout'));
+    }
+
+    /**
+     * Create a new ticket from Contact Admin page
+     */
+    public function createTicketWeb(Request $request)
+    {
+        $validated = $request->validate([
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string|max:2000',
+        ]);
+
+        $ticket = SupportTicket::create([
+            'user_id'         => Auth::id(),
+            'subject'         => $validated['subject'],
+            'status'          => 'open',
+            'last_message_at' => now(),
+        ]);
+
+        SupportMessage::create([
+            'ticket_id'     => $ticket->id,
+            'sender_id'     => Auth::id(),
+            'message'       => $validated['message'],
+            'is_from_admin' => false,
+        ]);
+
+        return redirect()->route('contact.admin.show', $ticket)
+            ->with('success', 'Tiket #' . $ticket->id . ' berhasil dibuat! Admin akan segera membalas.');
+    }
+
+    /**
+     * Show a specific ticket conversation
+     */
+    public function showTicket(SupportTicket $ticket)
+    {
+        // Ensure user owns the ticket
+        if ($ticket->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        // Mark admin messages as read
+        $ticket->messages()
+            ->where('is_from_admin', true)
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
+
+        $ticket->load(['messages.sender', 'assignedAdmin']);
+
+        $layout = Auth::user()->account_type === 'lembaga' ? 'lembaga' : 'user';
+
+        return view('contact-admin.show', compact('ticket', 'layout'));
+    }
+
+    /**
+     * Send a message to a ticket from Contact Admin page
+     */
+    public function sendMessageWeb(Request $request, SupportTicket $ticket)
+    {
+        // Ensure user owns the ticket
+        if ($ticket->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        $validated = $request->validate([
+            'message' => 'required|string|max:2000',
+        ]);
+
+        SupportMessage::create([
+            'ticket_id'     => $ticket->id,
+            'sender_id'     => Auth::id(),
+            'message'       => $validated['message'],
+            'is_from_admin' => false,
+        ]);
+
+        $ticket->update(['last_message_at' => now()]);
+
+        return back()->with('success', 'Pesan terkirim!');
+    }
 }
