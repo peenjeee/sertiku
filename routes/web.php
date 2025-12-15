@@ -194,8 +194,11 @@ Route::middleware('auth')->group(function () {
 
         // Profil
         Route::get('/profil', [\App\Http\Controllers\UserController::class, 'profil'])->name('profil');
+        Route::get('/profil/edit', [\App\Http\Controllers\UserController::class, 'editProfil'])->name('profil.edit');
         Route::put('/profil', [\App\Http\Controllers\UserController::class, 'updateProfil'])->name('profil.update');
         Route::put('/profil/password', [\App\Http\Controllers\UserController::class, 'updatePassword'])->name('profil.password');
+        Route::post('/profil/avatar', [\App\Http\Controllers\UserController::class, 'uploadAvatar'])->name('profil.avatar');
+        Route::delete('/profil/avatar', [\App\Http\Controllers\UserController::class, 'removeAvatar'])->name('profil.avatar.remove');
 
         // Notifikasi
         Route::get('/notifikasi', [\App\Http\Controllers\UserController::class, 'notifikasi'])->name('notifikasi');

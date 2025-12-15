@@ -27,6 +27,20 @@ class VerifyController extends Controller
         if ($certificate) {
             $isValid = $certificate->isValid();
 
+            // Increment verification count
+            $certificate->increment('verification_count');
+
+            // Send notification to certificate owner if they exist in system
+            if ($certificate->recipient_email) {
+                $owner = \App\Models\User::where('email', $certificate->recipient_email)->first();
+                if ($owner) {
+                    $owner->notify(new \App\Notifications\CertificateViewed($certificate, [
+                        'ip'         => $request->ip(),
+                        'user_agent' => $request->userAgent(),
+                    ]));
+                }
+            }
+
             $certificateData = [
                 'id'         => $certificate->id,
                 'nama'       => $certificate->recipient_name,

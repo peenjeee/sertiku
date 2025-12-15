@@ -40,27 +40,21 @@ class UserController extends Controller
             ];
         }
 
-        // Recent activity (mock for now, can be replaced with actual activity log)
-        $recentActivity = [
-            [
-                'type'     => 'new',
-                'title'    => 'Sertifikat baru ditambahkan',
-                'subtitle' => 'Workshop Web Development',
-                'time'     => '2 jam lalu',
-            ],
-            [
-                'type'     => 'view',
-                'title'    => 'Sertifikat dilihat',
-                'subtitle' => 'Seminar Cybersecurity',
-                'time'     => '5 jam lalu',
-            ],
-            [
-                'type'     => 'share',
-                'title'    => 'Sertifikat dibagikan',
-                'subtitle' => 'Training Data Science',
-                'time'     => '1 hari lalu',
-            ],
-        ];
+        // Recent activity from database notifications
+        $recentActivity = $user->notifications()
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(function ($notification) {
+                $data = $notification->data;
+                return [
+                    'type'     => $data['type'] ?? 'general',
+                    'title'    => $data['title'] ?? 'Notifikasi',
+                    'subtitle' => $data['subtitle'] ?? '',
+                    'time'     => $notification->created_at->diffForHumans(),
+                    'read'     => $notification->read_at !== null,
+                ];
+            })->toArray();
 
         // Recent certificates
         $recentCertificates = $certificates->sortByDesc('created_at')->take(3);
@@ -104,12 +98,103 @@ class UserController extends Controller
     }
 
     /**
-     * Profil Pengguna
+     * Profil Pengguna - View Profile with Achievements
      */
     public function profil()
     {
         $user = Auth::user();
-        return view('user.profil', compact('user'));
+
+        // Get user's certificates
+        $certificates = Certificate::where('recipient_email', $user->email)
+            ->orWhere('user_id', $user->id)
+            ->get();
+
+        // Stats
+        $stats = [
+            'total_sertifikat' => $certificates->count(),
+            'terverifikasi'    => $certificates->where('status', 'active')->count(),
+            'total_lembaga'    => $certificates->pluck('user_id')->unique()->count(),
+            'total_kategori'   => $certificates->pluck('category')->filter()->unique()->count(),
+        ];
+
+        // Recent certificates
+        $recentCertificates = $certificates->sortByDesc('created_at')->take(3);
+
+        // Achievements/Badges
+        $achievements = $this->calculateAchievements($certificates);
+
+        return view('user.profil', compact('user', 'stats', 'recentCertificates', 'achievements'));
+    }
+
+    /**
+     * Edit Profil Page
+     */
+    public function editProfil()
+    {
+        $user = Auth::user();
+        return view('user.edit-profil', compact('user'));
+    }
+
+    /**
+     * Calculate user achievements based on certificates
+     */
+    private function calculateAchievements($certificates)
+    {
+        $totalCerts  = $certificates->count();
+        $activeCerts = $certificates->where('status', 'active')->count();
+        $categories  = $certificates->pluck('category')->filter()->unique()->count();
+        $lembaga     = $certificates->pluck('user_id')->unique()->count();
+
+        return [
+            [
+                'name'        => 'Pemula',
+                'description' => 'Dapatkan sertifikat pertama',
+                'icon'        => '🎯',
+                'unlocked'    => $totalCerts >= 1,
+            ],
+            [
+                'name'        => 'Kolektor',
+                'description' => 'Kumpulkan 5 sertifikat',
+                'icon'        => '📚',
+                'unlocked'    => $totalCerts >= 5,
+            ],
+            [
+                'name'        => 'Master',
+                'description' => 'Kumpulkan 10 sertifikat',
+                'icon'        => '🏆',
+                'unlocked'    => $totalCerts >= 10,
+            ],
+            [
+                'name'        => 'Terverifikasi',
+                'description' => '3 sertifikat aktif',
+                'icon'        => '✅',
+                'unlocked'    => $activeCerts >= 3,
+            ],
+            [
+                'name'        => 'Multitalenta',
+                'description' => '3 kategori berbeda',
+                'icon'        => '🌟',
+                'unlocked'    => $categories >= 3,
+            ],
+            [
+                'name'        => 'Networker',
+                'description' => 'Dari 3 lembaga berbeda',
+                'icon'        => '🤝',
+                'unlocked'    => $lembaga >= 3,
+            ],
+            [
+                'name'        => 'Legend',
+                'description' => 'Kumpulkan 25 sertifikat',
+                'icon'        => '👑',
+                'unlocked'    => $totalCerts >= 25,
+            ],
+            [
+                'name'        => 'Elite',
+                'description' => 'Kumpulkan 50 sertifikat',
+                'icon'        => '💎',
+                'unlocked'    => $totalCerts >= 50,
+            ],
+        ];
     }
 
     /**
@@ -129,7 +214,7 @@ class UserController extends Controller
 
         $user->update($validated);
 
-        return back()->with('success', 'Profil berhasil diperbarui!');
+        return redirect()->route('user.profil.edit')->with('success', 'Profil berhasil diperbarui!');
     }
 
     /**
@@ -152,7 +237,46 @@ class UserController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        return back()->with('success', 'Password berhasil diperbarui!');
+        return back()->with('password_success', 'Password berhasil diperbarui!');
+    }
+
+    /**
+     * Upload Avatar
+     */
+    public function uploadAvatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => 'required|image|mimes:jpeg,png,gif|max:2048',
+        ]);
+
+        $user = Auth::user();
+
+        // Delete old avatar if exists
+        if ($user->avatar) {
+            \Storage::disk('public')->delete($user->avatar);
+        }
+
+        // Store new avatar
+        $path = $request->file('avatar')->store('avatars', 'public');
+
+        $user->update(['avatar' => $path]);
+
+        return redirect()->route('user.profil.edit')->with('avatar_success', 'Foto profil berhasil diperbarui!');
+    }
+
+    /**
+     * Remove Avatar
+     */
+    public function removeAvatar()
+    {
+        $user = Auth::user();
+
+        if ($user->avatar) {
+            \Storage::disk('public')->delete($user->avatar);
+            $user->update(['avatar' => null]);
+        }
+
+        return redirect()->route('user.profil.edit')->with('avatar_success', 'Foto profil berhasil dihapus!');
     }
 
     /**
