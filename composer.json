@@ -9,6 +9,7 @@
         "php": "^8.2",
         "blade-ui-kit/blade-heroicons": "^2.6",
         "doctrine/dbal": "^4.4",
+        "kornrunner/ethereum-offline-raw-tx": "^0.9.0",
         "laravel/framework": "^12.0",
         "laravel/socialite": "^5.23",
         "laravel/tinker": "^2.10.1",
