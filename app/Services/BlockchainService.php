@@ -60,7 +60,7 @@ class BlockchainService
 
     /**
      * Store certificate hash on Polygon blockchain
-     * Uses a simple transaction with data field containing the hash
+     * Uses Node.js script for transaction signing (more reliable than PHP)
      */
     public function storeCertificateHash(Certificate $certificate): ?string
     {
@@ -73,46 +73,35 @@ class BlockchainService
             // Generate certificate hash
             $certHash = $this->generateCertificateHash($certificate);
 
-            // Get current nonce
-            $nonce = $this->getNonce();
-            if ($nonce === null) {
-                throw new \Exception('Failed to get nonce');
+            // Try Node.js signing first (most reliable)
+            $txHash = $this->signWithNode($certHash);
+
+            // Fallback to direct RPC if Node.js not available
+            if (! $txHash) {
+                $txHash = $this->signWithDirectRpc($certHash);
             }
-
-            // Get gas price
-            $gasPrice = $this->getGasPrice();
-            if ($gasPrice === null) {
-                $gasPrice = '0x3B9ACA00'; // 1 Gwei default
-            }
-
-            // Build transaction
-            $transaction = [
-                'from'     => $this->walletAddress,
-                'to'       => $this->walletAddress, // Send to self with data
-                'value'    => '0x0',
-                'gas'      => '0x5208', // 21000 gas
-                'gasPrice' => $gasPrice,
-                'nonce'    => $nonce,
-                'data'     => $certHash,
-                'chainId'  => hexdec($this->chainId),
-            ];
-
-            // Sign and send transaction
-            $txHash = $this->signAndSendTransaction($transaction);
 
             if ($txHash) {
                 // Update certificate with blockchain info
                 $certificate->update([
                     'blockchain_hash'        => $certHash,
                     'blockchain_tx_hash'     => $txHash,
-                    'blockchain_status'      => 'pending',
+                    'blockchain_status'      => 'confirmed',
                     'blockchain_verified_at' => now(),
                 ]);
 
                 Log::info("Certificate {$certificate->certificate_number} stored on blockchain: {$txHash}");
+
+                return $txHash;
             }
 
-            return $txHash;
+            // If all methods fail, still save the hash for reference
+            $certificate->update([
+                'blockchain_hash'   => $certHash,
+                'blockchain_status' => 'pending',
+            ]);
+
+            return null;
 
         } catch (\Exception $e) {
             Log::error('BlockchainService Error: ' . $e->getMessage());
@@ -126,11 +115,110 @@ class BlockchainService
     }
 
     /**
+     * Sign transaction using Node.js script (most reliable method)
+     */
+    protected function signWithNode(string $dataHash): ?string
+    {
+        $scriptPath = base_path('scripts/sign_transaction.js');
+
+        if (! file_exists($scriptPath)) {
+            Log::warning('BlockchainService: Node script not found at ' . $scriptPath);
+            return null;
+        }
+
+        try {
+            // Build command with escaped arguments
+            $nodeScript    = escapeshellarg($scriptPath);
+            $privateKey    = escapeshellarg($this->privateKey);
+            $walletAddress = escapeshellarg($this->walletAddress);
+            $hash          = escapeshellarg($dataHash);
+            $rpcUrl        = escapeshellarg($this->rpcUrl);
+
+            $command = "node {$nodeScript} {$privateKey} {$walletAddress} {$hash} {$rpcUrl} 2>&1";
+
+            Log::info('BlockchainService: Executing Node.js signing script');
+
+            $output = shell_exec($command);
+            $output = trim($output ?? '');
+
+            Log::info('BlockchainService: Node.js output: ' . $output);
+
+            if (str_starts_with($output, '0x') && strlen($output) === 66) {
+                return $output;
+            }
+
+            // Check if output contains error
+            if (str_contains($output, 'Error:')) {
+                Log::error('BlockchainService Node.js Error: ' . $output);
+            }
+
+            return null;
+
+        } catch (\Exception $e) {
+            Log::error('BlockchainService: Node.js execution failed: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Sign transaction using direct RPC call
+     * This sends a simple value transfer with data
+     */
+    protected function signWithDirectRpc(string $dataHash): ?string
+    {
+        try {
+            // Get nonce
+            $nonce = $this->getNonce();
+            if (! $nonce) {
+                return null;
+            }
+
+            // Get gas price
+            $gasPrice = $this->getGasPrice();
+            if (! $gasPrice) {
+                $gasPrice = '0x3B9ACA00'; // 1 Gwei
+            }
+
+            // Build unsigned transaction
+            $txParams = [
+                'from'     => $this->walletAddress,
+                'to'       => $this->walletAddress,
+                'value'    => '0x0',
+                'gas'      => '0x6270', // ~25200 gas for data
+                'gasPrice' => $gasPrice,
+                'nonce'    => $nonce,
+                'data'     => $dataHash,
+            ];
+
+            // Try eth_sendTransaction (works if wallet is unlocked on node)
+            $response = Http::timeout(30)->post($this->rpcUrl, [
+                'jsonrpc' => '2.0',
+                'method'  => 'eth_sendTransaction',
+                'params'  => [$txParams],
+                'id'      => 1,
+            ]);
+
+            if ($response->successful()) {
+                $result = $response->json();
+                if (isset($result['result'])) {
+                    return $result['result'];
+                }
+            }
+
+            return null;
+
+        } catch (\Exception $e) {
+            Log::error('Direct RPC failed: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
      * Get current nonce for wallet
      */
-    protected function getNonce(): ?string
+    public function getNonce(): ?string
     {
-        $response = Http::post($this->rpcUrl, [
+        $response = Http::timeout(30)->post($this->rpcUrl, [
             'jsonrpc' => '2.0',
             'method'  => 'eth_getTransactionCount',
             'params'  => [$this->walletAddress, 'latest'],
@@ -147,9 +235,9 @@ class BlockchainService
     /**
      * Get current gas price
      */
-    protected function getGasPrice(): ?string
+    public function getGasPrice(): ?string
     {
-        $response = Http::post($this->rpcUrl, [
+        $response = Http::timeout(30)->post($this->rpcUrl, [
             'jsonrpc' => '2.0',
             'method'  => 'eth_gasPrice',
             'params'  => [],
@@ -164,68 +252,7 @@ class BlockchainService
     }
 
     /**
-     * Sign transaction using private key and send to network
-     * Note: For production, use a proper library like web3.php or kornrunner/ethereum-offline-raw-tx
-     */
-    protected function signAndSendTransaction(array $transaction): ?string
-    {
-        // For a complete implementation, you'd need to:
-        // 1. RLP encode the transaction
-        // 2. Sign with private key using secp256k1
-        // 3. Send raw transaction
-
-        // Using a simplified approach with eth_sendTransaction for testing
-        // In production, use a proper signing library
-
-        try {
-            // For testnet, we'll use a workaround by calling our own signing endpoint
-            // or use the web3.php package
-
-            // Simplified: Store the hash as data and create a minimal transaction
-            $response = Http::timeout(30)->post($this->rpcUrl, [
-                'jsonrpc' => '2.0',
-                'method'  => 'eth_sendRawTransaction',
-                'params'  => [$this->createSignedTransaction($transaction)],
-                'id'      => 1,
-            ]);
-
-            if ($response->successful() && isset($response['result'])) {
-                return $response['result'];
-            }
-
-            // If signing fails, log and return null
-            Log::warning('BlockchainService: Transaction signing/sending failed', [
-                'response' => $response->json(),
-            ]);
-
-            return null;
-
-        } catch (\Exception $e) {
-            Log::error('BlockchainService signAndSendTransaction: ' . $e->getMessage());
-            return null;
-        }
-    }
-
-    /**
-     * Create a signed raw transaction
-     * This is a placeholder - for production use kornrunner/ethereum-offline-raw-tx
-     */
-    protected function createSignedTransaction(array $transaction): string
-    {
-        // For a full implementation, install: composer require kornrunner/ethereum-offline-raw-tx
-        // Then use:
-        // $tx = new \kornrunner\Ethereum\Transaction($nonce, $gasPrice, $gasLimit, $to, $value, $data);
-        // $signedTx = $tx->getRaw($privateKey, $chainId);
-
-        // For now, return empty - user needs to install the signing package
-        // This is logged as a warning so they know to complete the setup
-        Log::warning('BlockchainService: Transaction signing not fully implemented. Install kornrunner/ethereum-offline-raw-tx for full functionality.');
-
-        return '';
-    }
-
-    /**
-     * Get wallet balance in MATIC
+     * Get wallet balance in MATIC/POL
      */
     public function getWalletBalance(): ?string
     {
@@ -233,7 +260,7 @@ class BlockchainService
             return null;
         }
 
-        $response = Http::post($this->rpcUrl, [
+        $response = Http::timeout(30)->post($this->rpcUrl, [
             'jsonrpc' => '2.0',
             'method'  => 'eth_getBalance',
             'params'  => [$this->walletAddress, 'latest'],
@@ -243,7 +270,7 @@ class BlockchainService
         if ($response->successful() && isset($response['result'])) {
             $balanceWei   = hexdec($response['result']);
             $balanceMatic = $balanceWei / 1e18;
-            return number_format($balanceMatic, 4);
+            return number_format($balanceMatic, 6);
         }
 
         return null;
@@ -254,7 +281,7 @@ class BlockchainService
      */
     public function getTransactionStatus(string $txHash): ?string
     {
-        $response = Http::post($this->rpcUrl, [
+        $response = Http::timeout(30)->post($this->rpcUrl, [
             'jsonrpc' => '2.0',
             'method'  => 'eth_getTransactionReceipt',
             'params'  => [$txHash],
@@ -267,6 +294,34 @@ class BlockchainService
                 return 'pending';
             }
             return $receipt['status'] === '0x1' ? 'confirmed' : 'failed';
+        }
+
+        return null;
+    }
+
+    /**
+     * Verify if a certificate hash exists on blockchain
+     */
+    public function verifyCertificateOnChain(string $txHash): ?array
+    {
+        $response = Http::timeout(30)->post($this->rpcUrl, [
+            'jsonrpc' => '2.0',
+            'method'  => 'eth_getTransactionByHash',
+            'params'  => [$txHash],
+            'id'      => 1,
+        ]);
+
+        if ($response->successful() && isset($response['result'])) {
+            $tx = $response['result'];
+            if ($tx) {
+                return [
+                    'hash'        => $tx['hash'],
+                    'from'        => $tx['from'],
+                    'to'          => $tx['to'],
+                    'data'        => $tx['input'],
+                    'blockNumber' => hexdec($tx['blockNumber']),
+                ];
+            }
         }
 
         return null;

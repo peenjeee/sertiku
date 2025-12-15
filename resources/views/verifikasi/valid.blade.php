@@ -168,6 +168,26 @@
                                 </svg>
                                 <span class="text-[#22C55E] font-semibold text-sm">Terverifikasi di sertiku.web.id</span>
                             </div>
+
+                            {{-- Blockchain Verification Section --}}
+                            @if(isset($certificate['blockchain_tx_hash']) && $certificate['blockchain_tx_hash'])
+                            <div class="mt-3">
+                                <a href="{{ config('blockchain.explorer_url', 'https://amoy.polygonscan.com') }}/tx/{{ $certificate['blockchain_tx_hash'] }}"
+                                   target="_blank"
+                                   class="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 border border-purple-500/40 rounded-lg py-3 px-4 hover:from-purple-600/30 hover:to-indigo-600/30 transition group">
+                                    <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                                    </svg>
+                                    <span class="text-purple-300 font-semibold text-sm">Tersimpan di Blockchain (Polygon)</span>
+                                    <svg class="w-4 h-4 text-purple-400 opacity-0 group-hover:opacity-100 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                    </svg>
+                                </a>
+                                <p class="text-center text-xs text-purple-400/60 mt-2 font-mono break-all px-4">
+                                    TX: {{ $certificate['blockchain_tx_hash'] }}
+                                </p>
+                            </div>
+                            @endif
                         </div>
                     </div>
 

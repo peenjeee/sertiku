@@ -1,0 +1,12 @@
+{
+  "name": "sertiku-blockchain-scripts",
+  "version": "1.0.0",
+  "description": "Blockchain signing scripts for SertiKu",
+  "main": "sign_transaction.js",
+  "scripts": {
+    "sign": "node sign_transaction.js"
+  },
+  "dependencies": {
+    "ethers": "^6.9.0"
+  }
+}

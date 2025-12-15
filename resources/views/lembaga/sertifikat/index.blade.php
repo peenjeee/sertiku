@@ -120,31 +120,43 @@
                         </div>
                     </div>
 
+                    {{-- Category Badge --}}
                     @if($certificate->category)
                     <div class="flex items-center gap-2 flex-wrap">
                         <span class="px-2 py-1 bg-blue-100 text-blue-600 text-xs rounded">{{ $certificate->category }}</span>
+                    </div>
+                    @endif
 
+                    {{-- Blockchain Badge - Always show if blockchain_enabled or has tx_hash --}}
+                    @if($certificate->blockchain_enabled || $certificate->blockchain_tx_hash)
+                    <div class="flex items-center gap-2 mt-2">
                         @if($certificate->blockchain_tx_hash)
                         <a href="{{ $certificate->blockchain_explorer_url }}" target="_blank"
-                           class="flex items-center gap-1 px-2 py-1 {{ $certificate->getBlockchainBadgeClass() }} text-xs rounded hover:opacity-80 transition"
-                           title="{{ $certificate->getBlockchainStatusText() }}">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101"/>
+                           class="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-purple-500/20 to-indigo-500/20 border border-purple-500/30 text-purple-600 text-xs font-medium rounded-lg hover:from-purple-500/30 hover:to-indigo-500/30 transition group">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
                             </svg>
-                            Blockchain
+                            <span>Tersimpan di Blockchain</span>
+                            <svg class="w-3 h-3 opacity-0 group-hover:opacity-100 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                            </svg>
                         </a>
+                        @elseif($certificate->blockchain_status === 'pending')
+                        <span class="flex items-center gap-1.5 px-3 py-1.5 bg-yellow-500/20 border border-yellow-500/30 text-yellow-600 text-xs font-medium rounded-lg">
+                            <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                            </svg>
+                            <span>Menunggu Blockchain...</span>
+                        </span>
+                        @elseif($certificate->blockchain_status === 'failed')
+                        <span class="flex items-center gap-1.5 px-3 py-1.5 bg-red-500/20 border border-red-500/30 text-red-600 text-xs font-medium rounded-lg">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span>Gagal Upload</span>
+                        </span>
                         @endif
-                    </div>
-                    @elseif($certificate->blockchain_tx_hash)
-                    <div>
-                        <a href="{{ $certificate->blockchain_explorer_url }}" target="_blank"
-                           class="flex items-center gap-1 px-2 py-1 {{ $certificate->getBlockchainBadgeClass() }} text-xs rounded hover:opacity-80 transition"
-                           title="{{ $certificate->getBlockchainStatusText() }}">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101"/>
-                            </svg>
-                            Blockchain
-                        </a>
                     </div>
                     @endif
                 </div>
