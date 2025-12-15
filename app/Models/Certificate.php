@@ -167,14 +167,14 @@ class Certificate extends Model
             Storage::disk('public')->makeDirectory($directory);
         }
 
-        // Generate filename based on certificate number
-        $filename = $directory . '/' . $this->certificate_number . '.png';
+        // Generate filename based on certificate number (using SVG format - no imagick needed)
+        $filename = $directory . '/' . $this->certificate_number . '.svg';
 
         // Generate QR code with verification URL
         $verificationUrl = $this->verification_url;
 
-        $qrCode = QrCode::format('png')
-            ->size(300)
+        // Use SVG format which doesn't require imagick extension
+        $qrCode = QrCode::size(300)
             ->margin(2)
             ->errorCorrection('H')
             ->generate($verificationUrl);
