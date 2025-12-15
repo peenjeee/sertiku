@@ -307,3 +307,28 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/profile', [\App\Http\Controllers\AdminController::class, 'updateProfile'])->name('profile.update');
     Route::post('/profile/password', [\App\Http\Controllers\AdminController::class, 'updatePassword'])->name('profile.password');
 });
+
+/*
+|--------------------------------------------------------------------------
+| Master (Superadmin) Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', \App\Http\Middleware\EnsureUserIsMaster::class])->prefix('master')->name('master.')->group(function () {
+    // Dashboard
+    Route::get('/', [\App\Http\Controllers\MasterController::class, 'dashboard'])->name('dashboard');
+
+    // Manage Admins
+    Route::get('/admins', [\App\Http\Controllers\MasterController::class, 'manageAdmins'])->name('admins');
+    Route::post('/admins/{user}/promote', [\App\Http\Controllers\MasterController::class, 'promoteToAdmin'])->name('admins.promote');
+    Route::post('/admins/{user}/demote', [\App\Http\Controllers\MasterController::class, 'demoteAdmin'])->name('admins.demote');
+
+    // Blockchain Wallet
+    Route::get('/blockchain', [\App\Http\Controllers\MasterController::class, 'blockchain'])->name('blockchain');
+
+    // Settings
+    Route::get('/settings', [\App\Http\Controllers\MasterController::class, 'settings'])->name('settings');
+
+    // Logs
+    Route::get('/logs', [\App\Http\Controllers\MasterController::class, 'logs'])->name('logs');
+});
