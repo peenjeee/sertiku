@@ -1,0 +1,200 @@
+{{-- resources/views/components/chat-widget.blade.php --}}
+@props(['role' => 'user'])
+
+@php
+    // FAQ berdasarkan role
+    $faqs = $role === 'lembaga' ? [
+        ['q' => 'Bagaimana cara membuat sertifikat?', 'a' => 'Untuk membuat sertifikat, buka menu "Sertifikat" > "Buat Baru", pilih template, isi data penerima, lalu klik "Terbitkan". Sertifikat akan otomatis dikirim ke email penerima.'],
+        ['q' => 'Bagaimana cara upload template?', 'a' => 'Buka menu "Template" > "Upload Template", pilih file template (format .docx/.pdf), atur placeholder, lalu klik "Simpan". Template siap digunakan untuk menerbitkan sertifikat.'],
+        ['q' => 'Berapa kuota sertifikat saya?', 'a' => 'Kuota sertifikat dapat dilihat di Dashboard. Untuk menambah kuota, Anda bisa upgrade paket di menu "Pengaturan" > "Langganan".'],
+        ['q' => 'Bagaimana cara revoke sertifikat?', 'a' => 'Buka detail sertifikat yang ingin dicabut, klik tombol "Revoke/Cabut", masukkan alasan pencabutan, lalu konfirmasi. Sertifikat akan langsung tidak valid.'],
+    ] : [
+        ['q' => 'Bagaimana cara melihat sertifikat saya?', 'a' => 'Buka menu "Sertifikat Saya" untuk melihat semua sertifikat yang Anda terima dari berbagai lembaga. Anda bisa download atau share sertifikat dari sana.'],
+        ['q' => 'Bagaimana cara verifikasi sertifikat?', 'a' => 'Buka halaman Verifikasi, masukkan kode hash yang tertera di sertifikat atau scan QR Code. Sistem akan menampilkan status keaslian sertifikat.'],
+        ['q' => 'Bagaimana cara share sertifikat?', 'a' => 'Buka detail sertifikat, klik tombol "Share", pilih platform (LinkedIn, WhatsApp, dll) atau salin link untuk dibagikan.'],
+        ['q' => 'Sertifikat tidak muncul, apa yang harus dilakukan?', 'a' => 'Pastikan email Anda sama dengan email penerima sertifikat. Jika masih tidak muncul, hubungi lembaga penerbit sertifikat untuk konfirmasi.'],
+    ];
+@endphp
+
+{{-- Chat Widget Container --}}
+<div class="fixed bottom-6 right-6 z-50" id="chatWidget">
+    {{-- Chat Modal --}}
+    <div id="chatModal" class="hidden mb-4 w-80 sm:w-96 rounded-2xl overflow-hidden shadow-2xl border border-white/10"
+         style="background: linear-gradient(180deg, #0c1829 0%, #0f1f35 100%);">
+        {{-- Header --}}
+        <div class="flex items-center justify-between p-4 border-b border-white/10 bg-gradient-to-r from-blue-600 to-indigo-600">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-white font-semibold text-sm">SertiKu Support</p>
+                    <p class="text-white/70 text-xs flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                        Online • {{ $role === 'lembaga' ? 'Bantuan Lembaga' : 'Bantuan Pengguna' }}
+                    </p>
+                </div>
+            </div>
+            <button onclick="toggleChat()" class="text-white/70 hover:text-white transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        {{-- Messages Area --}}
+        <div class="h-72 overflow-y-auto p-4 space-y-3" id="chatMessages">
+            {{-- Welcome Message --}}
+            <div class="flex items-start gap-2">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                    </svg>
+                </div>
+                <div class="bg-white/10 rounded-xl rounded-tl-none px-3 py-2 max-w-[85%]">
+                    <p class="text-white text-sm">Halo! 👋 Ada yang bisa kami bantu?</p>
+                    <p class="text-white/40 text-xs mt-1">Baru saja</p>
+                </div>
+            </div>
+
+            {{-- Quick FAQ Buttons --}}
+            <div class="pl-10 space-y-2" id="faqButtons">
+                <p class="text-white/50 text-xs mb-2">Pertanyaan Umum {{ $role === 'lembaga' ? 'Lembaga' : 'Pengguna' }}:</p>
+                @foreach($faqs as $index => $faq)
+                <button onclick="askFAQ({{ $index }})"
+                        class="w-full text-left px-3 py-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs hover:bg-blue-500/20 transition truncate">
+                    {{ $faq['q'] }}
+                </button>
+                @endforeach
+            </div>
+        </div>
+
+        {{-- Input Area --}}
+        <div class="p-3 border-t border-white/10">
+            <div class="flex gap-2">
+                <input type="text" id="chatInput"
+                       class="flex-1 rounded-xl bg-white/10 border border-white/10 px-4 py-2 text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                       placeholder="Ketik pesan..."
+                       onkeypress="if(event.key === 'Enter') sendChatMessage()">
+                <button onclick="sendChatMessage()"
+                        class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white hover:brightness-110 transition flex-shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {{-- Toggle Button --}}
+    <button onclick="toggleChat()" id="chatToggleBtn"
+            class="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300">
+        <svg id="chatIconOpen" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+        </svg>
+        <svg id="chatIconClose" class="w-6 h-6 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+    </button>
+</div>
+
+<script>
+    // FAQ Data dari Blade
+    const chatFaqs = @json($faqs);
+    const chatRole = '{{ $role }}';
+
+    function toggleChat() {
+        const modal = document.getElementById('chatModal');
+        const iconOpen = document.getElementById('chatIconOpen');
+        const iconClose = document.getElementById('chatIconClose');
+
+        modal.classList.toggle('hidden');
+        iconOpen.classList.toggle('hidden');
+        iconClose.classList.toggle('hidden');
+    }
+
+    function askFAQ(index) {
+        const faq = chatFaqs[index];
+        const messages = document.getElementById('chatMessages');
+
+        // Hide FAQ buttons after first question
+        document.getElementById('faqButtons').style.display = 'none';
+
+        // Add user question
+        addUserMessage(faq.q);
+
+        // Add bot response after delay
+        setTimeout(() => {
+            addBotMessage(faq.a);
+        }, 800);
+    }
+
+    function sendChatMessage() {
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+
+        if (!text) return;
+
+        // Hide FAQ buttons
+        const faqBtns = document.getElementById('faqButtons');
+        if (faqBtns) faqBtns.style.display = 'none';
+
+        // Add user message
+        addUserMessage(text);
+        input.value = '';
+
+        // Simulate bot response
+        setTimeout(() => {
+            const responses = [
+                'Terima kasih atas pertanyaannya! Tim support kami akan segera menghubungi Anda.',
+                'Pertanyaan Anda sudah kami terima. Mohon tunggu balasan dari tim kami.',
+                'Kami akan membantu Anda. Jika urgent, silakan email ke support@sertiku.com'
+            ];
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            addBotMessage(randomResponse);
+        }, 1000);
+    }
+
+    function addUserMessage(text) {
+        const messages = document.getElementById('chatMessages');
+        const time = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+        messages.innerHTML += `
+            <div class="flex items-start gap-2 justify-end">
+                <div class="bg-blue-500/30 rounded-xl rounded-tr-none px-3 py-2 max-w-[85%]">
+                    <p class="text-white text-sm">${escapeHtml(text)}</p>
+                    <p class="text-white/40 text-xs mt-1">${time}</p>
+                </div>
+            </div>
+        `;
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    function addBotMessage(text) {
+        const messages = document.getElementById('chatMessages');
+        const time = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+        messages.innerHTML += `
+            <div class="flex items-start gap-2">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                    </svg>
+                </div>
+                <div class="bg-white/10 rounded-xl rounded-tl-none px-3 py-2 max-w-[85%]">
+                    <p class="text-white text-sm">${text}</p>
+                    <p class="text-white/40 text-xs mt-1">${time}</p>
+                </div>
+            </div>
+        `;
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+</script>

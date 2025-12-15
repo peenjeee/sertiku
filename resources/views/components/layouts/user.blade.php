@@ -1,0 +1,225 @@
+@props(['title' => 'Dashboard User – SertiKu'])
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ $title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    {{-- Favicon --}}
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+
+    {{-- Google Fonts - Poppins --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- Chart.js --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a1628 0%, #0f1d32 50%, #0a1628 100%);
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: linear-gradient(180deg, #0c1829 0%, #0f1f35 100%);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            width: 240px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar.collapsed { width: 80px; }
+        .sidebar.collapsed .nav-text,
+        .sidebar.collapsed .logo-text,
+        .sidebar.collapsed .user-info { display: none; }
+        .sidebar.collapsed .nav-item { justify-content: center; padding-left: 0; padding-right: 0; }
+
+        /* Nav Items */
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            transition: all 0.2s ease;
+            margin-bottom: 4px;
+        }
+        .nav-item:hover { background: rgba(59, 130, 246, 0.1); color: rgba(255, 255, 255, 0.9); }
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(99, 102, 241, 0.15) 100%);
+            color: #fff;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        .nav-item.active .nav-icon { color: #3B82F6; }
+
+        /* Badge */
+        .notification-badge {
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            color: white; font-size: 10px; font-weight: 600;
+            padding: 2px 6px; border-radius: 10px; min-width: 18px; text-align: center;
+        }
+
+        /* Main Content */
+        .main-content { margin-left: 240px; transition: margin-left 0.3s ease; min-height: 100vh; padding: 24px; }
+        .sidebar.collapsed + .main-content { margin-left: 80px; }
+
+        /* Welcome Banner */
+        .welcome-banner { background: linear-gradient(135deg, #1a365d 0%, #1e3a8a 50%, #312e81 100%); border: 1px solid rgba(59, 130, 246, 0.2); }
+
+        /* Stat Cards */
+        .stat-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(10px); }
+        .stat-card-blue { background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); border: 1px solid rgba(59, 130, 246, 0.2); }
+        .stat-card-green { background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%); border: 1px solid rgba(34, 197, 94, 0.2); }
+        .stat-card-yellow { background: linear-gradient(135deg, rgba(234, 179, 8, 0.15) 0%, rgba(234, 179, 8, 0.05) 100%); border: 1px solid rgba(234, 179, 8, 0.2); }
+        .stat-card-red { background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%); border: 1px solid rgba(239, 68, 68, 0.2); }
+
+        /* Glass Card */
+        .glass-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+
+        /* Activity Card */
+        .activity-card { background: linear-gradient(180deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%); border: 1px solid rgba(255, 255, 255, 0.08); }
+
+        /* Animations */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+
+        /* Mobile */
+        @media (max-width: 1024px) {
+            .sidebar { position: fixed; left: -240px; z-index: 50; height: 100vh; }
+            .sidebar.open { left: 0; }
+            .main-content { margin-left: 0; }
+            .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 40; }
+            .sidebar.open + .sidebar-overlay { display: block; }
+        }
+
+        /* User Profile Section */
+        .user-profile-section { background: rgba(255, 255, 255, 0.03); border-top: 1px solid rgba(255, 255, 255, 0.08); }
+    </style>
+</head>
+<body class="antialiased text-white">
+    {{-- Sidebar Overlay (Mobile) --}}
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    {{-- Sidebar --}}
+    <aside class="sidebar fixed left-0 top-0 h-screen flex flex-col z-50" id="sidebar">
+        {{-- Logo --}}
+        <div class="flex items-center gap-3 px-5 py-5 border-b border-white/10">
+            <img src="{{ asset('favicon.svg') }}" alt="SertiKu" class="w-10 h-10 flex-shrink-0">
+            <div class="logo-text">
+                <p class="text-white font-bold text-lg">SertiKu</p>
+                <p class="text-white/50 text-xs">Dashboard User</p>
+            </div>
+            <button onclick="toggleSidebar()" class="ml-auto text-white/50 hover:text-white lg:hidden">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        {{-- Navigation --}}
+        <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+            <a href="{{ route('user.dashboard') }}" class="nav-item {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
+                <svg class="w-5 h-5 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 13a1 1 0 011-1h4a1 1 0 011 1v6a1 1 0 01-1 1h-4a1 1 0 01-1-1v-6z"/>
+                </svg>
+                <span class="nav-text">Dashboard</span>
+            </a>
+
+            <a href="{{ route('user.sertifikat') }}" class="nav-item {{ request()->routeIs('user.sertifikat*') ? 'active' : '' }}">
+                <svg class="w-5 h-5 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                </svg>
+                <span class="nav-text">Sertifikat Saya</span>
+            </a>
+
+            <a href="{{ route('user.profil') }}" class="nav-item {{ request()->routeIs('user.profil*') ? 'active' : '' }}">
+                <svg class="w-5 h-5 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+                <span class="nav-text">Profil</span>
+            </a>
+
+            <a href="{{ route('user.notifikasi') }}" class="nav-item {{ request()->routeIs('user.notifikasi*') ? 'active' : '' }}">
+                <svg class="w-5 h-5 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                </svg>
+                <span class="nav-text">Notifikasi</span>
+                @php $unreadCount = auth()->user()->unreadNotifications->count() ?? 0; @endphp
+                @if($unreadCount > 0)
+                <span class="notification-badge">{{ $unreadCount }}</span>
+                @endif
+            </a>
+        </nav>
+
+        {{-- User Profile Section --}}
+        <div class="user-profile-section p-4">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                    {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 2)) }}
+                </div>
+                <div class="user-info min-w-0">
+                    <p class="text-white font-medium text-sm truncate">{{ auth()->user()->name ?? 'User' }}</p>
+                    <p class="text-white/50 text-xs">User</p>
+                </div>
+            </div>
+            <a href="{{ route('user.profil') }}" class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-white/20 text-white/70 text-sm hover:bg-white/5 transition mb-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                <span class="nav-text">Edit Profil</span>
+            </a>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-white/50 text-sm hover:text-red-400 hover:bg-red-500/10 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                    </svg>
+                    <span class="nav-text">Keluar</span>
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    {{-- Mobile Menu Button --}}
+    <button onclick="toggleSidebar()" class="fixed top-4 left-4 z-40 lg:hidden p-2 rounded-lg bg-white/10 text-white">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+    </button>
+
+    {{-- Main Content --}}
+    <main class="main-content">
+        {{ $slot }}
+    </main>
+
+    {{-- Chat Widget Component --}}
+    <x-chat-widget role="user" />
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth < 1024) {
+                sidebar.classList.toggle('open');
+            } else {
+                sidebar.classList.toggle('collapsed');
+            }
+        }
+    </script>
+
+    @stack('scripts')
+</body>
+</html>

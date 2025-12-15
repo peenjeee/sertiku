@@ -115,12 +115,16 @@ Route::middleware('auth')->group(function () {
         }
 
         // Redirect based on account type
+        if ($user->is_admin) {
+            return redirect()->route('admin.dashboard');
+        }
+
         if ($user->isInstitution()) {
             return redirect()->route('lembaga.dashboard');
         }
 
-        // Personal users stay on this dashboard
-        return view('dashboard');
+        // Personal users go to user dashboard
+        return redirect()->route('user.dashboard');
     })->name('dashboard');
 
     // Settings
@@ -149,6 +153,25 @@ Route::middleware('auth')->group(function () {
         Route::post('/template', [\App\Http\Controllers\LembagaController::class, 'storeTemplate'])->name('template.store');
         Route::delete('/template/{template}', [\App\Http\Controllers\LembagaController::class, 'destroyTemplate'])->name('template.destroy');
         Route::post('/template/{template}/toggle', [\App\Http\Controllers\LembagaController::class, 'toggleTemplate'])->name('template.toggle');
+    });
+
+    // User (Personal) Routes
+    Route::prefix('user')->name('user.')->group(function () {
+        // Dashboard
+        Route::get('/', [\App\Http\Controllers\UserController::class, 'dashboard'])->name('dashboard');
+
+        // Sertifikat Saya
+        Route::get('/sertifikat', [\App\Http\Controllers\UserController::class, 'sertifikat'])->name('sertifikat');
+
+        // Profil
+        Route::get('/profil', [\App\Http\Controllers\UserController::class, 'profil'])->name('profil');
+        Route::put('/profil', [\App\Http\Controllers\UserController::class, 'updateProfil'])->name('profil.update');
+        Route::put('/profil/password', [\App\Http\Controllers\UserController::class, 'updatePassword'])->name('profil.password');
+
+        // Notifikasi
+        Route::get('/notifikasi', [\App\Http\Controllers\UserController::class, 'notifikasi'])->name('notifikasi');
+        Route::post('/notifikasi/{id}/read', [\App\Http\Controllers\UserController::class, 'markAsRead'])->name('notifikasi.read');
+        Route::post('/notifikasi/read-all', [\App\Http\Controllers\UserController::class, 'markAllAsRead'])->name('notifikasi.readAll');
     });
 });
 
