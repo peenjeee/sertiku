@@ -263,9 +263,23 @@
     {{-- Print-only styles --}}
     <style>
         @media print {
+            /* Reset and base print styles */
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
             /* Hide everything except printable content */
             body * {
                 visibility: hidden;
+            }
+
+            /* Hide navbar, footer, and no-print elements */
+            .no-print,
+            nav,
+            footer,
+            header {
+                display: none !important;
             }
 
             /* Show certificate image and info */
@@ -276,26 +290,19 @@
                 visibility: visible !important;
             }
 
-            /* Hide elements with no-print class */
-            .no-print {
-                display: none !important;
-            }
-
             /* Clean background for print */
             body {
                 background: white !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
             }
 
             /* Position certificate at top center */
             .print-only-cert {
-                position: fixed !important;
+                position: absolute !important;
                 left: 50% !important;
-                top: 20px !important;
+                top: 10px !important;
                 transform: translateX(-50%) !important;
-                width: 95% !important;
-                max-width: 700px !important;
+                width: 90% !important;
+                max-width: 650px !important;
             }
 
             .print-only-cert img {
@@ -307,16 +314,45 @@
 
             /* Position info below certificate */
             .print-info {
-                position: fixed !important;
+                position: absolute !important;
                 left: 50% !important;
-                bottom: 20px !important;
+                top: 420px !important;
                 transform: translateX(-50%) !important;
-                width: 95% !important;
-                max-width: 700px !important;
+                width: 90% !important;
+                max-width: 650px !important;
                 background: #f8fafc !important;
                 border: 1px solid #e5e7eb !important;
                 border-radius: 12px !important;
-                padding: 16px !important;
+                padding: 20px !important;
+            }
+
+            /* Keep flex layout for print */
+            .print-info > .flex {
+                display: flex !important;
+                flex-direction: row !important;
+                gap: 20px !important;
+            }
+
+            /* Certificate details styling */
+            .print-info .flex-1 {
+                flex: 1 !important;
+            }
+
+            /* QR code section for print */
+            .print-info .lg\\:w-48 {
+                width: 140px !important;
+                flex-shrink: 0 !important;
+            }
+
+            .print-info .lg\\:w-48 > div {
+                background: #f1f5f9 !important;
+                border: 1px solid #e5e7eb !important;
+                padding: 12px !important;
+            }
+
+            .print-info .lg\\:w-48 img {
+                width: 100px !important;
+                height: 100px !important;
             }
 
             /* Print-friendly text colors */
@@ -325,15 +361,16 @@
                 color: #1e293b !important;
             }
 
-            .print-info .text-\[#8EC5FF\] {
+            .print-info .text-\[\#8EC5FF\],
+            .print-info .font-semibold {
                 color: #1e40af !important;
             }
 
-            .print-info .text-\[#22C55E\] {
+            .print-info .text-\[\#22C55E\] {
                 color: #16a34a !important;
             }
 
-            .print-info .text-\[#15803D\] {
+            .print-info .text-\[\#15803D\] {
                 color: #16a34a !important;
             }
 
@@ -345,11 +382,14 @@
             /* Verification badge print style */
             .print-verification-badge {
                 border-top: 1px solid #e5e7eb !important;
+                margin-top: 16px !important;
+                padding-top: 16px !important;
             }
 
             .print-verification-badge > div {
                 background: #dcfce7 !important;
                 border-radius: 8px !important;
+                padding: 12px !important;
             }
 
             .print-verification-badge span {
@@ -365,9 +405,15 @@
                 font-size: 11px !important;
             }
 
-            /* Hide header text in print */
-            .print-info > div:first-child {
-                display: none !important;
+            /* Show header text in print */
+            .print-info .flex-col.gap-1 p {
+                color: #16a34a !important;
+            }
+
+            /* Page setup */
+            @page {
+                size: A4;
+                margin: 10mm;
             }
         }
     </style>
