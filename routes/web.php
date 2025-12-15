@@ -53,6 +53,35 @@ Route::post('/logout', [GoogleController::class, 'logout'])
     ->name('logout')
     ->middleware('auth');
 
+/*
+|--------------------------------------------------------------------------
+| MASTER AUTH & DASHBOARD
+|--------------------------------------------------------------------------
+*/
+
+// Master Login (separate login page)
+Route::get('/master/login', [\App\Http\Controllers\Auth\MasterLoginController::class, 'showLoginForm'])
+    ->middleware('guest')
+    ->name('master.login');
+
+Route::post('/master/login', [\App\Http\Controllers\Auth\MasterLoginController::class, 'login'])
+    ->middleware('guest')
+    ->name('master.login.submit');
+
+Route::post('/master/logout', [\App\Http\Controllers\Auth\MasterLoginController::class, 'logout'])
+    ->middleware('auth')
+    ->name('master.logout');
+
+// Master Dashboard Routes (protected by master.only middleware)
+Route::prefix('master')->name('master.')->middleware(['auth', 'master.only'])->group(function () {
+    Route::get('/', [\App\Http\Controllers\MasterController::class, 'dashboard'])->name('dashboard');
+    Route::get('/admins', [\App\Http\Controllers\MasterController::class, 'manageAdmins'])->name('admins');
+    Route::post('/admins/{user}/promote', [\App\Http\Controllers\MasterController::class, 'promoteToAdmin'])->name('promote');
+    Route::post('/admins/{user}/demote', [\App\Http\Controllers\MasterController::class, 'demoteAdmin'])->name('demote');
+    Route::get('/settings', [\App\Http\Controllers\MasterController::class, 'settings'])->name('settings');
+    Route::get('/logs', [\App\Http\Controllers\MasterController::class, 'logs'])->name('logs');
+});
+
 // Password Reset
 Route::get('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetController::class, 'showForgotForm'])
     ->middleware('guest')
@@ -135,8 +164,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/settings/password', [\App\Http\Controllers\SettingsController::class, 'updatePassword'])->name('settings.password');
     Route::delete('/settings/account', [\App\Http\Controllers\SettingsController::class, 'deleteAccount'])->name('settings.delete');
 
-    // Lembaga (Institution) Routes
-    Route::prefix('lembaga')->name('lembaga.')->group(function () {
+    // Lembaga (Institution) Routes - Only for lembaga accounts
+    Route::prefix('lembaga')->name('lembaga.')->middleware('lembaga.only')->group(function () {
         // Dashboard
         Route::get('/', [\App\Http\Controllers\LembagaController::class, 'dashboard'])->name('dashboard');
 
@@ -155,8 +184,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/template/{template}/toggle', [\App\Http\Controllers\LembagaController::class, 'toggleTemplate'])->name('template.toggle');
     });
 
-    // User (Personal) Routes
-    Route::prefix('user')->name('user.')->group(function () {
+    // User (Personal) Routes - Only for personal (pengguna) accounts
+    Route::prefix('user')->name('user.')->middleware('pengguna.only')->group(function () {
         // Dashboard
         Route::get('/', [\App\Http\Controllers\UserController::class, 'dashboard'])->name('dashboard');
 

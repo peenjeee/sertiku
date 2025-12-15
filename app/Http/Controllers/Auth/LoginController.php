@@ -46,10 +46,19 @@ class LoginController extends Controller
          * ----------------------------------------------------
          */
         $dummyUsers = [
+            'master@sertiku.web.id'  => [
+                'name'              => 'Master SertiKu',
+                'password'          => 'Master123',
+                'is_admin'          => true,
+                'is_master'         => true,
+                'account_type'      => 'admin',
+                'profile_completed' => true,
+            ],
             'admin@sertiku.web.id'   => [
                 'name'              => 'Admin SertiKu',
                 'password'          => 'Admin123',
                 'is_admin'          => true,
+                'is_master'         => false,
                 'account_type'      => 'admin',
                 'profile_completed' => true,
             ],
@@ -57,6 +66,7 @@ class LoginController extends Controller
                 'name'              => 'Lembaga SertiKu',
                 'password'          => 'lembaga123',
                 'is_admin'          => false,
+                'is_master'         => false,
                 'account_type'      => 'lembaga',
                 'profile_completed' => true,
             ],
@@ -64,6 +74,7 @@ class LoginController extends Controller
                 'name'              => 'User SertiKu',
                 'password'          => 'user123',
                 'is_admin'          => false,
+                'is_master'         => false,
                 'account_type'      => 'pengguna',
                 'profile_completed' => true,
             ],
@@ -83,6 +94,7 @@ class LoginController extends Controller
 
             // Update user fields from dummy config (syncs existing users)
             $user->is_admin          = $dummyUsers[$email]['is_admin'];
+            $user->is_master         = $dummyUsers[$email]['is_master'];
             $user->account_type      = $dummyUsers[$email]['account_type'];
             $user->profile_completed = $dummyUsers[$email]['profile_completed'];
             $user->save();

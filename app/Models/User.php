@@ -39,6 +39,7 @@ class User extends Authenticatable
         'profile_completed',
         'package_id',
         'is_admin',
+        'is_master',
     ];
 
     /**
@@ -212,7 +213,15 @@ class User extends Authenticatable
      */
     public function isInstitution(): bool
     {
-        return $this->account_type === 'institution';
+        return $this->account_type === 'lembaga';
+    }
+
+    /**
+     * Check if user is a master
+     */
+    public function isMaster(): bool
+    {
+        return $this->is_master === true;
     }
 
     /**

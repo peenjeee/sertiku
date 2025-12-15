@@ -16,7 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->alias([
-            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'admin'         => \App\Http\Middleware\AdminMiddleware::class,
+            'admin.only'    => \App\Http\Middleware\EnsureUserIsAdmin::class,
+            'master.only'   => \App\Http\Middleware\EnsureUserIsMaster::class,
+            'lembaga.only'  => \App\Http\Middleware\EnsureUserIsLembaga::class,
+            'pengguna.only' => \App\Http\Middleware\EnsureUserIsPengguna::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
