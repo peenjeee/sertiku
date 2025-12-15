@@ -45,4 +45,8 @@ return [
         'project_id' => env('WALLETCONNECT_PROJECT_ID'),
     ],
 
+    'n8n' => [
+        'webhook_url' => env('N8N_WEBHOOK_URL'),
+    ],
+
 ];

@@ -20,13 +20,15 @@
 <div class="fixed bottom-6 right-6 z-50" id="chatWidget">
     {{-- Chat Modal --}}
     <div id="chatModal" class="hidden mb-4 w-80 sm:w-96 rounded-2xl overflow-hidden shadow-2xl border border-white/10"
-         style="background: linear-gradient(180deg, #0c1829 0%, #0f1f35 100%);">
+        style="background: linear-gradient(180deg, #0c1829 0%, #0f1f35 100%);">
         {{-- Header --}}
-        <div class="flex items-center justify-between p-4 border-b border-white/10 bg-gradient-to-r from-blue-600 to-indigo-600">
+        <div
+            class="flex items-center justify-between p-4 border-b border-white/10 bg-gradient-to-r from-blue-600 to-indigo-600">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
                 </div>
                 <div>
@@ -39,7 +41,7 @@
             </div>
             <button onclick="toggleChat()" class="text-white/70 hover:text-white transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
         </div>
@@ -48,9 +50,11 @@
         <div class="h-72 overflow-y-auto p-4 space-y-3" id="chatMessages">
             {{-- Welcome Message --}}
             <div class="flex items-start gap-2">
-                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0">
+                <div
+                    class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0">
                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
                 </div>
                 <div class="bg-white/10 rounded-xl rounded-tl-none px-3 py-2 max-w-[85%]">
@@ -61,12 +65,14 @@
 
             {{-- Quick FAQ Buttons --}}
             <div class="pl-10 space-y-2" id="faqButtons">
-                <p class="text-white/50 text-xs mb-2">Pertanyaan Umum {{ $role === 'lembaga' ? 'Lembaga' : 'Pengguna' }}:</p>
+                <p class="text-white/50 text-xs mb-2">Pertanyaan Umum
+                    {{ $role === 'lembaga' ? 'Lembaga' : 'Pengguna' }}:
+                </p>
                 @foreach($faqs as $index => $faq)
-                <button onclick="askFAQ({{ $index }})"
+                    <button onclick="askFAQ({{ $index }})"
                         class="w-full text-left px-3 py-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs hover:bg-blue-500/20 transition truncate">
-                    {{ $faq['q'] }}
-                </button>
+                        {{ $faq['q'] }}
+                    </button>
                 @endforeach
             </div>
         </div>
@@ -75,13 +81,13 @@
         <div class="p-3 border-t border-white/10">
             <div class="flex gap-2">
                 <input type="text" id="chatInput"
-                       class="flex-1 rounded-xl bg-white/10 border border-white/10 px-4 py-2 text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                       placeholder="Ketik pesan..."
-                       onkeypress="if(event.key === 'Enter') sendChatMessage()">
+                    class="flex-1 rounded-xl bg-white/10 border border-white/10 px-4 py-2 text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                    placeholder="Ketik pesan..." onkeypress="if(event.key === 'Enter') sendChatMessage()">
                 <button onclick="sendChatMessage()"
-                        class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white hover:brightness-110 transition flex-shrink-0">
+                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white hover:brightness-110 transition flex-shrink-0">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                     </svg>
                 </button>
             </div>
@@ -90,12 +96,13 @@
 
     {{-- Toggle Button --}}
     <button onclick="toggleChat()" id="chatToggleBtn"
-            class="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300">
+        class="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300">
         <svg id="chatIconOpen" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
         </svg>
         <svg id="chatIconClose" class="w-6 h-6 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
     </button>
 </div>
@@ -131,7 +138,7 @@
         }, 800);
     }
 
-    function sendChatMessage() {
+    async function sendChatMessage() {
         const input = document.getElementById('chatInput');
         const text = input.value.trim();
 
@@ -145,16 +152,60 @@
         addUserMessage(text);
         input.value = '';
 
-        // Simulate bot response
-        setTimeout(() => {
-            const responses = [
-                'Terima kasih atas pertanyaannya! Tim support kami akan segera menghubungi Anda.',
-                'Pertanyaan Anda sudah kami terima. Mohon tunggu balasan dari tim kami.',
-                'Kami akan membantu Anda. Jika urgent, silakan email ke support@sertiku.com'
-            ];
-            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-            addBotMessage(randomResponse);
-        }, 1000);
+        // Show typing indicator
+        showTypingIndicator();
+
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: text,
+                    role: chatRole,
+                }),
+            });
+
+            const data = await response.json();
+            hideTypingIndicator();
+            addBotMessage(data.reply || 'Maaf, terjadi kesalahan. Silakan coba lagi.');
+
+        } catch (error) {
+            console.error('Chat error:', error);
+            hideTypingIndicator();
+            addBotMessage('Maaf, terjadi kesalahan koneksi. Silakan coba lagi.');
+        }
+    }
+
+    function showTypingIndicator() {
+        const messages = document.getElementById('chatMessages');
+        const indicator = document.createElement('div');
+        indicator.id = 'typingIndicator';
+        indicator.className = 'flex items-start gap-2';
+        indicator.innerHTML = `
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01"/>
+                </svg>
+            </div>
+            <div class="bg-white/10 rounded-xl rounded-tl-none px-3 py-2">
+                <div class="flex gap-1">
+                    <span class="w-2 h-2 bg-white/60 rounded-full animate-bounce" style="animation-delay: 0ms"></span>
+                    <span class="w-2 h-2 bg-white/60 rounded-full animate-bounce" style="animation-delay: 150ms"></span>
+                    <span class="w-2 h-2 bg-white/60 rounded-full animate-bounce" style="animation-delay: 300ms"></span>
+                </div>
+            </div>
+        `;
+        messages.appendChild(indicator);
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    function hideTypingIndicator() {
+        const indicator = document.getElementById('typingIndicator');
+        if (indicator) indicator.remove();
     }
 
     function addUserMessage(text) {
@@ -184,7 +235,7 @@
                     </svg>
                 </div>
                 <div class="bg-white/10 rounded-xl rounded-tl-none px-3 py-2 max-w-[85%]">
-                    <p class="text-white text-sm">${text}</p>
+                    <div class="text-white text-sm leading-relaxed">${formatMarkdown(text)}</div>
                     <p class="text-white/40 text-xs mt-1">${time}</p>
                 </div>
             </div>
@@ -196,5 +247,30 @@
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+
+    // Format markdown untuk output AI yang lebih rapih
+    function formatMarkdown(text) {
+        if (!text) return '';
+
+        return text
+            // Bold: **text** atau __text__
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/__(.*?)__/g, '<strong>$1</strong>')
+            // Italic: *text* atau _text_
+            .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+            .replace(/_([^_]+)_/g, '<em>$1</em>')
+            // Numbered list: 1. item
+            .replace(/^\d+\.\s+(.*)$/gm, '<li class="ml-4 list-decimal">$1</li>')
+            // Bullet list: - item atau * item
+            .replace(/^[\-\*]\s+(.*)$/gm, '<li class="ml-4 list-disc">$1</li>')
+            // Headers
+            .replace(/^###\s+(.*)$/gm, '<strong class="text-blue-300">$1</strong>')
+            .replace(/^##\s+(.*)$/gm, '<strong class="text-blue-300 text-base">$1</strong>')
+            // Line breaks
+            .replace(/\n\n/g, '<br><br>')
+            .replace(/\n/g, '<br>')
+            // Links
+            .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-400 underline" target="_blank">$1</a>');
     }
 </script>
