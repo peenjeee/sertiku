@@ -249,20 +249,20 @@
 
             {{-- Progress Bar (hidden by default) --}}
             <div id="upload-progress" class="hidden mb-6">
-                <div class="bg-gray-200 rounded-xl p-5 border border-gray-300">
+                <div class="bg-[#1E3A8A] rounded-xl p-5 border border-blue-500/30 shadow-lg">
                     <div class="flex items-center gap-3 mb-3">
-                        <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <svg class="animate-spin h-5 w-5 text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        <span class="text-gray-800 font-bold text-sm">Menerbitkan Sertifikat...</span>
+                        <span class="text-white font-bold text-sm">Menerbitkan Sertifikat...</span>
                     </div>
-                    <div class="w-full bg-gray-300 rounded-full h-3 overflow-hidden">
-                        <div id="progress-bar" class="bg-gradient-to-r from-blue-500 to-indigo-600 h-3 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    <div class="w-full bg-blue-900/50 rounded-full h-3 overflow-hidden">
+                        <div id="progress-bar" class="bg-gradient-to-r from-blue-400 to-cyan-400 h-3 rounded-full transition-all duration-300" style="width: 0%"></div>
                     </div>
                     <div class="flex justify-between mt-2">
-                        <span id="progress-text" class="text-gray-600 text-xs">Memproses data...</span>
-                        <span id="progress-percent" class="text-blue-600 text-xs font-bold">0%</span>
+                        <span id="progress-text" class="text-blue-200 text-xs">Memproses data...</span>
+                        <span id="progress-percent" class="text-cyan-300 text-xs font-bold">0%</span>
                     </div>
                 </div>
             </div>
