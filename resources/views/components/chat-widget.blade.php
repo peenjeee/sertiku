@@ -74,6 +74,17 @@
                         {{ $faq['q'] }}
                     </button>
                 @endforeach
+
+                {{-- Hubungi Admin Button --}}
+                @auth
+                <button onclick="showContactAdminModal()"
+                    class="w-full text-left px-3 py-2 rounded-lg bg-green-500/10 border border-green-500/20 text-green-300 text-xs hover:bg-green-500/20 transition flex items-center gap-2 mt-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+                    </svg>
+                    Hubungi Admin Langsung
+                </button>
+                @endauth
             </div>
         </div>
 
@@ -111,6 +122,15 @@
     // FAQ Data dari Blade
     const chatFaqs = @json($faqs);
     const chatRole = '{{ $role }}';
+    const CHAT_STORAGE_KEY = 'sertiku_chat_' + chatRole;
+    const CHAT_EXPIRY_MS = 5 * 60 * 1000; // 5 minutes
+    let supportTicketId = null;
+    let supportPollingInterval = null;
+
+    // Initialize chat from localStorage
+    document.addEventListener('DOMContentLoaded', function() {
+        loadChatFromStorage();
+    });
 
     function toggleChat() {
         const modal = document.getElementById('chatModal');
@@ -122,19 +142,54 @@
         iconClose.classList.toggle('hidden');
     }
 
+    function saveChatToStorage() {
+        const messages = document.getElementById('chatMessages').innerHTML;
+        const faqVisible = document.getElementById('faqButtons')?.style.display !== 'none';
+        const data = {
+            messages: messages,
+            faqVisible: faqVisible,
+            timestamp: Date.now(),
+            ticketId: supportTicketId,
+        };
+        localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function loadChatFromStorage() {
+        const stored = localStorage.getItem(CHAT_STORAGE_KEY);
+        if (!stored) return;
+
+        try {
+            const data = JSON.parse(stored);
+            // Check if expired (5 minutes)
+            if (Date.now() - data.timestamp > CHAT_EXPIRY_MS) {
+                localStorage.removeItem(CHAT_STORAGE_KEY);
+                return;
+            }
+
+            // Restore messages
+            document.getElementById('chatMessages').innerHTML = data.messages;
+            if (!data.faqVisible) {
+                const faqBtns = document.getElementById('faqButtons');
+                if (faqBtns) faqBtns.style.display = 'none';
+            }
+
+            // Restore ticket polling if exists
+            if (data.ticketId) {
+                supportTicketId = data.ticketId;
+                startSupportPolling();
+            }
+        } catch (e) {
+            console.error('Failed to load chat:', e);
+        }
+    }
+
     function askFAQ(index) {
         const faq = chatFaqs[index];
-        const messages = document.getElementById('chatMessages');
-
-        // Hide FAQ buttons after first question
         document.getElementById('faqButtons').style.display = 'none';
-
-        // Add user question
         addUserMessage(faq.q);
-
-        // Add bot response after delay
         setTimeout(() => {
             addBotMessage(faq.a);
+            saveChatToStorage();
         }, 800);
     }
 
@@ -144,15 +199,11 @@
 
         if (!text) return;
 
-        // Hide FAQ buttons
         const faqBtns = document.getElementById('faqButtons');
         if (faqBtns) faqBtns.style.display = 'none';
 
-        // Add user message
         addUserMessage(text);
         input.value = '';
-
-        // Show typing indicator
         showTypingIndicator();
 
         try {
@@ -163,23 +214,165 @@
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
                     'Accept': 'application/json',
                 },
-                body: JSON.stringify({
-                    message: text,
-                    role: chatRole,
-                }),
+                body: JSON.stringify({ message: text, role: chatRole }),
             });
 
             const data = await response.json();
             hideTypingIndicator();
             addBotMessage(data.reply || 'Maaf, terjadi kesalahan. Silakan coba lagi.');
+            saveChatToStorage();
 
         } catch (error) {
             console.error('Chat error:', error);
             hideTypingIndicator();
             addBotMessage('Maaf, terjadi kesalahan koneksi. Silakan coba lagi.');
+            saveChatToStorage();
         }
     }
 
+    // ======== HUBUNGI ADMIN FEATURE ========
+    function showContactAdminModal() {
+        const modal = document.createElement('div');
+        modal.id = 'contactAdminModal';
+        modal.className = 'fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm';
+        modal.innerHTML = `
+            <div class="bg-gradient-to-b from-[#0c1829] to-[#0f1f35] rounded-2xl p-6 w-80 sm:w-96 border border-white/10 shadow-2xl">
+                <h3 class="text-white font-semibold text-lg mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+                    </svg>
+                    Hubungi Admin
+                </h3>
+                <p class="text-white/60 text-sm mb-4">Jelaskan masalah Anda dan tim kami akan segera membalas.</p>
+                <input type="text" id="ticketSubject" placeholder="Subjek (contoh: Masalah login)"
+                    class="w-full px-4 py-2.5 rounded-xl bg-white/10 border border-white/10 text-white text-sm placeholder:text-white/40 focus:outline-none focus:border-blue-500 mb-3">
+                <textarea id="ticketMessage" placeholder="Jelaskan masalah Anda..."
+                    class="w-full px-4 py-2.5 rounded-xl bg-white/10 border border-white/10 text-white text-sm placeholder:text-white/40 focus:outline-none focus:border-blue-500 h-24 resize-none mb-4"></textarea>
+                <div class="flex gap-2">
+                    <button onclick="closeContactAdminModal()" class="flex-1 px-4 py-2.5 rounded-xl bg-white/10 text-white/70 text-sm hover:bg-white/20 transition">
+                        Batal
+                    </button>
+                    <button onclick="submitSupportTicket()" class="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white text-sm hover:opacity-90 transition">
+                        Kirim
+                    </button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
+    function closeContactAdminModal() {
+        document.getElementById('contactAdminModal')?.remove();
+    }
+
+    async function submitSupportTicket() {
+        const subject = document.getElementById('ticketSubject').value.trim();
+        const message = document.getElementById('ticketMessage').value.trim();
+
+        if (!subject || !message) {
+            alert('Mohon isi subjek dan pesan');
+            return;
+        }
+
+        try {
+            const response = await fetch('/support/ticket', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ subject, message }),
+            });
+
+            const data = await response.json();
+            closeContactAdminModal();
+
+            if (data.success) {
+                supportTicketId = data.ticket.id;
+                addBotMessage('✅ Tiket support berhasil dibuat! Admin akan segera membalas. Anda akan menerima notifikasi saat ada balasan.');
+                startSupportPolling();
+                saveChatToStorage();
+            } else {
+                addBotMessage('❌ Gagal membuat tiket. Silakan coba lagi.');
+            }
+        } catch (error) {
+            console.error('Ticket error:', error);
+            addBotMessage('❌ Terjadi kesalahan. Silakan coba lagi.');
+        }
+    }
+
+    function startSupportPolling() {
+        if (supportPollingInterval) clearInterval(supportPollingInterval);
+        supportPollingInterval = setInterval(checkSupportReplies, 5000);
+    }
+
+    async function checkSupportReplies() {
+        if (!supportTicketId) return;
+
+        try {
+            const response = await fetch(`/support/messages/${supportTicketId}`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                },
+            });
+
+            const data = await response.json();
+            if (data.messages) {
+                const adminReplies = data.messages.filter(m => m.is_from_admin && !m.displayed);
+                adminReplies.forEach(msg => {
+                    addAdminReplyMessage(msg.message, msg.sender?.name || 'Admin');
+                    msg.displayed = true;
+                });
+                if (adminReplies.length > 0) saveChatToStorage();
+            }
+        } catch (e) {
+            console.log('Polling error:', e);
+        }
+    }
+
+    async function sendSupportReply(text) {
+        if (!supportTicketId) return;
+
+        try {
+            await fetch('/support/message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ ticket_id: supportTicketId, message: text }),
+            });
+            saveChatToStorage();
+        } catch (e) {
+            console.error('Reply error:', e);
+        }
+    }
+
+    function addAdminReplyMessage(text, adminName) {
+        const messages = document.getElementById('chatMessages');
+        const time = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+        messages.innerHTML += `
+            <div class="flex items-start gap-2">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <div class="bg-green-500/20 border border-green-500/30 rounded-xl rounded-tl-none px-3 py-2 max-w-[85%]">
+                    <p class="text-green-300 text-xs font-medium mb-1">${escapeHtml(adminName)}</p>
+                    <p class="text-white text-sm">${escapeHtml(text)}</p>
+                    <p class="text-white/40 text-xs mt-1">${time}</p>
+                </div>
+            </div>
+        `;
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    // ======== HELPER FUNCTIONS ========
     function showTypingIndicator() {
         const messages = document.getElementById('chatMessages');
         const indicator = document.createElement('div');
@@ -204,8 +397,7 @@
     }
 
     function hideTypingIndicator() {
-        const indicator = document.getElementById('typingIndicator');
-        if (indicator) indicator.remove();
+        document.getElementById('typingIndicator')?.remove();
     }
 
     function addUserMessage(text) {
@@ -221,6 +413,7 @@
             </div>
         `;
         messages.scrollTop = messages.scrollHeight;
+        saveChatToStorage();
     }
 
     function addBotMessage(text) {
@@ -249,28 +442,19 @@
         return div.innerHTML;
     }
 
-    // Format markdown untuk output AI yang lebih rapih
     function formatMarkdown(text) {
         if (!text) return '';
-
         return text
-            // Bold: **text** atau __text__
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
             .replace(/__(.*?)__/g, '<strong>$1</strong>')
-            // Italic: *text* atau _text_
             .replace(/\*([^*]+)\*/g, '<em>$1</em>')
             .replace(/_([^_]+)_/g, '<em>$1</em>')
-            // Numbered list: 1. item
             .replace(/^\d+\.\s+(.*)$/gm, '<li class="ml-4 list-decimal">$1</li>')
-            // Bullet list: - item atau * item
             .replace(/^[\-\*]\s+(.*)$/gm, '<li class="ml-4 list-disc">$1</li>')
-            // Headers
             .replace(/^###\s+(.*)$/gm, '<strong class="text-blue-300">$1</strong>')
             .replace(/^##\s+(.*)$/gm, '<strong class="text-blue-300 text-base">$1</strong>')
-            // Line breaks
             .replace(/\n\n/g, '<br><br>')
             .replace(/\n/g, '<br>')
-            // Links
             .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-400 underline" target="_blank">$1</a>');
     }
 </script>

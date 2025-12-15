@@ -125,6 +125,20 @@
                 <span>Log Aktivitas</span>
             </a>
 
+            <a href="{{ route('master.blockchain') }}" class="nav-item {{ request()->routeIs('master.blockchain') ? 'active' : '' }}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                </svg>
+                <span>Blockchain Wallet</span>
+            </a>
+
+            <a href="{{ route('master.support') }}" class="nav-item {{ request()->routeIs('master.support*') ? 'active' : '' }}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+                <span>Support Tickets</span>
+            </a>
+
             <div class="border-t border-white/10 my-4 pt-4">
                 <p class="text-white/40 text-xs px-3 mb-2">PANEL LAINNYA</p>
             </div>

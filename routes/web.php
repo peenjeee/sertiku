@@ -331,4 +331,33 @@ Route::middleware(['auth', \App\Http\Middleware\EnsureUserIsMaster::class])->pre
 
     // Logs
     Route::get('/logs', [\App\Http\Controllers\MasterController::class, 'logs'])->name('logs');
+
+    // Support Tickets (Master can see all)
+    Route::get('/support', [\App\Http\Controllers\SupportController::class, 'masterIndex'])->name('support');
+    Route::get('/support/{ticket}', [\App\Http\Controllers\SupportController::class, 'masterShow'])->name('support.show');
+    Route::post('/support/{ticket}/reply', [\App\Http\Controllers\SupportController::class, 'adminReply'])->name('support.reply');
 });
+
+/*
+|--------------------------------------------------------------------------
+| Support Ticket Routes (User side - AJAX)
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth'])->prefix('support')->name('support.')->group(function () {
+    Route::post('/ticket', [\App\Http\Controllers\SupportController::class, 'createTicket'])->name('ticket.create');
+    Route::post('/message', [\App\Http\Controllers\SupportController::class, 'sendMessage'])->name('message.send');
+    Route::get('/messages/{ticket}', [\App\Http\Controllers\SupportController::class, 'getMessages'])->name('messages');
+    Route::get('/tickets', [\App\Http\Controllers\SupportController::class, 'userTickets'])->name('tickets');
+    Route::post('/ticket/{ticket}/close', [\App\Http\Controllers\SupportController::class, 'closeTicket'])->name('ticket.close');
+});
+
+// Admin support routes (add to admin group)
+Route::middleware(['auth', 'admin'])->prefix('admin/support')->name('admin.support.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\SupportController::class, 'adminIndex'])->name('index');
+    Route::get('/{ticket}', [\App\Http\Controllers\SupportController::class, 'adminShow'])->name('show');
+    Route::post('/{ticket}/reply', [\App\Http\Controllers\SupportController::class, 'adminReply'])->name('reply');
+});
+
+// API for unread count
+Route::middleware(['auth'])->get('/api/support/unread', [\App\Http\Controllers\SupportController::class, 'unreadCount']);
