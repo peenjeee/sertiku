@@ -103,4 +103,29 @@ class MasterController extends Controller
     {
         return view('master.logs');
     }
+
+    /**
+     * Blockchain Wallet Dashboard
+     */
+    public function blockchain()
+    {
+        $blockchainService = new \App\Services\BlockchainService();
+        $walletInfo        = $blockchainService->getWalletInfo();
+
+        // Get blockchain certificates stats
+        $blockchainStats = [
+            'total_blockchain' => Certificate::whereNotNull('blockchain_tx_hash')->count(),
+            'pending'          => Certificate::where('blockchain_status', 'pending')->count(),
+            'confirmed'        => Certificate::where('blockchain_status', 'confirmed')->count(),
+            'failed'           => Certificate::where('blockchain_status', 'failed')->count(),
+        ];
+
+        // Recent blockchain transactions
+        $recentBlockchainTx = Certificate::whereNotNull('blockchain_tx_hash')
+            ->latest()
+            ->take(10)
+            ->get();
+
+        return view('master.blockchain', compact('walletInfo', 'blockchainStats', 'recentBlockchainTx'));
+    }
 }
