@@ -1,23 +1,21 @@
 # 🔐 SertiKu
 
 Platform terdepan untuk menerbitkan, mengelola, dan memverifikasi sertifikat digital dengan teknologi QR Code dan blockchain
-
 ![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=flat-square&logo=laravel&logoColor=white)
 ![PHP](https://img.shields.io/badge/PHP-8.3+-777BB4?style=flat-square&logo=php&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.0+-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
 
 ## ✨ Fitur
 
-- 🔑 Login dengan Google dan Address Wallet
-- 🎨 UI Modern dengan TailwindCSS
-- 📄 Upload dan kelola sertifikat digital
-- 🔍 Verifikasi sertifikat dengan QR Code
-- 📊 Dashboard analytics dan laporan
-- 🔗 Integrasi blockchain untuk keamanan
-- 📱 Responsive design untuk mobile
-- 🔔 Notifikasi real-time
-- 📈 Tracking status sertifikat
-
+-   🔑 Login dengan Google dan Address Wallet
+-   🎨 UI Modern dengan TailwindCSS
+-   📄 Upload dan kelola sertifikat digital
+-   🔍 Verifikasi sertifikat dengan QR Code
+-   📊 Dashboard analytics dan laporan
+-   🔗 Integrasi blockchain untuk keamanan
+-   📱 Responsive design untuk mobile
+-   🔔 Notifikasi real-time
+-   📈 Tracking status sertifikat
 
 ## 🚀 Instalasi
 
@@ -79,17 +77,17 @@ Buka: http://127.0.0.1:8000/
 sertiku/
 ├── app/
 │   ├── Http/
-│   │   └── Controllers/ 
-│   └── Models/                      
+│   │   └── Controllers/
+│   └── Models/
 ├── config/
-│   └── services.php                        
+│   └── services.php
 ├── database/
 │   └── migrations/
 ├── resources/
-│   └── views/          
+│   └── views/
 ├── routes/
-│   └── web.php                             
-├── .env                                    
+│   └── web.php
+├── .env
 └── composer.json
 ```
 
