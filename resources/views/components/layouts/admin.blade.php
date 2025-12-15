@@ -272,11 +272,7 @@
         <aside id="sidebar" class="sidebar fixed left-0 top-0 h-screen flex flex-col z-40">
             <!-- Logo Section -->
             <div class="logo-section flex items-center gap-3 px-6 py-6 border-b border-white/10">
-                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                    </svg>
-                </div>
+                <img src="{{ asset('favicon.svg') }}" alt="SertiKu" class="w-10 h-10 flex-shrink-0">
                 <div class="logo-text">
                     <p class="text-white font-bold text-lg">SertiKu</p>
                     <p class="text-white/50 text-xs">Admin Dashboard</p>

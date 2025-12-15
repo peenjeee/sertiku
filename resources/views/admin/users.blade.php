@@ -90,7 +90,9 @@
                             <span class="text-gray-600 text-sm">{{ $user->email }}</span>
                         </td>
                         <td class="py-4 px-4">
-                            @if($user->account_type === 'lembaga')
+                            @if($user->account_type === 'admin')
+                            <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">Admin</span>
+                            @elseif($user->account_type === 'lembaga')
                             <span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">Lembaga</span>
                             @else
                             <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">Pengguna</span>

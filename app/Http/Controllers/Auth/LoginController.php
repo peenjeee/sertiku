@@ -13,6 +13,10 @@ class LoginController extends Controller
      */
     protected function getDashboardRoute($user)
     {
+        // Admin users go to admin panel
+        if ($user->is_admin) {
+            return route('admin.dashboard');
+        }
         if ($user->isInstitution()) {
             return route('lembaga.dashboard');
         }
@@ -40,22 +44,28 @@ class LoginController extends Controller
         /**
          * 1) CEK 3 AKUN DUMMY DULU
          * ----------------------------------------------------
-         * admin@sertiku.my.id   / admin123
-         * lembaga@sertiku.my.id / lembaga123
-         * user@sertiku.my.id    / user123
          */
         $dummyUsers = [
-            'admin@sertiku.my.id'   => [
-                'name'     => 'Admin SertiKu',
-                'password' => 'admin123',
+            'admin@sertiku.web.id'   => [
+                'name'              => 'Admin SertiKu',
+                'password'          => 'Admin123',
+                'is_admin'          => true,
+                'account_type'      => 'admin',
+                'profile_completed' => true,
             ],
-            'lembaga@sertiku.my.id' => [
-                'name'     => 'Lembaga SertiKu',
-                'password' => 'lembaga123',
+            'lembaga@sertiku.web.id' => [
+                'name'              => 'Lembaga SertiKu',
+                'password'          => 'lembaga123',
+                'is_admin'          => false,
+                'account_type'      => 'lembaga',
+                'profile_completed' => true,
             ],
-            'user@sertiku.my.id'    => [
-                'name'     => 'User SertiKu',
-                'password' => 'user123',
+            'user@sertiku.web.id'    => [
+                'name'              => 'User SertiKu',
+                'password'          => 'user123',
+                'is_admin'          => false,
+                'account_type'      => 'pengguna',
+                'profile_completed' => true,
             ],
         ];
 
@@ -64,13 +74,26 @@ class LoginController extends Controller
             $user = User::firstOrCreate(
                 ['email' => $email],
                 [
-                    'name'     => $dummyUsers[$email]['name'],
-                    'password' => bcrypt($dummyUsers[$email]['password']),
+                    'name'              => $dummyUsers[$email]['name'],
+                    'password'          => bcrypt($dummyUsers[$email]['password']),
+                    'account_type'      => $dummyUsers[$email]['account_type'],
+                    'profile_completed' => $dummyUsers[$email]['profile_completed'],
                 ]
             );
 
+            // Update user fields from dummy config (syncs existing users)
+            $user->is_admin          = $dummyUsers[$email]['is_admin'];
+            $user->account_type      = $dummyUsers[$email]['account_type'];
+            $user->profile_completed = $dummyUsers[$email]['profile_completed'];
+            $user->save();
+
             Auth::login($user, true);
             $request->session()->regenerate();
+
+            // Admin users skip onboarding
+            if ($user->is_admin) {
+                return redirect()->route('admin.dashboard');
+            }
 
             // Check if profile is completed
             if (! $user->isProfileCompleted()) {
@@ -89,6 +112,12 @@ class LoginController extends Controller
 
             // Check if profile is completed
             $user = Auth::user();
+
+            // Admin users skip onboarding and go to admin panel
+            if ($user->is_admin) {
+                return redirect()->route('admin.dashboard');
+            }
+
             if (! $user->isProfileCompleted()) {
                 return redirect()->route('onboarding');
             }

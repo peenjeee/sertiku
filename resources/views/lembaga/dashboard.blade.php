@@ -1,7 +1,7 @@
 <x-layouts.lembaga>
     <div class="space-y-6 lg:space-y-8">
         <!-- Welcome Banner -->
-        <div class="welcome-banner relative rounded-2xl lg:rounded-3xl p-5 lg:p-8 overflow-hidden">
+        <div class="welcome-banner relative rounded-2xl lg:rounded-3xl p-5 lg:p-8 overflow-hidden animate-fade-in">
             <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h1 class="text-xl sm:text-2xl lg:text-3xl text-white font-bold mb-1 lg:mb-2">Selamat Datang, {{ Auth::user()->institution_name ?? Auth::user()->name }}! 👋</h1>
@@ -83,7 +83,7 @@
         <!-- Quick Action Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <!-- Terbitkan Sertifikat -->
-            <a href="{{ route('lembaga.sertifikat.create') }}" class="gradient-card-blue rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer">
+            <a href="{{ route('lembaga.sertifikat.create') }}" class="gradient-card-blue rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-1">
                 <div class="flex items-center gap-3 lg:gap-4">
                     <div class="icon-circle-blue w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
                         <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -98,7 +98,7 @@
             </a>
 
             <!-- Galeri Template -->
-            <a href="{{ route('lembaga.template.index') }}" class="gradient-card-green rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer">
+            <a href="{{ route('lembaga.template.index') }}" class="gradient-card-green rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-2">
                 <div class="flex items-center gap-3 lg:gap-4">
                     <div class="icon-circle-green w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
                         <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -113,7 +113,7 @@
             </a>
 
             <!-- Daftar Sertifikat -->
-            <a href="{{ route('lembaga.sertifikat.index') }}" class="gradient-card-purple rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer">
+            <a href="{{ route('lembaga.sertifikat.index') }}" class="gradient-card-purple rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-3">
                 <div class="flex items-center gap-3 lg:gap-4">
                     <div class="icon-circle-purple w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
                         <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,7 +131,7 @@
         <!-- Stats Cards -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
             <!-- Total Sertifikat -->
-            <div class="stat-card-blue rounded-xl lg:rounded-2xl p-4 lg:p-6">
+            <div class="stat-card-blue rounded-xl lg:rounded-2xl p-4 lg:p-6 hover-lift animate-fade-in-up stagger-1">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-[#1E40AF] text-xs lg:text-sm font-medium">Total Sertifikat</p>
@@ -146,7 +146,7 @@
             </div>
 
             <!-- Sertifikat Aktif -->
-            <div class="stat-card-green rounded-xl lg:rounded-2xl p-4 lg:p-6">
+            <div class="stat-card-green rounded-xl lg:rounded-2xl p-4 lg:p-6 hover-lift animate-fade-in-up stagger-2">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-[#166534] text-xs lg:text-sm font-medium">Sertifikat Aktif</p>
@@ -161,7 +161,7 @@
             </div>
 
             <!-- Bulan Ini -->
-            <div class="stat-card-orange rounded-xl lg:rounded-2xl p-4 lg:p-6">
+            <div class="stat-card-orange rounded-xl lg:rounded-2xl p-4 lg:p-6 hover-lift animate-fade-in-up stagger-3">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-[#9A3412] text-xs lg:text-sm font-medium">Bulan Ini</p>
@@ -176,7 +176,7 @@
             </div>
 
             <!-- Total Verifikasi -->
-            <div class="stat-card-purple rounded-xl lg:rounded-2xl p-4 lg:p-6">
+            <div class="stat-card-purple rounded-xl lg:rounded-2xl p-4 lg:p-6 hover-lift animate-fade-in-up stagger-4">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-[#6B21A8] text-xs lg:text-sm font-medium">Total Verifikasi</p>
@@ -192,7 +192,7 @@
         </div>
 
         <!-- Recent Certificates Card -->
-        <div class="glass-card rounded-xl lg:rounded-2xl overflow-hidden">
+        <div class="glass-card rounded-xl lg:rounded-2xl overflow-hidden animate-fade-in">
             <!-- Header -->
             <div class="header-gradient p-4 lg:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div class="flex items-center gap-3">
