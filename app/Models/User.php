@@ -38,6 +38,7 @@ class User extends Authenticatable
         'wallet_address',
         'profile_completed',
         'package_id',
+        'is_admin',
     ];
 
     /**

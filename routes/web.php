@@ -219,3 +219,36 @@ Route::middleware(['auth'])->prefix('lembaga')->name('lembaga.')->group(function
     Route::get('/template/upload', [\App\Http\Controllers\LembagaController::class, 'uploadTemplate'])->name('template.upload');
     Route::post('/template', [\App\Http\Controllers\LembagaController::class, 'storeTemplate'])->name('template.store');
 });
+
+/*
+|--------------------------------------------------------------------------
+| Admin Dashboard Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Dashboard
+    Route::get('/', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
+
+    // Analytics
+    Route::get('/analytics', [\App\Http\Controllers\AdminController::class, 'analytics'])->name('analytics');
+
+    // Kelola Pengguna
+    Route::get('/users', [\App\Http\Controllers\AdminController::class, 'users'])->name('users');
+    Route::get('/users/{user}', [\App\Http\Controllers\AdminController::class, 'showUser'])->name('users.show');
+    Route::patch('/users/{user}/toggle', [\App\Http\Controllers\AdminController::class, 'toggleUser'])->name('users.toggle');
+
+    // Backup & Restore
+    Route::get('/backup', [\App\Http\Controllers\AdminController::class, 'backup'])->name('backup');
+    Route::post('/backup/export', [\App\Http\Controllers\AdminController::class, 'exportData'])->name('backup.export');
+    Route::post('/backup/create', [\App\Http\Controllers\AdminController::class, 'createBackup'])->name('backup.create');
+
+    // Settings
+    Route::get('/settings', [\App\Http\Controllers\AdminController::class, 'settings'])->name('settings');
+    Route::post('/settings', [\App\Http\Controllers\AdminController::class, 'updateSettings'])->name('settings.update');
+
+    // Profile
+    Route::get('/profile', [\App\Http\Controllers\AdminController::class, 'profile'])->name('profile');
+    Route::post('/profile', [\App\Http\Controllers\AdminController::class, 'updateProfile'])->name('profile.update');
+    Route::post('/profile/password', [\App\Http\Controllers\AdminController::class, 'updatePassword'])->name('profile.password');
+});
