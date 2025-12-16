@@ -159,8 +159,18 @@ class LoginController extends Controller
      */
     public function loginWallet(Request $request)
     {
-        $data = $request->validate([
+        // Build validation rules
+        $rules = [
             'wallet_address' => ['required', 'string'],
+        ];
+
+        // Add reCAPTCHA validation if enabled
+        if (config('recaptcha.enabled') && config('recaptcha.site_key')) {
+            $rules['g-recaptcha-response'] = ['required', new Recaptcha];
+        }
+
+        $data = $request->validate($rules, [
+            'g-recaptcha-response.required' => 'Mohon verifikasi bahwa Anda bukan robot.',
         ]);
 
         $wallet = strtolower($data['wallet_address']);

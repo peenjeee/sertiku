@@ -74,10 +74,27 @@
 
         // Wallet connect status
         let connectedAddress = null;
+        
+        // Wallet captcha status
+        let walletCaptchaVerified = {{ config('recaptcha.enabled') && config('recaptcha.site_key') ? 'false' : 'true' }};
+        
+        // Callback when wallet captcha is verified
+        function onWalletCaptchaSuccess(token) {
+            walletCaptchaVerified = true;
+            const errorEl = document.getElementById('wallet-captcha-error');
+            if (errorEl) errorEl.classList.add('hidden');
+        }
 
         // Connect wallet using specific provider
         async function connectWallet(walletType, event) {
             if (event) event.preventDefault();
+            
+            // Check captcha first
+            if (!walletCaptchaVerified) {
+                const errorEl = document.getElementById('wallet-captcha-error');
+                if (errorEl) errorEl.classList.remove('hidden');
+                return;
+            }
 
             const statusEl = document.getElementById('wallet-status');
             const errorEl = document.getElementById('wallet-error');
@@ -238,8 +255,15 @@
                 statusEl.classList.remove('hidden');
             }
 
-            // Submit form
+            // Submit form with captcha response
             document.getElementById('wallet_address').value = address;
+            
+            // Get captcha response from wallet tab
+            const captchaResponse = document.querySelector('#wallet-recaptcha textarea[name="g-recaptcha-response"]');
+            if (captchaResponse) {
+                document.getElementById('wallet_recaptcha_response').value = captchaResponse.value;
+            }
+            
             document.getElementById('walletLoginForm').submit();
         }
     </script>
@@ -711,6 +735,20 @@
                                 </button>
                             </div>
 
+                            {{-- Google reCAPTCHA for Wallet --}}
+                            @if(config('recaptcha.enabled') && config('recaptcha.site_key'))
+                                <div class="space-y-2">
+                                    <div class="flex justify-center">
+                                        <div class="g-recaptcha rounded-xl overflow-hidden" id="wallet-recaptcha"
+                                            data-sitekey="{{ config('recaptcha.site_key') }}" data-theme="dark"
+                                            data-callback="onWalletCaptchaSuccess"></div>
+                                    </div>
+                                    <p id="wallet-captcha-error" class="hidden mt-1 text-xs text-red-400 text-center">
+                                        Mohon verifikasi bahwa Anda bukan robot.
+                                    </p>
+                                </div>
+                            @endif
+
                             <!-- Info Box Bottom -->
                             <div class="bg-[#1E3A8F]/30 border border-[#3B82F6]/30 rounded-[14px] p-4">
                                 <div class="flex gap-3">
@@ -753,6 +791,7 @@
     <form id="walletLoginForm" method="POST" action="{{ route('login.wallet') }}" class="hidden">
         @csrf
         <input type="hidden" id="wallet_address" name="wallet_address">
+        <input type="hidden" id="wallet_recaptcha_response" name="g-recaptcha-response">
     </form>
 
     {{-- Legal Popup Script --}}
