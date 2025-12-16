@@ -2,9 +2,25 @@
 
 Platform terdepan untuk menerbitkan, mengelola, dan memverifikasi sertifikat digital dengan teknologi QR Code dan blockchain.
 
-![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=flat-square&logo=laravel&logoColor=white)
-![PHP](https://img.shields.io/badge/PHP-8.3+-777BB4?style=flat-square&logo=php&logoColor=white)
-![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.0+-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+[![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com/)
+[![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=flat-square&logo=php&logoColor=white)](https://www.php.net/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1+-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Vite](https://img.shields.io/badge/Vite-7.0+-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0+-4479A1?style=flat-square&logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![Blade](https://img.shields.io/badge/Blade-Template-FF2D20?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com/docs/blade)
+
+[![Cloudflare](https://img.shields.io/badge/Cloudflare-Protected-F38020?style=flat-square&logo=cloudflare&logoColor=white)](https://www.cloudflare.com/)
+[![Turnstile](https://img.shields.io/badge/Turnstile-CAPTCHA-F38020?style=flat-square&logo=cloudflare&logoColor=white)](https://www.cloudflare.com/products/turnstile/)
+[![reCAPTCHA](https://img.shields.io/badge/reCAPTCHA-v2-4285F4?style=flat-square&logo=google&logoColor=white)](https://www.google.com/recaptcha/)
+[![Google OAuth](https://img.shields.io/badge/Google-OAuth-4285F4?style=flat-square&logo=google&logoColor=white)](https://developers.google.com/identity)
+
+[![Ethereum](https://img.shields.io/badge/Ethereum-Web3-3C3C3D?style=flat-square&logo=ethereum&logoColor=white)](https://ethereum.org/)
+[![Polygon](https://img.shields.io/badge/Polygon-Blockchain-8247E5?style=flat-square&logo=polygon&logoColor=white)](https://polygon.technology/)
+[![Ethers.js](https://img.shields.io/badge/Ethers.js-6.0-3C3C3D?style=flat-square&logo=ethereum&logoColor=white)](https://docs.ethers.org/)
+[![WalletConnect](https://img.shields.io/badge/WalletConnect-Web3Modal-3B99FC?style=flat-square&logo=walletconnect&logoColor=white)](https://walletconnect.com/)
+
+[![Midtrans](https://img.shields.io/badge/Midtrans-Payment-00A9E0?style=flat-square&logo=money&logoColor=white)](https://midtrans.com/)
+[![QR Code](https://img.shields.io/badge/QR_Code-Generator-000000?style=flat-square&logo=qrcode&logoColor=white)](https://github.com/SimpleSoftwareIO/simple-qrcode)
 
 ## ✨ Fitur
 
