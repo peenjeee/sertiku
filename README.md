@@ -1,21 +1,31 @@
 # 🔐 SertiKu
 
-Platform terdepan untuk menerbitkan, mengelola, dan memverifikasi sertifikat digital dengan teknologi QR Code dan blockchain
+Platform terdepan untuk menerbitkan, mengelola, dan memverifikasi sertifikat digital dengan teknologi QR Code dan blockchain.
+
 ![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=flat-square&logo=laravel&logoColor=white)
 ![PHP](https://img.shields.io/badge/PHP-8.3+-777BB4?style=flat-square&logo=php&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.0+-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
 
 ## ✨ Fitur
 
--   🔑 Login dengan Google dan Address Wallet
--   🎨 UI Modern dengan TailwindCSS
--   📄 Upload dan kelola sertifikat digital
--   🔍 Verifikasi sertifikat dengan QR Code
--   📊 Dashboard analytics dan laporan
--   🔗 Integrasi blockchain untuk keamanan
--   📱 Responsive design untuk mobile
--   🔔 Notifikasi real-time
--   📈 Tracking status sertifikat
+### Autentikasi & Keamanan
+- 🔑 Multi-method Login: Email/Password, Google OAuth, Wallet (MetaMask/WalletConnect)
+- 📧 Verifikasi Email OTP - Kode 6 digit dikirim ke email untuk aktivasi akun
+- 🛡️ Google reCAPTCHA v2 - Proteksi bot pada form login dan register
+- 🔒 Reset Password via Email - Link reset dengan token yang aman
+- 🍪 Cookie Consent Banner - Kepatuhan regulasi privasi
+
+### Sertifikat Digital
+- 📄 Upload dan kelola sertifikat digital
+- 🔍 Verifikasi sertifikat dengan QR Code
+- 🔗 Integrasi blockchain untuk keamanan dan keaslian
+- 📈 Tracking status sertifikat
+
+### Dashboard & Manajemen
+- 📊 Dashboard analytics dan laporan
+- 👥 Multi-role: User, Lembaga, Admin, Master
+- 🔔 Notifikasi real-time
+- 📱 Responsive design untuk mobile
 
 ## 🚀 Instalasi
 
@@ -26,6 +36,7 @@ cd sertiku
 
 # Install dependencies
 composer install
+npm install
 
 # Setup environment
 cp .env.example .env
@@ -33,9 +44,14 @@ php artisan key:generate
 
 # Buat database & jalankan migration
 php artisan migrate
+
+# Clear cache
+php artisan optimize:clear
 ```
 
-## ⚙️ Konfigurasi Google OAuth
+## ⚙️ Konfigurasi
+
+### Google OAuth
 
 1. Buka [Google Cloud Console](https://console.cloud.google.com/)
 2. Buat project baru
@@ -44,32 +60,119 @@ php artisan migrate
 5. Tambahkan redirect URI: `http://127.0.0.1:8000/auth/google/callback`
 6. Copy Client ID & Client Secret
 
-Edit `.env`:
-
 ```env
 GOOGLE_CLIENT_ID=your-client-id
 GOOGLE_CLIENT_SECRET=your-client-secret
 GOOGLE_REDIRECT_URI=http://127.0.0.1:8000/auth/google/callback
 ```
 
-## 🎨 Menjalankan TailwindCSS
+### Gmail SMTP (untuk OTP & Reset Password)
 
-```bash
-# Install Node.js dependencies
-npm install
+1. Buka [Google App Passwords](https://myaccount.google.com/apppasswords)
+2. Buat App Password baru (pilih Mail)
+3. Copy password 16 karakter
+
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=your-email@gmail.com
+MAIL_PASSWORD=your-app-password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS="noreply@sertiku.web.id"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+### Google reCAPTCHA v2
+
+1. Buka [reCAPTCHA Admin](https://www.google.com/recaptcha/admin)
+2. Daftarkan site baru (pilih reCAPTCHA v2 "I'm not a robot")
+3. Tambahkan domain: `localhost`, `127.0.0.1`, dan domain production
+
+```env
+RECAPTCHA_ENABLED=true
+RECAPTCHA_SITE_KEY=your-site-key
+RECAPTCHA_SECRET_KEY=your-secret-key
+```
+
+### Polygon Blockchain (untuk Sertifikat On-Chain)
+
+SertiKu menggunakan Polygon (Amoy Testnet) untuk menyimpan hash sertifikat di blockchain.
+
+1. Buat wallet di [MetaMask](https://metamask.io/)
+2. Dapatkan MATIC testnet dari [Polygon Faucet](https://faucet.polygon.technology/)
+3. Deploy smart contract atau gunakan contract yang sudah ada
+
+```env
+BLOCKCHAIN_ENABLED=true
+POLYGON_RPC_URL=https://rpc-amoy.polygon.technology/
+POLYGON_CHAIN_ID=80002
+POLYGON_PRIVATE_KEY=your-wallet-private-key
+POLYGON_WALLET_ADDRESS=your-wallet-address
+POLYGON_CONTRACT_ADDRESS=your-contract-address
+POLYGON_EXPLORER_URL=https://amoy.polygonscan.com
+```
+
+>
+
+### Midtrans Payment Gateway (Opsional)
+
+Untuk fitur pembayaran paket premium:
+
+```env
+MIDTRANS_SERVER_KEY=your-server-key
+MIDTRANS_CLIENT_KEY=your-client-key
+MIDTRANS_IS_PRODUCTION=false
+MIDTRANS_IS_3DS=true
 ```
 
 ## ▶️ Menjalankan
 
 ```bash
-# Jalankan TailwindCSS (terminal pertama)
+# Terminal 1: Jalankan Vite/TailwindCSS
 npm run dev
 
-# Jalankan Laravel server (terminal kedua)
+# Terminal 2: Jalankan Laravel server
 php artisan serve
 ```
 
 Buka: http://127.0.0.1:8000/
+
+## 👤 Akun Demo
+
+<table>
+  <thead>
+    <tr>
+      <th>Role</th>
+      <th>Email</th>
+      <th>Password</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>👤 User</td>
+      <td><code>user@sertiku.web.id</code></td>
+      <td><code>User1234</code></td>
+    </tr>
+    <tr>
+      <td>🏢 Lembaga</td>
+      <td><code>lembaga@sertiku.web.id</code></td>
+      <td><code>Lembaga1234</code></td>
+    </tr>
+    <tr>
+      <td>⚙️ Admin</td>
+      <td><code>admin@sertiku.web.id</code></td>
+      <td><code>Admin1234</code></td>
+    </tr>
+    <tr>
+      <td>👑 Master</td>
+      <td><code>master@sertiku.web.id</code></td>
+      <td><code>Master123</code></td>
+    </tr>
+  </tbody>
+</table>
+
+> **Note:** Akun dengan domain `@sertiku.web.id` tidak memerlukan verifikasi OTP.
 
 ## 📁 Struktur Project
 
@@ -77,46 +180,56 @@ Buka: http://127.0.0.1:8000/
 sertiku/
 ├── app/
 │   ├── Http/
-│   │   └── Controllers/
-│   └── Models/
+│   │   ├── Controllers/
+│   │   │   └── Auth/           # Login, Register, OTP, Password Reset
+│   │   └── Middleware/
+│   ├── Mail/                   # Mailable classes (OTP, dll)
+│   ├── Models/
+│   └── Rules/                  # Custom validation (reCAPTCHA)
 ├── config/
-│   └── services.php
+│   ├── recaptcha.php           # Konfigurasi reCAPTCHA
+│   └── services.php            # Google OAuth config
 ├── database/
 │   └── migrations/
 ├── resources/
 │   └── views/
+│       ├── auth/               # Login, Register, OTP, Reset Password
+│       ├── emails/             # Email templates
+│       └── components/         # Blade components
 ├── routes/
 │   └── web.php
-├── .env
-└── composer.json
+└── .env
 ```
 
-## 📝 License
+## 🔐 Alur Autentikasi
 
-MIT License
+### Register
+```
+Form Register → Kirim OTP → Verifikasi OTP → Dashboard
+```
 
-Copyright (c) 2024 MIT License
+### Login (Email belum terverifikasi)
+```
+Login → Kirim OTP → Verifikasi OTP → Dashboard
+```
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+### Login (Email sudah terverifikasi)
+```
+Login → Dashboard
+```
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+### Wallet Login
+```
+Connect Wallet → Input Email → Kirim OTP → Verifikasi → Dashboard
+```
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+### Reset Password
+```
+Forgot Password → Kirim Link → Klik Link → Input Password Baru → Login
+```
 
 ---
 
 <p align="center">
-  Made with ❤️ by SertiKu Team</a>
+  Made with ❤️ by SertiKu Team
 </p>
