@@ -10,6 +10,14 @@
 
     {{-- Favicon --}}
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
+
+    {{-- PWA Manifest --}}
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="theme-color" content="#3B82F6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SertiKu">
 
     {{-- Google Fonts - Poppins --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -541,6 +549,27 @@
 
     {{-- Cookie Consent Popup --}}
     <x-cookie-consent />
+
+    {{-- PWA Install Prompt --}}
+    <x-pwa-install-prompt />
+
+    {{-- Notification Permission Prompt --}}
+    <x-notification-prompt />
+
+    {{-- Service Worker Registration --}}
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('[SW] Registered:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('[SW] Registration failed:', error);
+                    });
+            });
+        }
+    </script>
 </body>
 
 </html>

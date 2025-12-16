@@ -1,0 +1,58 @@
+{
+    "name": "SertiKu - Sertifikat Digital",
+    "short_name": "SertiKu",
+    "description": "Platform sertifikat digital dengan QR Code dan blockchain",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#050C1F",
+    "theme_color": "#3B82F6",
+    "orientation": "portrait-primary",
+    "lang": "id",
+    "categories": [
+        "education",
+        "productivity",
+        "utilities"
+    ],
+    "icons": [
+        {
+            "src": "/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        },
+        {
+            "src": "/icons/icon.svg",
+            "sizes": "512x512",
+            "type": "image/svg+xml",
+            "purpose": "maskable"
+        }
+    ],
+    "screenshots": [],
+    "shortcuts": [
+        {
+            "name": "Verifikasi Sertifikat",
+            "short_name": "Verifikasi",
+            "description": "Verifikasi keaslian sertifikat",
+            "url": "/verifikasi",
+            "icons": [
+                {
+                    "src": "/icons/icon-192x192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        },
+        {
+            "name": "Dashboard",
+            "short_name": "Dashboard",
+            "description": "Lihat dashboard Anda",
+            "url": "/dashboard",
+            "icons": [
+                {
+                    "src": "/icons/icon-192x192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        }
+    ]
+}
