@@ -12,6 +12,7 @@ Platform terdepan untuk menerbitkan, mengelola, dan memverifikasi sertifikat dig
 - 🔑 Multi-method Login: Email/Password, Google OAuth, Wallet (MetaMask/WalletConnect)
 - 📧 Verifikasi Email OTP - Kode 6 digit dikirim ke email untuk aktivasi akun
 - 🛡️ Google reCAPTCHA v2 - Proteksi bot pada form login dan register
+- ☁️ Cloudflare Turnstile - CAPTCHA tambahan untuk keamanan berlapis
 - 🔒 Reset Password via Email - Link reset dengan token yang aman
 - 🍪 Cookie Consent Banner - Kepatuhan regulasi privasi
 
@@ -94,6 +95,24 @@ RECAPTCHA_ENABLED=true
 RECAPTCHA_SITE_KEY=your-site-key
 RECAPTCHA_SECRET_KEY=your-secret-key
 ```
+
+### Cloudflare Turnstile (Opsional - CAPTCHA Tambahan)
+
+1. Buka [Cloudflare Dashboard](https://dash.cloudflare.com) → **Turnstile**
+2. Klik **Add site**
+3. Konfigurasi:
+   - **Site name**: `SertiKu`
+   - **Domain**: `localhost`, `127.0.0.1`, `sertiku.web.id`
+   - **Widget Type**: **Managed** (recommended)
+4. Copy Site Key & Secret Key
+
+```env
+TURNSTILE_ENABLED=true
+TURNSTILE_SITE_KEY=your-site-key
+TURNSTILE_SECRET_KEY=your-secret-key
+```
+
+> **Note:** Turnstile dapat digunakan bersamaan dengan reCAPTCHA untuk keamanan berlapis.
 
 ### Polygon Blockchain (untuk Sertifikat On-Chain)
 

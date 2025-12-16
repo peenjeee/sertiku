@@ -27,6 +27,21 @@
         </style>
     @endif
 
+    {{-- Cloudflare Turnstile Script --}}
+    @if(config('turnstile.enabled') && config('turnstile.site_key'))
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+        <style>
+            /* Turnstile Styling */
+            .cf-turnstile {
+                margin: 0 auto;
+            }
+
+            .cf-turnstile iframe {
+                border-radius: 12px !important;
+            }
+        </style>
+    @endif
+
     {{-- Set global variables --}}
     <script>
         window.walletConnectProjectId = '{{ config("services.walletconnect.project_id", "") }}';
@@ -74,24 +89,47 @@
 
         // Wallet connect status
         let connectedAddress = null;
-        
-        // Wallet captcha status
+
+        // Wallet captcha status (reCAPTCHA)
         let walletCaptchaVerified = {{ config('recaptcha.enabled') && config('recaptcha.site_key') ? 'false' : 'true' }};
         
-        // Callback when wallet captcha is verified
+        // Wallet Turnstile status
+        let walletTurnstileVerified = {{ config('turnstile.enabled') && config('turnstile.site_key') ? 'false' : 'true' }};
+
+        // Callback when wallet reCAPTCHA is verified
         function onWalletCaptchaSuccess(token) {
             walletCaptchaVerified = true;
             const errorEl = document.getElementById('wallet-captcha-error');
             if (errorEl) errorEl.classList.add('hidden');
         }
+        
+        // Callback when wallet Turnstile is verified
+        function onWalletTurnstileSuccess(token) {
+            walletTurnstileVerified = true;
+            document.getElementById('wallet_turnstile_response').value = token;
+            const errorEl = document.getElementById('wallet-turnstile-error');
+            if (errorEl) errorEl.classList.add('hidden');
+        }
+        
+        // Callback when email form Turnstile is verified (auto-handled by form)
+        function onTurnstileSuccess(token) {
+            // Token is automatically added to the form by Turnstile
+        }
 
         // Connect wallet using specific provider
         async function connectWallet(walletType, event) {
             if (event) event.preventDefault();
-            
-            // Check captcha first
+
+            // Check reCAPTCHA first
             if (!walletCaptchaVerified) {
                 const errorEl = document.getElementById('wallet-captcha-error');
+                if (errorEl) errorEl.classList.remove('hidden');
+                return;
+            }
+            
+            // Check Turnstile
+            if (!walletTurnstileVerified) {
+                const errorEl = document.getElementById('wallet-turnstile-error');
                 if (errorEl) errorEl.classList.remove('hidden');
                 return;
             }
@@ -257,13 +295,13 @@
 
             // Submit form with captcha response
             document.getElementById('wallet_address').value = address;
-            
+
             // Get captcha response from wallet tab
             const captchaResponse = document.querySelector('#wallet-recaptcha textarea[name="g-recaptcha-response"]');
             if (captchaResponse) {
                 document.getElementById('wallet_recaptcha_response').value = captchaResponse.value;
             }
-            
+
             document.getElementById('walletLoginForm').submit();
         }
     </script>
@@ -468,6 +506,21 @@
                                                 data-sitekey="{{ config('recaptcha.site_key') }}" data-theme="dark"></div>
                                         </div>
                                         @error('g-recaptcha-response')
+                                            <p class="mt-1 text-xs text-red-400 text-center">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                @endif
+
+                                {{-- Cloudflare Turnstile --}}
+                                @if(config('turnstile.enabled') && config('turnstile.site_key'))
+                                    <div class="space-y-2">
+                                        <div class="flex justify-center">
+                                            <div class="cf-turnstile"
+                                                data-sitekey="{{ config('turnstile.site_key') }}"
+                                                data-theme="dark"
+                                                data-callback="onTurnstileSuccess"></div>
+                                        </div>
+                                        @error('cf-turnstile-response')
                                             <p class="mt-1 text-xs text-red-400 text-center">{{ $message }}</p>
                                         @enderror
                                     </div>
@@ -749,6 +802,21 @@
                                 </div>
                             @endif
 
+                            {{-- Cloudflare Turnstile for Wallet --}}
+                            @if(config('turnstile.enabled') && config('turnstile.site_key'))
+                                <div class="space-y-2">
+                                    <div class="flex justify-center">
+                                        <div class="cf-turnstile" id="wallet-turnstile"
+                                            data-sitekey="{{ config('turnstile.site_key') }}"
+                                            data-theme="dark"
+                                            data-callback="onWalletTurnstileSuccess"></div>
+                                    </div>
+                                    <p id="wallet-turnstile-error" class="hidden mt-1 text-xs text-red-400 text-center">
+                                        Mohon verifikasi Cloudflare Turnstile.
+                                    </p>
+                                </div>
+                            @endif
+
                             <!-- Info Box Bottom -->
                             <div class="bg-[#1E3A8F]/30 border border-[#3B82F6]/30 rounded-[14px] p-4">
                                 <div class="flex gap-3">
@@ -792,6 +860,7 @@
         @csrf
         <input type="hidden" id="wallet_address" name="wallet_address">
         <input type="hidden" id="wallet_recaptcha_response" name="g-recaptcha-response">
+        <input type="hidden" id="wallet_turnstile_response" name="cf-turnstile-response">
     </form>
 
     {{-- Legal Popup Script --}}

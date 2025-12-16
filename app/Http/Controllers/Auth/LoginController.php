@@ -6,6 +6,7 @@ use App\Mail\OtpMail;
 use App\Models\EmailVerification;
 use App\Models\User;
 use App\Rules\Recaptcha;
+use App\Rules\Turnstile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -60,8 +61,14 @@ class LoginController extends Controller
             $rules['g-recaptcha-response'] = ['required', new Recaptcha];
         }
 
+        // Add Cloudflare Turnstile validation if enabled
+        if (config('turnstile.enabled') && config('turnstile.site_key')) {
+            $rules['cf-turnstile-response'] = ['required', new Turnstile];
+        }
+
         $request->validate($rules, [
             'g-recaptcha-response.required' => 'Mohon verifikasi bahwa Anda bukan robot.',
+            'cf-turnstile-response.required' => 'Mohon verifikasi Cloudflare Turnstile.',
         ]);
 
         // Only use email and password for authentication
@@ -197,8 +204,14 @@ class LoginController extends Controller
             $rules['g-recaptcha-response'] = ['required', new Recaptcha];
         }
 
+        // Add Cloudflare Turnstile validation if enabled
+        if (config('turnstile.enabled') && config('turnstile.site_key')) {
+            $rules['cf-turnstile-response'] = ['required', new Turnstile];
+        }
+
         $data = $request->validate($rules, [
             'g-recaptcha-response.required' => 'Mohon verifikasi bahwa Anda bukan robot.',
+            'cf-turnstile-response.required' => 'Mohon verifikasi Cloudflare Turnstile.',
         ]);
 
         $wallet = strtolower($data['wallet_address']);
