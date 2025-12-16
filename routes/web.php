@@ -237,6 +237,15 @@ Route::get('/verifikasi/{hash}', [VerifyController::class, 'show'])->name('verif
 
 /*
 |--------------------------------------------------------------------------
+| Blockchain Verification
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/blockchain/verify', [\App\Http\Controllers\BlockchainController::class, 'verify'])->name('blockchain.verify');
+Route::get('/blockchain/api/verify', [\App\Http\Controllers\BlockchainController::class, 'verifyApi'])->name('blockchain.verify.api');
+
+/*
+|--------------------------------------------------------------------------
 | Payment Routes
 |--------------------------------------------------------------------------
 */
