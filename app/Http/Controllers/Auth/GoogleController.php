@@ -2,8 +2,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OtpMail;
+use App\Models\EmailVerification;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
 
 class GoogleController extends Controller
@@ -23,20 +26,40 @@ class GoogleController extends Controller
         try {
             $googleUser = Socialite::driver('google')->user();
 
+            // Check if user already exists
+            $existingUser = User::where('google_id', $googleUser->getId())
+                ->orWhere('email', $googleUser->getEmail())
+                ->first();
+
+            $isNewUser = !$existingUser;
+
             $user = User::updateOrCreate(
                 ['google_id' => $googleUser->getId()],
                 [
-                    'name'              => $googleUser->getName(),
-                    'email'             => $googleUser->getEmail(),
-                    'avatar'            => $googleUser->getAvatar(),
-                    'email_verified_at' => now(),
+                    'name' => $googleUser->getName(),
+                    'email' => $googleUser->getEmail(),
+                    'avatar' => $googleUser->getAvatar(),
+                    // Do NOT auto-verify email - user must verify via OTP
                 ]
             );
 
             Auth::login($user);
 
+            // If email not verified, send OTP and redirect to verification
+            if (!$user->email_verified_at) {
+                // Generate and send OTP
+                $verification = EmailVerification::generateOtp($user);
+                Mail::to($user->email)->send(new OtpMail($verification));
+
+                $message = $isNewUser
+                    ? 'Akun berhasil dibuat. Silakan verifikasi email Anda.'
+                    : 'Silakan verifikasi email Anda untuk melanjutkan.';
+
+                return redirect()->route('verification.otp')->with('success', $message);
+            }
+
             // Check if profile is completed
-            if (! $user->isProfileCompleted()) {
+            if (!$user->isProfileCompleted()) {
                 return redirect()->route('onboarding')->with('info', 'Silakan lengkapi profil Anda.');
             }
 

@@ -2,10 +2,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OtpMail;
+use App\Models\EmailVerification;
 use App\Models\User;
 use App\Rules\Recaptcha;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class LoginController extends Controller
 {
@@ -22,6 +25,18 @@ class LoginController extends Controller
             return route('lembaga.dashboard');
         }
         return route('dashboard');
+    }
+
+    /**
+     * Check if user is exempt from OTP verification
+     * Exempt: @sertiku.web.id emails (admin, lembaga, user dummy accounts)
+     */
+    protected function isExemptFromOtp($user): bool
+    {
+        if (empty($user->email)) {
+            return false;
+        }
+        return str_ends_with($user->email, '@sertiku.web.id');
     }
 
     public function showLoginForm()
@@ -113,6 +128,12 @@ class LoginController extends Controller
             Auth::login($user, true);
             $request->session()->regenerate();
 
+            // Check email verification first (skip for @sertiku.web.id)
+            if (!$user->email_verified_at && !$this->isExemptFromOtp($user)) {
+                $this->sendOtpIfNeeded($user);
+                return redirect()->route('verification.otp');
+            }
+
             // Admin users skip onboarding
             if ($user->is_admin) {
                 return redirect()->route('admin.dashboard');
@@ -133,8 +154,13 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            // Check if profile is completed
             $user = Auth::user();
+
+            // Check email verification first (skip for @sertiku.web.id)
+            if (!$user->email_verified_at && !$this->isExemptFromOtp($user)) {
+                $this->sendOtpIfNeeded($user);
+                return redirect()->route('verification.otp');
+            }
 
             // Admin users skip onboarding and go to admin panel
             if ($user->is_admin) {
@@ -177,6 +203,7 @@ class LoginController extends Controller
 
         // cari user berdasarkan wallet_address
         $user = User::where('wallet_address', $wallet)->first();
+        $isNewUser = !$user;
 
         // kalau belum ada, buat user baru (dummy). Sesuaikan kebutuhanmu.
         if (!$user) {
@@ -190,6 +217,21 @@ class LoginController extends Controller
 
         Auth::login($user, true);
         $request->session()->regenerate();
+
+        // Check email verification - wallet users need to input real email first (skip for @sertiku.web.id)
+        if (!$user->email_verified_at && !$this->isExemptFromOtp($user)) {
+            // If user has dummy email, redirect to email input
+            if (str_ends_with($user->email, '@wallet.local')) {
+                $message = $isNewUser
+                    ? 'Akun berhasil dibuat. Masukkan email untuk verifikasi.'
+                    : 'Masukkan email untuk verifikasi akun.';
+                return redirect()->route('verification.email.input')->with('info', $message);
+            }
+
+            // If user has real email, send OTP
+            $this->sendOtpIfNeeded($user);
+            return redirect()->route('verification.otp');
+        }
 
         // Check if profile is completed
         if (!$user->isProfileCompleted()) {
@@ -220,5 +262,30 @@ class LoginController extends Controller
         Auth::login($user, true);
 
         return redirect()->intended(route('dashboard'));
+    }
+
+    /**
+     * Send OTP if user doesn't have a recent one
+     */
+    protected function sendOtpIfNeeded(User $user): void
+    {
+        // Check if user has valid email
+        if (empty($user->email) || str_ends_with($user->email, '@wallet.local')) {
+            return; // Will be redirected to email input page
+        }
+
+        // Check if there's a recent OTP (within last 2 minutes)
+        $recentOtp = EmailVerification::where('user_id', $user->id)
+            ->where('created_at', '>', now()->subMinutes(2))
+            ->whereNull('verified_at')
+            ->first();
+
+        if ($recentOtp) {
+            return; // Already sent recently
+        }
+
+        // Generate and send new OTP
+        $verification = EmailVerification::generateOtp($user);
+        Mail::to($user->email)->send(new OtpMail($verification));
     }
 }

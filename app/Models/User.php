@@ -40,6 +40,7 @@ class User extends Authenticatable
         'package_id',
         'is_admin',
         'is_master',
+        'email_verified_at',
     ];
 
     /**
@@ -57,7 +58,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
+            'password' => 'hashed',
             'profile_completed' => 'boolean',
         ];
     }
@@ -205,7 +206,7 @@ class User extends Authenticatable
      */
     public function isPersonal(): bool
     {
-        return $this->account_type === 'personal';
+        return in_array($this->account_type, ['personal', 'pengguna']);
     }
 
     /**
@@ -213,7 +214,7 @@ class User extends Authenticatable
      */
     public function isInstitution(): bool
     {
-        return $this->account_type === 'lembaga';
+        return in_array($this->account_type, ['lembaga', 'institution']);
     }
 
     /**
@@ -229,7 +230,7 @@ class User extends Authenticatable
      */
     public function hasGoogleLogin(): bool
     {
-        return ! empty($this->google_id);
+        return !empty($this->google_id);
     }
 
     /**
@@ -237,7 +238,7 @@ class User extends Authenticatable
      */
     public function hasWalletLogin(): bool
     {
-        return ! empty($this->wallet_address);
+        return !empty($this->wallet_address);
     }
 
     /**
@@ -245,6 +246,6 @@ class User extends Authenticatable
      */
     public function hasPasswordLogin(): bool
     {
-        return ! empty($this->password);
+        return !empty($this->password);
     }
 }

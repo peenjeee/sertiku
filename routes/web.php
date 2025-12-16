@@ -101,6 +101,38 @@ Route::post('/reset-password', [\App\Http\Controllers\Auth\PasswordResetControll
 
 /*
 |--------------------------------------------------------------------------
+| EMAIL VERIFICATION OTP
+|--------------------------------------------------------------------------
+*/
+
+use App\Http\Controllers\Auth\EmailVerificationController;
+
+// OTP Verification Page
+Route::get('/verify-email', [EmailVerificationController::class, 'show'])
+    ->middleware('auth')
+    ->name('verification.otp');
+
+// Verify OTP
+Route::post('/verify-email', [EmailVerificationController::class, 'verify'])
+    ->middleware('auth')
+    ->name('verification.otp.verify');
+
+// Resend OTP
+Route::post('/verify-email/resend', [EmailVerificationController::class, 'resend'])
+    ->middleware('auth')
+    ->name('verification.otp.resend');
+
+// Email Input (for wallet users)
+Route::get('/verify-email/input', [EmailVerificationController::class, 'showEmailInput'])
+    ->middleware('auth')
+    ->name('verification.email.input');
+
+Route::post('/verify-email/input', [EmailVerificationController::class, 'storeEmail'])
+    ->middleware('auth')
+    ->name('verification.email.store');
+
+/*
+|--------------------------------------------------------------------------
 | REGISTER (Pengguna & Lembaga – multi-tab)
 |--------------------------------------------------------------------------
 */
@@ -138,8 +170,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         $user = auth()->user();
 
+        // Check email verification first (skip for @sertiku.web.id)
+        if (!$user->email_verified_at && !str_ends_with($user->email ?? '', '@sertiku.web.id')) {
+            // Wallet users with dummy email go to email input
+            if (str_ends_with($user->email, '@wallet.local')) {
+                return redirect()->route('verification.email.input');
+            }
+            return redirect()->route('verification.otp');
+        }
+
         // If profile not completed, go to onboarding
-        if (! $user->isProfileCompleted()) {
+        if (!$user->isProfileCompleted()) {
             return redirect()->route('onboarding');
         }
 
