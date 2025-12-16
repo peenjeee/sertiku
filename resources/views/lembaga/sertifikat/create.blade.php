@@ -327,58 +327,161 @@
         @endif
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.querySelector('form');
             if (!form) return;
 
             form.addEventListener('submit', function(e) {
-                // Show progress bar
-                const progressContainer = document.getElementById('upload-progress');
-                const actionButtons = document.getElementById('action-buttons');
-                const progressBar = document.getElementById('progress-bar');
-                const progressText = document.getElementById('progress-text');
-                const progressPercent = document.getElementById('progress-percent');
-                const submitBtn = document.getElementById('submit-btn');
+                e.preventDefault();
 
-                // Disable submit button
-                submitBtn.disabled = true;
-                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                // Check if blockchain enabled
+                const blockchainEnabled = form.querySelector('input[name="blockchain_enabled"]')?.checked;
+                const estimatedTime = blockchainEnabled ? 30 : 5;
 
-                // Show progress bar
-                progressContainer.classList.remove('hidden');
+                // Show SweetAlert with loading
+                Swal.fire({
+                    title: 'Menerbitkan Sertifikat...',
+                    html: `
+                        <div class="text-left mb-4">
+                            <p class="text-gray-600 mb-2">Mohon tunggu, proses sedang berjalan.</p>
+                            ${blockchainEnabled ? '<p class="text-purple-600 text-sm"><strong>Blockchain:</strong> Menyimpan ke Polygon Network</p>' : ''}
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+                            <div id="swal-progress" class="bg-gradient-to-r from-blue-500 to-indigo-600 h-3 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                        <p id="swal-status" class="text-sm text-gray-500">Memvalidasi data...</p>
+                        <p class="text-xs text-gray-400 mt-2">Estimasi: <span id="swal-countdown">${estimatedTime}</span> detik</p>
+                    `,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
 
-                // Animate progress bar
-                let progress = 0;
-                const messages = [
-                    { at: 0, text: 'Memvalidasi data...' },
-                    { at: 20, text: 'Membuat sertifikat...' },
-                    { at: 40, text: 'Generating QR Code...' },
-                    { at: 60, text: 'Menyimpan ke database...' },
-                    { at: 80, text: 'Memproses selesai...' },
-                    { at: 95, text: 'Menyelesaikan...' }
-                ];
+                        // Animate progress and countdown
+                        let progress = 0;
+                        let countdown = estimatedTime;
+                        const statusEl = document.getElementById('swal-status');
+                        const progressEl = document.getElementById('swal-progress');
+                        const countdownEl = document.getElementById('swal-countdown');
 
-                const interval = setInterval(() => {
-                    if (progress < 95) {
-                        progress += Math.random() * 10 + 2;
-                        progress = Math.min(progress, 95);
+                        const statuses = [
+                            { at: 10, text: 'Membuat sertifikat...' },
+                            { at: 25, text: 'Generating QR Code...' },
+                            { at: 40, text: 'Menyimpan ke database...' },
+                            { at: 55, text: blockchainEnabled ? 'Menghubungi jaringan Polygon...' : 'Memproses...' },
+                            { at: 70, text: blockchainEnabled ? 'Menyimpan hash ke blockchain...' : 'Hampir selesai...' },
+                            { at: 85, text: blockchainEnabled ? 'Menunggu konfirmasi blockchain...' : 'Menyelesaikan...' },
+                            { at: 95, text: 'Selesai!' }
+                        ];
 
-                        progressBar.style.width = progress + '%';
-                        progressPercent.textContent = Math.round(progress) + '%';
+                        const progressInterval = setInterval(() => {
+                            if (progress < 95) {
+                                progress += Math.random() * 8 + 2;
+                                progress = Math.min(progress, 95);
+                                if (progressEl) progressEl.style.width = progress + '%';
 
-                        // Update message based on progress
-                        for (let i = messages.length - 1; i >= 0; i--) {
-                            if (progress >= messages[i].at) {
-                                progressText.textContent = messages[i].text;
-                                break;
+                                for (let i = statuses.length - 1; i >= 0; i--) {
+                                    if (progress >= statuses[i].at) {
+                                        if (statusEl) statusEl.textContent = statuses[i].text;
+                                        break;
+                                    }
+                                }
                             }
-                        }
-                    }
-                }, 200);
+                        }, 400);
 
-                // Store interval ID to clear later
-                form.dataset.intervalId = interval;
+                        const countdownInterval = setInterval(() => {
+                            countdown--;
+                            if (countdownEl) countdownEl.textContent = Math.max(0, countdown);
+                            if (countdown <= 0) clearInterval(countdownInterval);
+                        }, 1000);
+
+                        // Submit form via AJAX
+                        const formData = new FormData(form);
+
+                        fetch(form.action, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Accept': 'application/json'
+                            }
+                        })
+                        .then(response => {
+                            clearInterval(progressInterval);
+                            clearInterval(countdownInterval);
+
+                            if (progressEl) progressEl.style.width = '100%';
+                            if (statusEl) statusEl.textContent = 'Selesai!';
+
+                            if (response.ok || response.redirected) {
+                                // Success
+                                setTimeout(() => {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Sertifikat Berhasil Diterbitkan!',
+                                        html: blockchainEnabled
+                                            ? '<p class="text-gray-600">Sertifikat telah tersimpan di database dan blockchain.</p>'
+                                            : '<p class="text-gray-600">Sertifikat telah tersimpan di database.</p>',
+                                        confirmButtonText: 'Lihat Daftar Sertifikat',
+                                        confirmButtonColor: '#4F46E5',
+                                        timer: 3000,
+                                        timerProgressBar: true
+                                    }).then(() => {
+                                        window.location.href = '{{ route("lembaga.sertifikat.index") }}?success=1';
+                                    });
+                                }, 500);
+                            } else {
+                                // Error
+                                response.json().then(data => {
+                                    let errorMessage = 'Terjadi kesalahan saat menerbitkan sertifikat.';
+                                    if (data.errors) {
+                                        errorMessage = Object.values(data.errors).flat().join('<br>');
+                                    } else if (data.message) {
+                                        errorMessage = data.message;
+                                    }
+
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Gagal Menerbitkan Sertifikat',
+                                        html: errorMessage,
+                                        confirmButtonText: 'Coba Lagi',
+                                        confirmButtonColor: '#EF4444'
+                                    });
+                                }).catch(() => {
+                                    // If not JSON, might be redirect - consider it success
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Sertifikat Berhasil Diterbitkan!',
+                                        confirmButtonText: 'Lihat Daftar Sertifikat',
+                                        confirmButtonColor: '#4F46E5',
+                                        timer: 3000,
+                                        timerProgressBar: true
+                                    }).then(() => {
+                                        window.location.href = '{{ route("lembaga.sertifikat.index") }}?success=1';
+                                    });
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            clearInterval(progressInterval);
+                            clearInterval(countdownInterval);
+
+                            // Network error - but form might have submitted, redirect anyway
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Proses Selesai',
+                                text: 'Silakan cek daftar sertifikat untuk memastikan sertifikat berhasil dibuat.',
+                                confirmButtonText: 'Lihat Daftar Sertifikat',
+                                confirmButtonColor: '#4F46E5'
+                            }).then(() => {
+                                window.location.href = '{{ route("lembaga.sertifikat.index") }}';
+                            });
+                        });
+                    }
+                });
             });
         });
     </script>

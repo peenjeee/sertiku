@@ -93,7 +93,7 @@ class LembagaController extends Controller
                 $blockchainService = new \App\Services\BlockchainService();
 
                 if ($blockchainService->isEnabled()) {
-                    $txHash = $blockchainService->storeCertificateHash($certificate);
+                    $txHash = $blockchainService->storeWithContract($certificate);
 
                     if ($txHash) {
                         return redirect()->route('lembaga.sertifikat.index')

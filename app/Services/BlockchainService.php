@@ -11,15 +11,17 @@ class BlockchainService
     protected string $chainId;
     protected string $privateKey;
     protected string $walletAddress;
+    protected string $contractAddress;
     protected bool $enabled;
 
     public function __construct()
     {
-        $this->enabled       = config('blockchain.enabled', false);
-        $this->rpcUrl        = config('blockchain.rpc_url', 'https://rpc-amoy.polygon.technology/');
-        $this->chainId       = config('blockchain.chain_id', '80002');
-        $this->privateKey    = config('blockchain.private_key', '');
-        $this->walletAddress = config('blockchain.wallet_address', '');
+        $this->enabled         = config('blockchain.enabled', false);
+        $this->rpcUrl          = config('blockchain.rpc_url', 'https://rpc-amoy.polygon.technology/');
+        $this->chainId         = config('blockchain.chain_id', '80002');
+        $this->privateKey      = config('blockchain.private_key', '');
+        $this->walletAddress   = config('blockchain.wallet_address', '');
+        $this->contractAddress = config('blockchain.contract_address', '');
     }
 
     /**
@@ -275,9 +277,9 @@ class BlockchainService
     }
 
     /**
-     * Verify if a certificate hash exists on blockchain
+     * Verify if a transaction hash exists on blockchain (legacy method)
      */
-    public function verifyCertificateOnChain(string $txHash): ?array
+    public function verifyTransactionOnChain(string $txHash): ?array
     {
         $response = Http::timeout(30)->post($this->rpcUrl, [
             'jsonrpc' => '2.0',
@@ -394,5 +396,164 @@ class BlockchainService
     public function getWalletAddress(): string
     {
         return $this->walletAddress;
+    }
+
+    /**
+     * Check if smart contract is configured
+     */
+    public function hasContract(): bool
+    {
+        return ! empty($this->contractAddress);
+    }
+
+    /**
+     * Get contract address
+     */
+    public function getContractAddress(): string
+    {
+        return $this->contractAddress;
+    }
+
+    /**
+     * Store certificate hash on smart contract
+     * Uses Node.js script for contract interaction
+     */
+    public function storeWithContract(Certificate $certificate): ?string
+    {
+        if (! $this->isEnabled()) {
+            Log::warning('BlockchainService: Blockchain not enabled');
+            return null;
+        }
+
+        if (! $this->hasContract()) {
+            Log::warning('BlockchainService: Smart contract not configured, falling back to data tx');
+            return $this->storeCertificateHash($certificate);
+        }
+
+        try {
+            $certHash   = $this->generateCertificateHash($certificate);
+            $scriptPath = base_path('scripts/interact_contract.js');
+
+            if (! file_exists($scriptPath)) {
+                Log::warning('BlockchainService: interact_contract.js not found');
+                return $this->storeCertificateHash($certificate);
+            }
+
+            // Prepare certificate data for smart contract
+            $hash          = escapeshellarg($certHash);
+            $certNumber    = escapeshellarg($certificate->certificate_number ?? '');
+            $recipientName = escapeshellarg($certificate->recipient_name ?? '');
+            $courseName    = escapeshellarg($certificate->course_name ?? '');
+            $issueDate     = escapeshellarg($certificate->issue_date?->format('Y-m-d') ?? '');
+            $issuerName    = escapeshellarg($certificate->user->institution_name ?? $certificate->user->name ?? '');
+
+            $command = "node {$scriptPath} store {$hash} {$certNumber} {$recipientName} {$courseName} {$issueDate} {$issuerName} 2>&1";
+
+            Log::info('BlockchainService: Storing certificate via smart contract with full data');
+
+            $output = shell_exec($command);
+            $output = trim($output ?? '');
+
+            // Parse last JSON line (the confirmed status)
+            $lines    = explode("\n", $output);
+            $lastLine = end($lines);
+            $result   = json_decode($lastLine, true);
+
+            if ($result && isset($result['success']) && $result['success']) {
+                $txHash = $result['transactionHash'] ?? null;
+
+                if ($txHash) {
+                    $certificate->update([
+                        'blockchain_hash'        => $certHash,
+                        'blockchain_tx_hash'     => $txHash,
+                        'blockchain_status'      => $result['status'] ?? 'confirmed',
+                        'blockchain_verified_at' => now(),
+                    ]);
+
+                    Log::info("Certificate {$certificate->certificate_number} stored on smart contract: {$txHash}");
+                    return $txHash;
+                }
+            }
+
+            Log::error('BlockchainService: Smart contract storage failed: ' . $output);
+
+            // Fallback to data tx
+            return $this->storeCertificateHash($certificate);
+
+        } catch (\Exception $e) {
+            Log::error('BlockchainService: Smart contract error: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Verify certificate on smart contract
+     * @return array|null null if not found, array with exists, issuer, timestamp if found
+     */
+    public function verifyCertificateOnChain(string $certHash): ?array
+    {
+        if (! $this->hasContract()) {
+            return null;
+        }
+
+        try {
+            $scriptPath = base_path('scripts/interact_contract.js');
+
+            if (! file_exists($scriptPath)) {
+                return null;
+            }
+
+            $hash    = escapeshellarg($certHash);
+            $command = "node {$scriptPath} verify {$hash} 2>&1";
+
+            $output = shell_exec($command);
+            $output = trim($output ?? '');
+
+            $result = json_decode($output, true);
+
+            if ($result && isset($result['success']) && $result['success']) {
+                return $result;
+            }
+
+            return null;
+
+        } catch (\Exception $e) {
+            Log::error('BlockchainService: Verify error: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Get contract statistics
+     */
+    public function getContractStats(): ?array
+    {
+        if (! $this->hasContract()) {
+            return null;
+        }
+
+        try {
+            $scriptPath = base_path('scripts/interact_contract.js');
+
+            if (! file_exists($scriptPath)) {
+                return null;
+            }
+
+            $command = "node {$scriptPath} stats 2>&1";
+            $output  = shell_exec($command);
+            $output  = trim($output ?? '');
+
+            $result = json_decode($output, true);
+
+            if ($result && isset($result['success']) && $result['success']) {
+                return $result;
+            }
+
+            return null;
+
+        } catch (\Exception $e) {
+            Log::error('BlockchainService: Stats error: ' . $e->getMessage());
+            return null;
+        }
     }
 }
