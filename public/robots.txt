@@ -1,2 +1,22 @@
+# SertiKu Sitemap
 User-agent: *
-Disallow:
+Allow: /
+
+# Block admin and internal pages
+Disallow: /admin/
+Disallow: /superadmin/
+Disallow: /master/
+Disallow: /api/
+Disallow: /storage/
+
+# Block authentication pages
+Disallow: /login
+Disallow: /register
+Disallow: /password/
+Disallow: /verify-otp
+
+# Sitemap
+Sitemap: https://sertiku.web.id/sitemap.xml
+
+# Crawl-delay (optional, be nice to servers)
+Crawl-delay: 1

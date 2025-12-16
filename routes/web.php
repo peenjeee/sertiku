@@ -18,6 +18,9 @@ Route::get('/', function () {
     return view('landing');
 })->name('home');
 
+// SEO Sitemap
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
+
 /*
 |--------------------------------------------------------------------------
 | AUTH ROUTES (Email + Wallet + Google)

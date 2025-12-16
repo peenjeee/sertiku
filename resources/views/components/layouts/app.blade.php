@@ -1,4 +1,9 @@
-@props(['title' => 'SertiKu'])
+@props([
+    'title' => 'SertiKu',
+    'description' => 'Platform terdepan untuk menerbitkan, mengelola, dan memverifikasi sertifikat digital dengan teknologi QR Code dan blockchain.',
+    'keywords' => 'sertifikat digital, verifikasi sertifikat, QR code, blockchain, e-sertifikat',
+    'image' => null
+])
 
 <!DOCTYPE html>
 <html lang="id">
@@ -7,6 +12,9 @@
     <meta charset="UTF-8">
     <title>{{ $title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {{-- SEO Meta Tags --}}
+    <x-seo-meta :title="$title" :description="$description" :keywords="$keywords" :image="$image" />
 
     {{-- Favicon --}}
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
