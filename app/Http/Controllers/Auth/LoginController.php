@@ -60,12 +60,14 @@ class LoginController extends Controller
             $rules['g-recaptcha-response'] = ['required', new Recaptcha];
         }
 
-        $credentials = $request->validate($rules, [
+        $request->validate($rules, [
             'g-recaptcha-response.required' => 'Mohon verifikasi bahwa Anda bukan robot.',
         ]);
 
-        $email = strtolower($credentials['email']);
-        $password = $credentials['password'];
+        // Only use email and password for authentication
+        $email = strtolower($request->input('email'));
+        $password = $request->input('password');
+        $credentials = ['email' => $email, 'password' => $password];
 
         /**
          * 1) CEK 3 AKUN DUMMY DULU
