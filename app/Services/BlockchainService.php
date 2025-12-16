@@ -447,7 +447,9 @@ class BlockchainService
             $issueDate     = escapeshellarg($certificate->issue_date?->format('Y-m-d') ?? '');
             $issuerName    = escapeshellarg($certificate->user->institution_name ?? $certificate->user->name ?? '');
 
-            $command = "node {$scriptPath} store {$hash} {$certNumber} {$recipientName} {$courseName} {$issueDate} {$issuerName} 2>&1";
+            // Use full path for hosting, fallback to 'node' for local
+            $nodePath = env('NODE_PATH', 'node');
+            $command  = "{$nodePath} {$scriptPath} store {$hash} {$certNumber} {$recipientName} {$courseName} {$issueDate} {$issuerName} 2>&1";
 
             Log::info('BlockchainService: Storing certificate via smart contract with full data');
 
@@ -503,8 +505,9 @@ class BlockchainService
                 return null;
             }
 
-            $hash    = escapeshellarg($certHash);
-            $command = "node {$scriptPath} verify {$hash} 2>&1";
+            $hash     = escapeshellarg($certHash);
+            $nodePath = env('NODE_PATH', 'node');
+            $command  = "{$nodePath} {$scriptPath} verify {$hash} 2>&1";
 
             $output = shell_exec($command);
             $output = trim($output ?? '');

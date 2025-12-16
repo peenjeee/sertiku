@@ -58,8 +58,8 @@ class VerifyController extends Controller
                 'blockchain_status'  => $certificate->blockchain_status,
             ];
 
-            // Return JSON for AJAX request
-            if ($request->ajax() || $request->wantsJson()) {
+            // Return JSON for AJAX/API request (check POST method or Accept header)
+            if ($request->isMethod('post') || $request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
                 return response()->json([
                     'valid'       => $isValid,
                     'hash'        => $certificate->hash,
@@ -74,7 +74,7 @@ class VerifyController extends Controller
         }
 
         // Certificate not found
-        if ($request->ajax() || $request->wantsJson()) {
+        if ($request->isMethod('post') || $request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
             return response()->json([
                 'valid'   => false,
                 'hash'    => $hash,
