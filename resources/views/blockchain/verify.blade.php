@@ -1,87 +1,65 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verifikasi Blockchain - SertiKu</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(180deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
-            min-height: 100vh;
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .chain-icon {
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-    </style>
-</head>
-<body class="text-white">
-    <!-- Header -->
-    <header class="py-6 px-4 border-b border-white/10">
-        <div class="max-w-4xl mx-auto flex items-center justify-between">
-            <a href="{{ url('/') }}" class="flex items-center gap-2">
-                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
-                    </svg>
-                </div>
-                <span class="text-xl font-bold">SertiKu</span>
-            </a>
-            <span class="px-3 py-1 bg-purple-500/20 text-purple-400 text-sm font-medium rounded-full flex items-center gap-2">
-                <svg class="w-4 h-4 chain-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+{{-- resources/views/blockchain/verify.blade.php --}}
+<x-layouts.app title="Verifikasi Blockchain – SertiKu">
+
+    {{-- KONTEN UTAMA --}}
+    <section class="mx-auto flex max-w-4xl flex-col gap-8 px-4 pb-20 pt-16 lg:px-0 lg:pt-20">
+
+        {{-- Title --}}
+        <div class="text-center animate-fade-in-up">
+            <div class="inline-flex h-[34px] items-center gap-2 rounded-[8px]
+                       border border-[rgba(255,255,255,0.2)]
+                       bg-[rgba(255,255,255,0.1)] px-4 text-[12px] text-white mb-4">
+                <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
                 </svg>
-                Blockchain Verification
-            </span>
+                <span>Blockchain Verification</span>
+            </div>
+            <h1 class="text-[32px] leading-[40px] font-semibold text-white md:text-[40px] md:leading-[50px]">
+                Verifikasi Sertifikat
+            </h1>
+            <h2 class="bg-[linear-gradient(90deg,#A855F7_0%,#8B5CF6_100%)]
+                       bg-clip-text text-[32px] leading-[40px] font-semibold text-transparent
+                       md:text-[40px] md:leading-[50px]">
+                Blockchain
+            </h2>
+            <p class="mt-4 text-[15px] text-[#BEDBFF]">
+                Cek keaslian sertifikat yang tersimpan di jaringan Polygon
+            </p>
         </div>
-    </header>
 
-    <main class="max-w-4xl mx-auto px-4 py-8">
-        <!-- Title -->
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold mb-2">Verifikasi Sertifikat Blockchain</h1>
-            <p class="text-white/60">Cek keaslian sertifikat yang tersimpan di jaringan Polygon</p>
-        </div>
-
-        <!-- Search Form -->
-        <div class="glass-card rounded-2xl p-6 mb-8">
-            <form action="{{ route('blockchain.verify') }}" method="GET" class="flex gap-3">
+        {{-- Search Form --}}
+        <div class="rounded-[16px] border border-[rgba(255,255,255,0.14)]
+                   bg-[rgba(15,23,42,0.9)]
+                   px-6 py-6 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)]
+                   backdrop-blur-xl animate-fade-in-up stagger-2">
+            <form action="{{ route('blockchain.verify') }}" method="GET" class="flex flex-col sm:flex-row gap-3">
                 <div class="flex-1 relative">
                     <input type="text" name="q" value="{{ $query ?? '' }}"
                         placeholder="Masukkan nomor sertifikat atau hash blockchain..."
-                        class="w-full px-4 py-4 pl-12 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-purple-500 transition">
+                        class="w-full px-4 py-4 pl-12 rounded-[8px] bg-white/5 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-purple-500 transition">
                     <svg class="w-5 h-5 text-white/40 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
                 </div>
-                <button type="submit" class="px-6 py-4 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-xl font-bold hover:opacity-90 transition flex items-center gap-2">
+                <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-[8px]
+                                           bg-[linear-gradient(180deg,#7C3AED_0%,#A855F7_100%)]
+                                           px-6 py-4 text-sm font-medium text-white
+                                           shadow-[0_10px_15px_-3px_rgba(168,85,247,0.5)]
+                                           hover:brightness-110 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    Verifikasi
+                    <span>Verifikasi</span>
                 </button>
             </form>
         </div>
 
-        @if($query)
-        <!-- Result Section -->
-        <div class="space-y-6">
-            @if($result === 'found' && $onChainData)
-            <!-- Success: Found on Blockchain -->
-            <div class="glass-card rounded-2xl overflow-hidden border-2 border-green-500/50">
+        @if($query ?? false)
+        {{-- Result Section --}}
+        <div class="space-y-6 animate-fade-in-up stagger-3">
+            @if(($result ?? '') === 'found' && ($onChainData ?? false))
+            {{-- Success: Found on Blockchain --}}
+            <div class="rounded-[16px] overflow-hidden border-2 border-green-500/50 bg-[rgba(15,23,42,0.9)] backdrop-blur-xl">
                 <div class="p-4 bg-green-500/20 border-b border-green-500/30 flex items-center gap-3">
                     <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,7 +73,7 @@
                 </div>
 
                 <div class="p-6 space-y-4">
-                    <!-- On-Chain Data -->
+                    {{-- On-Chain Data --}}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         @if(isset($onChainData['certificateNumber']) && $onChainData['certificateNumber'])
                         <div class="bg-white/5 rounded-xl p-4">
@@ -140,7 +118,7 @@
                         @endif
                     </div>
 
-                    <!-- Blockchain Details -->
+                    {{-- Blockchain Details --}}
                     <div class="border-t border-white/10 pt-4 mt-4">
                         <h3 class="text-white/70 text-sm font-bold mb-3 flex items-center gap-2">
                             <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -167,7 +145,7 @@
                             </div>
                             @endif
 
-                            @if($certificate && $certificate->blockchain_tx_hash)
+                            @if(($certificate ?? false) && $certificate->blockchain_tx_hash)
                             <div class="flex items-start gap-3 bg-white/5 rounded-xl p-3">
                                 <span class="text-white/50 text-xs w-24 flex-shrink-0">TX Hash:</span>
                                 <a href="{{ config('blockchain.explorer_url') }}/tx/{{ $certificate->blockchain_tx_hash }}" target="_blank"
@@ -182,9 +160,9 @@
                         </div>
                     </div>
 
-                    <!-- Action Buttons -->
+                    {{-- Action Buttons --}}
                     <div class="flex flex-wrap gap-3 pt-4">
-                        @if($certificate && $certificate->blockchain_tx_hash)
+                        @if(($certificate ?? false) && $certificate->blockchain_tx_hash)
                         <a href="{{ config('blockchain.explorer_url') }}/tx/{{ $certificate->blockchain_tx_hash }}" target="_blank"
                             class="px-4 py-2 bg-purple-500/20 border border-purple-500/30 text-purple-400 rounded-lg text-sm font-medium hover:bg-purple-500/30 transition flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -194,8 +172,8 @@
                         </a>
                         @endif
 
-                        @if($certificate)
-                        <a href="{{ route('verify') }}?q={{ $certificate->certificate_number }}"
+                        @if($certificate ?? false)
+                        <a href="{{ route('verifikasi') }}?q={{ $certificate->certificate_number }}"
                             class="px-4 py-2 bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded-lg text-sm font-medium hover:bg-blue-500/30 transition flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -207,9 +185,9 @@
                 </div>
             </div>
 
-            @elseif($result === 'not_on_chain' && $certificate)
-            <!-- Certificate exists but not on blockchain -->
-            <div class="glass-card rounded-2xl overflow-hidden border-2 border-yellow-500/50">
+            @elseif(($result ?? '') === 'not_on_chain' && ($certificate ?? false))
+            {{-- Certificate exists but not on blockchain --}}
+            <div class="rounded-[16px] overflow-hidden border-2 border-yellow-500/50 bg-[rgba(15,23,42,0.9)] backdrop-blur-xl">
                 <div class="p-4 bg-yellow-500/20 border-b border-yellow-500/30 flex items-center gap-3">
                     <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -227,9 +205,9 @@
                 </div>
             </div>
 
-            @elseif($result === 'no_blockchain' && $certificate)
-            <!-- Certificate without blockchain -->
-            <div class="glass-card rounded-2xl overflow-hidden border-2 border-gray-500/50">
+            @elseif(($result ?? '') === 'no_blockchain' && ($certificate ?? false))
+            {{-- Certificate without blockchain --}}
+            <div class="rounded-[16px] overflow-hidden border-2 border-gray-500/50 bg-[rgba(15,23,42,0.9)] backdrop-blur-xl">
                 <div class="p-4 bg-gray-500/20 border-b border-gray-500/30 flex items-center gap-3">
                     <div class="w-10 h-10 bg-gray-500 rounded-full flex items-center justify-center">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -247,8 +225,8 @@
             </div>
 
             @else
-            <!-- Not Found -->
-            <div class="glass-card rounded-2xl overflow-hidden border-2 border-red-500/50">
+            {{-- Not Found --}}
+            <div class="rounded-[16px] overflow-hidden border-2 border-red-500/50 bg-[rgba(15,23,42,0.9)] backdrop-blur-xl">
                 <div class="p-4 bg-red-500/20 border-b border-red-500/30 flex items-center gap-3">
                     <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -268,9 +246,11 @@
         </div>
         @endif
 
-        <!-- Contract Info -->
+        {{-- Contract Info --}}
         @if(isset($walletInfo) && $walletInfo)
-        <div class="glass-card rounded-2xl p-6 mt-8">
+        <div class="rounded-[16px] border border-[rgba(255,255,255,0.14)]
+                   bg-[rgba(15,23,42,0.9)]
+                   p-6 backdrop-blur-xl animate-fade-in-up stagger-4">
             <h3 class="text-white font-bold mb-4 flex items-center gap-2">
                 <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
@@ -298,13 +278,16 @@
             </div>
         </div>
         @endif
-    </main>
 
-    <!-- Footer -->
-    <footer class="py-6 px-4 border-t border-white/10 mt-8">
-        <div class="max-w-4xl mx-auto text-center text-white/50 text-sm">
-            <p>© {{ date('Y') }} SertiKu. Blockchain verification powered by Polygon.</p>
+        {{-- Back to Verification --}}
+        <div class="text-center">
+            <a href="{{ route('verifikasi') }}" class="inline-flex items-center gap-2 text-[#BEDBFF] hover:text-white transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Kembali ke Verifikasi Sertifikat
+            </a>
         </div>
-    </footer>
-</body>
-</html>
+    </section>
+
+</x-layouts.app>
