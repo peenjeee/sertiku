@@ -583,13 +583,16 @@
                     .then(data => {
                         btn.disabled = false;
                         btn.innerHTML = originalText;
+                        // DEBUG: Log the API response to see what's returned
+                        console.log('API Response:', data);
 
-                        if (data.valid) {
-                            // Show success notification then redirect
+                        // Check if certificate was found (certificate object exists in response)
+                        if (data.certificate) {
+                            // Certificate found - show success and redirect to detail
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Verifikasi Berhasil!',
-                                html: `<p>Data sertifikat ditemukan dalam sistem kami</p>
+                                title: 'Sertifikat Ditemukan!',
+                                html: `<p>Data sertifikat berhasil ditemukan dalam sistem kami</p>
                                <p class="text-sm text-gray-500 mt-2">Kode: <b>${hash}</b></p>`,
                                 showConfirmButton: true,
                                 confirmButtonText: 'Lihat Detail',
@@ -597,14 +600,14 @@
                                 timer: 3000,
                                 timerProgressBar: true
                             }).then(() => {
-                                // Redirect to valid page with hash
+                                // Redirect to certificate detail page
                                 window.location.href = `{{ url('/verifikasi') }}/${hash}`;
                             });
                         } else {
-                            // Show error notification then redirect
+                            // Certificate NOT found - show error then redirect to invalid page
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Verifikasi Gagal!',
+                                title: 'Sertifikat Tidak Ditemukan',
                                 html: `<p>Data sertifikat tidak ditemukan dalam sistem kami</p>
                                <p class="text-sm text-gray-500 mt-2">Kode: <b>${hash}</b></p>`,
                                 showConfirmButton: true,
