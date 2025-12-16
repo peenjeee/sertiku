@@ -29,8 +29,13 @@
     <style>
         /* Keyframe Animations */
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes fadeInUp {
@@ -38,6 +43,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -49,6 +55,7 @@
                 opacity: 0;
                 transform: translateY(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -60,6 +67,7 @@
                 opacity: 0;
                 transform: translateX(-30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -71,6 +79,7 @@
                 opacity: 0;
                 transform: translateX(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -82,6 +91,7 @@
                 opacity: 0;
                 transform: scale(0.9);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1);
@@ -89,13 +99,27 @@
         }
 
         @keyframes pulse-dot {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         /* Animation Classes */
@@ -132,12 +156,29 @@
         }
 
         /* Stagger Delays - only add delay, parent animation handles visibility */
-        .stagger-1 { animation-delay: 0.1s; }
-        .stagger-2 { animation-delay: 0.2s; }
-        .stagger-3 { animation-delay: 0.3s; }
-        .stagger-4 { animation-delay: 0.4s; }
-        .stagger-5 { animation-delay: 0.5s; }
-        .stagger-6 { animation-delay: 0.6s; }
+        .stagger-1 {
+            animation-delay: 0.1s;
+        }
+
+        .stagger-2 {
+            animation-delay: 0.2s;
+        }
+
+        .stagger-3 {
+            animation-delay: 0.3s;
+        }
+
+        .stagger-4 {
+            animation-delay: 0.4s;
+        }
+
+        .stagger-5 {
+            animation-delay: 0.5s;
+        }
+
+        .stagger-6 {
+            animation-delay: 0.6s;
+        }
 
         /* Hover Effects */
         .hover-lift {
@@ -286,12 +327,29 @@
         }
 
         /* Stagger delays for scroll animations */
-        .scroll-delay-1 { transition-delay: 0.1s; }
-        .scroll-delay-2 { transition-delay: 0.2s; }
-        .scroll-delay-3 { transition-delay: 0.3s; }
-        .scroll-delay-4 { transition-delay: 0.4s; }
-        .scroll-delay-5 { transition-delay: 0.5s; }
-        .scroll-delay-6 { transition-delay: 0.6s; }
+        .scroll-delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .scroll-delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .scroll-delay-3 {
+            transition-delay: 0.3s;
+        }
+
+        .scroll-delay-4 {
+            transition-delay: 0.4s;
+        }
+
+        .scroll-delay-5 {
+            transition-delay: 0.5s;
+        }
+
+        .scroll-delay-6 {
+            transition-delay: 0.6s;
+        }
 
         /* Counter Animation */
         .count-up {
@@ -305,9 +363,22 @@
 
         /* Bounce Animation */
         @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-15px); }
-            60% { transform: translateY(-8px); }
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-15px);
+            }
+
+            60% {
+                transform: translateY(-8px);
+            }
         }
 
         .animate-bounce-slow {
@@ -316,20 +387,32 @@
 
         /* Shimmer Effect for loading states */
         @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
         }
 
         .shimmer {
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
             background-size: 200% 100%;
             animation: shimmer 2s infinite;
         }
 
         /* Glow Pulse */
         @keyframes glow-pulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+            }
         }
 
         .animate-glow-pulse {
@@ -338,8 +421,15 @@
 
         /* Text Gradient Animate */
         @keyframes gradient-shift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
         }
 
         .animate-gradient-text {
@@ -388,7 +478,7 @@
 
     <script>
         // Intersection Observer for Scroll Animations
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const scrollElements = document.querySelectorAll('.scroll-animate');
 
             const observer = new IntersectionObserver((entries) => {
@@ -448,6 +538,9 @@
     </script>
 
     @stack('scripts')
+
+    {{-- Cookie Consent Popup --}}
+    <x-cookie-consent />
 </body>
 
 </html>
