@@ -538,102 +538,17 @@
                 }
             });
 
-            // Form submission handler
+            // Form submission handler - langsung redirect ke halaman verifikasi
             document.getElementById('verifyForm').addEventListener('submit', function (e) {
                 e.preventDefault();
                 const hash = document.getElementById('hashInput').value.trim();
                 if (hash) {
-                    verifyHash(hash);
+                    // Langsung redirect ke halaman verifikasi
+                    window.location.href = `{{ url('/verifikasi') }}/${hash}`;
                 } else {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Kode Hash Kosong',
-                        text: 'Silakan masukkan kode hash sertifikat',
-                        confirmButtonColor: '#3B82F6'
-                    });
+                    alert('Silakan masukkan kode hash sertifikat');
                 }
             });
-
-            // AJAX verification function
-            function verifyHash(hash) {
-                const btn = document.getElementById('verifyBtn');
-                const originalText = btn.innerHTML;
-
-                // Loading state
-                btn.disabled = true;
-                btn.innerHTML = `
-                <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <span>Memverifikasi...</span>
-            `;
-
-                fetch('{{ route("verifikasi.check") }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: JSON.stringify({ hash: hash })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        btn.disabled = false;
-                        btn.innerHTML = originalText;
-                        // DEBUG: Log the API response to see what's returned
-                        console.log('API Response:', data);
-
-                        // Check if certificate was found (certificate object exists in response)
-                        if (data.certificate) {
-                            // Certificate found - show success and redirect to detail
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Sertifikat Ditemukan!',
-                                html: `<p>Data sertifikat berhasil ditemukan dalam sistem kami</p>
-                               <p class="text-sm text-gray-500 mt-2">Kode: <b>${hash}</b></p>`,
-                                showConfirmButton: true,
-                                confirmButtonText: 'Lihat Detail',
-                                confirmButtonColor: '#10B981',
-                                timer: 3000,
-                                timerProgressBar: true
-                            }).then(() => {
-                                // Redirect to certificate detail page
-                                window.location.href = `{{ url('/verifikasi') }}/${hash}`;
-                            });
-                        } else {
-                            // Certificate NOT found - show error then redirect to invalid page
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Sertifikat Tidak Ditemukan',
-                                html: `<p>Data sertifikat tidak ditemukan dalam sistem kami</p>
-                               <p class="text-sm text-gray-500 mt-2">Kode: <b>${hash}</b></p>`,
-                                showConfirmButton: true,
-                                confirmButtonText: 'Lihat Detail',
-                                confirmButtonColor: '#EF4444',
-                                timer: 3000,
-                                timerProgressBar: true
-                            }).then(() => {
-                                // Redirect to invalid page with hash
-                                window.location.href = `{{ url('/verifikasi') }}/${hash}`;
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        btn.disabled = false;
-                        btn.innerHTML = originalText;
-                        console.error('Verification error:', error);
-
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Terjadi Kesalahan',
-                            text: 'Tidak dapat memverifikasi sertifikat. Silakan coba lagi.',
-                            confirmButtonColor: '#3B82F6'
-                        });
-                    });
-            }
         </script>
     @endpush
 
