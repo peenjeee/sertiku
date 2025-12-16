@@ -8,6 +8,7 @@ Platform terdepan untuk menerbitkan, mengelola, dan memverifikasi sertifikat dig
 [![Vite](https://img.shields.io/badge/Vite-7.0+-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0+-4479A1?style=flat-square&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Blade](https://img.shields.io/badge/Blade-Template-FF2D20?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com/docs/blade)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
 [![Cloudflare](https://img.shields.io/badge/Cloudflare-Protected-F38020?style=flat-square&logo=cloudflare&logoColor=white)](https://www.cloudflare.com/)
 [![Turnstile](https://img.shields.io/badge/Turnstile-CAPTCHA-F38020?style=flat-square&logo=cloudflare&logoColor=white)](https://www.cloudflare.com/products/turnstile/)
@@ -21,6 +22,7 @@ Platform terdepan untuk menerbitkan, mengelola, dan memverifikasi sertifikat dig
 
 [![Midtrans](https://img.shields.io/badge/Midtrans-Payment-00A9E0?style=flat-square&logo=money&logoColor=white)](https://midtrans.com/)
 [![QR Code](https://img.shields.io/badge/QR_Code-Generator-000000?style=flat-square&logo=qrcode&logoColor=white)](https://github.com/SimpleSoftwareIO/simple-qrcode)
+[![PWA](https://img.shields.io/badge/PWA-Ready-5A0FC8?style=flat-square&logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
 
 ## ✨ Fitur
 
@@ -43,6 +45,12 @@ Platform terdepan untuk menerbitkan, mengelola, dan memverifikasi sertifikat dig
 - 👥 Multi-role: User, Lembaga, Admin, Master
 - 🔔 Notifikasi real-time
 - 📱 Responsive design untuk mobile
+
+### PWA & SEO
+- 📲 Progressive Web App - Install ke home screen
+- 🔔 Push Notifications - Notifikasi browser
+- 🔍 SEO Optimized - Meta tags, sitemap, robots.txt
+- 📊 Google Search Console & Bing Webmaster Tools ready
 
 ## 🚀 Instalasi
 
@@ -148,8 +156,6 @@ POLYGON_CONTRACT_ADDRESS=your-contract-address
 POLYGON_EXPLORER_URL=https://amoy.polygonscan.com
 ```
 
->
-
 ### Midtrans Payment Gateway (Opsional)
 
 Untuk fitur pembayaran paket premium:
@@ -160,6 +166,19 @@ MIDTRANS_CLIENT_KEY=your-client-key
 MIDTRANS_IS_PRODUCTION=false
 MIDTRANS_IS_3DS=true
 ```
+
+## 🔄 Auto Deployment
+
+SertiKu mendukung auto-deploy via GitHub Actions dengan SSH:
+
+1. Setup SSH keys di server hosting
+2. Tambahkan secrets di GitHub repository:
+   - `SSH_HOST` - Server IP/hostname
+   - `SSH_USERNAME` - SSH username
+   - `SSH_PORT` - SSH port
+   - `SSH_PRIVATE_KEY` - Private key
+   - `PROJECT_PATH` - Path project di server
+3. Push ke branch `main` untuk trigger deploy
 
 ## ▶️ Menjalankan
 
@@ -216,7 +235,8 @@ sertiku/
 ├── app/
 │   ├── Http/
 │   │   ├── Controllers/
-│   │   │   └── Auth/           # Login, Register, OTP, Password Reset
+│   │   │   ├── Auth/           # Login, Register, OTP, Password Reset
+│   │   │   └── SitemapController.php  # Sitemap generation
 │   │   └── Middleware/
 │   ├── Mail/                   # Mailable classes (OTP, dll)
 │   ├── Models/
@@ -226,13 +246,21 @@ sertiku/
 │   └── services.php            # Google OAuth config
 ├── database/
 │   └── migrations/
+├── public/
+│   ├── manifest.json           # PWA manifest
+│   ├── sw.js                   # Service Worker
+│   └── robots.txt              # SEO robots
 ├── resources/
 │   └── views/
 │       ├── auth/               # Login, Register, OTP, Reset Password
 │       ├── emails/             # Email templates
-│       └── components/         # Blade components
+│       ├── sitemap/            # Sitemap template
+│       └── components/         # Blade components (SEO, PWA)
 ├── routes/
 │   └── web.php
+├── .github/
+│   └── workflows/
+│       └── deploy.yml          # GitHub Actions auto-deploy
 └── .env
 ```
 
@@ -262,6 +290,10 @@ Connect Wallet → Input Email → Kirim OTP → Verifikasi → Dashboard
 ```
 Forgot Password → Kirim Link → Klik Link → Input Password Baru → Login
 ```
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
