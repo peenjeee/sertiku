@@ -590,7 +590,7 @@
                                 icon: 'success',
                                 title: 'Verifikasi Berhasil!',
                                 html: `<p>Data sertifikat ditemukan dalam sistem kami</p>
-                               <p class="text-sm text-gray-500 mt-2">Kode: <b>${data.hash}</b></p>`,
+                               <p class="text-sm text-gray-500 mt-2">Kode: <b>${hash}</b></p>`,
                                 showConfirmButton: true,
                                 confirmButtonText: 'Lihat Detail',
                                 confirmButtonColor: '#10B981',
@@ -606,7 +606,7 @@
                                 icon: 'error',
                                 title: 'Verifikasi Gagal!',
                                 html: `<p>Data sertifikat tidak ditemukan dalam sistem kami</p>
-                               <p class="text-sm text-gray-500 mt-2">Kode: <b>${data.hash}</b></p>`,
+                               <p class="text-sm text-gray-500 mt-2">Kode: <b>${hash}</b></p>`,
                                 showConfirmButton: true,
                                 confirmButtonText: 'Lihat Detail',
                                 confirmButtonColor: '#EF4444',
