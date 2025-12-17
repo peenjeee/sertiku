@@ -47,10 +47,12 @@ Platform terdepan untuk menerbitkan, mengelola, dan memverifikasi sertifikat dig
 - 📱 Responsive design untuk mobile
 
 ### PWA & SEO
-- 📲 Progressive Web App - Install ke home screen
+- 📲 Progressive Web App - Install ke home screen dengan banner prompt
 - 🔔 Push Notifications - Notifikasi browser
-- 🔍 SEO Optimized - Meta tags, sitemap, robots.txt
-- 📊 Google Search Console & Bing Webmaster Tools ready
+- 🍪 Cookie Consent Banner - Kepatuhan regulasi privasi
+- 🔍 SEO Optimized - Meta tags, Open Graph, JSON-LD structured data
+- 🗺️ Sitemap & robots.txt - Auto-generated untuk search engines
+- 📊 Google Search Console & Bing Webmaster Tools verified
 
 ## 🚀 Instalasi
 
@@ -167,18 +169,18 @@ MIDTRANS_IS_PRODUCTION=false
 MIDTRANS_IS_3DS=true
 ```
 
-## 🔄 Auto Deployment
+## 🔄 Deployment
 
-SertiKu mendukung auto-deploy via GitHub Actions dengan SSH:
+Deploy manual via cPanel Terminal:
 
-1. Setup SSH keys di server hosting
-2. Tambahkan secrets di GitHub repository:
-   - `SSH_HOST` - Server IP/hostname
-   - `SSH_USERNAME` - SSH username
-   - `SSH_PORT` - SSH port
-   - `SSH_PRIVATE_KEY` - Private key
-   - `PROJECT_PATH` - Path project di server
-3. Push ke branch `main` untuk trigger deploy
+```bash
+cd ~/sertiku
+git pull origin main
+composer install --no-dev --optimize-autoloader
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
 
 ## ▶️ Menjalankan
 
@@ -258,9 +260,6 @@ sertiku/
 │       └── components/         # Blade components (SEO, PWA)
 ├── routes/
 │   └── web.php
-├── .github/
-│   └── workflows/
-│       └── deploy.yml          # GitHub Actions auto-deploy
 └── .env
 ```
 
