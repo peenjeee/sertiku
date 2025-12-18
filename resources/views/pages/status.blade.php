@@ -93,11 +93,11 @@
                 <div class="rounded-2xl bg-gradient-to-r from-[#1E3A8F]/30 to-[#3B82F6]/30 border border-[#3B82F6]/30 p-8">
                     <h3 class="text-xl font-semibold text-white mb-2">Dapatkan Notifikasi Status</h3>
                     <p class="text-[#BEDBFF]/80 mb-6">Dapatkan update jika ada gangguan layanan</p>
-                    <form class="flex gap-3 max-w-md mx-auto">
+                    <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
                         <input type="email" placeholder="email@contoh.com"
                                class="flex-1 rounded-lg bg-white/10 border border-white/20 px-4 py-3 text-white text-sm placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]">
                         <button type="button"
-                                class="rounded-lg bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-6 py-3 text-sm font-medium text-white hover:brightness-110 transition">
+                                class="w-full sm:w-auto rounded-lg bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-6 py-3 text-sm font-medium text-white hover:brightness-110 transition">
                             Subscribe
                         </button>
                     </form>
