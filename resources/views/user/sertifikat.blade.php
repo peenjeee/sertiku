@@ -10,15 +10,15 @@
     </div>
 
     {{-- Stats Cards --}}
-    <div class="grid grid-cols-3 gap-4 mb-6">
+    <div class="grid grid-cols-3 gap-2 sm:gap-4 mb-6">
         {{-- Total Sertifikat --}}
-        <div class="stat-card-blue rounded-xl lg:rounded-2xl p-4 lg:p-5 animate-fade-in-up stagger-1">
-            <div class="flex items-center justify-between">
+        <div class="stat-card-blue rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-5 animate-fade-in-up stagger-1">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <p class="text-white/60 text-xs lg:text-sm">Total Sertifikat</p>
-                    <p class="text-2xl lg:text-3xl font-bold text-white mt-1">{{ $stats['total'] }}</p>
+                    <p class="text-white/60 text-[10px] sm:text-xs lg:text-sm">Total Sertifikat</p>
+                    <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-white mt-1">{{ $stats['total'] }}</p>
                 </div>
-                <div class="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                <div class="hidden sm:flex w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-blue-500/20 items-center justify-center">
                     <svg class="w-5 h-5 lg:w-6 lg:h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
                     </svg>
@@ -27,13 +27,13 @@
         </div>
 
         {{-- Sertifikat Aktif --}}
-        <div class="stat-card-green rounded-xl lg:rounded-2xl p-4 lg:p-5 animate-fade-in-up stagger-2">
-            <div class="flex items-center justify-between">
+        <div class="stat-card-green rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-5 animate-fade-in-up stagger-2">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <p class="text-white/60 text-xs lg:text-sm">Sertifikat Aktif</p>
-                    <p class="text-2xl lg:text-3xl font-bold text-white mt-1">{{ $stats['aktif'] }}</p>
+                    <p class="text-white/60 text-[10px] sm:text-xs lg:text-sm">Sertifikat Aktif</p>
+                    <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-white mt-1">{{ $stats['aktif'] }}</p>
                 </div>
-                <div class="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-green-500/20 flex items-center justify-center">
+                <div class="hidden sm:flex w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-green-500/20 items-center justify-center">
                     <svg class="w-5 h-5 lg:w-6 lg:h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
@@ -42,13 +42,13 @@
         </div>
 
         {{-- Dicabut --}}
-        <div class="stat-card rounded-xl lg:rounded-2xl p-4 lg:p-5 animate-fade-in-up stagger-3">
-            <div class="flex items-center justify-between">
+        <div class="stat-card rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-5 animate-fade-in-up stagger-3">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <p class="text-white/60 text-xs lg:text-sm">Dicabut</p>
-                    <p class="text-2xl lg:text-3xl font-bold text-white mt-1">{{ $stats['dicabut'] }}</p>
+                    <p class="text-white/60 text-[10px] sm:text-xs lg:text-sm">Dicabut</p>
+                    <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-white mt-1">{{ $stats['dicabut'] }}</p>
                 </div>
-                <div class="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-red-500/20 flex items-center justify-center">
+                <div class="hidden sm:flex w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-red-500/20 items-center justify-center">
                     <svg class="w-5 h-5 lg:w-6 lg:h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
@@ -58,26 +58,26 @@
     </div>
 
     {{-- Search Section --}}
-    <div class="glass-card rounded-2xl p-5 lg:p-6 mb-6 animate-fade-in-up">
-        <h2 class="text-white font-medium mb-4">Cari Sertifikat berdasarkan Nama Kursus atau ID</h2>
-        <form action="{{ route('user.sertifikat') }}" method="GET" class="space-y-4">
+    <div class="glass-card rounded-2xl p-4 sm:p-5 lg:p-6 mb-6 animate-fade-in-up">
+        <h2 class="text-white font-medium mb-4 text-sm sm:text-base">Cari Sertifikat berdasarkan Nama Kursus atau ID</h2>
+        <form action="{{ route('user.sertifikat') }}" method="GET" class="space-y-3 sm:space-y-4">
             {{-- Search Input --}}
             <div class="relative">
-                <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
                 <input type="text" name="search" value="{{ request('search') }}"
-                       class="w-full rounded-xl bg-white/5 border border-white/10 pl-12 pr-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                       class="w-full rounded-xl bg-white/5 border border-white/10 pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm sm:text-base text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                        placeholder="Ketik untuk mencari...">
             </div>
 
             {{-- ID Input --}}
-            <div class="flex gap-3">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                 <input type="text" name="id"
-                       class="flex-1 rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                       class="flex-1 rounded-xl bg-white/5 border border-white/10 px-4 py-2.5 sm:py-3 text-sm sm:text-base text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                        placeholder="Atau masukkan ID Sertifikat...">
                 <button type="submit"
-                        class="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium hover:brightness-110 transition flex items-center gap-2">
+                        class="w-full sm:w-auto px-6 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium hover:brightness-110 transition flex items-center justify-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>

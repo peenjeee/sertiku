@@ -484,7 +484,7 @@
 
                 // Update status
                 document.getElementById('scanStatus').innerHTML =
-                    '<span class="text-green-400">QR Code terdeteksi! Memproses...</span>';
+                    '<span class="text-green-400">QR Code terdeteksi! Mengalihkan...</span>';
 
                 // Cek apakah hasil scan adalah URL atau kode hash
                 let hashCode = decodedText;
@@ -498,26 +498,11 @@
                     hashCode = urlParams.get('hash');
                 }
 
-                // Isi form dengan hasil scan
-                document.querySelector('input[name="hash"]').value = hashCode;
-
                 // Tutup modal
                 closeQRScanner();
 
-                // Tampilkan notifikasi
-                Swal.fire({
-                    icon: 'success',
-                    title: 'QR Code Terdeteksi!',
-                    text: 'Kode: ' + hashCode,
-                    showConfirmButton: true,
-                    confirmButtonText: 'Verifikasi Sekarang',
-                    confirmButtonColor: '#3B82F6'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Submit via AJAX
-                        verifyHash(hashCode);
-                    }
-                });
+                // Langsung redirect ke halaman hasil verifikasi
+                window.location.href = '{{ url("/verifikasi") }}/' + hashCode;
             }
 
             function onScanFailure(error) {
