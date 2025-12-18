@@ -1,12 +1,12 @@
 {{-- resources/views/auth/register.blade.php --}}
 <x-layouts.app title="SertiKu – Daftar Akun">
 
-    <main class="min-h-screen bg-gradient-to-b from-[#0F172A] via-[#1E293B] to-[#0F172A] px-4 py-10 flex items-center justify-center">
+    <main class="min-h-screen bg-gradient-to-b from-[#0F172A] via-[#1E293B] to-[#0F172A] px-4 py-10 flex items-center justify-center overflow-x-hidden">
 
         <div class="relative w-full max-w-6xl">
-            {{-- Glow kiri-kanan --}}
-            <div class="pointer-events-none absolute -left-32 top-24 h-96 w-96 rounded-full bg-gradient-to-r from-[#2B7FFF4D] to-[#00B8DB4D] blur-3xl opacity-80"></div>
-            <div class="pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-gradient-to-r from-[#AD46FF33] to-[#F6339A33] blur-3xl opacity-80"></div>
+            {{-- Glow kiri-kanan (hidden on mobile to prevent overflow) --}}
+            <div class="pointer-events-none absolute -left-32 top-24 h-96 w-96 rounded-full bg-gradient-to-r from-[#2B7FFF4D] to-[#00B8DB4D] blur-3xl opacity-80 hidden md:block"></div>
+            <div class="pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-gradient-to-r from-[#AD46FF33] to-[#F6339A33] blur-3xl opacity-80 hidden md:block"></div>
 
             {{-- Kartu utama --}}
             <div class="relative mx-auto max-w-4xl text-white">
@@ -42,51 +42,51 @@
                 </div>
 
                 {{-- STEP INDICATOR – PENGGUNA / LEMBAGA DIPISAH --}}
-                <div class="mb-6">
+                <div class="mb-6 px-2 sm:px-0">
                     {{-- Stepper Pengguna --}}
                     <div id="stepper-pengguna">
                         <div class="flex justify-between mb-3">
                             {{-- Info pribadi --}}
                             <div class="flex flex-col items-center w-1/4">
                                 <div id="userStepIcon-1"
-                                     class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#00C950] to-[#00BC7D] text-white shadow">
-                                    <span class="text-sm font-semibold">1</span>
+                                     class="flex h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#00C950] to-[#00BC7D] text-white shadow">
+                                    <span class="text-xs sm:text-sm font-semibold">1</span>
                                 </div>
-                                <p class="mt-2 text-xs font-medium" id="userStepLabel-1">Info Pribadi</p>
+                                <p class="mt-1 sm:mt-2 text-[10px] sm:text-xs font-medium text-center" id="userStepLabel-1">Info Pribadi</p>
                             </div>
 
                             {{-- Kontak --}}
                             <div class="flex flex-col items-center w-1/4">
                                 <div id="userStepIcon-2"
-                                     class="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white/60">
-                                    <span class="text-sm font-semibold">2</span>
+                                     class="flex h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white/60">
+                                    <span class="text-xs sm:text-sm font-semibold">2</span>
                                 </div>
-                                <p class="mt-2 text-xs text-white/60" id="userStepLabel-2">Kontak</p>
+                                <p class="mt-1 sm:mt-2 text-[10px] sm:text-xs text-white/60 text-center" id="userStepLabel-2">Kontak</p>
                             </div>
 
                             {{-- Keamanan --}}
                             <div class="flex flex-col items-center w-1/4">
                                 <div id="userStepIcon-3"
-                                     class="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white/60">
-                                    <span class="text-sm font-semibold">3</span>
+                                     class="flex h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white/60">
+                                    <span class="text-xs sm:text-sm font-semibold">3</span>
                                 </div>
-                                <p class="mt-2 text-xs text-white/60" id="userStepLabel-3">Keamanan</p>
+                                <p class="mt-1 sm:mt-2 text-[10px] sm:text-xs text-white/60 text-center" id="userStepLabel-3">Keamanan</p>
                             </div>
 
                             {{-- Minat (placeholder) --}}
                             <div class="flex flex-col items-center w-1/4">
                                 <div id="userStepIcon-4"
-                                     class="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white/60">
-                                    <span class="text-sm font-semibold">4</span>
+                                     class="flex h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white/60">
+                                    <span class="text-xs sm:text-sm font-semibold">4</span>
                                 </div>
-                                <p class="mt-2 text-xs text-white/60" id="userStepLabel-4">Minat</p>
+                                <p class="mt-1 sm:mt-2 text-[10px] sm:text-xs text-white/60 text-center" id="userStepLabel-4">Minat</p>
                             </div>
                         </div>
 
                         {{-- Progress bar --}}
-                        <div class="h-4 rounded-full bg-white/10 overflow-hidden">
+                        <div class="h-2 sm:h-4 rounded-full bg-white/10 overflow-hidden">
                             <div id="userStepProgress"
-                                 class="h-4 w-1/4 bg-gradient-to-r from-[#155DFC] to-[#0092B8] transition-all duration-300">
+                                 class="h-2 sm:h-4 w-1/4 bg-gradient-to-r from-[#155DFC] to-[#0092B8] transition-all duration-300">
                             </div>
                         </div>
                     </div>
@@ -97,44 +97,44 @@
                             {{-- Info Lembaga --}}
                             <div class="flex flex-col items-center w-1/4">
                                 <div id="orgStepIcon-1"
-                                     class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#00C950] to-[#00BC7D] text-white shadow">
-                                    <span class="text-sm font-semibold">1</span>
+                                     class="flex h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#00C950] to-[#00BC7D] text-white shadow">
+                                    <span class="text-xs sm:text-sm font-semibold">1</span>
                                 </div>
-                                <p class="mt-2 text-xs font-medium" id="orgStepLabel-1">Info Lembaga</p>
+                                <p class="mt-1 sm:mt-2 text-[10px] sm:text-xs font-medium text-center" id="orgStepLabel-1">Info Lembaga</p>
                             </div>
 
                             {{-- Alamat --}}
                             <div class="flex flex-col items-center w-1/4">
                                 <div id="orgStepIcon-2"
-                                     class="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white/60">
-                                    <span class="text-sm font-semibold">2</span>
+                                     class="flex h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white/60">
+                                    <span class="text-xs sm:text-sm font-semibold">2</span>
                                 </div>
-                                <p class="mt-2 text-xs text-white/60" id="orgStepLabel-2">Alamat</p>
+                                <p class="mt-1 sm:mt-2 text-[10px] sm:text-xs text-white/60 text-center" id="orgStepLabel-2">Alamat</p>
                             </div>
 
                             {{-- Admin --}}
                             <div class="flex flex-col items-center w-1/4">
                                 <div id="orgStepIcon-3"
-                                     class="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white/60">
-                                    <span class="text-sm font-semibold">3</span>
+                                     class="flex h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white/60">
+                                    <span class="text-xs sm:text-sm font-semibold">3</span>
                                 </div>
-                                <p class="mt-2 text-xs text-white/60" id="orgStepLabel-3">Admin</p>
+                                <p class="mt-1 sm:mt-2 text-[10px] sm:text-xs text-white/60 text-center" id="orgStepLabel-3">Admin</p>
                             </div>
 
                             {{-- Dokumen --}}
                             <div class="flex flex-col items-center w-1/4">
                                 <div id="orgStepIcon-4"
-                                     class="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white/60">
-                                    <span class="text-sm font-semibold">4</span>
+                                     class="flex h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white/60">
+                                    <span class="text-xs sm:text-sm font-semibold">4</span>
                                 </div>
-                                <p class="mt-2 text-xs text-white/60" id="orgStepLabel-4">Dokumen</p>
+                                <p class="mt-1 sm:mt-2 text-[10px] sm:text-xs text-white/60 text-center" id="orgStepLabel-4">Dokumen</p>
                             </div>
                         </div>
 
                         {{-- Progress bar lembaga --}}
-                        <div class="h-4 rounded-full bg-white/10 overflow-hidden">
+                        <div class="h-2 sm:h-4 rounded-full bg-white/10 overflow-hidden">
                             <div id="orgStepProgress"
-                                 class="h-4 w-1/4 bg-gradient-to-r from-[#155DFC] to-[#0092B8] transition-all duration-300">
+                                 class="h-2 sm:h-4 w-1/4 bg-gradient-to-r from-[#155DFC] to-[#0092B8] transition-all duration-300">
                             </div>
                         </div>
                     </div>

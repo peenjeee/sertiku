@@ -2,7 +2,7 @@
 <x-layouts.user title="Sertifikat Saya – SertiKu">
 
     {{-- Header --}}
-    <div class="mb-6 animate-fade-in-up">
+    <div class="mb-6 animate-fade-in-up pl-10 lg:pl-0">
         <h1 class="text-2xl lg:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
             Sertifikat Saya
         </h1>

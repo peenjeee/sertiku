@@ -747,8 +747,8 @@ md:-left-8 md:-top-8 md:h-16 md:w-16 z-10">
 
             {{-- Form input + tombol --}}
             <div class="mt-8 flex justify-center">
-                <form action="{{ route('register') }}" method="GET" class="w-full max-w-md">
-                    <div class="flex gap-3">
+                <form action="{{ route('register') }}" method="GET" class="w-full max-w-md px-2 sm:px-0">
+                    <div class="flex flex-col sm:flex-row gap-3">
                         {{-- Input email --}}
                         <input
                             type="email"
@@ -759,7 +759,7 @@ md:-left-8 md:-top-8 md:h-16 md:w-16 z-10">
                         {{-- Tombol Mulai --}}
                         <button
                             type="submit"
-                            class="inline-flex items-center gap-2 rounded-[10px] border border-white bg-[#FFFFFF] px-4 py-2.5 text-xs font-semibold text-[#1F2937] shadow-[0_12px_30px_-16px_rgba(15,23,42,0.9)] hover:bg-[#E5E7EB] transition">
+                            class="inline-flex items-center justify-center gap-2 rounded-[10px] border border-white bg-[#FFFFFF] px-4 py-2.5 text-xs font-semibold text-[#1F2937] shadow-[0_12px_30px_-16px_rgba(15,23,42,0.9)] hover:bg-[#E5E7EB] transition w-full sm:w-auto">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M3.33252 7.99805H12.6636" stroke="#1E3A8F" stroke-width="1.33301" stroke-linecap="round" stroke-linejoin="round" />
                                 <path d="M7.99805 3.33252L12.6636 7.99805L7.99805 12.6636" stroke="#1E3A8F" stroke-width="1.33301" stroke-linecap="round" stroke-linejoin="round" />

@@ -383,11 +383,11 @@
     </style>
 </head>
 
-<body class="antialiased">
-    <div class="institution-bg flex relative">
-        <!-- Blur decorations -->
-        <div class="blur-circle-1"></div>
-        <div class="blur-circle-2"></div>
+<body class="antialiased overflow-x-hidden">
+    <div class="institution-bg flex relative overflow-x-hidden">
+        <!-- Blur decorations (hidden on mobile to prevent overflow) -->
+        <div class="blur-circle-1 hidden md:block"></div>
+        <div class="blur-circle-2 hidden md:block"></div>
 
         <!-- Mobile Overlay -->
         <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
@@ -559,8 +559,10 @@
         </button>
 
         <!-- Main Content -->
-        <main class="main-content flex-1 p-4 pt-16 md:pt-6 lg:p-8 relative z-10" id="mainContent">
-            {{ $slot }}
+        <main class="main-content flex-1 p-4 pt-16 md:pt-6 lg:p-8 relative z-10 overflow-x-hidden max-w-full w-full" id="mainContent">
+            <div class="max-w-full overflow-x-hidden">
+                {{ $slot }}
+            </div>
         </main>
 
         <!-- Chat Widget -->

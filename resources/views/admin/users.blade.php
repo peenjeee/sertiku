@@ -56,9 +56,10 @@
         </form>
     </div>
 
-    <!-- Users Table -->
+    <!-- Users Table (Desktop) / Cards (Mobile) -->
     <div class="glass-card rounded-2xl overflow-hidden animate-fade-in">
-        <div class="overflow-x-auto">
+        <!-- Desktop Table -->
+        <div class="hidden md:block overflow-x-auto">
             <table class="w-full">
                 <thead>
                     <tr class="bg-gray-50 border-b border-gray-100">
@@ -148,6 +149,73 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        <!-- Mobile Cards -->
+        <div class="md:hidden divide-y divide-gray-100">
+            @forelse($users as $user)
+            <div class="p-4 hover:bg-gray-50 transition">
+                <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="min-w-0">
+                                <p class="text-gray-800 font-medium text-sm truncate">{{ $user->name }}</p>
+                                <p class="text-gray-500 text-xs truncate">{{ $user->email }}</p>
+                            </div>
+                            <div class="flex items-center gap-1 flex-shrink-0">
+                                <a href="{{ route('admin.users.show', $user) }}"
+                                   class="p-1.5 hover:bg-gray-200 rounded-lg transition">
+                                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    </svg>
+                                </a>
+                                <form method="POST" action="{{ route('admin.users.toggle', $user) }}" class="inline">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="p-1.5 hover:bg-gray-200 rounded-lg transition">
+                                        @if($user->profile_completed)
+                                        <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+                                        </svg>
+                                        @else
+                                        <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        @endif
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 mt-2">
+                            @if($user->account_type === 'admin')
+                            <span class="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">Admin</span>
+                            @elseif($user->account_type === 'lembaga')
+                            <span class="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-medium rounded-full">Lembaga</span>
+                            @else
+                            <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">Pengguna</span>
+                            @endif
+                            @if($user->profile_completed)
+                            <span class="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-full">Aktif</span>
+                            @else
+                            <span class="px-2 py-0.5 bg-gray-100 text-gray-500 text-xs font-medium rounded-full">Tidak Aktif</span>
+                            @endif
+                            <span class="text-gray-400 text-xs">{{ $user->created_at->format('d M Y') }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @empty
+            <div class="py-12 text-center">
+                <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                <p class="text-gray-400">Tidak ada pengguna ditemukan</p>
+            </div>
+            @endforelse
         </div>
 
         <!-- Pagination -->

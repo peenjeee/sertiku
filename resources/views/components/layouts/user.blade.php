@@ -109,7 +109,7 @@
         .user-profile-section { background: rgba(255, 255, 255, 0.03); border-top: 1px solid rgba(255, 255, 255, 0.08); }
     </style>
 </head>
-<body class="antialiased text-white">
+<body class="antialiased text-white overflow-x-hidden">
     {{-- Sidebar Overlay (Mobile) --}}
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
@@ -208,8 +208,10 @@
     </button>
 
     {{-- Main Content --}}
-    <main class="main-content">
-        {{ $slot }}
+    <main class="main-content pt-16 lg:pt-0 px-4 lg:px-6 pb-6 overflow-x-hidden max-w-full">
+        <div class="max-w-full overflow-x-hidden">
+            {{ $slot }}
+        </div>
     </main>
 
     {{-- Chat Widget Component --}}
