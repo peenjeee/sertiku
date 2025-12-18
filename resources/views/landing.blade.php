@@ -197,9 +197,9 @@ md:-left-8 md:-top-8 md:h-16 md:w-16 z-10">
                         </div>
                     </div>
 
-                    {{-- qr --}}
+                    {{-- qr (hidden on mobile to prevent overlap) --}}
                     <div
-                        class="absolute right-4 -bottom-3 flex h-12 w-12 items-center justify-center rounded-2xl
+                        class="hidden md:flex absolute right-4 -bottom-3 items-center justify-center rounded-2xl
                    bg-gradient-to-br from-[#8B5CF6] to-[#EC4899] shadow-[0_18px_40px_-18px_rgba(168,85,247,0.8)]
                    md:-right-8 md:-bottom-3 md:h-16 md:w-16">
                         <div

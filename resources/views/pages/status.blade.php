@@ -2,15 +2,15 @@
 <x-layouts.app title="SertiKu – Status Sistem">
 
         {{-- Hero --}}
-        <section class="overflow-hidden py-16 md:py-20">
-            <div class="pointer-events-none absolute -left-32 top-0 h-96 w-96 rounded-full bg-gradient-to-r from-[#10B98133] to-[#00B8DB33] blur-3xl opacity-60"></div>
+        <section class="overflow-hidden py-16 md:py-20 px-4">
+            <div class="pointer-events-none absolute -left-32 top-0 h-96 w-96 rounded-full bg-gradient-to-r from-[#10B98133] to-[#00B8DB33] blur-3xl opacity-60 hidden md:block"></div>
             <div class="mx-auto max-w-4xl px-4 text-center relative z-10">
                 {{-- Status Badge --}}
                 <div class="inline-flex items-center gap-2 rounded-full bg-[#10B981]/20 border border-[#10B981]/30 px-4 py-2 mb-6">
                     <span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
                     <span class="text-sm font-medium text-[#10B981]">Semua Sistem Berjalan Normal</span>
                 </div>
-                
+
                 <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Status Sistem</h1>
                 <p class="text-lg text-[#BEDBFF]/80 max-w-2xl mx-auto">
                     Pantau status layanan SertiKu secara real-time
@@ -33,20 +33,20 @@
                     @endphp
 
                     @foreach($services as $service)
-                    <div class="flex items-center justify-between rounded-xl bg-white/5 border border-white/10 p-5">
-                        <div class="flex items-center gap-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 rounded-xl bg-white/5 border border-white/10 p-4 sm:p-5">
+                        <div class="flex items-center gap-3 sm:gap-4">
                             @if($service['status'] === 'operational')
-                            <span class="w-3 h-3 rounded-full bg-[#10B981]"></span>
+                            <span class="w-3 h-3 rounded-full bg-[#10B981] flex-shrink-0"></span>
                             @elseif($service['status'] === 'degraded')
-                            <span class="w-3 h-3 rounded-full bg-[#F59E0B]"></span>
+                            <span class="w-3 h-3 rounded-full bg-[#F59E0B] flex-shrink-0"></span>
                             @else
-                            <span class="w-3 h-3 rounded-full bg-[#EF4444]"></span>
+                            <span class="w-3 h-3 rounded-full bg-[#EF4444] flex-shrink-0"></span>
                             @endif
-                            <span class="text-white font-medium">{{ $service['name'] }}</span>
+                            <span class="text-white font-medium text-sm sm:text-base">{{ $service['name'] }}</span>
                         </div>
-                        <div class="flex items-center gap-4">
-                            <span class="text-sm text-[#BEDBFF]/60">Uptime: {{ $service['uptime'] }}</span>
-                            <span class="text-sm text-[#10B981]">Operational</span>
+                        <div class="flex items-center gap-3 sm:gap-4 pl-6 sm:pl-0">
+                            <span class="text-xs sm:text-sm text-[#BEDBFF]/60">Uptime: {{ $service['uptime'] }}</span>
+                            <span class="text-xs sm:text-sm text-[#10B981]">Operational</span>
                         </div>
                     </div>
                     @endforeach
@@ -94,9 +94,9 @@
                     <h3 class="text-xl font-semibold text-white mb-2">Dapatkan Notifikasi Status</h3>
                     <p class="text-[#BEDBFF]/80 mb-6">Dapatkan update jika ada gangguan layanan</p>
                     <form class="flex gap-3 max-w-md mx-auto">
-                        <input type="email" placeholder="email@contoh.com" 
+                        <input type="email" placeholder="email@contoh.com"
                                class="flex-1 rounded-lg bg-white/10 border border-white/20 px-4 py-3 text-white text-sm placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]">
-                        <button type="button" 
+                        <button type="button"
                                 class="rounded-lg bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-6 py-3 text-sm font-medium text-white hover:brightness-110 transition">
                             Subscribe
                         </button>

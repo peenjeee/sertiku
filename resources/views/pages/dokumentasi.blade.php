@@ -3,9 +3,9 @@
 
 
         {{-- Hero --}}
-        <section class="overflow-hidden py-16 md:py-20">
-            <div class="pointer-events-none absolute -right-32 top-0 h-96 w-96 rounded-full bg-gradient-to-r from-[#AD46FF33] to-[#F6339A33] blur-3xl opacity-60"></div>
-            <div class="mx-auto max-w-4xl px-4 text-center relative z-10">
+        <section class="overflow-hidden py-16 md:py-20 px-4">
+            <div class="pointer-events-none absolute -right-32 top-0 h-96 w-96 rounded-full bg-gradient-to-r from-[#AD46FF33] to-[#F6339A33] blur-3xl opacity-60 hidden md:block"></div>
+            <div class="mx-auto max-w-4xl text-center relative z-10">
                 <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 animate-fade-in-up">Dokumentasi</h1>
                 <p class="text-lg text-[#BEDBFF]/80 max-w-2xl mx-auto animate-fade-in-up stagger-1">
                     Pelajari cara menggunakan SertiKu dengan panduan lengkap
