@@ -87,28 +87,25 @@ class LembagaController extends Controller
             }
         }
 
-        // If blockchain upload requested, store hash on chain
+        // If blockchain upload requested, dispatch job to process in background
         if ($validated['blockchain_enabled']) {
-            try {
-                $blockchainService = new \App\Services\BlockchainService();
+            $blockchainService = new \App\Services\BlockchainService();
 
-                if ($blockchainService->isEnabled()) {
-                    $txHash = $blockchainService->storeWithContract($certificate);
-
-                    if ($txHash) {
-                        return redirect()->route('lembaga.sertifikat.index')
-                            ->with('success', 'Sertifikat berhasil diterbitkan dan disimpan ke Blockchain! TX: ' . substr($txHash, 0, 20) . '...');
-                    }
-                } else {
-                    // Blockchain not configured, mark as failed
-                    $certificate->update([
-                        'blockchain_status' => 'failed',
-                    ]);
-                }
-            } catch (\Exception $e) {
-                \Log::error('Blockchain upload failed: ' . $e->getMessage());
+            if ($blockchainService->isEnabled()) {
+                // Mark as pending and dispatch background job
                 $certificate->update([
-                    'blockchain_status' => 'failed',
+                    'blockchain_status' => 'pending',
+                ]);
+
+                // Dispatch job to process blockchain in background
+                \App\Jobs\ProcessBlockchainCertificate::dispatch($certificate);
+
+                return redirect()->route('lembaga.sertifikat.index')
+                    ->with('success', 'Sertifikat berhasil diterbitkan! Proses blockchain sedang berjalan di background.');
+            } else {
+                // Blockchain not configured
+                $certificate->update([
+                    'blockchain_status' => 'disabled',
                 ]);
             }
         }
