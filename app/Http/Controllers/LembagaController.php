@@ -79,11 +79,12 @@ class LembagaController extends Controller
             $certificate->template->incrementUsage();
         }
 
-        // Send notification to recipient if email exists
+        // Send notification to recipient if email exists (queue it to avoid blocking)
         if ($validated['recipient_email']) {
             $recipient = \App\Models\User::where('email', $validated['recipient_email'])->first();
             if ($recipient) {
-                $recipient->notify(new \App\Notifications\CertificateReceived($certificate));
+                // Use queue to send notification in background
+                $recipient->notify((new \App\Notifications\CertificateReceived($certificate))->delay(now()->addSeconds(5)));
             }
         }
 
