@@ -4,12 +4,16 @@
         <div class="welcome-banner relative rounded-2xl lg:rounded-3xl p-5 lg:p-8 overflow-hidden animate-fade-in">
             <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 class="text-xl sm:text-2xl lg:text-3xl text-white font-bold mb-1 lg:mb-2">Selamat Datang, {{ Auth::user()->institution_name ?? Auth::user()->name }}! 👋</h1>
-                    <p class="text-[#DBEAFE] text-sm lg:text-lg">Kelola dan terbitkan sertifikat digital dengan mudah</p>
+                    <h1 class="text-xl sm:text-2xl lg:text-3xl text-white font-bold mb-1 lg:mb-2">Selamat Datang,
+                        {{ Auth::user()->institution_name ?? Auth::user()->name }}! 👋</h1>
+                    <p class="text-[#DBEAFE] text-sm lg:text-lg">Kelola dan terbitkan sertifikat digital dengan mudah
+                    </p>
                 </div>
                 <div class="opacity-30 hidden sm:block">
-                    <svg class="w-16 h-16 lg:w-24 lg:h-24" fill="none" stroke="white" viewBox="0 0 24 24" stroke-width="1">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                    <svg class="w-16 h-16 lg:w-24 lg:h-24" fill="none" stroke="white" viewBox="0 0 24 24"
+                        stroke-width="1">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                     </svg>
                 </div>
             </div>
@@ -26,68 +30,67 @@
 
         <!-- Upgrade Banner for Starter Plan -->
         @if($isStarterPlan)
-        <div class="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl p-3 lg:p-6">
-            <div class="flex flex-col gap-3">
-                <!-- Header -->
-                <div class="flex items-start gap-3">
-                    <div class="hidden sm:flex w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-lg lg:rounded-xl items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                        </svg>
+            <div class="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl p-3 lg:p-6">
+                <div class="flex flex-col gap-3">
+                    <!-- Header -->
+                    <div class="flex items-start gap-3">
+                        <div
+                            class="hidden sm:flex w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-lg lg:rounded-xl items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-[#92400E] font-bold text-sm lg:text-lg">Paket Starter</h3>
+                            <p class="text-[#B45309] text-xs lg:text-sm">
+                                Upgrade ke <strong>Professional</strong> untuk mendapatkan hingga 6.700 sertifikat/bulan
+                            </p>
+                        </div>
                     </div>
-                    <div class="flex-1 min-w-0">
-                        <h3 class="text-[#92400E] font-bold text-sm lg:text-lg">Paket Starter</h3>
-                        <p class="text-[#B45309] text-xs lg:text-sm">
-                            Upgrade ke <strong>Professional</strong> untuk mendapatkan hingga 6.700 sertifikat/bulan
-                        </p>
-                    </div>
-                </div>
 
-                <!-- Usage Progress -->
-                <div>
-                    <div class="flex items-center justify-between mb-1">
-                        <span class="text-[#92400E] text-xs lg:text-sm font-medium">Penggunaan</span>
-                        <span class="text-[#B45309] text-xs lg:text-sm font-bold">{{ $certificatesUsed }} / {{ $certificateLimit }} sertifikat</span>
+                    <!-- Usage Progress -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-[#92400E] text-xs lg:text-sm font-medium">Penggunaan</span>
+                            <span class="text-[#B45309] text-xs lg:text-sm font-bold">{{ $certificatesUsed }} /
+                                {{ $certificateLimit }} sertifikat</span>
+                        </div>
+                        <div class="w-full h-2 lg:h-3 bg-amber-200 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full"
+                                style="width: {{ $usagePercentage }}%"></div>
+                        </div>
+                        @if($remainingCerts <= 10)
+                            <p class="text-red-600 text-xs font-bold mt-1">⚠️ Sisa {{ $remainingCerts }} sertifikat!</p>
+                        @endif
                     </div>
-                    <div class="w-full h-2 lg:h-3 bg-amber-200 rounded-full overflow-hidden">
-                        <div class="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full" style="width: {{ $usagePercentage }}%"></div>
-                    </div>
-                    @if($remainingCerts <= 10)
-                    <p class="text-red-600 text-xs font-bold mt-1">⚠️ Sisa {{ $remainingCerts }} sertifikat!</p>
-                    @endif
-                </div>
 
-                <!-- Upgrade Button -->
-                <button type="button"
-                        id="btn-upgrade"
-                        onclick="initiateUpgrade()"
-                        class="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 lg:py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-bold rounded-lg hover:from-amber-600 hover:to-orange-600 transition disabled:opacity-50">
-                    <span id="btn-upgrade-text" class="flex items-center gap-2">
+                    {{-- Upgrade Button --}}
+                    <a href="{{ route('checkout', 'professional') }}"
+                        class="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 lg:py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-bold rounded-lg hover:from-amber-600 hover:to-orange-600 transition">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 10l7-7m0 0l7 7m-7-7v18" />
                         </svg>
                         Upgrade ke Professional
-                    </span>
-                    <span id="btn-upgrade-loading" class="hidden flex items-center gap-2">
-                        <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Memproses...
-                    </span>
-                </button>
+                    </a>
+                </div>
             </div>
-        </div>
         @endif
 
         <!-- Quick Action Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <!-- Terbitkan Sertifikat -->
-            <a href="{{ route('lembaga.sertifikat.create') }}" class="gradient-card-blue rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-1">
+            <a href="{{ route('lembaga.sertifikat.create') }}"
+                class="gradient-card-blue rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-1">
                 <div class="flex items-center gap-3 lg:gap-4">
-                    <div class="icon-circle-blue w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    <div
+                        class="icon-circle-blue w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
                     </div>
                     <div>
@@ -98,11 +101,15 @@
             </a>
 
             <!-- Galeri Template -->
-            <a href="{{ route('lembaga.template.index') }}" class="gradient-card-green rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-2">
+            <a href="{{ route('lembaga.template.index') }}"
+                class="gradient-card-green rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-2">
                 <div class="flex items-center gap-3 lg:gap-4">
-                    <div class="icon-circle-green w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    <div
+                        class="icon-circle-green w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                     </div>
                     <div>
@@ -113,11 +120,15 @@
             </a>
 
             <!-- Daftar Sertifikat -->
-            <a href="{{ route('lembaga.sertifikat.index') }}" class="gradient-card-purple rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-3">
+            <a href="{{ route('lembaga.sertifikat.index') }}"
+                class="gradient-card-purple rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-3">
                 <div class="flex items-center gap-3 lg:gap-4">
-                    <div class="icon-circle-purple w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                    <div
+                        class="icon-circle-purple w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                         </svg>
                     </div>
                     <div>
@@ -135,11 +146,15 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-[#1E40AF] text-xs lg:text-sm font-medium">Total Sertifikat</p>
-                        <p class="text-[#1E3A8A] text-xl lg:text-3xl font-bold mt-1">{{ number_format($stats['total_certificates'] ?? 0) }}</p>
+                        <p class="text-[#1E3A8A] text-xl lg:text-3xl font-bold mt-1">
+                            {{ number_format($stats['total_certificates'] ?? 0) }}</p>
                     </div>
-                    <div class="stat-icon-blue w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#3B82F6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                    <div
+                        class="stat-icon-blue w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#3B82F6]" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                         </svg>
                     </div>
                 </div>
@@ -150,11 +165,15 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-[#166534] text-xs lg:text-sm font-medium">Sertifikat Aktif</p>
-                        <p class="text-[#15803D] text-xl lg:text-3xl font-bold mt-1">{{ number_format($stats['active_certificates'] ?? 0) }}</p>
+                        <p class="text-[#15803D] text-xl lg:text-3xl font-bold mt-1">
+                            {{ number_format($stats['active_certificates'] ?? 0) }}</p>
                     </div>
-                    <div class="stat-icon-green w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#22C55E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    <div
+                        class="stat-icon-green w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#22C55E]" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
                 </div>
@@ -165,11 +184,15 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-[#9A3412] text-xs lg:text-sm font-medium">Bulan Ini</p>
-                        <p class="text-[#C2410C] text-xl lg:text-3xl font-bold mt-1">{{ number_format($stats['certificates_this_month'] ?? 0) }}</p>
+                        <p class="text-[#C2410C] text-xl lg:text-3xl font-bold mt-1">
+                            {{ number_format($stats['certificates_this_month'] ?? 0) }}</p>
                     </div>
-                    <div class="stat-icon-orange w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#F97316]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    <div
+                        class="stat-icon-orange w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#F97316]" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                     </div>
                 </div>
@@ -180,11 +203,15 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-[#6B21A8] text-xs lg:text-sm font-medium">Total Verifikasi</p>
-                        <p class="text-[#7C3AED] text-xl lg:text-3xl font-bold mt-1">{{ number_format($stats['total_verifications'] ?? 0) }}</p>
+                        <p class="text-[#7C3AED] text-xl lg:text-3xl font-bold mt-1">
+                            {{ number_format($stats['total_verifications'] ?? 0) }}</p>
                     </div>
-                    <div class="stat-icon-purple w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#A855F7]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    <div
+                        class="stat-icon-purple w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#A855F7]" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>
                     </div>
                 </div>
@@ -196,18 +223,22 @@
             <!-- Header -->
             <div class="header-gradient p-4 lg:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div class="flex items-center gap-3">
-                    <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#3B82F6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                    <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#3B82F6]" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                     </svg>
                     <div>
                         <h2 class="text-[#1E293B] text-base lg:text-xl font-bold">Sertifikat Terbaru</h2>
                         <p class="text-[#64748B] text-xs lg:text-sm">5 sertifikat yang baru diterbitkan</p>
                     </div>
                 </div>
-                <a href="{{ route('lembaga.sertifikat.index') }}" class="flex items-center justify-center gap-2 px-3 lg:px-4 py-2 lg:py-2.5 bg-white border border-[#E2E8F0] rounded-lg text-[#1E293B] text-xs lg:text-sm hover:bg-gray-50 transition shadow-sm">
+                <a href="{{ route('lembaga.sertifikat.index') }}"
+                    class="flex items-center justify-center gap-2 px-3 lg:px-4 py-2 lg:py-2.5 bg-white border border-[#E2E8F0] rounded-lg text-[#1E293B] text-xs lg:text-sm hover:bg-gray-50 transition shadow-sm">
                     Lihat Semua
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>
                 </a>
             </div>
@@ -217,15 +248,21 @@
                 <!-- Search & Filter -->
                 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-4 lg:mb-6">
                     <div class="relative flex-1 lg:max-w-xl">
-                        <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#94A3B8]" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
-                        <input type="text" id="search-input" placeholder="Cari nama atau ID..." onkeyup="filterTable()" class="w-full pl-10 pr-4 py-2.5 lg:py-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg text-sm text-[#1E293B] placeholder-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input type="text" id="search-input" placeholder="Cari nama atau ID..." onkeyup="filterTable()"
+                            class="w-full pl-10 pr-4 py-2.5 lg:py-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg text-sm text-[#1E293B] placeholder-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     </div>
                     <div class="flex items-center gap-2 overflow-x-auto" id="filter-buttons">
-                        <button onclick="setFilter('all')" data-filter="all" class="filter-btn active px-3 lg:px-4 py-2 lg:py-3 bg-[#1E3A8F] text-white text-xs lg:text-sm rounded-lg font-medium whitespace-nowrap">Semua</button>
-                        <button onclick="setFilter('active')" data-filter="active" class="filter-btn px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg hover:bg-gray-50 whitespace-nowrap">Aktif</button>
-                        <button onclick="setFilter('revoked')" data-filter="revoked" class="filter-btn px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg hover:bg-gray-50 whitespace-nowrap">Dicabut</button>
+                        <button onclick="setFilter('all')" data-filter="all"
+                            class="filter-btn active px-3 lg:px-4 py-2 lg:py-3 bg-[#1E3A8F] text-white text-xs lg:text-sm rounded-lg font-medium whitespace-nowrap">Semua</button>
+                        <button onclick="setFilter('active')" data-filter="active"
+                            class="filter-btn px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg hover:bg-gray-50 whitespace-nowrap">Aktif</button>
+                        <button onclick="setFilter('revoked')" data-filter="revoked"
+                            class="filter-btn px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg hover:bg-gray-50 whitespace-nowrap">Dicabut</button>
                     </div>
                 </div>
 
@@ -244,58 +281,73 @@
                         </thead>
                         <tbody id="certificate-tbody">
                             @forelse($stats['recent_certificates'] ?? [] as $cert)
-                            @php
-                                $colors = ['from-blue-500 to-indigo-600', 'from-emerald-500 to-teal-600', 'from-purple-500 to-pink-600', 'from-orange-500 to-red-600', 'from-cyan-500 to-blue-600'];
-                                $colorIndex = $loop->index % count($colors);
-                                $initials = collect(explode(' ', $cert->recipient_name))->map(fn($n) => strtoupper(substr($n, 0, 1)))->take(2)->join('');
-                            @endphp
-                            <tr class="border-b border-[#F1F5F9] hover:bg-[#F8FAFC] cert-row" data-status="{{ $cert->status }}" data-name="{{ strtolower($cert->recipient_name) }}" data-cert="{{ strtolower($cert->certificate_number) }}">
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-full bg-gradient-to-br {{ $colors[$colorIndex] }} flex items-center justify-center text-white font-bold text-sm">{{ $initials }}</div>
-                                        <div>
-                                            <p class="text-[#1E293B] font-medium">{{ $cert->recipient_name }}</p>
-                                            <p class="text-[#94A3B8] text-sm">{{ $cert->recipient_email ?? 'Email tidak tersedia' }}</p>
+                                @php
+                                    $colors = ['from-blue-500 to-indigo-600', 'from-emerald-500 to-teal-600', 'from-purple-500 to-pink-600', 'from-orange-500 to-red-600', 'from-cyan-500 to-blue-600'];
+                                    $colorIndex = $loop->index % count($colors);
+                                    $initials = collect(explode(' ', $cert->recipient_name))->map(fn($n) => strtoupper(substr($n, 0, 1)))->take(2)->join('');
+                                @endphp
+                                <tr class="border-b border-[#F1F5F9] hover:bg-[#F8FAFC] cert-row"
+                                    data-status="{{ $cert->status }}" data-name="{{ strtolower($cert->recipient_name) }}"
+                                    data-cert="{{ strtolower($cert->certificate_number) }}">
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-10 h-10 rounded-full bg-gradient-to-br {{ $colors[$colorIndex] }} flex items-center justify-center text-white font-bold text-sm">
+                                                {{ $initials }}</div>
+                                            <div>
+                                                <p class="text-[#1E293B] font-medium">{{ $cert->recipient_name }}</p>
+                                                <p class="text-[#94A3B8] text-sm">
+                                                    {{ $cert->recipient_email ?? 'Email tidak tersedia' }}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4 text-[#1E293B]">{{ $cert->course_name }}</td>
-                                <td class="py-4 px-4">
-                                    <code class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">{{ Str::limit($cert->certificate_number, 14) }}</code>
-                                </td>
-                                <td class="py-4 px-4 text-[#64748B]">{{ $cert->issue_date->format('d M Y') }}</td>
-                                <td class="py-4 px-4">
-                                    @if($cert->status === 'active')
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#ECFDF5] text-[#059669] text-sm rounded-full font-medium">
-                                        <span class="w-1.5 h-1.5 bg-[#059669] rounded-full"></span>
-                                        Aktif
-                                    </span>
-                                    @else
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FEF2F2] text-[#DC2626] text-sm rounded-full font-medium">
-                                        <span class="w-1.5 h-1.5 bg-[#DC2626] rounded-full"></span>
-                                        Dicabut
-                                    </span>
-                                    @endif
-                                </td>
-                                <td class="py-4 px-4 text-right">
-                                    <a href="{{ route('verifikasi.show', $cert->hash) }}" target="_blank" class="text-[#3B82F6] hover:text-[#1D4ED8] text-sm font-medium">Lihat</a>
-                                </td>
-                            </tr>
+                                    </td>
+                                    <td class="py-4 px-4 text-[#1E293B]">{{ $cert->course_name }}</td>
+                                    <td class="py-4 px-4">
+                                        <code
+                                            class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">{{ Str::limit($cert->certificate_number, 14) }}</code>
+                                    </td>
+                                    <td class="py-4 px-4 text-[#64748B]">{{ $cert->issue_date->format('d M Y') }}</td>
+                                    <td class="py-4 px-4">
+                                        @if($cert->status === 'active')
+                                            <span
+                                                class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#ECFDF5] text-[#059669] text-sm rounded-full font-medium">
+                                                <span class="w-1.5 h-1.5 bg-[#059669] rounded-full"></span>
+                                                Aktif
+                                            </span>
+                                        @else
+                                            <span
+                                                class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FEF2F2] text-[#DC2626] text-sm rounded-full font-medium">
+                                                <span class="w-1.5 h-1.5 bg-[#DC2626] rounded-full"></span>
+                                                Dicabut
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="py-4 px-4 text-right">
+                                        <a href="{{ route('verifikasi.show', $cert->hash) }}" target="_blank"
+                                            class="text-[#3B82F6] hover:text-[#1D4ED8] text-sm font-medium">Lihat</a>
+                                    </td>
+                                </tr>
                             @empty
-                            <tr>
-                                <td colspan="6" class="py-12 text-center">
-                                    <div class="flex flex-col items-center">
-                                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                            </svg>
+                                <tr>
+                                    <td colspan="6" class="py-12 text-center">
+                                        <div class="flex flex-col items-center">
+                                            <div
+                                                class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                </svg>
+                                            </div>
+                                            <p class="text-gray-600 font-medium mb-1">Belum ada sertifikat</p>
+                                            <p class="text-gray-400 text-sm mb-4">Mulai terbitkan sertifikat pertama Anda
+                                            </p>
+                                            <a href="{{ route('lembaga.sertifikat.create') }}"
+                                                class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition">Terbitkan
+                                                Sekarang</a>
                                         </div>
-                                        <p class="text-gray-600 font-medium mb-1">Belum ada sertifikat</p>
-                                        <p class="text-gray-400 text-sm mb-4">Mulai terbitkan sertifikat pertama Anda</p>
-                                        <a href="{{ route('lembaga.sertifikat.create') }}" class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition">Terbitkan Sekarang</a>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
                             @endforelse
                         </tbody>
                     </table>
@@ -352,104 +404,4 @@
         }
     </script>
 
-    @if($isStarterPlan)
-    <!-- Midtrans Snap.js -->
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
-
-    <script>
-        function initiateUpgrade() {
-            const btn = document.getElementById('btn-upgrade');
-            const btnText = document.getElementById('btn-upgrade-text');
-            const btnLoading = document.getElementById('btn-upgrade-loading');
-
-            // Show loading state
-            btn.disabled = true;
-            btnText.classList.add('hidden');
-            btnLoading.classList.remove('hidden');
-
-            // Request snap token from server
-            fetch('{{ route("payment.quick-upgrade") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({
-                    package_slug: 'professional'
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(data.error);
-                    resetButton();
-                    return;
-                }
-
-                if (data.snap_token) {
-                    const orderNumber = data.order_number;
-
-                    // Open Midtrans Snap popup
-                    window.snap.pay(data.snap_token, {
-                        onSuccess: function(result) {
-                            // Confirm payment to server (for sandbox where webhook doesn't work)
-                            fetch('{{ route("payment.confirm") }}', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                    'Accept': 'application/json',
-                                },
-                                body: JSON.stringify({
-                                    order_number: orderNumber
-                                })
-                            })
-                            .then(response => response.json())
-                            .then(confirmData => {
-                                alert('Pembayaran berhasil! Kuota sertifikat Anda telah ditingkatkan ke ' + (confirmData.package_name || 'Professional') + '.');
-                                window.location.reload();
-                            })
-                            .catch(error => {
-                                console.error('Confirm error:', error);
-                                // Still reload even if confirm fails
-                                alert('Pembayaran berhasil! Kuota sertifikat Anda telah ditingkatkan.');
-                                window.location.reload();
-                            });
-                        },
-                        onPending: function(result) {
-                            // Payment pending
-                            alert('Pembayaran dalam proses. Silakan selesaikan pembayaran Anda.');
-                            resetButton();
-                        },
-                        onError: function(result) {
-                            // Payment failed
-                            alert('Pembayaran gagal. Silakan coba lagi.');
-                            resetButton();
-                        },
-                        onClose: function() {
-                            // User closed popup without finishing
-                            resetButton();
-                        }
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Terjadi kesalahan. Silakan coba lagi.');
-                resetButton();
-            });
-        }
-
-        function resetButton() {
-            const btn = document.getElementById('btn-upgrade');
-            const btnText = document.getElementById('btn-upgrade-text');
-            const btnLoading = document.getElementById('btn-upgrade-loading');
-
-            btn.disabled = false;
-            btnText.classList.remove('hidden');
-            btnLoading.classList.add('hidden');
-        }
-    </script>
-    @endif
 </x-layouts.lembaga>
