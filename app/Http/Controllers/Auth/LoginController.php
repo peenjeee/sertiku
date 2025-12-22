@@ -57,7 +57,7 @@ class LoginController extends Controller
     {
         // Build validation rules
         $rules = [
-            'email'    => ['required', 'email'],
+            'email' => ['required', 'email'],
             'password' => ['required', 'string'],
         ];
 
@@ -72,13 +72,13 @@ class LoginController extends Controller
         }
 
         $request->validate($rules, [
-            'g-recaptcha-response.required'  => 'Mohon verifikasi bahwa Anda bukan robot.',
-            'cf-turnstile-response.required' => 'Mohon verifikasi Cloudflare Turnstile.',
+            'g-recaptcha-response.required' => 'Mohon verifikasi bahwa Anda bukan robot.',
+            'cf-turnstile-response.required' => 'Mohon verifikasi Capcha',
         ]);
 
         // Only use email and password for authentication
-        $email       = strtolower($request->input('email'));
-        $password    = $request->input('password');
+        $email = strtolower($request->input('email'));
+        $password = $request->input('password');
         $credentials = ['email' => $email, 'password' => $password];
 
         /**
@@ -86,36 +86,36 @@ class LoginController extends Controller
          * ----------------------------------------------------
          */
         $dummyUsers = [
-            'master@sertiku.web.id'  => [
-                'name'              => 'Master SertiKu',
-                'password'          => 'Master123',
-                'is_admin'          => true,
-                'is_master'         => true,
-                'account_type'      => 'admin',
+            'master@sertiku.web.id' => [
+                'name' => 'Master SertiKu',
+                'password' => 'Master123',
+                'is_admin' => true,
+                'is_master' => true,
+                'account_type' => 'admin',
                 'profile_completed' => true,
             ],
-            'admin@sertiku.web.id'   => [
-                'name'              => 'Admin SertiKu',
-                'password'          => 'Admin123',
-                'is_admin'          => true,
-                'is_master'         => false,
-                'account_type'      => 'admin',
+            'admin@sertiku.web.id' => [
+                'name' => 'Admin SertiKu',
+                'password' => 'Admin123',
+                'is_admin' => true,
+                'is_master' => false,
+                'account_type' => 'admin',
                 'profile_completed' => true,
             ],
             'lembaga@sertiku.web.id' => [
-                'name'              => 'Lembaga SertiKu',
-                'password'          => 'lembaga123',
-                'is_admin'          => false,
-                'is_master'         => false,
-                'account_type'      => 'lembaga',
+                'name' => 'Lembaga SertiKu',
+                'password' => 'lembaga123',
+                'is_admin' => false,
+                'is_master' => false,
+                'account_type' => 'lembaga',
                 'profile_completed' => true,
             ],
-            'user@sertiku.web.id'    => [
-                'name'              => 'User SertiKu',
-                'password'          => 'user123',
-                'is_admin'          => false,
-                'is_master'         => false,
-                'account_type'      => 'pengguna',
+            'user@sertiku.web.id' => [
+                'name' => 'User SertiKu',
+                'password' => 'user123',
+                'is_admin' => false,
+                'is_master' => false,
+                'account_type' => 'pengguna',
                 'profile_completed' => true,
             ],
         ];
@@ -125,17 +125,17 @@ class LoginController extends Controller
             $user = User::firstOrCreate(
                 ['email' => $email],
                 [
-                    'name'              => $dummyUsers[$email]['name'],
-                    'password'          => bcrypt($dummyUsers[$email]['password']),
-                    'account_type'      => $dummyUsers[$email]['account_type'],
+                    'name' => $dummyUsers[$email]['name'],
+                    'password' => bcrypt($dummyUsers[$email]['password']),
+                    'account_type' => $dummyUsers[$email]['account_type'],
                     'profile_completed' => $dummyUsers[$email]['profile_completed'],
                 ]
             );
 
             // Update user fields from dummy config (syncs existing users)
-            $user->is_admin          = $dummyUsers[$email]['is_admin'];
-            $user->is_master         = $dummyUsers[$email]['is_master'];
-            $user->account_type      = $dummyUsers[$email]['account_type'];
+            $user->is_admin = $dummyUsers[$email]['is_admin'];
+            $user->is_master = $dummyUsers[$email]['is_master'];
+            $user->account_type = $dummyUsers[$email]['account_type'];
             $user->profile_completed = $dummyUsers[$email]['profile_completed'];
             $user->save();
 
@@ -146,7 +146,7 @@ class LoginController extends Controller
             ActivityLog::log('login', 'Login via akun dummy: ' . $user->email, $user);
 
             // Check email verification first (skip for @sertiku.web.id)
-            if (! $user->email_verified_at && ! $this->isExemptFromOtp($user)) {
+            if (!$user->email_verified_at && !$this->isExemptFromOtp($user)) {
                 $this->sendOtpIfNeeded($user);
                 return redirect()->route('verification.otp');
             }
@@ -162,7 +162,7 @@ class LoginController extends Controller
             }
 
             // Check if profile is completed
-            if (! $user->isProfileCompleted()) {
+            if (!$user->isProfileCompleted()) {
                 return redirect()->route('onboarding');
             }
 
@@ -182,7 +182,7 @@ class LoginController extends Controller
             ActivityLog::log('login', 'Login via email: ' . $user->email, $user);
 
             // Check email verification first (skip for @sertiku.web.id)
-            if (! $user->email_verified_at && ! $this->isExemptFromOtp($user)) {
+            if (!$user->email_verified_at && !$this->isExemptFromOtp($user)) {
                 $this->sendOtpIfNeeded($user);
                 return redirect()->route('verification.otp');
             }
@@ -197,7 +197,7 @@ class LoginController extends Controller
                 return redirect()->route('admin.dashboard');
             }
 
-            if (! $user->isProfileCompleted()) {
+            if (!$user->isProfileCompleted()) {
                 return redirect()->route('onboarding');
             }
 
@@ -231,22 +231,22 @@ class LoginController extends Controller
         }
 
         $data = $request->validate($rules, [
-            'g-recaptcha-response.required'  => 'Mohon verifikasi bahwa Anda bukan robot.',
-            'cf-turnstile-response.required' => 'Mohon verifikasi Cloudflare Turnstile.',
+            'g-recaptcha-response.required' => 'Mohon verifikasi bahwa Anda bukan robot.',
+            'cf-turnstile-response.required' => 'Mohon verifikasi Capcha',
         ]);
 
         $wallet = strtolower($data['wallet_address']);
 
         // cari user berdasarkan wallet_address
-        $user      = User::where('wallet_address', $wallet)->first();
-        $isNewUser = ! $user;
+        $user = User::where('wallet_address', $wallet)->first();
+        $isNewUser = !$user;
 
         // kalau belum ada, buat user baru (dummy). Sesuaikan kebutuhanmu.
-        if (! $user) {
+        if (!$user) {
             $user = User::create([
-                'name'           => 'User Web3',
-                'email'          => $wallet . '@wallet.local',
-                'password'       => bcrypt(str()->random(32)),
+                'name' => 'User Web3',
+                'email' => $wallet . '@wallet.local',
+                'password' => bcrypt(str()->random(32)),
                 'wallet_address' => $wallet,
             ]);
         }
@@ -258,7 +258,7 @@ class LoginController extends Controller
         ActivityLog::log('login', 'Login via wallet: ' . $wallet, $user);
 
         // Check email verification - wallet users need to input real email first (skip for @sertiku.web.id)
-        if (! $user->email_verified_at && ! $this->isExemptFromOtp($user)) {
+        if (!$user->email_verified_at && !$this->isExemptFromOtp($user)) {
             // If user has dummy email, redirect to email input
             if (str_ends_with($user->email, '@wallet.local')) {
                 $message = $isNewUser
@@ -273,7 +273,7 @@ class LoginController extends Controller
         }
 
         // Check if profile is completed
-        if (! $user->isProfileCompleted()) {
+        if (!$user->isProfileCompleted()) {
             return redirect()->route('onboarding');
         }
 
@@ -293,7 +293,7 @@ class LoginController extends Controller
         $user = User::firstOrCreate(
             ['email' => $googleUser->getEmail()],
             [
-                'name'     => $googleUser->getName() ?: $googleUser->getNickname(),
+                'name' => $googleUser->getName() ?: $googleUser->getNickname(),
                 'password' => bcrypt(str()->random(32)),
             ]
         );

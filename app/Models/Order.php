@@ -75,6 +75,9 @@ class Order extends Model
             'paid_at' => now(),
         ]);
 
+        // Refresh to get updated paid_at value
+        $this->refresh();
+
         // Update user's package to the purchased package
         if ($this->user && $this->package_id) {
             $this->user->update([

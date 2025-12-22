@@ -92,7 +92,7 @@
 
         // Wallet captcha status (reCAPTCHA)
         let walletCaptchaVerified = {{ config('recaptcha.enabled') && config('recaptcha.site_key') ? 'false' : 'true' }};
-        
+
         // Wallet Turnstile status
         let walletTurnstileVerified = {{ config('turnstile.enabled') && config('turnstile.site_key') ? 'false' : 'true' }};
 
@@ -102,7 +102,7 @@
             const errorEl = document.getElementById('wallet-captcha-error');
             if (errorEl) errorEl.classList.add('hidden');
         }
-        
+
         // Callback when wallet Turnstile is verified
         function onWalletTurnstileSuccess(token) {
             walletTurnstileVerified = true;
@@ -110,7 +110,7 @@
             const errorEl = document.getElementById('wallet-turnstile-error');
             if (errorEl) errorEl.classList.add('hidden');
         }
-        
+
         // Callback when email form Turnstile is verified (auto-handled by form)
         function onTurnstileSuccess(token) {
             // Token is automatically added to the form by Turnstile
@@ -126,7 +126,7 @@
                 if (errorEl) errorEl.classList.remove('hidden');
                 return;
             }
-            
+
             // Check Turnstile
             if (!walletTurnstileVerified) {
                 const errorEl = document.getElementById('wallet-turnstile-error');
@@ -515,10 +515,8 @@
                                 @if(config('turnstile.enabled') && config('turnstile.site_key'))
                                     <div class="space-y-2">
                                         <div class="flex justify-center">
-                                            <div class="cf-turnstile"
-                                                data-sitekey="{{ config('turnstile.site_key') }}"
-                                                data-theme="dark"
-                                                data-callback="onTurnstileSuccess"></div>
+                                            <div class="cf-turnstile" data-sitekey="{{ config('turnstile.site_key') }}"
+                                                data-theme="dark" data-callback="onTurnstileSuccess"></div>
                                         </div>
                                         @error('cf-turnstile-response')
                                             <p class="mt-1 text-xs text-red-400 text-center">{{ $message }}</p>
@@ -807,12 +805,11 @@
                                 <div class="space-y-2">
                                     <div class="flex justify-center">
                                         <div class="cf-turnstile" id="wallet-turnstile"
-                                            data-sitekey="{{ config('turnstile.site_key') }}"
-                                            data-theme="dark"
+                                            data-sitekey="{{ config('turnstile.site_key') }}" data-theme="dark"
                                             data-callback="onWalletTurnstileSuccess"></div>
                                     </div>
                                     <p id="wallet-turnstile-error" class="hidden mt-1 text-xs text-red-400 text-center">
-                                        Mohon verifikasi Cloudflare Turnstile.
+                                        Mohon verifikasi Capcha
                                     </p>
                                 </div>
                             @endif

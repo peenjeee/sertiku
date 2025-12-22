@@ -33,6 +33,24 @@ class PaymentController extends Controller
             return redirect()->route('contact.enterprise');
         }
 
+        // Check if user already has this package or higher
+        $user = auth()->user();
+        if ($user && $user->package_id) {
+            $currentPackage = Package::find($user->package_id);
+
+            // If user already has same or higher package, redirect to dashboard
+            if ($currentPackage && $currentPackage->slug === $package->slug) {
+                return redirect()->route('lembaga.dashboard')
+                    ->with('info', 'Anda sudah memiliki paket ' . $package->name);
+            }
+
+            // If user has professional and trying to buy starter, redirect
+            if ($currentPackage && $currentPackage->slug === 'professional' && $package->slug === 'starter') {
+                return redirect()->route('lembaga.dashboard')
+                    ->with('info', 'Anda sudah memiliki paket Professional');
+            }
+        }
+
         return view('payment.checkout', [
             'package' => $package,
             'clientKey' => config('midtrans.client_key'),

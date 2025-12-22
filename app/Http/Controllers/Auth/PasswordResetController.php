@@ -42,6 +42,11 @@ class PasswordResetController extends Controller
             return back()->withErrors(['email' => 'Akun ini menggunakan login wallet. Tidak dapat reset password.']);
         }
 
+        // Check if user logged in via Google OAuth
+        if ($user->google_id) {
+            return back()->withErrors(['email' => 'Akun ini menggunakan login Google. Silakan login dengan Google.']);
+        }
+
         // Generate token
         $token = Str::random(64);
 
