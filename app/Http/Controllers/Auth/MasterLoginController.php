@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -68,6 +69,9 @@ class MasterLoginController extends Controller
             Auth::login($user, $request->boolean('remember'));
             $request->session()->regenerate();
 
+            // Log activity
+            ActivityLog::log('login', 'Master login via akun dummy', $user);
+
             return redirect()->route('master.dashboard')
                 ->with('success', 'Selamat datang, Master!');
         }
@@ -98,6 +102,9 @@ class MasterLoginController extends Controller
         Auth::login($user, $request->boolean('remember'));
         $request->session()->regenerate();
 
+        // Log activity
+        ActivityLog::log('login', 'Master login: ' . $user->email, $user);
+
         return redirect()->route('master.dashboard')
             ->with('success', 'Selamat datang, Master!');
     }
@@ -107,6 +114,13 @@ class MasterLoginController extends Controller
      */
     public function logout(Request $request)
     {
+        $user = Auth::user();
+
+        // Log activity before logout
+        if ($user) {
+            ActivityLog::log('logout', 'Master logout: ' . $user->email, $user);
+        }
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

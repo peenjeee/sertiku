@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Mail\OtpMail;
+use App\Models\ActivityLog;
 use App\Models\EmailVerification;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -31,13 +32,13 @@ class GoogleController extends Controller
                 ->orWhere('email', $googleUser->getEmail())
                 ->first();
 
-            $isNewUser = !$existingUser;
+            $isNewUser = ! $existingUser;
 
             $user = User::updateOrCreate(
                 ['google_id' => $googleUser->getId()],
                 [
-                    'name' => $googleUser->getName(),
-                    'email' => $googleUser->getEmail(),
+                    'name'   => $googleUser->getName(),
+                    'email'  => $googleUser->getEmail(),
                     'avatar' => $googleUser->getAvatar(),
                     // Do NOT auto-verify email - user must verify via OTP
                 ]
@@ -45,8 +46,11 @@ class GoogleController extends Controller
 
             Auth::login($user);
 
+            // Log activity
+            ActivityLog::log('login', 'Login via Google: ' . $user->email, $user);
+
             // If email not verified, send OTP and redirect to verification
-            if (!$user->email_verified_at) {
+            if (! $user->email_verified_at) {
                 // Generate and send OTP
                 $verification = EmailVerification::generateOtp($user);
                 Mail::to($user->email)->send(new OtpMail($verification));
@@ -59,7 +63,7 @@ class GoogleController extends Controller
             }
 
             // Check if profile is completed
-            if (!$user->isProfileCompleted()) {
+            if (! $user->isProfileCompleted()) {
                 return redirect()->route('onboarding')->with('info', 'Silakan lengkapi profil Anda.');
             }
 
@@ -74,6 +78,13 @@ class GoogleController extends Controller
 
     public function logout()
     {
+        $user = Auth::user();
+
+        // Log activity before logout
+        if ($user) {
+            ActivityLog::log('logout', 'User logout: ' . $user->email, $user);
+        }
+
         Auth::logout();
         request()->session()->invalidate();
         request()->session()->regenerateToken();
