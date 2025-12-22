@@ -28,7 +28,7 @@
             <h1 class="mt-6 text-4xl font-semibold leading-tight text-[#F9FAFB] md:text-5xl lg:text-6xl animate-fade-in-up stagger-1">
                 Verifikasi Sertifikat <br>
                 <span class="bg-gradient-to-r from-[#2B7FFF] to-[#00B8DB] bg-clip-text text-transparent animate-gradient-text">
-                    Jadi Mudah hrhdhrhdhdrd
+                    Jadi Mudah
                 </span>
             </h1>
 
