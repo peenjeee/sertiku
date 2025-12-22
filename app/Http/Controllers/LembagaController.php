@@ -1,11 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
-<<<<<<< HEAD
 use App\Mail\CertificateIssuedMail;
-=======
 use App\Models\ActivityLog;
->>>>>>> 20bf8862ec7627c65d5f5f0c4f4f47bbdff78803
 use App\Models\Certificate;
 use App\Models\Template;
 use Illuminate\Http\Request;
@@ -92,7 +89,13 @@ class LembagaController extends Controller
             $certificate->template->incrementUsage();
         }
 
-<<<<<<< HEAD
+        // Log activity
+        ActivityLog::log(
+            'create_certificate',
+            'Sertifikat diterbitkan untuk: ' . $certificate->recipient_name,
+            $certificate
+        );
+
         // Send email to recipient if email exists and send_email is checked
         if ($sendEmail && !empty($validated['recipient_email'])) {
             // Send certificate email via queue
@@ -102,17 +105,6 @@ class LembagaController extends Controller
 
         // Send in-app notification to recipient if they have an account
         if (!empty($validated['recipient_email'])) {
-=======
-        // Log activity
-        ActivityLog::log(
-            'create_certificate',
-            'Sertifikat diterbitkan untuk: ' . $certificate->recipient_name,
-            $certificate
-        );
-
-        // Send notification to recipient if email exists (queue it to avoid blocking)
-        if ($validated['recipient_email']) {
->>>>>>> 20bf8862ec7627c65d5f5f0c4f4f47bbdff78803
             $recipient = \App\Models\User::where('email', $validated['recipient_email'])->first();
             if ($recipient) {
                 // Use queue to send notification in background
