@@ -175,9 +175,9 @@
                     @if(config('blockchain.enabled'))
                         <div class="mt-4 pt-4 border-t border-white/10">
                             <a href="{{ route('blockchain.verify') }}" class="flex items-center justify-center gap-2 w-full py-3 rounded-[8px]
-                                               border border-purple-500/30 bg-purple-500/10
-                                               text-purple-300 text-sm font-medium
-                                               hover:bg-purple-500/20 transition">
+                                                   border border-purple-500/30 bg-purple-500/10
+                                                   text-purple-300 text-sm font-medium
+                                                   hover:bg-purple-500/20 transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
@@ -481,40 +481,40 @@
             function onScanSuccess(decodedText, decodedResult) {
                 // Stop scanner
                 stopScanner();
+                closeQRScanner();
 
-                // Update status
-                document.getElementById('scanStatus').innerHTML =
-                    '<span class="text-green-400">QR Code terdeteksi! Mengalihkan...</span>';
+                // 1. Direct Redirect untuk URL Sertiku yang valid
+                // Regex mencocokkan http/s dan subpath /verifikasi/
+                if (decodedText.match(/^https?:\/\/.*\/verifikasi\/.+/)) {
+                    window.location.href = decodedText;
+                    return;
+                }
 
-                // Cek apakah hasil scan adalah URL atau kode hash
+                // 2. Fallback: Ekstrak Hash jika input bukan full URL atau format lain
                 let hashCode = decodedText;
 
-                // Jika hasil scan adalah URL, ekstrak hash dari URL
-                if (decodedText.includes('/verifikasi/')) {
-                    // Handle format baru: .../verifikasi/HASH
-                    const parts = decodedText.split('/verifikasi/');
-                    if (parts.length > 1) {
-                        // Ambil hash, pastikan bersih dari query/slash
-                        hashCode = parts[1].split('/')[0].split('?')[0];
-                    }
-                } else if (decodedText.includes('hash=')) {
-                    // Handle format lama: ...?hash=HASH
+                if (decodedText.includes('hash=')) {
+                    // Format lama: ...?hash=HASH
                     const urlParts = decodedText.split('?');
                     if (urlParts.length > 1) {
                         const urlParams = new URLSearchParams(urlParts[1]);
                         hashCode = urlParams.get('hash');
                     }
+                } else if (decodedText.includes('/verifikasi/')) {
+                    // Format baru tapi parsial/tidak match regex awal
+                    const parts = decodedText.split('/verifikasi/');
+                    if (parts.length > 1) {
+                        hashCode = parts[1].split('/')[0].split('?')[0];
+                    }
                 }
-                // Tutup modal
-                closeQRScanner();
 
-                if (!hashCode || hashCode === decodedText && decodedText.length > 50) {
-                    // Fallback check: if hash implies full URL but wasn't parsed
-                    alert("Gagal membaca format QR Code: " + decodedText);
+                // Validasi Hash
+                if (!hashCode || hashCode.length < 3 || (hashCode.includes('http') && hashCode.length > 50)) {
+                    alert("QR Code tidak dikenali: " + decodedText);
                     return;
                 }
 
-                // Force redirect
+                // 3. Rebuild URL
                 const targetUrl = '{{ url("/verifikasi") }}/' + hashCode;
                 window.location.href = targetUrl;
             }
