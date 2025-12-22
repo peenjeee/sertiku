@@ -258,23 +258,18 @@
 
                     <!-- Send Email Option -->
                     <div id="send-email-option" class="hidden">
-                        <div class="flex items-start gap-3 p-4 bg-blue-50 border border-blue-300 rounded-xl">
-                            <label class="relative inline-flex items-center cursor-pointer mt-0.5">
+                        <div class="flex items-start gap-4">
+                            <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" name="send_email" id="send_email" value="1" class="sr-only peer" {{ old('send_email', true) ? 'checked' : '' }}>
                                 <div
-                                    class="w-11 h-6 bg-gray-400 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all after:shadow-md peer-checked:bg-blue-600 border border-gray-400 peer-checked:border-blue-600">
+                                    class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
                                 </div>
                             </label>
                             <div class="flex-1">
-                                <p class="text-gray-800 font-bold text-sm">Kirim email ke penerima</p>
-                                <p class="text-gray-600 text-xs mt-1">Penerima akan menerima email berisi informasi
+                                <p class="text-gray-800 font-medium text-sm">Kirim email ke penerima</p>
+                                <p class="text-gray-500 text-xs mt-1">Penerima akan menerima email berisi informasi
                                     sertifikat, link verifikasi, dan link download.</p>
                             </div>
-                            <svg class="w-6 h-6 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
                         </div>
                     </div>
                 </div>
