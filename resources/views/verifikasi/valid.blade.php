@@ -147,12 +147,12 @@
                             {{-- Right: QR Code --}}
                             @if($certificate['qr_code_url'] ?? null)
                             <div class="lg:w-48 flex-shrink-0">
-                                <div class="text-center p-4 bg-[rgba(15,23,42,0.8)] rounded-xl border border-[#3B82F6]/30">
-                                    <p class="text-sm font-semibold text-[#8EC5FF] mb-3">Scan untuk Verifikasi</p>
+                                <div class="text-center p-4 bg-[rgba(30,41,59,0.95)] rounded-xl border border-[#3B82F6]/40">
+                                    <p class="text-sm font-bold text-white mb-3">Scan untuk Verifikasi</p>
                                     <div class="bg-white p-3 rounded-lg inline-block">
                                         <img src="{{ $certificate['qr_code_url'] }}" alt="QR Code" class="w-28 h-28">
                                     </div>
-                                    <p class="text-xs text-[#BEDBFF] mt-3 break-all font-mono">
+                                    <p class="text-xs text-white/90 mt-3 break-all font-mono">
                                         {{ $certificate['nomor'] ?? '' }}
                                     </p>
                                 </div>
