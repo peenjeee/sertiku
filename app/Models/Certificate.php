@@ -39,10 +39,10 @@ class Certificate extends Model
     ];
 
     protected $casts = [
-        'issue_date'             => 'date',
-        'expire_date'            => 'date',
-        'revoked_at'             => 'datetime',
-        'blockchain_enabled'     => 'boolean',
+        'issue_date' => 'date',
+        'expire_date' => 'date',
+        'revoked_at' => 'datetime',
+        'blockchain_enabled' => 'boolean',
         'blockchain_verified_at' => 'datetime',
     ];
 
@@ -55,12 +55,12 @@ class Certificate extends Model
 
         static::creating(function ($certificate) {
             // Generate certificate number if not set
-            if (! $certificate->certificate_number) {
+            if (!$certificate->certificate_number) {
                 $certificate->certificate_number = self::generateCertificateNumber();
             }
 
             // Generate hash if not set
-            if (! $certificate->hash) {
+            if (!$certificate->hash) {
                 $certificate->hash = self::generateHash();
             }
         });
@@ -96,8 +96,8 @@ class Certificate extends Model
     public static function generateCertificateNumber(): string
     {
         $prefix = 'SERT';
-        $year   = date('Y');
-        $month  = date('m');
+        $year = date('Y');
+        $month = date('m');
         $random = strtoupper(Str::random(6));
 
         return "{$prefix}-{$year}{$month}-{$random}";
@@ -133,8 +133,8 @@ class Certificate extends Model
     public function revoke(string $reason = null): void
     {
         $this->update([
-            'status'         => 'revoked',
-            'revoked_at'     => now(),
+            'status' => 'revoked',
+            'revoked_at' => now(),
             'revoked_reason' => $reason,
         ]);
     }
@@ -144,7 +144,7 @@ class Certificate extends Model
      */
     public function getVerificationUrlAttribute(): string
     {
-        return url('/verifikasi?hash=' . $this->hash);
+        return url('/verifikasi/' . $this->hash);
     }
 
     /**
@@ -169,8 +169,8 @@ class Certificate extends Model
     public function isOnBlockchain(): bool
     {
         return $this->blockchain_enabled
-        && ! empty($this->blockchain_tx_hash)
-        && $this->blockchain_status === 'confirmed';
+            && !empty($this->blockchain_tx_hash)
+            && $this->blockchain_status === 'confirmed';
     }
 
     /**
@@ -193,9 +193,9 @@ class Certificate extends Model
     {
         return match ($this->blockchain_status) {
             'confirmed' => 'bg-emerald-500/20 text-emerald-400',
-            'pending'   => 'bg-yellow-500/20 text-yellow-400',
-            'failed'    => 'bg-red-500/20 text-red-400',
-            default     => 'bg-gray-500/20 text-gray-400',
+            'pending' => 'bg-yellow-500/20 text-yellow-400',
+            'failed' => 'bg-red-500/20 text-red-400',
+            default => 'bg-gray-500/20 text-gray-400',
         };
     }
 
@@ -206,9 +206,9 @@ class Certificate extends Model
     {
         return match ($this->blockchain_status) {
             'confirmed' => 'Terverifikasi di Blockchain',
-            'pending'   => 'Menunggu Konfirmasi',
-            'failed'    => 'Gagal Upload ke Blockchain',
-            default     => 'Tidak di Blockchain',
+            'pending' => 'Menunggu Konfirmasi',
+            'failed' => 'Gagal Upload ke Blockchain',
+            default => 'Tidak di Blockchain',
         };
     }
 
@@ -220,7 +220,7 @@ class Certificate extends Model
     {
         // Create qrcodes directory if not exists
         $directory = 'qrcodes';
-        if (! Storage::disk('public')->exists($directory)) {
+        if (!Storage::disk('public')->exists($directory)) {
             Storage::disk('public')->makeDirectory($directory);
         }
 
