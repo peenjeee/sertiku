@@ -1,11 +1,16 @@
 <?php
 namespace App\Http\Controllers;
 
+<<<<<<< HEAD
+use App\Mail\CertificateIssuedMail;
+=======
 use App\Models\ActivityLog;
+>>>>>>> 20bf8862ec7627c65d5f5f0c4f4f47bbdff78803
 use App\Models\Certificate;
 use App\Models\Template;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class LembagaController extends Controller
@@ -18,14 +23,14 @@ class LembagaController extends Controller
         $user = Auth::user();
 
         $stats = [
-            'total_certificates'      => $user->certificates()->count(),
-            'active_certificates'     => $user->certificates()->where('status', 'active')->count(),
+            'total_certificates' => $user->certificates()->count(),
+            'active_certificates' => $user->certificates()->where('status', 'active')->count(),
             'certificates_this_month' => $user->getCertificatesUsedThisMonth(),
-            'total_templates'         => $user->templates()->where('is_active', true)->count(),
-            'recent_certificates'     => $user->certificates()->latest()->take(5)->get(),
-                                                                              // Total verifications could be tracked via a verification_count field or logs
-                                                                              // For now, we'll use a placeholder based on certificates count * average views
-            'total_verifications'     => $user->certificates()->count() * 10, // Placeholder
+            'total_templates' => $user->templates()->where('is_active', true)->count(),
+            'recent_certificates' => $user->certificates()->latest()->take(5)->get(),
+            // Total verifications could be tracked via a verification_count field or logs
+            // For now, we'll use a placeholder based on certificates count * average views
+            'total_verifications' => $user->certificates()->count() * 10, // Placeholder
         ];
 
         return view('lembaga.dashboard', compact('stats'));
@@ -36,7 +41,7 @@ class LembagaController extends Controller
      */
     public function createSertifikat()
     {
-        $user      = Auth::user();
+        $user = Auth::user();
         $templates = $user->templates()->where('is_active', true)->get();
 
         return view('lembaga.sertifikat.create', compact('templates'));
@@ -50,24 +55,31 @@ class LembagaController extends Controller
         $user = Auth::user();
 
         // Check certificate limit
-        if (! $user->canIssueCertificate()) {
+        if (!$user->canIssueCertificate()) {
             return back()->with('error', 'Kuota sertifikat bulan ini sudah habis. Silakan upgrade paket Anda.');
         }
 
         $validated = $request->validate([
-            'template_id'        => 'nullable|exists:templates,id',
-            'recipient_name'     => 'required|string|max:255',
-            'recipient_email'    => 'nullable|email|max:255',
-            'course_name'        => 'required|string|max:255',
-            'category'           => 'nullable|string|max:100',
-            'description'        => 'nullable|string|max:1000',
-            'issue_date'         => 'required|date',
-            'expire_date'        => 'nullable|date|after:issue_date',
+            'template_id' => 'nullable|exists:templates,id',
+            'recipient_name' => 'required|string|max:255',
+            'recipient_email' => 'nullable|email|max:255',
+            'course_name' => 'required|string|max:255',
+            'category' => 'nullable|string|max:100',
+            'description' => 'nullable|string|max:1000',
+            'issue_date' => 'required|date',
+            'expire_date' => 'nullable|date|after:issue_date',
             'blockchain_enabled' => 'nullable|boolean',
+            'send_email' => 'nullable|boolean',
         ]);
 
         // Set blockchain_enabled flag
         $validated['blockchain_enabled'] = $request->has('blockchain_enabled') && $request->blockchain_enabled == '1';
+
+        // Get send_email flag (not stored in database)
+        $sendEmail = $request->has('send_email') && $request->send_email == '1';
+
+        // Remove send_email from validated data (not a database field)
+        unset($validated['send_email']);
 
         // Create certificate
         $certificate = $user->certificates()->create($validated);
@@ -80,6 +92,17 @@ class LembagaController extends Controller
             $certificate->template->incrementUsage();
         }
 
+<<<<<<< HEAD
+        // Send email to recipient if email exists and send_email is checked
+        if ($sendEmail && !empty($validated['recipient_email'])) {
+            // Send certificate email via queue
+            Mail::to($validated['recipient_email'])
+                ->queue(new CertificateIssuedMail($certificate));
+        }
+
+        // Send in-app notification to recipient if they have an account
+        if (!empty($validated['recipient_email'])) {
+=======
         // Log activity
         ActivityLog::log(
             'create_certificate',
@@ -89,6 +112,7 @@ class LembagaController extends Controller
 
         // Send notification to recipient if email exists (queue it to avoid blocking)
         if ($validated['recipient_email']) {
+>>>>>>> 20bf8862ec7627c65d5f5f0c4f4f47bbdff78803
             $recipient = \App\Models\User::where('email', $validated['recipient_email'])->first();
             if ($recipient) {
                 // Use queue to send notification in background
@@ -156,8 +180,8 @@ class LembagaController extends Controller
 
         // Get stats
         $stats = [
-            'total'   => $user->certificates()->count(),
-            'active'  => $user->certificates()->where('status', 'active')->count(),
+            'total' => $user->certificates()->count(),
+            'active' => $user->certificates()->where('status', 'active')->count(),
             'revoked' => $user->certificates()->where('status', 'revoked')->count(),
         ];
 
@@ -201,11 +225,11 @@ class LembagaController extends Controller
      */
     public function indexTemplate()
     {
-        $user      = Auth::user();
+        $user = Auth::user();
         $templates = $user->templates()->latest()->paginate(12);
 
         $stats = [
-            'total'  => $user->templates()->count(),
+            'total' => $user->templates()->count(),
             'active' => $user->templates()->where('is_active', true)->count(),
         ];
 
@@ -226,10 +250,10 @@ class LembagaController extends Controller
     public function storeTemplate(Request $request)
     {
         $validated = $request->validate([
-            'name'          => 'required|string|max:255',
-            'description'   => 'nullable|string|max:1000',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
             'template_file' => 'required|file|mimes:png,jpg,jpeg,pdf|max:10240', // Max 10MB
-            'orientation'   => 'required|in:landscape,portrait',
+            'orientation' => 'required|in:landscape,portrait',
         ]);
 
         $user = Auth::user();
@@ -245,7 +269,7 @@ class LembagaController extends Controller
         }
 
         // Get image dimensions
-        $width  = null;
+        $width = null;
         $height = null;
         if (in_array($file->getClientOriginalExtension(), ['png', 'jpg', 'jpeg'])) {
             list($width, $height) = getimagesize($file->getRealPath());
@@ -253,13 +277,13 @@ class LembagaController extends Controller
 
         // Create template record
         $template = $user->templates()->create([
-            'name'           => $validated['name'],
-            'description'    => $validated['description'],
-            'file_path'      => $path,
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'file_path' => $path,
             'thumbnail_path' => $thumbnailPath,
-            'orientation'    => $validated['orientation'],
-            'width'          => $width,
-            'height'         => $height,
+            'orientation' => $validated['orientation'],
+            'width' => $width,
+            'height' => $height,
         ]);
 
         return redirect()->route('lembaga.template.index')
@@ -299,7 +323,7 @@ class LembagaController extends Controller
             abort(403);
         }
 
-        $template->update(['is_active' => ! $template->is_active]);
+        $template->update(['is_active' => !$template->is_active]);
 
         $status = $template->is_active ? 'diaktifkan' : 'dinonaktifkan';
         return back()->with('success', "Template berhasil {$status}.");
