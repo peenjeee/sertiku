@@ -81,5 +81,43 @@ class Order extends Model
                 'package_id' => $this->package_id,
             ]);
         }
+
+        // Send WhatsApp invoice if phone number exists
+        $this->sendWhatsAppInvoice();
+    }
+
+    /**
+     * Send invoice to WhatsApp via Fonnte
+     */
+    protected function sendWhatsAppInvoice(): void
+    {
+        // Check if phone number exists
+        if (empty($this->phone)) {
+            return;
+        }
+
+        // Check if package exists
+        if (!$this->package) {
+            return;
+        }
+
+        try {
+            $fonnte = new \App\Services\FonnteService();
+
+            if (!$fonnte->isConfigured()) {
+                return;
+            }
+
+            $fonnte->sendInvoice(
+                phone: $this->phone,
+                customerName: $this->name,
+                orderNumber: $this->order_number,
+                packageName: $this->package->name,
+                amount: (int) $this->amount,
+                paymentDate: $this->paid_at->format('d/m/Y H:i')
+            );
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to send WhatsApp invoice: ' . $e->getMessage());
+        }
     }
 }
