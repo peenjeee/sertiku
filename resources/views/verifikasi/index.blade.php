@@ -514,9 +514,13 @@
                     return;
                 }
 
-                // Langsung redirect ke halaman hasil verifikasi
+                // Debug alert
                 const targetUrl = '{{ url("/verifikasi") }}/' + hashCode;
-                window.location.assign(targetUrl);
+                // alert("Debug: Hash=" + hashCode + "\nRedirect to: " + targetUrl); // Uncomment if needed, but for now just log
+                console.log("Redirecting to:", targetUrl);
+                
+                // Force redirect
+                window.location.href = targetUrl;
             }
 
             function onScanFailure(error) {

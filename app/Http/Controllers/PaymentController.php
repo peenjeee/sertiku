@@ -35,20 +35,32 @@ class PaymentController extends Controller
 
         // Check if user already has this package or higher
         $user = auth()->user();
+
+        \Log::info('Checkout Check', [
+            'user_id' => $user->id ?? 'null',
+            'user_package_id' => $user->package_id ?? 'null',
+            'target_package_slug' => $slug,
+            'user_package_slug' => $user && $user->package_id ? Package::find($user->package_id)->slug : 'N/A'
+        ]);
+
         if ($user && $user->package_id) {
             $currentPackage = Package::find($user->package_id);
 
             // If user already has same or higher package, redirect to dashboard
             if ($currentPackage && $currentPackage->slug === $package->slug) {
+                \Log::info('Checkout Redirect: User already has package');
                 return redirect()->route('lembaga.dashboard')
                     ->with('info', 'Anda sudah memiliki paket ' . $package->name);
             }
 
             // If user has professional and trying to buy starter, redirect
             if ($currentPackage && $currentPackage->slug === 'professional' && $package->slug === 'starter') {
+                \Log::info('Checkout Redirect: Downgrade attempt');
                 return redirect()->route('lembaga.dashboard')
                     ->with('info', 'Anda sudah memiliki paket Professional');
             }
+        } else {
+            \Log::info('Checkout: User has no package or logic skipped');
         }
 
         return view('payment.checkout', [
