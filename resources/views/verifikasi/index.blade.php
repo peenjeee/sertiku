@@ -173,18 +173,18 @@
 
                     {{-- Blockchain Verification Link --}}
                     @if(config('blockchain.enabled'))
-                    <div class="mt-4 pt-4 border-t border-white/10">
-                        <a href="{{ route('blockchain.verify') }}"
-                            class="flex items-center justify-center gap-2 w-full py-3 rounded-[8px]
-                                   border border-purple-500/30 bg-purple-500/10
-                                   text-purple-300 text-sm font-medium
-                                   hover:bg-purple-500/20 transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
-                            </svg>
-                            Cek Blockchain (On-Chain Verification)
-                        </a>
-                    </div>
+                        <div class="mt-4 pt-4 border-t border-white/10">
+                            <a href="{{ route('blockchain.verify') }}" class="flex items-center justify-center gap-2 w-full py-3 rounded-[8px]
+                                       border border-purple-500/30 bg-purple-500/10
+                                       text-purple-300 text-sm font-medium
+                                       hover:bg-purple-500/20 transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                </svg>
+                                Cek Blockchain (On-Chain Verification)
+                            </a>
+                        </div>
                     @endif
                 </form>
             </div>
@@ -491,13 +491,20 @@
 
                 // Jika hasil scan adalah URL, ekstrak hash dari URL
                 if (decodedText.includes('/verifikasi/')) {
-                    const urlParts = decodedText.split('/');
-                    hashCode = urlParts[urlParts.length - 1];
+                    // Handle format baru: .../verifikasi/HASH
+                    const parts = decodedText.split('/verifikasi/');
+                    if (parts.length > 1) {
+                        // Ambil hash, pastikan bersih dari query/slash
+                        hashCode = parts[1].split('/')[0].split('?')[0];
+                    }
                 } else if (decodedText.includes('hash=')) {
-                    const urlParams = new URLSearchParams(decodedText.split('?')[1]);
-                    hashCode = urlParams.get('hash');
+                    // Handle format lama: ...?hash=HASH
+                    const urlParts = decodedText.split('?');
+                    if (urlParts.length > 1) {
+                        const urlParams = new URLSearchParams(urlParts[1]);
+                        hashCode = urlParams.get('hash');
+                    }
                 }
-
                 // Tutup modal
                 closeQRScanner();
 
