@@ -16,11 +16,11 @@ class BlockchainService
 
     public function __construct()
     {
-        $this->enabled         = config('blockchain.enabled', false);
-        $this->rpcUrl          = config('blockchain.rpc_url', 'https://rpc-amoy.polygon.technology/');
-        $this->chainId         = config('blockchain.chain_id', '80002');
-        $this->privateKey      = config('blockchain.private_key', '');
-        $this->walletAddress   = config('blockchain.wallet_address', '');
+        $this->enabled = config('blockchain.enabled', false);
+        $this->rpcUrl = config('blockchain.rpc_url', 'https://rpc-amoy.polygon.technology/');
+        $this->chainId = config('blockchain.chain_id', '80002');
+        $this->privateKey = config('blockchain.private_key', '');
+        $this->walletAddress = config('blockchain.wallet_address', '');
         $this->contractAddress = config('blockchain.contract_address', '');
     }
 
@@ -30,8 +30,8 @@ class BlockchainService
     public function isEnabled(): bool
     {
         return $this->enabled
-        && ! empty($this->privateKey)
-        && ! empty($this->walletAddress);
+            && !empty($this->privateKey)
+            && !empty($this->walletAddress);
     }
 
     /**
@@ -49,12 +49,12 @@ class BlockchainService
     {
         $data = json_encode([
             'certificate_number' => $certificate->certificate_number,
-            'recipient_name'     => $certificate->recipient_name,
-            'recipient_email'    => $certificate->recipient_email,
-            'course_name'        => $certificate->course_name,
-            'issue_date'         => $certificate->issue_date->format('Y-m-d'),
-            'issuer_id'          => $certificate->user_id,
-            'created_at'         => $certificate->created_at->format('Y-m-d H:i:s'),
+            'recipient_name' => $certificate->recipient_name,
+            'recipient_email' => $certificate->recipient_email,
+            'course_name' => $certificate->course_name,
+            'issue_date' => $certificate->issue_date->format('Y-m-d'),
+            'issuer_id' => $certificate->user_id,
+            'created_at' => $certificate->created_at->format('Y-m-d H:i:s'),
         ]);
 
         return '0x' . hash('sha256', $data);
@@ -66,7 +66,7 @@ class BlockchainService
      */
     public function storeCertificateHash(Certificate $certificate): ?string
     {
-        if (! $this->isEnabled()) {
+        if (!$this->isEnabled()) {
             Log::warning('BlockchainService: Blockchain not enabled or not configured');
             return null;
         }
@@ -79,16 +79,16 @@ class BlockchainService
             $txHash = $this->signWithNode($certHash);
 
             // Fallback to direct RPC if Node.js not available
-            if (! $txHash) {
+            if (!$txHash) {
                 $txHash = $this->signWithDirectRpc($certHash);
             }
 
             if ($txHash) {
                 // Update certificate with blockchain info
                 $certificate->update([
-                    'blockchain_hash'        => $certHash,
-                    'blockchain_tx_hash'     => $txHash,
-                    'blockchain_status'      => 'confirmed',
+                    'blockchain_hash' => $certHash,
+                    'blockchain_tx_hash' => $txHash,
+                    'blockchain_status' => 'confirmed',
                     'blockchain_verified_at' => now(),
                 ]);
 
@@ -99,7 +99,7 @@ class BlockchainService
 
             // If all methods fail, still save the hash for reference
             $certificate->update([
-                'blockchain_hash'   => $certHash,
+                'blockchain_hash' => $certHash,
                 'blockchain_status' => 'pending',
             ]);
 
@@ -123,18 +123,18 @@ class BlockchainService
     {
         $scriptPath = base_path('scripts/sign_transaction.js');
 
-        if (! file_exists($scriptPath)) {
+        if (!file_exists($scriptPath)) {
             Log::warning('BlockchainService: Node script not found at ' . $scriptPath);
             return null;
         }
 
         try {
             // Build command with escaped arguments
-            $nodeScript    = escapeshellarg($scriptPath);
-            $privateKey    = escapeshellarg($this->privateKey);
+            $nodeScript = escapeshellarg($scriptPath);
+            $privateKey = escapeshellarg($this->privateKey);
             $walletAddress = escapeshellarg($this->walletAddress);
-            $hash          = escapeshellarg($dataHash);
-            $rpcUrl        = escapeshellarg($this->rpcUrl);
+            $hash = escapeshellarg($dataHash);
+            $rpcUrl = escapeshellarg($this->rpcUrl);
 
             $command = "node {$nodeScript} {$privateKey} {$walletAddress} {$hash} {$rpcUrl} 2>&1";
 
@@ -171,33 +171,33 @@ class BlockchainService
         try {
             // Get nonce
             $nonce = $this->getNonce();
-            if (! $nonce) {
+            if (!$nonce) {
                 return null;
             }
 
             // Get gas price
             $gasPrice = $this->getGasPrice();
-            if (! $gasPrice) {
+            if (!$gasPrice) {
                 $gasPrice = '0x3B9ACA00'; // 1 Gwei
             }
 
             // Build unsigned transaction
             $txParams = [
-                'from'     => $this->walletAddress,
-                'to'       => $this->walletAddress,
-                'value'    => '0x0',
-                'gas'      => '0x6270', // ~25200 gas for data
+                'from' => $this->walletAddress,
+                'to' => $this->walletAddress,
+                'value' => '0x0',
+                'gas' => '0x6270', // ~25200 gas for data
                 'gasPrice' => $gasPrice,
-                'nonce'    => $nonce,
-                'data'     => $dataHash,
+                'nonce' => $nonce,
+                'data' => $dataHash,
             ];
 
             // Try eth_sendTransaction (works if wallet is unlocked on node)
             $response = Http::timeout(30)->post($this->rpcUrl, [
                 'jsonrpc' => '2.0',
-                'method'  => 'eth_sendTransaction',
-                'params'  => [$txParams],
-                'id'      => 1,
+                'method' => 'eth_sendTransaction',
+                'params' => [$txParams],
+                'id' => 1,
             ]);
 
             if ($response->successful()) {
@@ -222,9 +222,9 @@ class BlockchainService
     {
         $response = Http::timeout(30)->post($this->rpcUrl, [
             'jsonrpc' => '2.0',
-            'method'  => 'eth_getTransactionCount',
-            'params'  => [$this->walletAddress, 'latest'],
-            'id'      => 1,
+            'method' => 'eth_getTransactionCount',
+            'params' => [$this->walletAddress, 'latest'],
+            'id' => 1,
         ]);
 
         if ($response->successful() && isset($response['result'])) {
@@ -241,9 +241,9 @@ class BlockchainService
     {
         $response = Http::timeout(30)->post($this->rpcUrl, [
             'jsonrpc' => '2.0',
-            'method'  => 'eth_gasPrice',
-            'params'  => [],
-            'id'      => 1,
+            'method' => 'eth_gasPrice',
+            'params' => [],
+            'id' => 1,
         ]);
 
         if ($response->successful() && isset($response['result'])) {
@@ -260,9 +260,9 @@ class BlockchainService
     {
         $response = Http::timeout(30)->post($this->rpcUrl, [
             'jsonrpc' => '2.0',
-            'method'  => 'eth_getTransactionReceipt',
-            'params'  => [$txHash],
-            'id'      => 1,
+            'method' => 'eth_getTransactionReceipt',
+            'params' => [$txHash],
+            'id' => 1,
         ]);
 
         if ($response->successful() && isset($response['result'])) {
@@ -283,19 +283,19 @@ class BlockchainService
     {
         $response = Http::timeout(30)->post($this->rpcUrl, [
             'jsonrpc' => '2.0',
-            'method'  => 'eth_getTransactionByHash',
-            'params'  => [$txHash],
-            'id'      => 1,
+            'method' => 'eth_getTransactionByHash',
+            'params' => [$txHash],
+            'id' => 1,
         ]);
 
         if ($response->successful() && isset($response['result'])) {
             $tx = $response['result'];
             if ($tx) {
                 return [
-                    'hash'        => $tx['hash'],
-                    'from'        => $tx['from'],
-                    'to'          => $tx['to'],
-                    'data'        => $tx['input'],
+                    'hash' => $tx['hash'],
+                    'from' => $tx['from'],
+                    'to' => $tx['to'],
+                    'data' => $tx['input'],
                     'blockNumber' => hexdec($tx['blockNumber']),
                 ];
             }
@@ -316,18 +316,18 @@ class BlockchainService
         try {
             $response = Http::timeout(10)->post($this->rpcUrl, [
                 'jsonrpc' => '2.0',
-                'method'  => 'eth_getBalance',
-                'params'  => [$this->walletAddress, 'latest'],
-                'id'      => 1,
+                'method' => 'eth_getBalance',
+                'params' => [$this->walletAddress, 'latest'],
+                'id' => 1,
             ]);
 
             if ($response->successful() && isset($response->json()['result'])) {
-                $balanceWei   = hexdec($response->json()['result']);
+                $balanceWei = hexdec($response->json()['result']);
                 $balanceMatic = $balanceWei / 1e18;
 
                 return [
-                    'wei'       => $balanceWei,
-                    'matic'     => round($balanceMatic, 6),
+                    'wei' => $balanceWei,
+                    'matic' => round($balanceMatic, 6),
                     'formatted' => number_format($balanceMatic, 4) . ' MATIC',
                 ];
             }
@@ -350,9 +350,9 @@ class BlockchainService
         try {
             $response = Http::timeout(10)->post($this->rpcUrl, [
                 'jsonrpc' => '2.0',
-                'method'  => 'eth_getTransactionCount',
-                'params'  => [$this->walletAddress, 'latest'],
-                'id'      => 1,
+                'method' => 'eth_getTransactionCount',
+                'params' => [$this->walletAddress, 'latest'],
+                'id' => 1,
             ]);
 
             if ($response->successful() && isset($response->json()['result'])) {
@@ -373,20 +373,20 @@ class BlockchainService
         $balance = $this->getWalletBalance();
         $txCount = $this->getTransactionCount();
 
-                                  // Estimate remaining certificates based on average gas cost
+        // Estimate remaining certificates based on average gas cost
         $avgGasCostMatic = 0.003; // ~0.003 MATIC per transaction
-        $remainingCerts  = $balance ? floor($balance['matic'] / $avgGasCostMatic) : 0;
+        $remainingCerts = $balance ? floor($balance['matic'] / $avgGasCostMatic) : 0;
 
         return [
-            'enabled'           => $this->isEnabled(),
-            'wallet_address'    => $this->walletAddress,
-            'short_address'     => $this->walletAddress ? substr($this->walletAddress, 0, 6) . '...' . substr($this->walletAddress, -4) : null,
-            'balance'           => $balance,
+            'enabled' => $this->isEnabled(),
+            'wallet_address' => $this->walletAddress,
+            'short_address' => $this->walletAddress ? substr($this->walletAddress, 0, 6) . '...' . substr($this->walletAddress, -4) : null,
+            'balance' => $balance,
             'transaction_count' => $txCount,
-            'remaining_certs'   => $remainingCerts,
-            'network'           => $this->chainId === '80002' ? 'Polygon Amoy (Testnet)' : 'Polygon Mainnet',
-            'explorer_url'      => config('blockchain.explorer_url', 'https://amoy.polygonscan.com'),
-            'rpc_url'           => $this->rpcUrl,
+            'remaining_certs' => $remainingCerts,
+            'network' => $this->chainId === '80002' ? 'Polygon Amoy (Testnet)' : 'Polygon Mainnet',
+            'explorer_url' => config('blockchain.explorer_url', 'https://amoy.polygonscan.com'),
+            'rpc_url' => $this->rpcUrl,
         ];
     }
 
@@ -403,7 +403,7 @@ class BlockchainService
      */
     public function hasContract(): bool
     {
-        return ! empty($this->contractAddress);
+        return !empty($this->contractAddress);
     }
 
     /**
@@ -420,36 +420,36 @@ class BlockchainService
      */
     public function storeWithContract(Certificate $certificate): ?string
     {
-        if (! $this->isEnabled()) {
+        if (!$this->isEnabled()) {
             Log::warning('BlockchainService: Blockchain not enabled');
             return null;
         }
 
-        if (! $this->hasContract()) {
+        if (!$this->hasContract()) {
             Log::warning('BlockchainService: Smart contract not configured, falling back to data tx');
             return $this->storeCertificateHash($certificate);
         }
 
         try {
-            $certHash   = $this->generateCertificateHash($certificate);
+            $certHash = $this->generateCertificateHash($certificate);
             $scriptPath = base_path('scripts/interact_contract.js');
 
-            if (! file_exists($scriptPath)) {
+            if (!file_exists($scriptPath)) {
                 Log::warning('BlockchainService: interact_contract.js not found');
                 return $this->storeCertificateHash($certificate);
             }
 
             // Prepare certificate data for smart contract
-            $hash          = escapeshellarg($certHash);
-            $certNumber    = escapeshellarg($certificate->certificate_number ?? '');
+            $hash = escapeshellarg($certHash);
+            $certNumber = escapeshellarg($certificate->certificate_number ?? '');
             $recipientName = escapeshellarg($certificate->recipient_name ?? '');
-            $courseName    = escapeshellarg($certificate->course_name ?? '');
-            $issueDate     = escapeshellarg($certificate->issue_date?->format('Y-m-d') ?? '');
-            $issuerName    = escapeshellarg($certificate->user->institution_name ?? $certificate->user->name ?? '');
+            $courseName = escapeshellarg($certificate->course_name ?? '');
+            $issueDate = escapeshellarg($certificate->issue_date?->format('Y-m-d') ?? '');
+            $issuerName = escapeshellarg($certificate->user->institution_name ?? $certificate->user->name ?? '');
 
             // Use full path for hosting, fallback to 'node' for local
             $nodePath = env('NODE_PATH', 'node');
-            $command  = "{$nodePath} {$scriptPath} store {$hash} {$certNumber} {$recipientName} {$courseName} {$issueDate} {$issuerName} 2>&1";
+            $command = "{$nodePath} {$scriptPath} store {$hash} {$certNumber} {$recipientName} {$courseName} {$issueDate} {$issuerName} 2>&1";
 
             Log::info('BlockchainService: Storing certificate via smart contract with full data');
 
@@ -457,18 +457,18 @@ class BlockchainService
             $output = trim($output ?? '');
 
             // Parse last JSON line (the confirmed status)
-            $lines    = explode("\n", $output);
+            $lines = explode("\n", $output);
             $lastLine = end($lines);
-            $result   = json_decode($lastLine, true);
+            $result = json_decode($lastLine, true);
 
             if ($result && isset($result['success']) && $result['success']) {
                 $txHash = $result['transactionHash'] ?? null;
 
                 if ($txHash) {
                     $certificate->update([
-                        'blockchain_hash'        => $certHash,
-                        'blockchain_tx_hash'     => $txHash,
-                        'blockchain_status'      => $result['status'] ?? 'confirmed',
+                        'blockchain_hash' => $certHash,
+                        'blockchain_tx_hash' => $txHash,
+                        'blockchain_status' => $result['status'] ?? 'confirmed',
                         'blockchain_verified_at' => now(),
                     ]);
 
@@ -494,20 +494,20 @@ class BlockchainService
      */
     public function verifyCertificateOnChain(string $certHash): ?array
     {
-        if (! $this->hasContract()) {
+        if (!$this->hasContract()) {
             return null;
         }
 
         try {
             $scriptPath = base_path('scripts/interact_contract.js');
 
-            if (! file_exists($scriptPath)) {
+            if (!file_exists($scriptPath)) {
                 return null;
             }
 
-            $hash     = escapeshellarg($certHash);
+            $hash = escapeshellarg($certHash);
             $nodePath = env('NODE_PATH', 'node');
-            $command  = "{$nodePath} {$scriptPath} verify {$hash} 2>&1";
+            $command = "{$nodePath} {$scriptPath} verify {$hash} 2>&1";
 
             $output = shell_exec($command);
             $output = trim($output ?? '');
@@ -531,20 +531,21 @@ class BlockchainService
      */
     public function getContractStats(): ?array
     {
-        if (! $this->hasContract()) {
+        if (!$this->hasContract()) {
             return null;
         }
 
         try {
             $scriptPath = base_path('scripts/interact_contract.js');
 
-            if (! file_exists($scriptPath)) {
+            if (!file_exists($scriptPath)) {
                 return null;
             }
 
-            $command = "node {$scriptPath} stats 2>&1";
-            $output  = shell_exec($command);
-            $output  = trim($output ?? '');
+            $nodePath = env('NODE_PATH', 'node');
+            $command = "{$nodePath} {$scriptPath} stats 2>&1";
+            $output = shell_exec($command);
+            $output = trim($output ?? '');
 
             $result = json_decode($output, true);
 
