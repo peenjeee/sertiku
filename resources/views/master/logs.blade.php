@@ -13,12 +13,13 @@
     <div class="glass-card rounded-2xl p-4 mb-6 animate-fade-in-up">
         <form method="GET" class="flex flex-wrap gap-4">
             <div class="flex-1 min-w-[200px]">
-                <select name="action"
-                    class="w-full px-4 py-2 rounded-xl bg-[#1a1a2e] border border-white/20 text-white text-sm focus:outline-none focus:border-purple-500 [&>option]:bg-[#1a1a2e] [&>option]:text-white">
-                    <option value="" class="bg-[#1a1a2e] text-white">Semua Aktivitas</option>
+                <select name="action" style="background-color: #1a1a2e !important; color: white !important;"
+                    class="w-full px-4 py-2 rounded-xl border border-white/20 text-sm focus:outline-none focus:border-purple-500">
+                    <option value="" style="background-color: #1a1a2e !important; color: white !important;">Semua
+                        Aktivitas</option>
                     @foreach($actions as $action)
                         <option value="{{ $action }}" {{ request('action') == $action ? 'selected' : '' }}
-                            class="bg-[#1a1a2e] text-white">
+                            style="background-color: #1a1a2e !important; color: white !important;">
                             {{ ucwords(str_replace('_', ' ', $action)) }}
                         </option>
                     @endforeach
