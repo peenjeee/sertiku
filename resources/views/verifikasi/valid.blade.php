@@ -238,10 +238,10 @@
 
                             <div class="flex flex-col">
                                 <p class="text-sm font-normal text-white">
-                                    Bagikan Sertifikat
+                                    Bagikan Sertifikat 🚀
                                 </p>
                                 <p class="text-sm font-normal text-[#3B82F6]" id="share-text">
-                                    Kirim tautan verifikasi kepada pihak lain.
+                                    Tunjukkan pencapaianmu! Buat yang lain tahu SertiKu 🎉
                                 </p>
                             </div>
                         </button>
@@ -253,15 +253,15 @@
 
                                 if (navigator.share) {
                                     navigator.share({
-                                        title: 'Verifikasi Sertifikat',
-                                        text: 'Lihat sertifikat yang terverifikasi ini',
+                                        title: '🎓 Sertifikat Terverifikasi - SertiKu',
+                                        text: '✨ Lihat sertifikat asli saya yang terverifikasi di SertiKu! Platform sertifikat digital terpercaya dengan teknologi blockchain. Yuk cobain SertiKu untuk sertifikatmu! 🚀',
                                         url: url
                                     });
                                 } else {
                                     navigator.clipboard.writeText(url).then(() => {
-                                        shareText.textContent = '✓ Link berhasil disalin!';
+                                        shareText.textContent = '✓ Link berhasil disalin! Share sekarang!';
                                         setTimeout(() => {
-                                            shareText.textContent = 'Kirim tautan verifikasi kepada pihak lain.';
+                                            shareText.textContent = 'Tunjukkan pencapaianmu! Buat yang lain tahu SertiKu 🎉';
                                         }, 2000);
                                     });
                                 }
