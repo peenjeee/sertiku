@@ -2,11 +2,12 @@
 
     <section class="mx-auto max-w-2xl px-4 py-16 lg:px-0">
         <div class="rounded-[28px] border border-[rgba(255,255,255,0.14)] bg-[rgba(15,23,42,0.9)] p-8 text-center">
-            
+
             {{-- Success Icon --}}
-            <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#22C55E] to-[#4ADE80]">
+            <div
+                class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#22C55E] to-[#4ADE80]">
                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
             </div>
 
@@ -29,7 +30,7 @@
             {{-- Order Details --}}
             <div class="mt-8 rounded-[18px] bg-[rgba(15,23,42,0.5)] p-6 text-left">
                 <h2 class="text-sm font-semibold text-[#8EC5FF]">Detail Pesanan</h2>
-                
+
                 <div class="mt-4 space-y-3 text-sm">
                     <div class="flex justify-between">
                         <span class="text-[rgba(190,219,255,0.7)]">Nomor Pesanan</span>
@@ -70,9 +71,10 @@
             <div class="mt-8">
                 <p class="text-sm text-[rgba(190,219,255,0.7)]">
                     @if($order->status === 'paid')
-                        Detail akun akan dikirim ke email <strong class="text-white">{{ $order->email }}</strong>
+                        Paket Anda sudah aktif. Silakan lanjutkan ke dashboard untuk mulai menggunakan fitur premium.
                     @else
-                        Kami akan mengirim konfirmasi ke <strong class="text-white">{{ $order->email }}</strong> setelah pembayaran terverifikasi.
+                        Kami akan mengirim konfirmasi ke <strong class="text-white">{{ $order->email }}</strong> setelah
+                        pembayaran terverifikasi.
                     @endif
                 </p>
             </div>
@@ -84,10 +86,10 @@
                     Kembali ke Beranda
                 </a>
                 @auth
-                <a href="{{ route('dashboard') }}"
-                    class="inline-flex items-center justify-center gap-2 rounded-[12px] border border-[rgba(255,255,255,0.2)] px-6 py-3 text-sm font-semibold text-white hover:bg-[rgba(15,23,42,1)] transition">
-                    Ke Dashboard
-                </a>
+                    <a href="{{ route('dashboard') }}"
+                        class="inline-flex items-center justify-center gap-2 rounded-[12px] border border-[rgba(255,255,255,0.2)] px-6 py-3 text-sm font-semibold text-white hover:bg-[rgba(15,23,42,1)] transition">
+                        Ke Dashboard
+                    </a>
                 @endauth
             </div>
         </div>

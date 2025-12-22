@@ -91,13 +91,20 @@ class Order extends Model
      */
     protected function sendWhatsAppInvoice(): void
     {
+        \Illuminate\Support\Facades\Log::info('sendWhatsAppInvoice called', [
+            'order_number' => $this->order_number,
+            'phone' => $this->phone,
+        ]);
+
         // Check if phone number exists
         if (empty($this->phone)) {
+            \Illuminate\Support\Facades\Log::info('sendWhatsAppInvoice: No phone number');
             return;
         }
 
         // Check if package exists
         if (!$this->package) {
+            \Illuminate\Support\Facades\Log::info('sendWhatsAppInvoice: No package');
             return;
         }
 
@@ -105,10 +112,13 @@ class Order extends Model
             $fonnte = new \App\Services\FonnteService();
 
             if (!$fonnte->isConfigured()) {
+                \Illuminate\Support\Facades\Log::info('sendWhatsAppInvoice: Fonnte not configured');
                 return;
             }
 
-            $fonnte->sendInvoice(
+            \Illuminate\Support\Facades\Log::info('sendWhatsAppInvoice: Sending to ' . $this->phone);
+
+            $result = $fonnte->sendInvoice(
                 phone: $this->phone,
                 customerName: $this->name,
                 orderNumber: $this->order_number,
@@ -116,6 +126,8 @@ class Order extends Model
                 amount: (int) $this->amount,
                 paymentDate: $this->paid_at->format('d/m/Y H:i')
             );
+
+            \Illuminate\Support\Facades\Log::info('sendWhatsAppInvoice result', $result);
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Failed to send WhatsApp invoice: ' . $e->getMessage());
         }

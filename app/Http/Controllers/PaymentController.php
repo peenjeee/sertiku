@@ -14,11 +14,11 @@ class PaymentController extends Controller
     public function __construct()
     {
         // Set Midtrans configuration
-        Config::$serverKey    = config('midtrans.server_key');
-        Config::$clientKey    = config('midtrans.client_key');
+        Config::$serverKey = config('midtrans.server_key');
+        Config::$clientKey = config('midtrans.client_key');
         Config::$isProduction = config('midtrans.is_production');
-        Config::$isSanitized  = true;
-        Config::$is3ds        = config('midtrans.is_3ds');
+        Config::$isSanitized = true;
+        Config::$is3ds = config('midtrans.is_3ds');
     }
 
     /**
@@ -34,7 +34,7 @@ class PaymentController extends Controller
         }
 
         return view('payment.checkout', [
-            'package'   => $package,
+            'package' => $package,
             'clientKey' => config('midtrans.client_key'),
         ]);
     }
@@ -46,7 +46,7 @@ class PaymentController extends Controller
     {
         $user = auth()->user();
 
-        if (! $user) {
+        if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -58,7 +58,7 @@ class PaymentController extends Controller
             ->where('is_active', true)
             ->first();
 
-        if (! $package) {
+        if (!$package) {
             return response()->json(['error' => 'Paket tidak ditemukan'], 404);
         }
 
@@ -68,38 +68,38 @@ class PaymentController extends Controller
 
         // Create pending order
         $order = Order::create([
-            'user_id'      => $user->id,
-            'package_id'   => $package->id,
+            'user_id' => $user->id,
+            'package_id' => $package->id,
             'order_number' => Order::generateOrderNumber(),
-            'name'         => $user->name ?? $user->institution_name,
-            'email'        => $user->email,
-            'phone'        => $user->phone ?? $user->admin_phone,
-            'institution'  => $user->institution_name,
-            'amount'       => $package->price,
-            'status'       => 'pending',
-            'expired_at'   => now()->addHours(24),
+            'name' => $user->name ?? $user->institution_name,
+            'email' => $user->email,
+            'phone' => $user->phone ?? $user->admin_phone,
+            'institution' => $user->institution_name,
+            'amount' => $package->price,
+            'status' => 'pending',
+            'expired_at' => now()->addHours(24),
         ]);
 
         // Create Midtrans Snap token
         $params = [
             'transaction_details' => [
-                'order_id'     => $order->order_number,
+                'order_id' => $order->order_number,
                 'gross_amount' => (int) $order->amount,
             ],
-            'customer_details'    => [
+            'customer_details' => [
                 'first_name' => $order->name,
-                'email'      => $order->email,
-                'phone'      => $order->phone ?? '',
+                'email' => $order->email,
+                'phone' => $order->phone ?? '',
             ],
-            'item_details'        => [
+            'item_details' => [
                 [
-                    'id'       => $package->slug,
-                    'price'    => (int) $package->price,
+                    'id' => $package->slug,
+                    'price' => (int) $package->price,
                     'quantity' => 1,
-                    'name'     => 'Upgrade ke ' . $package->name,
+                    'name' => 'Upgrade ke ' . $package->name,
                 ],
             ],
-            'callbacks'           => [
+            'callbacks' => [
                 'finish' => route('lembaga.dashboard'),
             ],
         ];
@@ -110,11 +110,11 @@ class PaymentController extends Controller
             $order->update(['snap_token' => $snapToken]);
 
             return response()->json([
-                'success'      => true,
-                'snap_token'   => $snapToken,
+                'success' => true,
+                'snap_token' => $snapToken,
                 'order_number' => $order->order_number,
                 'package_name' => $package->name,
-                'amount'       => $package->formatted_price,
+                'amount' => $package->formatted_price,
             ]);
         } catch (\Exception $e) {
             Log::error('Quick Upgrade Midtrans Error: ' . $e->getMessage());
@@ -131,10 +131,10 @@ class PaymentController extends Controller
     public function process(Request $request)
     {
         $validated = $request->validate([
-            'package_id'  => 'required|exists:packages,id',
-            'name'        => 'required|string|max:255',
-            'email'       => 'required|email|max:255',
-            'phone'       => 'nullable|string|max:20',
+            'package_id' => 'required|exists:packages,id',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'nullable|string|max:20',
             'institution' => 'nullable|string|max:255',
         ]);
 
@@ -143,16 +143,16 @@ class PaymentController extends Controller
         // For free package, create order and redirect to success
         if ($package->price == 0) {
             $order = Order::create([
-                'user_id'      => auth()->id(),
-                'package_id'   => $package->id,
+                'user_id' => auth()->id(),
+                'package_id' => $package->id,
                 'order_number' => Order::generateOrderNumber(),
-                'name'         => $validated['name'],
-                'email'        => $validated['email'],
-                'phone'        => $validated['phone'] ?? null,
-                'institution'  => $validated['institution'] ?? null,
-                'amount'       => 0,
-                'status'       => 'paid',
-                'paid_at'      => now(),
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'] ?? null,
+                'institution' => $validated['institution'] ?? null,
+                'amount' => 0,
+                'status' => 'paid',
+                'paid_at' => now(),
             ]);
 
             return redirect()->route('payment.success', $order->order_number);
@@ -160,38 +160,38 @@ class PaymentController extends Controller
 
         // Create pending order
         $order = Order::create([
-            'user_id'      => auth()->id(),
-            'package_id'   => $package->id,
+            'user_id' => auth()->id(),
+            'package_id' => $package->id,
             'order_number' => Order::generateOrderNumber(),
-            'name'         => $validated['name'],
-            'email'        => $validated['email'],
-            'phone'        => $validated['phone'] ?? null,
-            'institution'  => $validated['institution'] ?? null,
-            'amount'       => $package->price,
-            'status'       => 'pending',
-            'expired_at'   => now()->addHours(24),
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'] ?? null,
+            'institution' => $validated['institution'] ?? null,
+            'amount' => $package->price,
+            'status' => 'pending',
+            'expired_at' => now()->addHours(24),
         ]);
 
         // Create Midtrans Snap token
         $params = [
             'transaction_details' => [
-                'order_id'     => $order->order_number,
+                'order_id' => $order->order_number,
                 'gross_amount' => (int) $order->amount,
             ],
-            'customer_details'    => [
+            'customer_details' => [
                 'first_name' => $order->name,
-                'email'      => $order->email,
-                'phone'      => $order->phone ?? '',
+                'email' => $order->email,
+                'phone' => $order->phone ?? '',
             ],
-            'item_details'        => [
+            'item_details' => [
                 [
-                    'id'       => $package->slug,
-                    'price'    => (int) $package->price,
+                    'id' => $package->slug,
+                    'price' => (int) $package->price,
                     'quantity' => 1,
-                    'name'     => $package->name . ' - Paket Bulanan',
+                    'name' => $package->name . ' - Paket Bulanan',
                 ],
             ],
-            'callbacks'           => [
+            'callbacks' => [
                 'finish' => route('payment.success', $order->order_number),
             ],
         ];
@@ -202,7 +202,7 @@ class PaymentController extends Controller
             $order->update(['snap_token' => $snapToken]);
 
             return response()->json([
-                'snap_token'   => $snapToken,
+                'snap_token' => $snapToken,
                 'order_number' => $order->order_number,
             ]);
         } catch (\Exception $e) {
@@ -222,14 +222,14 @@ class PaymentController extends Controller
         try {
             $notification = new Notification();
 
-            $orderId           = $notification->order_id;
+            $orderId = $notification->order_id;
             $transactionStatus = $notification->transaction_status;
-            $paymentType       = $notification->payment_type;
-            $fraudStatus       = $notification->fraud_status ?? null;
+            $paymentType = $notification->payment_type;
+            $fraudStatus = $notification->fraud_status ?? null;
 
             $order = Order::where('order_number', $orderId)->first();
 
-            if (! $order) {
+            if (!$order) {
                 return response()->json(['message' => 'Order not found'], 404);
             }
 
@@ -261,6 +261,8 @@ class PaymentController extends Controller
      */
     public function confirmPayment(Request $request)
     {
+        \Log::info('confirmPayment called', $request->all());
+
         $validated = $request->validate([
             'order_number' => 'required|string',
         ]);
@@ -269,18 +271,24 @@ class PaymentController extends Controller
             ->where('user_id', auth()->id())
             ->first();
 
-        if (! $order) {
+        if (!$order) {
+            \Log::info('confirmPayment: Order not found', ['order_number' => $validated['order_number'], 'user_id' => auth()->id()]);
             return response()->json(['error' => 'Order not found'], 404);
         }
 
+        \Log::info('confirmPayment: Order found', ['order_number' => $order->order_number, 'status' => $order->status]);
+
         // Only process if order is still pending
         if ($order->status === 'pending') {
+            \Log::info('confirmPayment: Marking as paid');
             $order->markAsPaid('snap', 'client-confirmed-' . now()->timestamp);
+        } else {
+            \Log::info('confirmPayment: Order already ' . $order->status);
         }
 
         return response()->json([
-            'success'      => true,
-            'message'      => 'Payment confirmed',
+            'success' => true,
+            'message' => 'Payment confirmed',
             'package_name' => $order->package->name ?? 'Unknown',
         ]);
     }
@@ -291,6 +299,30 @@ class PaymentController extends Controller
     public function success($orderNumber)
     {
         $order = Order::where('order_number', $orderNumber)->with('package')->firstOrFail();
+
+        // If order is paid and WA not yet sent, send it now (backup mechanism)
+        if ($order->status === 'paid' && !$order->wa_sent && $order->phone) {
+            try {
+                $fonnte = new \App\Services\FonnteService();
+                if ($fonnte->isConfigured()) {
+                    $result = $fonnte->sendInvoice(
+                        phone: $order->phone,
+                        customerName: $order->name,
+                        orderNumber: $order->order_number,
+                        packageName: $order->package->name,
+                        amount: (int) $order->amount,
+                        paymentDate: $order->paid_at ? $order->paid_at->format('d/m/Y H:i') : now()->format('d/m/Y H:i')
+                    );
+
+                    if ($result['success']) {
+                        $order->update(['wa_sent' => true]);
+                        \Log::info('WA Invoice sent via success page', ['order' => $orderNumber]);
+                    }
+                }
+            } catch (\Exception $e) {
+                \Log::error('WA Invoice error on success page: ' . $e->getMessage());
+            }
+        }
 
         return view('payment.success', compact('order'));
     }
@@ -309,11 +341,11 @@ class PaymentController extends Controller
     public function sendContactEnterprise(Request $request)
     {
         $validated = $request->validate([
-            'name'        => 'required|string|max:255',
-            'email'       => 'required|email|max:255',
-            'phone'       => 'required|string|max:20',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
             'institution' => 'required|string|max:255',
-            'message'     => 'required|string|max:2000',
+            'message' => 'required|string|max:2000',
         ]);
 
         // Here you would typically send an email or store in database
