@@ -14,4 +14,4 @@
             <path d="M11 14h.01" />
         </svg>
     </div>
-@endsections
+@endsection
