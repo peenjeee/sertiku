@@ -378,19 +378,33 @@
 
             /* QR code section for print */
             .print-info .lg\\:w-48 {
-                width: 140px !important;
+                width: 160px !important;
                 flex-shrink: 0 !important;
             }
 
             .print-info .lg\\:w-48 > div {
                 background: #f1f5f9 !important;
                 border: 1px solid #e5e7eb !important;
-                padding: 12px !important;
+                padding: 16px !important;
+                border-radius: 12px !important;
             }
 
             .print-info .lg\\:w-48 img {
-                width: 100px !important;
-                height: 100px !important;
+                width: 110px !important;
+                height: 110px !important;
+            }
+
+            /* QR code section text for print */
+            .print-info .lg\\:w-48 p {
+                color: #1e293b !important;
+                font-size: 11px !important;
+                font-weight: 600 !important;
+            }
+
+            .print-info .lg\\:w-48 .font-mono {
+                font-size: 9px !important;
+                color: #475569 !important;
+                font-weight: 500 !important;
             }
 
             /* Print-friendly text colors */
