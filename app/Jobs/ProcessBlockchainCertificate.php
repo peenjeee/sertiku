@@ -1,6 +1,7 @@
 <?php
 namespace App\Jobs;
 
+use App\Models\ActivityLog;
 use App\Models\Certificate;
 use App\Services\BlockchainService;
 use Illuminate\Contracts\Queue\ShouldQueue;
