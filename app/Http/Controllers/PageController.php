@@ -1,7 +1,10 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Mail\ContactFormMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class PageController extends Controller
 {
@@ -190,9 +193,19 @@ class PageController extends Controller
             'message' => 'required|string|max:2000',
         ]);
 
-        // For now, just redirect with success message
-        // TODO: Implement actual email sending
-        return redirect()->back()->with('success', 'Pesan berhasil dikirim! Kami akan menghubungi Anda segera.');
+        try {
+            // Send email to SertiKu support
+            Mail::to('sertikuofficial@gmail.com')
+                ->send(new ContactFormMail($validated));
+
+            return redirect()->back()->with('success', 'Pesan berhasil dikirim! Kami akan menghubungi Anda dalam 24 jam.');
+        } catch (\Exception $e) {
+            Log::error('Contact form email failed: ' . $e->getMessage());
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Maaf, pesan gagal dikirim. Silakan coba lagi atau hubungi kami langsung via WhatsApp.');
+        }
     }
 
     public function privasi()

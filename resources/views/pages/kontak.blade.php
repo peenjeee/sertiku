@@ -83,7 +83,7 @@
                                     </div>
                                     <div>
                                         <h3 class="text-white font-medium text-sm lg:text-base">Email</h3>
-                                        <p class="text-[#BEDBFF]/70 text-sm mt-0.5 lg:mt-1">support@sertiku.my.id</p>
+                                        <p class="text-[#BEDBFF]/70 text-sm mt-0.5 lg:mt-1">support@sertiku.web.id</p>
                                         <p class="text-[#BEDBFF]/50 text-xs mt-0.5 lg:mt-1">Respon dalam 24 jam</p>
                                     </div>
                                 </div>
