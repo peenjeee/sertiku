@@ -39,7 +39,7 @@ class OnboardingController extends Controller
      */
     public function store(Request $request)
     {
-        $user        = Auth::user();
+        $user = Auth::user();
         $accountType = $request->input('account_type');
 
         // Base validation rules
@@ -49,30 +49,30 @@ class OnboardingController extends Controller
 
         if ($accountType === 'personal') {
             $rules = array_merge($rules, [
-                'name'             => 'required|string|max:255',
-                'phone'            => 'nullable|string|max:20',
-                'occupation'       => 'nullable|string|max:255',
+                'name' => 'required|string|max:255',
+                'phone' => 'nullable|string|max:20',
+                'occupation' => 'nullable|string|max:255',
                 'user_institution' => 'nullable|string|max:255',
-                'city'             => 'nullable|string|max:100',
+                'city' => 'nullable|string|max:100',
             ]);
         } else {
             $rules = array_merge($rules, [
                 // Institution info
                 'institution_name' => 'required|string|max:255',
                 'institution_type' => 'required|string|max:255',
-                'sector'           => 'nullable|string|max:255',
-                'website'          => 'nullable|url|max:255',
-                'description'      => 'nullable|string|max:1000',
+                'sector' => 'nullable|string|max:255',
+                'website' => 'nullable|url|max:255',
+                'description' => 'nullable|string|max:1000',
                 // Address (simplified)
-                'address_line'     => 'nullable|string|max:500',
-                'city'             => 'required|string|max:100',
-                'province'         => 'nullable|string|max:100',
-                'postal_code'      => 'nullable|string|max:10',
-                'country'          => 'nullable|string|max:100',
+                'address_line' => 'nullable|string|max:500',
+                'city' => 'required|string|max:100',
+                'province' => 'nullable|string|max:100',
+                'postal_code' => 'nullable|string|max:10',
+                'country' => 'nullable|string|max:100',
                 // Admin info
-                'admin_name'       => 'required|string|max:255',
-                'admin_phone'      => 'nullable|string|max:20',
-                'admin_position'   => 'nullable|string|max:255',
+                'admin_name' => 'required|string|max:255',
+                'admin_phone' => 'nullable|string|max:20',
+                'admin_position' => 'nullable|string|max:255',
             ]);
         }
 
@@ -85,34 +85,34 @@ class OnboardingController extends Controller
 
         // Update user data
         $updateData = [
-            'account_type'      => $accountType,
+            'account_type' => $accountType,
             'profile_completed' => true,
         ];
 
         if ($accountType === 'personal') {
             $updateData = array_merge($updateData, [
-                'name'             => $validated['name'],
-                'phone'            => $validated['phone'] ?? null,
-                'occupation'       => $validated['occupation'] ?? null,
+                'name' => $validated['name'],
+                'phone' => $validated['phone'] ?? null,
+                'occupation' => $validated['occupation'] ?? null,
                 'user_institution' => $validated['user_institution'] ?? null,
-                'city'             => $validated['city'] ?? null,
+                'city' => $validated['city'] ?? null,
             ]);
         } else {
             $updateData = array_merge($updateData, [
                 'institution_name' => $validated['institution_name'],
                 'institution_type' => $validated['institution_type'],
-                'sector'           => $validated['sector'] ?? null,
-                'website'          => $validated['website'] ?? null,
-                'description'      => $validated['description'] ?? null,
-                'address_line'     => $validated['address_line'] ?? null,
-                'city'             => $validated['city'],
-                'province'         => $validated['province'] ?? null,
-                'postal_code'      => $validated['postal_code'] ?? null,
-                'country'          => $validated['country'] ?? 'Indonesia',
-                'admin_name'       => $validated['admin_name'],
-                'admin_phone'      => $validated['admin_phone'] ?? null,
-                'admin_position'   => $validated['admin_position'] ?? null,
-                'name'             => $validated['admin_name'], // Use admin name as user name
+                'sector' => $validated['sector'] ?? null,
+                'website' => $validated['website'] ?? null,
+                'description' => $validated['description'] ?? null,
+                'address_line' => $validated['address_line'] ?? null,
+                'city' => $validated['city'],
+                'province' => $validated['province'] ?? null,
+                'postal_code' => $validated['postal_code'] ?? null,
+                'country' => $validated['country'] ?? 'Indonesia',
+                'admin_name' => $validated['admin_name'],
+                'admin_phone' => $validated['admin_phone'] ?? null,
+                'admin_position' => $validated['admin_position'] ?? null,
+                'name' => $validated['admin_name'], // Use admin name as user name
             ]);
         }
 
@@ -142,16 +142,24 @@ class OnboardingController extends Controller
     /**
      * Skip onboarding (mark as completed without full data)
      */
-    public function skip()
+    public function skip(Request $request)
     {
         $user = Auth::user();
+        $type = $request->input('type', 'personal');
 
-        // Set a default account type and mark as completed
+        // Validate type fallback to personal if invalid
+        if (!in_array($type, ['personal', 'institution'])) {
+            $type = 'personal';
+        }
+
+        // Set account type and mark as completed
         $user->update([
-            'account_type'      => 'personal',
+            'account_type' => $type,
             'profile_completed' => true,
         ]);
 
-        return redirect()->route('dashboard')->with('info', 'Anda dapat melengkapi profil nanti di pengaturan akun.');
+        $redirectRoute = $this->getDashboardRoute($user);
+
+        return redirect($redirectRoute)->with('info', 'Anda dapat melengkapi profil nanti di pengaturan akun.');
     }
 }
