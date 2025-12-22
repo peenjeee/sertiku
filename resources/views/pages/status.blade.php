@@ -6,14 +6,29 @@
             <div class="pointer-events-none absolute -left-32 top-0 h-96 w-96 rounded-full bg-gradient-to-r from-[#10B98133] to-[#00B8DB33] blur-3xl opacity-60 hidden md:block"></div>
             <div class="mx-auto max-w-4xl px-4 text-center relative z-10">
                 {{-- Status Badge --}}
+                @if($overallStatus === 'operational')
                 <div class="inline-flex items-center gap-2 rounded-full bg-[#10B981]/20 border border-[#10B981]/30 px-4 py-2 mb-6">
                     <span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
                     <span class="text-sm font-medium text-[#10B981]">Semua Sistem Berjalan Normal</span>
                 </div>
+                @elseif($overallStatus === 'degraded')
+                <div class="inline-flex items-center gap-2 rounded-full bg-[#F59E0B]/20 border border-[#F59E0B]/30 px-4 py-2 mb-6">
+                    <span class="w-2 h-2 rounded-full bg-[#F59E0B] animate-pulse"></span>
+                    <span class="text-sm font-medium text-[#F59E0B]">Beberapa Layanan Terganggu</span>
+                </div>
+                @else
+                <div class="inline-flex items-center gap-2 rounded-full bg-[#EF4444]/20 border border-[#EF4444]/30 px-4 py-2 mb-6">
+                    <span class="w-2 h-2 rounded-full bg-[#EF4444] animate-pulse"></span>
+                    <span class="text-sm font-medium text-[#EF4444]">Sistem Mengalami Gangguan</span>
+                </div>
+                @endif
 
                 <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Status Sistem</h1>
                 <p class="text-lg text-[#BEDBFF]/80 max-w-2xl mx-auto">
                     Pantau status layanan SertiKu secara real-time
+                </p>
+                <p class="text-sm text-[#BEDBFF]/50 mt-2">
+                    Terakhir diperbarui: {{ now()->format('d M Y, H:i:s') }} WIB
                 </p>
             </div>
         </section>
@@ -22,16 +37,6 @@
         <section class="py-12 px-4">
             <div class="mx-auto max-w-3xl">
                 <div class="space-y-4">
-                    @php
-                        $services = [
-                            ['name' => 'Website & Dashboard', 'status' => 'operational', 'uptime' => '99.99%'],
-                            ['name' => 'API Sertifikat', 'status' => 'operational', 'uptime' => '99.98%'],
-                            ['name' => 'Verifikasi Blockchain', 'status' => 'operational', 'uptime' => '99.95%'],
-                            ['name' => 'Sistem Pembayaran', 'status' => 'operational', 'uptime' => '99.99%'],
-                            ['name' => 'Email Notifications', 'status' => 'operational', 'uptime' => '99.90%'],
-                        ];
-                    @endphp
-
                     @foreach($services as $service)
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 rounded-xl bg-white/5 border border-white/10 p-4 sm:p-5">
                         <div class="flex items-center gap-3 sm:gap-4">
@@ -45,8 +50,15 @@
                             <span class="text-white font-medium text-sm sm:text-base">{{ $service['name'] }}</span>
                         </div>
                         <div class="flex items-center gap-3 sm:gap-4 pl-6 sm:pl-0">
+                            <span class="text-xs sm:text-sm text-[#BEDBFF]/60">{{ $service['response_time'] ?? '' }}</span>
                             <span class="text-xs sm:text-sm text-[#BEDBFF]/60">Uptime: {{ $service['uptime'] }}</span>
+                            @if($service['status'] === 'operational')
                             <span class="text-xs sm:text-sm text-[#10B981]">Operational</span>
+                            @elseif($service['status'] === 'degraded')
+                            <span class="text-xs sm:text-sm text-[#F59E0B]">Degraded</span>
+                            @else
+                            <span class="text-xs sm:text-sm text-[#EF4444]">Down</span>
+                            @endif
                         </div>
                     </div>
                     @endforeach
@@ -60,9 +72,12 @@
                 <h2 class="text-xl font-bold text-white mb-6">Uptime 30 Hari Terakhir</h2>
                 <div class="rounded-xl bg-white/5 border border-white/10 p-6">
                     <div class="flex gap-1">
-                        @for($i = 0; $i < 30; $i++)
-                        <div class="flex-1 h-10 rounded bg-[#10B981] hover:brightness-110 transition" title="Hari {{ 30 - $i }}: 100%"></div>
-                        @endfor
+                        @foreach($uptimeHistory as $day)
+                        @php
+                            $color = $day['uptime'] >= 99 ? 'bg-[#10B981]' : ($day['uptime'] >= 95 ? 'bg-[#F59E0B]' : 'bg-[#EF4444]');
+                        @endphp
+                        <div class="flex-1 h-10 rounded {{ $color }} hover:brightness-110 transition" title="{{ $day['date'] }}: {{ $day['uptime'] }}%"></div>
+                        @endforeach
                     </div>
                     <div class="flex justify-between mt-3 text-xs text-[#BEDBFF]/60">
                         <span>30 hari lalu</span>
