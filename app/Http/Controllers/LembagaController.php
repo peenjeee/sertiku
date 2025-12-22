@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Certificate;
 use App\Models\Template;
 use Illuminate\Http\Request;
@@ -78,6 +79,13 @@ class LembagaController extends Controller
         if ($certificate->template_id) {
             $certificate->template->incrementUsage();
         }
+
+        // Log activity
+        ActivityLog::log(
+            'create_certificate',
+            'Sertifikat diterbitkan untuk: ' . $certificate->recipient_name,
+            $certificate
+        );
 
         // Send notification to recipient if email exists (queue it to avoid blocking)
         if ($validated['recipient_email']) {

@@ -55,6 +55,14 @@ class ProcessBlockchainCertificate implements ShouldQueue
 
             if ($txHash) {
                 Log::info("Certificate {$this->certificate->certificate_number} stored on blockchain: {$txHash}");
+
+                // Log activity for blockchain transaction
+                ActivityLog::log(
+                    'blockchain_tx',
+                    "Sertifikat {$this->certificate->certificate_number} berhasil disimpan di blockchain",
+                    $this->certificate,
+                    ['tx_hash' => $txHash]
+                );
             } else {
                 Log::warning("Failed to store certificate {$this->certificate->certificate_number} on blockchain");
             }

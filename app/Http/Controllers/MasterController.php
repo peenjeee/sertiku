@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Certificate;
 use App\Models\Order;
 use App\Models\User;
@@ -59,6 +60,13 @@ class MasterController extends Controller
         $user->account_type = 'admin';
         $user->save();
 
+        // Log activity
+        ActivityLog::log(
+            'promote_admin',
+            'User dipromosikan menjadi Admin: ' . $user->name,
+            $user
+        );
+
         return back()->with('success', "User {$user->name} berhasil dijadikan Admin.");
     }
 
@@ -84,6 +92,13 @@ class MasterController extends Controller
         $user->is_admin     = false;
         $user->account_type = 'pengguna';
         $user->save();
+
+        // Log activity
+        ActivityLog::log(
+            'demote_admin',
+            'Admin diturunkan ke User: ' . $user->name,
+            $user
+        );
 
         return back()->with('success', "Admin {$user->name} berhasil diturunkan ke User.");
     }
