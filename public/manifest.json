@@ -19,13 +19,7 @@
             "src": "/favicon.svg",
             "sizes": "any",
             "type": "image/svg+xml",
-            "purpose": "any"
-        },
-        {
-            "src": "/icons/icon.svg",
-            "sizes": "512x512",
-            "type": "image/svg+xml",
-            "purpose": "maskable"
+            "purpose": "any maskable"
         }
     ],
     "screenshots": [],
@@ -37,8 +31,9 @@
             "url": "/verifikasi",
             "icons": [
                 {
-                    "src": "/icons/icon-192x192.png",
-                    "sizes": "192x192"
+                    "src": "/favicon.svg",
+                    "sizes": "any",
+                    "type": "image/svg+xml"
                 }
             ]
         },
@@ -49,10 +44,13 @@
             "url": "/dashboard",
             "icons": [
                 {
-                    "src": "/icons/icon-192x192.png",
-                    "sizes": "192x192"
+                    "src": "/favicon.svg",
+                    "sizes": "any",
+                    "type": "image/svg+xml"
                 }
             ]
         }
-    ]
+    ],
+    "related_applications": [],
+    "prefer_related_applications": false
 }
