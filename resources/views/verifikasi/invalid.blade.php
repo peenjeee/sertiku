@@ -114,9 +114,9 @@
                         </div>
                     </a>
 
-                    {{-- Tombol 2: Laporkan Sertifikat Palsu --}}
-                    <a href="#"
-                        class="block rounded-[8px] border border-[#FB2C36]/30 bg-[rgba(15,23,42,0.5)] px-4 py-4 hover:bg-[rgba(251,44,54,0.1)] transition-colors duration-200">
+                    {{-- Tombol 2: Laporkan Sertifikat Palsu (toggle form) --}}
+                    <button type="button" onclick="toggleFraudForm()"
+                        class="block w-full rounded-[8px] border border-[#FB2C36]/30 bg-[rgba(15,23,42,0.5)] px-4 py-4 hover:bg-[rgba(251,44,54,0.1)] transition-colors duration-200 text-left">
                         <div class="flex items-center gap-3">
                             <div
                                 class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] bg-[#FB2C36]/20">
@@ -142,8 +142,92 @@
                                     Bantu kami mencegah pemalsuan
                                 </p>
                             </div>
+
+                            <svg id="fraudFormArrow" class="w-5 h-5 text-[#FB2C36] transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
                         </div>
-                    </a>
+                    </button>
+
+                    {{-- Form Laporan Pemalsuan (hidden by default) --}}
+                    <div id="fraudReportForm" class="hidden mt-4 rounded-[16px] border border-[#FB2C36]/30 bg-[rgba(15,23,42,0.7)] p-6 animate-fade-in-up">
+                        <h3 class="text-white text-lg font-semibold mb-4 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-[#FB2C36]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                            Form Aduan Pemalsuan Sertifikat
+                        </h3>
+
+                        <form id="fraudForm" class="space-y-4">
+                            @csrf
+                            <input type="hidden" name="reported_hash" value="{{ $hash }}">
+
+                            {{-- Hash yang dilaporkan (readonly) --}}
+                            <div>
+                                <label class="block text-sm text-[#BEDBFF] mb-1">Kode Hash yang Dilaporkan</label>
+                                <input type="text" value="{{ $hash }}" readonly
+                                    class="w-full px-4 py-2.5 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-white/60 text-sm cursor-not-allowed">
+                            </div>
+
+                            {{-- Nama Pelapor --}}
+                            <div>
+                                <label class="block text-sm text-[#BEDBFF] mb-1">Nama Lengkap <span class="text-[#FB2C36]">*</span></label>
+                                <input type="text" name="reporter_name" required
+                                    class="w-full px-4 py-2.5 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.2)] text-white text-sm placeholder:text-white/40 focus:outline-none focus:border-[#3B82F6]"
+                                    placeholder="Masukkan nama lengkap Anda">
+                            </div>
+
+                            {{-- Email Pelapor --}}
+                            <div>
+                                <label class="block text-sm text-[#BEDBFF] mb-1">Email <span class="text-[#FB2C36]">*</span></label>
+                                <input type="email" name="reporter_email" required
+                                    class="w-full px-4 py-2.5 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.2)] text-white text-sm placeholder:text-white/40 focus:outline-none focus:border-[#3B82F6]"
+                                    placeholder="email@example.com">
+                            </div>
+
+                            {{-- Nomor Telepon (Optional) --}}
+                            <div>
+                                <label class="block text-sm text-[#BEDBFF] mb-1">Nomor Telepon <span class="text-white/40">(opsional)</span></label>
+                                <input type="tel" name="reporter_phone"
+                                    class="w-full px-4 py-2.5 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.2)] text-white text-sm placeholder:text-white/40 focus:outline-none focus:border-[#3B82F6]"
+                                    placeholder="08xxxxxxxxxx">
+                            </div>
+
+                            {{-- Deskripsi --}}
+                            <div>
+                                <label class="block text-sm text-[#BEDBFF] mb-1">Deskripsi Pemalsuan <span class="text-[#FB2C36]">*</span></label>
+                                <textarea name="description" rows="4" required
+                                    class="w-full px-4 py-2.5 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.2)] text-white text-sm placeholder:text-white/40 focus:outline-none focus:border-[#3B82F6] resize-none"
+                                    placeholder="Jelaskan bagaimana Anda menemukan sertifikat ini dan mengapa Anda menduga ini adalah pemalsuan..."></textarea>
+                            </div>
+
+                            {{-- Submit Button --}}
+                            <div class="flex gap-3 pt-2">
+                                <button type="submit" id="submitFraudBtn"
+                                    class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#FB2C36] text-white font-medium text-sm hover:bg-[#e02530] transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                    </svg>
+                                    <span>Kirim Laporan</span>
+                                </button>
+                                <button type="button" onclick="toggleFraudForm()"
+                                    class="px-6 py-3 rounded-lg border border-[rgba(255,255,255,0.2)] text-white/70 font-medium text-sm hover:bg-[rgba(255,255,255,0.05)] transition-colors">
+                                    Batal
+                                </button>
+                            </div>
+                        </form>
+
+                        {{-- Success Message (hidden) --}}
+                        <div id="fraudSuccess" class="hidden text-center py-8">
+                            <div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <h4 class="text-green-400 text-lg font-semibold mb-2">Laporan Berhasil Dikirim!</h4>
+                            <p class="text-[#BEDBFF] text-sm">Terima kasih atas laporan Anda. Tim kami akan meninjau dan menindaklanjuti laporan ini.</p>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -166,5 +250,58 @@
         </div>
 
     </section>
+
+    @push('scripts')
+    <script>
+        function toggleFraudForm() {
+            const form = document.getElementById('fraudReportForm');
+            const arrow = document.getElementById('fraudFormArrow');
+
+            if (form.classList.contains('hidden')) {
+                form.classList.remove('hidden');
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                form.classList.add('hidden');
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('fraudForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const btn = document.getElementById('submitFraudBtn');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Mengirim...';
+
+            try {
+                const formData = new FormData(this);
+                const response = await fetch('{{ route("fraud.report.store") }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    // Hide form, show success
+                    document.getElementById('fraudForm').classList.add('hidden');
+                    document.getElementById('fraudSuccess').classList.remove('hidden');
+                } else {
+                    throw new Error(data.message || 'Terjadi kesalahan');
+                }
+            } catch (error) {
+                alert('Gagal mengirim laporan: ' + error.message);
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        });
+    </script>
+    @endpush
 
 </x-layouts.app>

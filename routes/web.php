@@ -1,12 +1,12 @@
 <?php
 
+use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\VerifyController;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -108,7 +108,7 @@ Route::post('/reset-password', [\App\Http\Controllers\Auth\PasswordResetControll
 |--------------------------------------------------------------------------
 */
 
-use App\Http\Controllers\Auth\EmailVerificationController;
+use Illuminate\Support\Facades\Route;
 
 // OTP Verification Page
 Route::get('/verify-email', [EmailVerificationController::class, 'show'])
@@ -174,7 +174,7 @@ Route::middleware('auth')->group(function () {
         $user = auth()->user();
 
         // Check email verification first (skip for @sertiku.web.id)
-        if (!$user->email_verified_at && !str_ends_with($user->email ?? '', '@sertiku.web.id')) {
+        if (! $user->email_verified_at && ! str_ends_with($user->email ?? '', '@sertiku.web.id')) {
             // Wallet users with dummy email go to email input
             if (str_ends_with($user->email, '@wallet.local')) {
                 return redirect()->route('verification.email.input');
@@ -183,7 +183,7 @@ Route::middleware('auth')->group(function () {
         }
 
         // If profile not completed, go to onboarding
-        if (!$user->isProfileCompleted()) {
+        if (! $user->isProfileCompleted()) {
             return redirect()->route('onboarding');
         }
 
@@ -278,6 +278,9 @@ Route::post('/verifikasi/check', [VerifyController::class, 'check'])->name('veri
 
 // Halaman hasil dengan hash di URL
 Route::get('/verifikasi/{hash}', [VerifyController::class, 'show'])->name('verifikasi.show');
+
+// Fraud Report - Laporan Pemalsuan Sertifikat
+Route::post('/lapor-pemalsuan', [VerifyController::class, 'storeFraudReport'])->name('fraud.report.store');
 
 /*
 |--------------------------------------------------------------------------

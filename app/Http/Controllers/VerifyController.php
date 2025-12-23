@@ -132,4 +132,41 @@ class VerifyController extends Controller
         // Certificate not found
         return view('verifikasi.invalid', compact('hash'));
     }
+
+    /**
+     * Store a fraud report
+     */
+    public function storeFraudReport(Request $request)
+    {
+        $validated = $request->validate([
+            'reported_hash'  => 'required|string|max:255',
+            'reporter_name'  => 'required|string|max:255',
+            'reporter_email' => 'required|email|max:255',
+            'reporter_phone' => 'nullable|string|max:20',
+            'description'    => 'required|string|min:10|max:2000',
+        ], [
+            'reported_hash.required'  => 'Hash sertifikat wajib diisi.',
+            'reporter_name.required'  => 'Nama lengkap wajib diisi.',
+            'reporter_email.required' => 'Email wajib diisi.',
+            'reporter_email.email'    => 'Format email tidak valid.',
+            'description.required'    => 'Deskripsi pemalsuan wajib diisi.',
+            'description.min'         => 'Deskripsi minimal 10 karakter.',
+        ]);
+
+        // Create fraud report
+        $report = \App\Models\FraudReport::create([
+            'reported_hash'  => $validated['reported_hash'],
+            'reporter_name'  => $validated['reporter_name'],
+            'reporter_email' => $validated['reporter_email'],
+            'reporter_phone' => $validated['reporter_phone'] ?? null,
+            'description'    => $validated['description'],
+            'status'         => 'pending',
+        ]);
+
+        return response()->json([
+            'success'   => true,
+            'message'   => 'Laporan berhasil dikirim. Terima kasih atas kontribusi Anda.',
+            'report_id' => $report->id,
+        ]);
+    }
 }

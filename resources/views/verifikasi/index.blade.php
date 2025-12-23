@@ -479,44 +479,73 @@
             }
 
             function onScanSuccess(decodedText, decodedResult) {
-                // Stop scanner
-                stopScanner();
-                closeQRScanner();
-
-                // 1. Direct Redirect untuk URL Sertiku yang valid
-                // Regex mencocokkan http/s dan subpath /verifikasi/
-                if (decodedText.match(/^https?:\/\/.*\/verifikasi\/.+/)) {
-                    window.location.href = decodedText;
-                    return;
+                // Stop scanner first with a small delay to ensure proper cleanup
+                if (html5QrCode && html5QrCode.isScanning) {
+                    html5QrCode.stop().then(() => {
+                        console.log("Scanner stopped successfully");
+                        processQRCode(decodedText);
+                    }).catch(err => {
+                        console.log("Stop error:", err);
+                        processQRCode(decodedText);
+                    });
+                } else {
+                    processQRCode(decodedText);
                 }
+                closeQRScanner();
+            }
 
-                // 2. Fallback: Ekstrak Hash jika input bukan full URL atau format lain
-                let hashCode = decodedText;
+            function processQRCode(decodedText) {
+                console.log("QR Code detected:", decodedText);
 
-                if (decodedText.includes('hash=')) {
-                    // Format lama: ...?hash=HASH
-                    const urlParts = decodedText.split('?');
-                    if (urlParts.length > 1) {
-                        const urlParams = new URLSearchParams(urlParts[1]);
-                        hashCode = urlParams.get('hash');
+                // Update status
+                document.getElementById('scanStatus').innerHTML =
+                    '<span class="text-green-400">✓ QR Code terdeteksi! Mengalihkan...</span>';
+
+                let targetUrl = null;
+
+                // 1. Direct URL dengan /verifikasi/ path
+                if (decodedText.match(/^https?:\/\/.*\/verifikasi\/.+/i)) {
+                    targetUrl = decodedText;
+                }
+                // 2. URL dengan query string hash=
+                else if (decodedText.includes('hash=')) {
+                    try {
+                        const url = new URL(decodedText);
+                        const hash = url.searchParams.get('hash');
+                        if (hash) {
+                            targetUrl = '{{ url("/verifikasi") }}/' + encodeURIComponent(hash);
+                        }
+                    } catch (e) {
+                        // Not a valid URL, try to extract hash manually
+                        const match = decodedText.match(/hash=([^&]+)/);
+                        if (match && match[1]) {
+                            targetUrl = '{{ url("/verifikasi") }}/' + encodeURIComponent(match[1]);
+                        }
                     }
-                } else if (decodedText.includes('/verifikasi/')) {
-                    // Format baru tapi parsial/tidak match regex awal
+                }
+                // 3. Path contains /verifikasi/
+                else if (decodedText.includes('/verifikasi/')) {
                     const parts = decodedText.split('/verifikasi/');
                     if (parts.length > 1) {
-                        hashCode = parts[1].split('/')[0].split('?')[0];
+                        const hash = parts[1].split('/')[0].split('?')[0].split('#')[0];
+                        if (hash && hash.length >= 3) {
+                            targetUrl = '{{ url("/verifikasi") }}/' + encodeURIComponent(hash);
+                        }
                     }
                 }
-
-                // Validasi Hash
-                if (!hashCode || hashCode.length < 3 || (hashCode.includes('http') && hashCode.length > 50)) {
-                    alert("QR Code tidak dikenali: " + decodedText);
-                    return;
+                // 4. Plain hash/certificate number (e.g., SERT-123456 or alphanumeric)
+                else if (decodedText.match(/^[A-Za-z0-9\-_]+$/) && decodedText.length >= 3 && decodedText.length <= 100) {
+                    targetUrl = '{{ url("/verifikasi") }}/' + encodeURIComponent(decodedText);
                 }
 
-                // 3. Rebuild URL
-                const targetUrl = '{{ url("/verifikasi") }}/' + hashCode;
-                window.location.href = targetUrl;
+                if (targetUrl) {
+                    // Add small delay for mobile browsers to process properly
+                    setTimeout(() => {
+                        window.location.href = targetUrl;
+                    }, 300);
+                } else {
+                    alert("QR Code tidak dikenali sebagai sertifikat SertiKu: " + decodedText.substring(0, 50));
+                }
             }
 
             function onScanFailure(error) {
