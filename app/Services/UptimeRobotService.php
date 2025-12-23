@@ -28,7 +28,7 @@ class UptimeRobotService
     }
 
     /**
-     * Fetch monitors from UptimeRobot API v3
+     * Fetch monitors from UptimeRobot API v2
      */
     private function fetchMonitors(): array
     {
@@ -37,13 +37,13 @@ class UptimeRobotService
         }
 
         try {
-            // API v3 uses GET with Bearer token
+            // API v2 with form data
             $response = Http::timeout(10)
-                ->withHeaders([
-                    'x-api-key' => $this->apiKey,
-                ])
-                ->get('https://api.uptimerobot.com/v3/monitors', [
-                    'response_times' => true,
+                ->asForm()
+                ->post('https://api.uptimerobot.com/v2/getMonitors', [
+                    'api_key' => $this->apiKey,
+                    'format' => 'json',
+                    'response_times' => 1,
                     'response_times_limit' => 1,
                     'custom_uptime_ratios' => '30',
                 ]);
@@ -51,11 +51,8 @@ class UptimeRobotService
             if ($response->successful()) {
                 $data = $response->json();
 
-                // V3 returns data directly, not in 'monitors' key
-                $monitors = $data['data'] ?? $data['monitors'] ?? [];
-
-                if (!empty($monitors)) {
-                    return $this->transformMonitors($monitors);
+                if (isset($data['stat']) && $data['stat'] === 'ok' && !empty($data['monitors'])) {
+                    return $this->transformMonitors($data['monitors']);
                 }
             }
 
