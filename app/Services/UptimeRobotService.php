@@ -177,4 +177,39 @@ class UptimeRobotService
         Cache::forget('uptimerobot_monitors');
         Cache::forget('uptimerobot_history');
     }
+
+    /**
+     * Get current incidents (down/degraded services)
+     */
+    public function getIncidents(): array
+    {
+        $monitors = $this->getMonitors();
+        $incidents = [];
+
+        if (!empty($monitors['services'])) {
+            foreach ($monitors['services'] as $service) {
+                if ($service['status'] === 'down') {
+                    $incidents[] = [
+                        'name' => $service['name'],
+                        'status' => 'down',
+                        'status_text' => 'Down',
+                        'status_color' => 'red',
+                        'message' => 'Layanan sedang tidak dapat diakses',
+                        'url' => $service['url'] ?? '',
+                    ];
+                } elseif ($service['status'] === 'degraded') {
+                    $incidents[] = [
+                        'name' => $service['name'],
+                        'status' => 'degraded',
+                        'status_text' => 'Degraded',
+                        'status_color' => 'yellow',
+                        'message' => 'Layanan mengalami penurunan performa',
+                        'url' => $service['url'] ?? '',
+                    ];
+                }
+            }
+        }
+
+        return $incidents;
+    }
 }

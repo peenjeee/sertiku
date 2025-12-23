@@ -49,7 +49,10 @@ class PageController extends Controller
 
         $overallStatus = $hasDown ? 'down' : ($allOperational ? 'operational' : 'degraded');
 
-        return view('pages.status', compact('services', 'overallStatus', 'uptimeHistory', 'dataSource'));
+        // Get current incidents (down/degraded services)
+        $incidents = $uptimeRobot->isConfigured() ? $uptimeRobot->getIncidents() : [];
+
+        return view('pages.status', compact('services', 'overallStatus', 'uptimeHistory', 'dataSource', 'incidents'));
     }
 
     /**
