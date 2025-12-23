@@ -137,6 +137,32 @@
                     </div>
                 </div>
             </a>
+
+            @php
+                $activePackage = $user->getActivePackage();
+                $canAccessApi = $activePackage && in_array($activePackage->slug, ['professional', 'enterprise']);
+            @endphp
+
+            @if($canAccessApi)
+            <!-- API Tokens - Only for Professional/Enterprise -->
+            <a href="{{ route('lembaga.api-tokens.index') }}"
+                class="bg-gradient-to-br from-cyan-50 to-sky-100 border border-cyan-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-4">
+                <div class="flex items-center gap-3 lg:gap-4">
+                    <div
+                        class="bg-gradient-to-br from-cyan-500 to-sky-600 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-[#0E7490] font-bold text-sm lg:text-lg">API Tokens</h3>
+                        <p class="text-[#0891B2] text-xs lg:text-sm">Integrasi API</p>
+                    </div>
+                </div>
+            </a>
+            @endif
         </div>
 
         <!-- Stats Cards -->

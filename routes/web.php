@@ -21,6 +21,11 @@ Route::get('/', function () {
 // SEO Sitemap
 Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
 
+// API Documentation
+Route::get('/api-docs', function () {
+    return view('pages.api');
+})->name('api.docs');
+
 /*
 |--------------------------------------------------------------------------
 | AUTH ROUTES (Email + Wallet + Google)
@@ -174,7 +179,7 @@ Route::middleware('auth')->group(function () {
         $user = auth()->user();
 
         // Check email verification first (skip for @sertiku.web.id)
-        if (! $user->email_verified_at && ! str_ends_with($user->email ?? '', '@sertiku.web.id')) {
+        if (!$user->email_verified_at && !str_ends_with($user->email ?? '', '@sertiku.web.id')) {
             // Wallet users with dummy email go to email input
             if (str_ends_with($user->email, '@wallet.local')) {
                 return redirect()->route('verification.email.input');
@@ -183,7 +188,7 @@ Route::middleware('auth')->group(function () {
         }
 
         // If profile not completed, go to onboarding
-        if (! $user->isProfileCompleted()) {
+        if (!$user->isProfileCompleted()) {
             return redirect()->route('onboarding');
         }
 
@@ -313,7 +318,6 @@ Route::post('/contact-enterprise', [PaymentController::class, 'sendContactEnterp
 */
 
 Route::get('/bantuan', [\App\Http\Controllers\PageController::class, 'bantuan'])->name('bantuan');
-Route::get('/dokumentasi', [\App\Http\Controllers\PageController::class, 'dokumentasi'])->name('dokumentasi');
 Route::get('/status', [\App\Http\Controllers\PageController::class, 'status'])->name('status');
 Route::get('/kontak', [\App\Http\Controllers\PageController::class, 'kontak'])->name('kontak');
 Route::post('/kontak', [\App\Http\Controllers\PageController::class, 'sendKontak'])->name('kontak.send');
@@ -342,6 +346,11 @@ Route::middleware(['auth'])->prefix('lembaga')->name('lembaga.')->group(function
     Route::get('/template', [\App\Http\Controllers\LembagaController::class, 'indexTemplate'])->name('template.index');
     Route::get('/template/upload', [\App\Http\Controllers\LembagaController::class, 'uploadTemplate'])->name('template.upload');
     Route::post('/template', [\App\Http\Controllers\LembagaController::class, 'storeTemplate'])->name('template.store');
+
+    // API Tokens (Professional & Enterprise only)
+    Route::get('/api-tokens', [\App\Http\Controllers\ApiTokenController::class, 'index'])->name('api-tokens.index');
+    Route::post('/api-tokens', [\App\Http\Controllers\ApiTokenController::class, 'store'])->name('api-tokens.store');
+    Route::delete('/api-tokens/{tokenId}', [\App\Http\Controllers\ApiTokenController::class, 'destroy'])->name('api-tokens.destroy');
 });
 
 /*
