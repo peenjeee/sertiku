@@ -117,9 +117,35 @@
     const dismissCooldown = 7 * 24 * 60 * 60 * 1000; // 7 days
     const pwaInstalled = localStorage.getItem('pwa-installed');
 
-    // Detect iOS
+    // Detect device type
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const isStandalone = window.navigator.standalone === true;
+    const isAndroid = /Android/.test(navigator.userAgent);
+    const isMobile = isIOS || isAndroid || /Mobile|webOS|Opera Mini|IEMobile/.test(navigator.userAgent);
+    const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+
+    // DEBUG: Log device detection
+    console.log('PWA Debug:', {
+        isIOS: isIOS,
+        isAndroid: isAndroid,
+        isMobile: isMobile,
+        isStandalone: isStandalone,
+        pwaInstalled: pwaInstalled,
+        pwaDismissed: pwaDismissed
+    });
+    // DEBUG: Clear localStorage for testing (REMOVE IN PRODUCTION)
+    localStorage.removeItem('pwa-prompt-dismissed');
+    localStorage.removeItem('pwa-installed');
+    console.log('PWA: Cleared localStorage for testing');
+
+    // Helper function to show prompt with force visibility
+    function showPwaPrompt(source) {
+        console.log('PWA: Showing prompt from', source);
+        pwaPrompt.classList.remove('hidden');
+        pwaPrompt.style.display = 'block';
+        pwaPrompt.style.opacity = '1';
+        pwaPrompt.style.visibility = 'visible';
+        console.log('PWA: Prompt should be visible now. Classes:', pwaPrompt.className);
+    }
 
     // For Android/Desktop - Listen for beforeinstallprompt
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -127,31 +153,29 @@
         e.preventDefault();
         deferredPrompt = e;
 
-        // Check if already in standalone mode
-        const isStandaloneMode = window.matchMedia('(display-mode: standalone)').matches;
-
-        // Show prompt if cooldown passed and not installed, and not already in standalone mode
-        // DEV MODE: Cooldown check disabled for testing
-        // if ((!pwaDismissed || Date.now() - pwaDismissedTime > dismissCooldown) && !pwaInstalled && !isStandaloneMode) {
-        if (!pwaInstalled && !isStandaloneMode) {
-            console.log('PWA: Showing prompt (Testing Mode)');
+        // Show prompt immediately for testing
+        if (!isStandalone) {
             setTimeout(() => {
-                pwaPrompt.classList.remove('hidden');
-                console.log('PWA: Removed hidden class from prompt');
-            }, 1000); // Reduced to 1 second for testing
-        } else {
-            console.log('PWA: Prompt not shown. Installed:', pwaInstalled, 'Standalone:', isStandaloneMode);
+                showPwaPrompt('beforeinstallprompt');
+            }, 1000);
         }
     });
 
-    // For iOS - Show instructions after delay
-    if (isIOS && !isStandalone && !pwaInstalled) {
-        if (!pwaDismissed || Date.now() - pwaDismissedTime > dismissCooldown) {
-            setTimeout(() => {
-                pwaPrompt.classList.remove('hidden');
-            }, 5000);
-        }
+    // UNIVERSAL MOBILE FALLBACK: If beforeinstallprompt doesn't fire after 3 seconds, show prompt anyway
+    // This helps for iOS (which never fires beforeinstallprompt) and some Android browsers
+    if (isMobile && !isStandalone) {
+        console.log('PWA: Mobile device detected, setting up fallback timer');
+        setTimeout(() => {
+            showPwaPrompt('mobile-fallback');
+        }, 3000); // 3 second fallback for mobile
     }
+
+    // DEBUG: UNCONDITIONAL FORCE SHOW for testing (REMOVE IN PRODUCTION)
+    // This will ALWAYS show the prompt after 2 seconds regardless of device
+    setTimeout(() => {
+        console.log('PWA: FORCE SHOW - unconditional test');
+        showPwaPrompt('force-test');
+    }, 2000);
 
     window.addEventListener('appinstalled', () => {
         localStorage.setItem('pwa-installed', 'true');
