@@ -1,18 +1,18 @@
 {
-  "_index-DmXye8qy.js": {
-    "file": "assets/index-DmXye8qy.js",
+  "_index-109yMTs2.js": {
+    "file": "assets/index-109yMTs2.js",
     "name": "index",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js",
-      "_web3modal-CuSl4S30.js"
+      "_web3modal-ay82gtD0.js"
     ],
     "dynamicImports": [
       "node_modules/@walletconnect/modal-ui/dist/index.js"
     ]
   },
-  "_web3modal-CuSl4S30.js": {
-    "file": "assets/web3modal-CuSl4S30.js",
+  "_web3modal-ay82gtD0.js": {
+    "file": "assets/web3modal-ay82gtD0.js",
     "name": "web3modal",
     "isDynamicEntry": true,
     "imports": [
@@ -24,30 +24,30 @@
       "node_modules/@web3modal/siwe/dist/esm/exports/index.js",
       "node_modules/@web3modal/siwe/dist/esm/exports/index.js",
       "node_modules/@web3modal/siwe/dist/esm/exports/index.js",
-      "_index-DmXye8qy.js",
+      "_index-109yMTs2.js",
       "node_modules/@web3modal/siwe/dist/esm/exports/index.js",
       "node_modules/@web3modal/siwe/dist/esm/exports/index.js"
     ]
   },
   "node_modules/@walletconnect/modal-ui/dist/index.js": {
-    "file": "assets/index-Cq_-mgik.js",
+    "file": "assets/index-Dc6Sd9Or.js",
     "name": "index",
     "src": "node_modules/@walletconnect/modal-ui/dist/index.js",
     "isDynamicEntry": true,
     "imports": [
-      "_index-DmXye8qy.js",
-      "_web3modal-CuSl4S30.js",
+      "_index-109yMTs2.js",
+      "_web3modal-ay82gtD0.js",
       "resources/js/app.js"
     ]
   },
   "node_modules/@web3modal/scaffold-ui/dist/esm/exports/w3m-modal.js": {
-    "file": "assets/w3m-modal-CgtPJLAK.js",
+    "file": "assets/w3m-modal-B0zlfXgO.js",
     "name": "w3m-modal",
     "src": "node_modules/@web3modal/scaffold-ui/dist/esm/exports/w3m-modal.js",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js",
-      "_web3modal-CuSl4S30.js"
+      "_web3modal-ay82gtD0.js"
     ],
     "dynamicImports": [
       "node_modules/@web3modal/siwe/dist/esm/exports/index.js",
@@ -55,17 +55,17 @@
     ]
   },
   "node_modules/@web3modal/siwe/dist/esm/exports/index.js": {
-    "file": "assets/index-vWG4dUJG.js",
+    "file": "assets/index-CXR4VsLO.js",
     "name": "index",
     "src": "node_modules/@web3modal/siwe/dist/esm/exports/index.js",
     "isDynamicEntry": true,
     "imports": [
-      "_web3modal-CuSl4S30.js",
+      "_web3modal-ay82gtD0.js",
       "resources/js/app.js"
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-BNzLltdn.css",
+    "file": "assets/app-DI-UAzcv.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -74,12 +74,12 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-UDH3osgz.js",
+    "file": "assets/app-bTLEhFuD.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "dynamicImports": [
-      "_web3modal-CuSl4S30.js"
+      "_web3modal-ay82gtD0.js"
     ]
   }
 }
