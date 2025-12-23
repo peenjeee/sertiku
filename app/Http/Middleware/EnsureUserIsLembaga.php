@@ -30,12 +30,13 @@ class EnsureUserIsLembaga
         // Redirect based on role with appropriate message
         $message = 'Pembelian paket hanya tersedia untuk akun Lembaga/Institusi.';
 
-        if ($user->is_admin) {
-            return redirect()->route('admin.dashboard')->with('error', $message);
-        }
-
+        // Check is_master FIRST (master may also have is_admin = true)
         if ($user->is_master) {
             return redirect()->route('master.dashboard')->with('error', $message);
+        }
+
+        if ($user->is_admin) {
+            return redirect()->route('admin.dashboard')->with('error', $message);
         }
 
         if ($user->isPersonal()) {
