@@ -1,5 +1,5 @@
 {{-- PWA Install Prompt Component - Enhanced Version --}}
-<div id="pwa-install-prompt" class="fixed bottom-4 right-4 z-50 hidden max-w-sm">
+<div id="pwa-install-prompt" class="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 z-50 hidden md:max-w-sm">
     <div
         class="bg-[#0A1628]/95 backdrop-blur-xl border border-[#3B82F6]/30 rounded-2xl shadow-2xl p-5 animate-bounce-in">
         {{-- Close Button --}}
@@ -131,10 +131,16 @@
         const isStandaloneMode = window.matchMedia('(display-mode: standalone)').matches;
 
         // Show prompt if cooldown passed and not installed, and not already in standalone mode
-        if ((!pwaDismissed || Date.now() - pwaDismissedTime > dismissCooldown) && !pwaInstalled && !isStandaloneMode) {
+        // DEV MODE: Cooldown check disabled for testing
+        // if ((!pwaDismissed || Date.now() - pwaDismissedTime > dismissCooldown) && !pwaInstalled && !isStandaloneMode) {
+        if (!pwaInstalled && !isStandaloneMode) {
+            console.log('PWA: Showing prompt (Testing Mode)');
             setTimeout(() => {
                 pwaPrompt.classList.remove('hidden');
-            }, 5000); // Show after 5 seconds
+                console.log('PWA: Removed hidden class from prompt');
+            }, 1000); // Reduced to 1 second for testing
+        } else {
+            console.log('PWA: Prompt not shown. Installed:', pwaInstalled, 'Standalone:', isStandaloneMode);
         }
     });
 
