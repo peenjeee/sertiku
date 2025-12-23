@@ -10,24 +10,28 @@ class EnsureUserIsLembaga
     /**
      * Handle an incoming request.
      * Only allow access if user has lembaga (institution) account type.
+     * Admin, Master, and regular users are NOT allowed.
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! auth()->check()) {
-            return redirect()->route('login');
+        if (!auth()->check()) {
+            return redirect()->route('login')
+                ->with('error', 'Silakan login terlebih dahulu.');
         }
 
         $user = auth()->user();
 
-        // Allow admin to access anything
-        if ($user->is_admin) {
-            return $next($request);
-        }
+        // Only allow lembaga/institution accounts
+        if (!$user->isInstitution()) {
+            // Determine where to redirect based on role
+            $redirectRoute = match (true) {
+                $user->is_admin => 'master.dashboard',
+                $user->is_master => 'master.dashboard',
+                default => 'user.dashboard',
+            };
 
-        if (! $user->isInstitution()) {
-            // Redirect personal users back to their dashboard
-            return redirect()->route('user.dashboard')
-                ->with('error', 'Halaman ini hanya untuk akun Lembaga.');
+            return redirect()->route($redirectRoute)
+                ->with('error', 'Pembelian paket hanya tersedia untuk akun Lembaga/Institusi.');
         }
 
         return $next($request);
