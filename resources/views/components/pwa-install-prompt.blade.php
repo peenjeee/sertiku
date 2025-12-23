@@ -1,7 +1,9 @@
 {{-- PWA Install Prompt Component - Enhanced Version --}}
 {{-- DEBUG: Using inline styles to bypass CSS issues --}}
-<div id="pwa-install-prompt" style="position: fixed; bottom: 16px; left: 16px; right: 16px; z-index: 9999; display: none;">
-    <div style="background: rgba(10, 22, 40, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); padding: 20px;">
+<div id="pwa-install-prompt"
+    style="position: fixed; bottom: 16px; left: 16px; right: 16px; z-index: 9999; display: none;">
+    <div
+        style="background: rgba(10, 22, 40, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); padding: 20px;">
         {{-- Close Button --}}
         <button onclick="dismissPwaPrompt()"
             class="absolute top-3 right-3 text-white/50 hover:text-white transition-colors">
@@ -123,63 +125,57 @@
     const isMobile = isIOS || isAndroid || /Mobile|webOS|Opera Mini|IEMobile/.test(navigator.userAgent);
     const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
 
-    // DEBUG: Log device detection
-    console.log('PWA Debug:', {
-        isIOS: isIOS,
-        isAndroid: isAndroid,
-        isMobile: isMobile,
-        isStandalone: isStandalone,
-        pwaInstalled: pwaInstalled,
-        pwaDismissed: pwaDismissed
-    });
-    // DEBUG: Clear localStorage for testing (REMOVE IN PRODUCTION)
-    localStorage.removeItem('pwa-prompt-dismissed');
-    localStorage.removeItem('pwa-installed');
-    console.log('PWA: Cleared localStorage for testing');
-
-    // Helper function to show prompt with force visibility
-    function showPwaPrompt(source) {
-        console.log('PWA: Showing prompt from', source);
-        pwaPrompt.classList.remove('hidden');
+    // Helper function to show prompt
+    function showPwaPrompt() {
         pwaPrompt.style.display = 'block';
         pwaPrompt.style.opacity = '1';
         pwaPrompt.style.visibility = 'visible';
-        console.log('PWA: Prompt should be visible now. Classes:', pwaPrompt.className);
+    }
+
+    // Check if we should show the prompt
+    function shouldShowPrompt() {
+        // Don't show if already installed (user clicked install before)
+        if (pwaInstalled) return false;
+        // Don't show if in standalone mode (currently running as PWA)
+        if (isStandalone) return false;
+        // Don't show if dismissed recently (within cooldown period)
+        if (pwaDismissed && (Date.now() - pwaDismissedTime < dismissCooldown)) return false;
+        return true;
     }
 
     // For Android/Desktop - Listen for beforeinstallprompt
     window.addEventListener('beforeinstallprompt', (e) => {
-        console.log('PWA: beforeinstallprompt fired');
         e.preventDefault();
         deferredPrompt = e;
 
-        // Show prompt immediately for testing
-        if (!isStandalone) {
+        if (shouldShowPrompt()) {
             setTimeout(() => {
-                showPwaPrompt('beforeinstallprompt');
-            }, 1000);
+                showPwaPrompt();
+            }, 5000); // Show after 5 seconds
         }
     });
 
-    // UNIVERSAL MOBILE FALLBACK: If beforeinstallprompt doesn't fire after 3 seconds, show prompt anyway
-    // This helps for iOS (which never fires beforeinstallprompt) and some Android browsers
-    if (isMobile && !isStandalone) {
-        console.log('PWA: Mobile device detected, setting up fallback timer');
+    // For iOS - Show instructions after delay (iOS doesn't support beforeinstallprompt)
+    if (isIOS && shouldShowPrompt()) {
         setTimeout(() => {
-            showPwaPrompt('mobile-fallback');
-        }, 3000); // 3 second fallback for mobile
+            showPwaPrompt();
+        }, 5000);
     }
 
-    // DEBUG: UNCONDITIONAL FORCE SHOW for testing (REMOVE IN PRODUCTION)
-    // This will ALWAYS show the prompt after 2 seconds regardless of device
-    setTimeout(() => {
-        console.log('PWA: FORCE SHOW - unconditional test');
-        showPwaPrompt('force-test');
-    }, 2000);
+    // UNIVERSAL FALLBACK: For ALL devices - Show prompt after 7 seconds if it hasn't appeared yet
+    // This handles cases where beforeinstallprompt doesn't fire (mobile browsers, DevTools simulation, etc.)
+    if (shouldShowPrompt()) {
+        setTimeout(() => {
+            // Only show if prompt isn't already visible
+            if (pwaPrompt.style.display !== 'block') {
+                showPwaPrompt();
+            }
+        }, 7000);
+    }
 
     window.addEventListener('appinstalled', () => {
         localStorage.setItem('pwa-installed', 'true');
-        pwaPrompt.classList.add('hidden');
+        pwaPrompt.style.display = 'none';
         deferredPrompt = null;
 
         if (typeof Swal !== 'undefined') {
@@ -199,7 +195,7 @@
             // Show iOS instructions
             iosModal.classList.remove('hidden');
             iosModal.classList.add('flex');
-            pwaPrompt.classList.add('hidden');
+            pwaPrompt.style.display = 'none';
             return;
         }
 
@@ -211,12 +207,12 @@
                 console.log('User accepted PWA install');
             }
             deferredPrompt = null;
-            pwaPrompt.classList.add('hidden');
+            pwaPrompt.style.display = 'none';
         });
     }
 
     function dismissPwaPrompt() {
-        pwaPrompt.classList.add('hidden');
+        pwaPrompt.style.display = 'none';
         localStorage.setItem('pwa-prompt-dismissed', Date.now().toString());
     }
 
