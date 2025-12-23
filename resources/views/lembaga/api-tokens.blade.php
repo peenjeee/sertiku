@@ -2,13 +2,13 @@
     <div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-4xl mx-auto">
             {{-- Header --}}
-            <div class="flex items-center justify-between mb-8">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 md:mb-8">
                 <div>
-                    <h1 class="text-2xl font-bold text-white">API Tokens</h1>
-                    <p class="text-[#8EC5FF]/70">Kelola token untuk mengakses SertiKu API</p>
+                    <h1 class="text-xl md:text-2xl font-bold text-white">API Tokens</h1>
+                    <p class="text-sm md:text-base text-[#8EC5FF]/70">Kelola token untuk mengakses SertiKu API</p>
                 </div>
                 <a href="{{ route('api.docs') }}"
-                    class="text-[#3B82F6] hover:underline text-sm flex items-center gap-1">
+                    class="text-[#3B82F6] hover:underline text-sm flex items-center gap-1 self-start sm:self-auto">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -60,31 +60,33 @@
             @endif
 
             {{-- Create Token Form --}}
-            <div class="bg-[#0A1929]/80 border border-[#1E3A5F] rounded-xl p-6 mb-8">
-                <h2 class="text-lg font-semibold text-white mb-4">Buat Token Baru</h2>
-                <form action="{{ route('lembaga.api-tokens.store') }}" method="POST" class="flex gap-4">
+            <div class="bg-[#0A1929]/80 border border-[#1E3A5F] rounded-xl p-4 md:p-6 mb-6 md:mb-8">
+                <h2 class="text-base md:text-lg font-semibold text-white mb-4">Buat Token Baru</h2>
+                <form action="{{ route('lembaga.api-tokens.store') }}" method="POST"
+                    class="flex flex-col sm:flex-row gap-3 sm:gap-4">
                     @csrf
                     <input type="text" name="name" placeholder="Nama token (contoh: Production App)" required
-                        class="flex-1 bg-[#050C1F] border border-[#1E3A5F] rounded-lg px-4 py-2.5 text-white placeholder-[#8EC5FF]/50 focus:border-[#3B82F6] focus:outline-none">
+                        class="flex-1 bg-[#050C1F] border border-[#1E3A5F] rounded-lg px-3 md:px-4 py-2.5 text-sm md:text-base text-white placeholder-[#8EC5FF]/50 focus:border-[#3B82F6] focus:outline-none">
                     <button type="submit"
-                        class="px-6 py-2.5 bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] text-white font-medium rounded-lg hover:opacity-90 transition">
+                        class="px-4 md:px-6 py-2.5 bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] text-white font-medium rounded-lg hover:opacity-90 transition whitespace-nowrap text-sm md:text-base">
                         Buat Token
                     </button>
                 </form>
-                <p class="text-[#8EC5FF]/50 text-sm mt-3">Maksimal 5 token per akun.</p>
+                <p class="text-[#8EC5FF]/50 text-xs md:text-sm mt-3">Maksimal 5 token per akun.</p>
             </div>
 
             {{-- Tokens List --}}
             <div class="bg-[#0A1929]/80 border border-[#1E3A5F] rounded-xl overflow-hidden">
-                <div class="px-6 py-4 border-b border-[#1E3A5F]">
-                    <h2 class="text-lg font-semibold text-white">Token Aktif</h2>
+                <div class="px-4 md:px-6 py-3 md:py-4 border-b border-[#1E3A5F]">
+                    <h2 class="text-base md:text-lg font-semibold text-white">Token Aktif</h2>
                 </div>
 
                 @forelse($tokens as $token)
-                    <div class="px-6 py-4 border-b border-[#1E3A5F] flex items-center justify-between">
-                        <div>
-                            <p class="text-white font-medium">{{ $token->name }}</p>
-                            <p class="text-[#8EC5FF]/50 text-sm">
+                    <div
+                        class="px-4 md:px-6 py-3 md:py-4 border-b border-[#1E3A5F] flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
+                        <div class="flex-1 min-w-0">
+                            <p class="text-white font-medium text-sm md:text-base truncate">{{ $token->name }}</p>
+                            <p class="text-[#8EC5FF]/50 text-xs md:text-sm">
                                 Dibuat {{ $token->created_at->diffForHumans() }}
                                 @if($token->last_used_at)
                                     • Terakhir digunakan {{ $token->last_used_at->diffForHumans() }}
@@ -92,7 +94,7 @@
                             </p>
                         </div>
                         <form action="{{ route('lembaga.api-tokens.destroy', $token->id) }}" method="POST"
-                            onsubmit="return confirm('Yakin ingin menghapus token ini?')">
+                            onsubmit="return confirm('Yakin ingin menghapus token ini?')" class="self-end sm:self-auto">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-red-400 hover:text-red-300 transition p-2"
@@ -118,15 +120,16 @@
             </div>
 
             {{-- Usage Guide --}}
-            <div class="mt-8 bg-[#0A1929]/80 border border-[#1E3A5F] rounded-xl p-6">
-                <h3 class="text-lg font-semibold text-white mb-4">Cara Menggunakan Token</h3>
-                <p class="text-[#BEDBFF] mb-4">Tambahkan header <code class="text-[#10B981]">Authorization</code> pada
+            <div class="mt-6 md:mt-8 bg-[#0A1929]/80 border border-[#1E3A5F] rounded-xl p-4 md:p-6">
+                <h3 class="text-base md:text-lg font-semibold text-white mb-4">Cara Menggunakan Token</h3>
+                <p class="text-sm md:text-base text-[#BEDBFF] mb-4">Tambahkan header <code
+                        class="text-[#10B981]">Authorization</code> pada
                     setiap request:</p>
-                <div class="bg-[#050C1F] rounded-lg p-4 font-mono text-sm">
+                <div class="bg-[#050C1F] rounded-lg p-3 md:p-4 font-mono text-xs md:text-sm overflow-x-auto">
                     <pre class="text-[#10B981]">Authorization: Bearer YOUR_API_TOKEN</pre>
                 </div>
-                <p class="text-[#8EC5FF]/50 text-sm mt-4">Contoh menggunakan cURL:</p>
-                <div class="bg-[#050C1F] rounded-lg p-4 font-mono text-sm mt-2 overflow-x-auto">
+                <p class="text-[#8EC5FF]/50 text-xs md:text-sm mt-4">Contoh menggunakan cURL:</p>
+                <div class="bg-[#050C1F] rounded-lg p-3 md:p-4 font-mono text-xs md:text-sm mt-2 overflow-x-auto">
                     <pre class="text-[#10B981]">curl -X GET "{{ url('/api/v1/certificates') }}" \
   -H "Authorization: Bearer YOUR_API_TOKEN" \
   -H "Accept: application/json"</pre>
@@ -135,9 +138,9 @@
 
             {{-- Test API Token --}}
             <div
-                class="mt-8 bg-gradient-to-br from-[#3B82F6]/10 to-[#8B5CF6]/10 border border-[#3B82F6]/30 rounded-xl p-6">
-                <h3 class="text-lg font-semibold text-white mb-4">🧪 Test API Token</h3>
-                <p class="text-[#BEDBFF] mb-4">Uji token Anda dengan mengirim request ke API.</p>
+                class="mt-6 md:mt-8 bg-gradient-to-br from-[#3B82F6]/10 to-[#8B5CF6]/10 border border-[#3B82F6]/30 rounded-xl p-4 md:p-6">
+                <h3 class="text-base md:text-lg font-semibold text-white mb-4">🧪 Test API Token</h3>
+                <p class="text-sm md:text-base text-[#BEDBFF] mb-4">Uji token Anda dengan mengirim request ke API.</p>
 
                 <div class="space-y-4">
                     {{-- Token Input --}}

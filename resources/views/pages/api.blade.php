@@ -3,9 +3,9 @@
     <div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-5xl mx-auto">
             {{-- Header --}}
-            <div class="text-center mb-12 scroll-animate">
-                <h1 class="text-4xl font-bold text-white mb-4">API Documentation</h1>
-                <p class="text-[#8EC5FF]/80 text-lg max-w-2xl mx-auto">
+            <div class="text-center mb-8 md:mb-12 scroll-animate">
+                <h1 class="text-2xl md:text-4xl font-bold text-white mb-3 md:mb-4">API Documentation</h1>
+                <p class="text-[#8EC5FF]/80 text-sm md:text-lg max-w-2xl mx-auto px-2">
                     Integrasikan SertiKu ke aplikasi Anda untuk verifikasi sertifikat digital secara otomatis.
                 </p>
             </div>
@@ -13,8 +13,9 @@
             {{-- Base URL --}}
             <div class="bg-[#0A1929]/80 border border-[#1E3A5F] rounded-xl p-6 mb-8 scroll-animate">
                 <h2 class="text-xl font-semibold text-white mb-3">Base URL</h2>
-                <div class="flex items-center gap-2 bg-[#050C1F] rounded-lg p-4">
-                    <code class="text-[#10B981] font-mono text-lg flex-1" id="baseUrl">{{ url('/api/v1') }}</code>
+                <div class="flex items-center gap-2 bg-[#050C1F] rounded-lg p-3 md:p-4">
+                    <code class="text-[#10B981] font-mono text-xs md:text-lg flex-1 break-all"
+                        id="baseUrl">{{ url('/api/v1') }}</code>
                     <button onclick="copyToClipboard('baseUrl')" class="text-[#8EC5FF] hover:text-white transition p-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -53,14 +54,16 @@
                 {{-- Verify Endpoint --}}
                 <div class="bg-[#0A1929]/80 border border-[#1E3A5F] rounded-xl overflow-hidden scroll-animate"
                     x-data="{ open: true }">
-                    <button @click="open = !open" class="w-full flex items-center justify-between p-6 text-left">
-                        <div class="flex items-center gap-4">
-                            <span class="px-3 py-1 bg-[#10B981]/20 text-[#10B981] text-sm font-mono rounded">GET</span>
-                            <code class="text-white font-mono">/verify/{hash}</code>
-                            <span class="text-[#8EC5FF]/60 text-sm">Verifikasi Sertifikat</span>
+                    <button @click="open = !open" class="w-full flex items-center justify-between p-4 md:p-6 text-left">
+                        <div class="flex flex-wrap items-center gap-2 md:gap-4">
+                            <span
+                                class="px-2 md:px-3 py-1 bg-[#10B981]/20 text-[#10B981] text-xs md:text-sm font-mono rounded">GET</span>
+                            <code class="text-white font-mono text-sm md:text-base">/verify/{hash}</code>
+                            <span class="text-[#8EC5FF]/60 text-xs md:text-sm hidden sm:inline">Verifikasi
+                                Sertifikat</span>
                         </div>
-                        <svg class="w-5 h-5 text-[#8EC5FF] transition-transform" :class="{ 'rotate-180': open }"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-[#8EC5FF] transition-transform flex-shrink-0"
+                            :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
@@ -90,13 +93,13 @@
                         </div>
 
                         {{-- Try it out --}}
-                        <div class="bg-[#050C1F] rounded-lg p-4">
+                        <div class="bg-[#050C1F] rounded-lg p-3 md:p-4">
                             <h4 class="text-white font-medium mb-3">🧪 Try it out</h4>
-                            <div class="flex gap-2">
+                            <div class="flex flex-col sm:flex-row gap-2">
                                 <input type="text" id="verifyInput" placeholder="Masukkan hash atau nomor sertifikat"
-                                    class="flex-1 bg-[#0A1929] border border-[#1E3A5F] rounded-lg px-4 py-2 text-white placeholder-[#8EC5FF]/50 focus:border-[#3B82F6] focus:outline-none">
+                                    class="flex-1 bg-[#0A1929] border border-[#1E3A5F] rounded-lg px-3 md:px-4 py-2 text-sm md:text-base text-white placeholder-[#8EC5FF]/50 focus:border-[#3B82F6] focus:outline-none">
                                 <button onclick="tryVerify()"
-                                    class="px-4 py-2 bg-[#3B82F6] text-white rounded-lg hover:bg-[#2563EB] transition">
+                                    class="px-4 py-2 bg-[#3B82F6] text-white rounded-lg hover:bg-[#2563EB] transition whitespace-nowrap">
                                     Test
                                 </button>
                             </div>
@@ -132,14 +135,16 @@ const data = await response.json();</pre>
                 {{-- Stats Endpoint --}}
                 <div class="bg-[#0A1929]/80 border border-[#1E3A5F] rounded-xl overflow-hidden scroll-animate"
                     x-data="{ open: false }">
-                    <button @click="open = !open" class="w-full flex items-center justify-between p-6 text-left">
-                        <div class="flex items-center gap-4">
-                            <span class="px-3 py-1 bg-[#10B981]/20 text-[#10B981] text-sm font-mono rounded">GET</span>
-                            <code class="text-white font-mono">/stats</code>
-                            <span class="text-[#8EC5FF]/60 text-sm">Statistik Platform</span>
+                    <button @click="open = !open" class="w-full flex items-center justify-between p-4 md:p-6 text-left">
+                        <div class="flex flex-wrap items-center gap-2 md:gap-4">
+                            <span
+                                class="px-2 md:px-3 py-1 bg-[#10B981]/20 text-[#10B981] text-xs md:text-sm font-mono rounded">GET</span>
+                            <code class="text-white font-mono text-sm md:text-base">/stats</code>
+                            <span class="text-[#8EC5FF]/60 text-xs md:text-sm hidden sm:inline">Statistik
+                                Platform</span>
                         </div>
-                        <svg class="w-5 h-5 text-[#8EC5FF] transition-transform" :class="{ 'rotate-180': open }"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-[#8EC5FF] transition-transform flex-shrink-0"
+                            :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
@@ -165,16 +170,16 @@ const data = await response.json();</pre>
                 {{-- GET Certificates Endpoint --}}
                 <div class="bg-[#0A1929]/80 border border-[#1E3A5F] rounded-xl overflow-hidden scroll-animate"
                     x-data="{ open: false }">
-                    <button @click="open = !open" class="w-full flex items-center justify-between p-6 text-left">
-                        <div class="flex items-center gap-4">
-                            <span class="px-3 py-1 bg-[#10B981]/20 text-[#10B981] text-sm font-mono rounded">GET</span>
-                            <code class="text-white font-mono">/certificates</code>
-                            <span class="text-[#8EC5FF]/60 text-sm">List Sertifikat</span>
-                            <span class="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] text-xs rounded">Auth
-                                Required</span>
+                    <button @click="open = !open" class="w-full flex items-center justify-between p-4 md:p-6 text-left">
+                        <div class="flex flex-wrap items-center gap-2 md:gap-4">
+                            <span
+                                class="px-2 md:px-3 py-1 bg-[#10B981]/20 text-[#10B981] text-xs md:text-sm font-mono rounded">GET</span>
+                            <code class="text-white font-mono text-sm md:text-base">/certificates</code>
+                            <span class="text-[#8EC5FF]/60 text-xs md:text-sm hidden sm:inline">List Sertifikat</span>
+                            <span class="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] text-xs rounded">Auth</span>
                         </div>
-                        <svg class="w-5 h-5 text-[#8EC5FF] transition-transform" :class="{ 'rotate-180': open }"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-[#8EC5FF] transition-transform flex-shrink-0"
+                            :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
@@ -241,16 +246,17 @@ const data = await response.json();</pre>
                 {{-- POST Certificates Endpoint --}}
                 <div class="bg-[#0A1929]/80 border border-[#1E3A5F] rounded-xl overflow-hidden scroll-animate"
                     x-data="{ open: false }">
-                    <button @click="open = !open" class="w-full flex items-center justify-between p-6 text-left">
-                        <div class="flex items-center gap-4">
-                            <span class="px-3 py-1 bg-[#3B82F6]/20 text-[#3B82F6] text-sm font-mono rounded">POST</span>
-                            <code class="text-white font-mono">/certificates</code>
-                            <span class="text-[#8EC5FF]/60 text-sm">Buat Sertifikat Baru</span>
-                            <span class="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] text-xs rounded">Auth
-                                Required</span>
+                    <button @click="open = !open" class="w-full flex items-center justify-between p-4 md:p-6 text-left">
+                        <div class="flex flex-wrap items-center gap-2 md:gap-4">
+                            <span
+                                class="px-2 md:px-3 py-1 bg-[#3B82F6]/20 text-[#3B82F6] text-xs md:text-sm font-mono rounded">POST</span>
+                            <code class="text-white font-mono text-sm md:text-base">/certificates</code>
+                            <span class="text-[#8EC5FF]/60 text-xs md:text-sm hidden sm:inline">Buat Sertifikat
+                                Baru</span>
+                            <span class="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] text-xs rounded">Auth</span>
                         </div>
-                        <svg class="w-5 h-5 text-[#8EC5FF] transition-transform" :class="{ 'rotate-180': open }"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-[#8EC5FF] transition-transform flex-shrink-0"
+                            :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
@@ -322,16 +328,17 @@ const data = await response.json();</pre>
                 {{-- PUT Revoke Endpoint --}}
                 <div class="bg-[#0A1929]/80 border border-[#1E3A5F] rounded-xl overflow-hidden scroll-animate"
                     x-data="{ open: false }">
-                    <button @click="open = !open" class="w-full flex items-center justify-between p-6 text-left">
-                        <div class="flex items-center gap-4">
-                            <span class="px-3 py-1 bg-[#F59E0B]/20 text-[#F59E0B] text-sm font-mono rounded">PUT</span>
-                            <code class="text-white font-mono">/certificates/{id}/revoke</code>
-                            <span class="text-[#8EC5FF]/60 text-sm">Cabut Sertifikat</span>
-                            <span class="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] text-xs rounded">Auth
-                                Required</span>
+                    <button @click="open = !open" class="w-full flex items-center justify-between p-4 md:p-6 text-left">
+                        <div class="flex flex-wrap items-center gap-2 md:gap-4">
+                            <span
+                                class="px-2 md:px-3 py-1 bg-[#F59E0B]/20 text-[#F59E0B] text-xs md:text-sm font-mono rounded">PUT</span>
+                            <code
+                                class="text-white font-mono text-xs md:text-base break-all">/certificates/{id}/revoke</code>
+                            <span class="text-[#8EC5FF]/60 text-xs md:text-sm hidden sm:inline">Cabut Sertifikat</span>
+                            <span class="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] text-xs rounded">Auth</span>
                         </div>
-                        <svg class="w-5 h-5 text-[#8EC5FF] transition-transform" :class="{ 'rotate-180': open }"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-[#8EC5FF] transition-transform flex-shrink-0"
+                            :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
