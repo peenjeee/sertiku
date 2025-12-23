@@ -53,4 +53,8 @@ return [
         'token' => env('FONNTE_TOKEN'),
     ],
 
+    'uptimerobot' => [
+        'api_key' => env('UPTIMEROBOT_API_KEY'),
+    ],
+
 ];
