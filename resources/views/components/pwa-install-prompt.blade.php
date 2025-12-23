@@ -1,7 +1,7 @@
 {{-- PWA Install Prompt Component - Enhanced Version --}}
-<div id="pwa-install-prompt" class="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 z-50 hidden md:max-w-sm">
-    <div
-        class="bg-[#0A1628]/95 backdrop-blur-xl border border-[#3B82F6]/30 rounded-2xl shadow-2xl p-5 animate-bounce-in">
+{{-- DEBUG: Using inline styles to bypass CSS issues --}}
+<div id="pwa-install-prompt" style="position: fixed; bottom: 16px; left: 16px; right: 16px; z-index: 9999; display: none;">
+    <div style="background: rgba(10, 22, 40, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); padding: 20px;">
         {{-- Close Button --}}
         <button onclick="dismissPwaPrompt()"
             class="absolute top-3 right-3 text-white/50 hover:text-white transition-colors">
