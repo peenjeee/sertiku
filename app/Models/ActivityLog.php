@@ -50,14 +50,14 @@ class ActivityLog extends Model
         $user = auth()->user();
 
         return self::create([
-            'user_id'     => $user?->id,
-            'action'      => $action,
-            'model_type'  => $subject ? get_class($subject) : null,
-            'model_id'    => $subject?->id ?? null,
+            'user_id' => $user?->id,
+            'action' => $action,
+            'model_type' => $subject ? get_class($subject) : null,
+            'model_id' => $subject?->id ?? null,
             'description' => $description,
-            'properties'  => $properties,
-            'ip_address'  => request()->ip(),
-            'user_agent'  => request()->userAgent(),
+            'properties' => $properties,
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
         ]);
     }
 
@@ -67,16 +67,18 @@ class ActivityLog extends Model
     public function getIconAttribute(): string
     {
         return match ($this->action) {
-            'login'              => '🔑',
-            'logout'             => '🚪',
+            'login' => '🔑',
+            'logout' => '🚪',
             'create_certificate' => '📜',
-            'promote_admin'      => '⬆️',
-            'demote_admin'       => '⬇️',
-            'create_user'        => '👤',
-            'update_settings'    => '⚙️',
-            'create_ticket'      => '🎫',
-            'blockchain_tx'      => '🔗',
-            default              => '📝',
+            'promote_admin' => '⬆️',
+            'demote_admin' => '⬇️',
+            'create_user' => '👤',
+            'update_settings' => '⚙️',
+            'create_ticket' => '🎫',
+            'blockchain_tx' => '🔗',
+            'backup' => '💾',
+            'restore' => '📥',
+            default => '📝',
         };
     }
 
@@ -86,14 +88,16 @@ class ActivityLog extends Model
     public function getColorAttribute(): string
     {
         return match ($this->action) {
-            'login'              => 'green',
-            'logout'             => 'gray',
+            'login' => 'green',
+            'logout' => 'gray',
             'create_certificate' => 'blue',
-            'promote_admin'      => 'purple',
-            'demote_admin'       => 'red',
-            'create_user'        => 'teal',
-            'update_settings'    => 'yellow',
-            default              => 'indigo',
+            'promote_admin' => 'purple',
+            'demote_admin' => 'red',
+            'create_user' => 'teal',
+            'update_settings' => 'yellow',
+            'backup' => 'cyan',
+            'restore' => 'orange',
+            default => 'indigo',
         };
     }
 }

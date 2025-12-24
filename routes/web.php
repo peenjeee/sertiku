@@ -372,9 +372,17 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::patch('/users/{user}/toggle', [\App\Http\Controllers\AdminController::class, 'toggleUser'])->name('users.toggle');
 
     // Backup & Restore
-    Route::get('/backup', [\App\Http\Controllers\AdminController::class, 'backup'])->name('backup');
-    Route::post('/backup/export', [\App\Http\Controllers\AdminController::class, 'exportData'])->name('backup.export');
-    Route::post('/backup/create', [\App\Http\Controllers\AdminController::class, 'createBackup'])->name('backup.create');
+    Route::get('/backup', [\App\Http\Controllers\BackupController::class, 'index'])->name('backup');
+    Route::post('/backup/create', [\App\Http\Controllers\BackupController::class, 'createBackup'])->name('backup.create');
+    Route::get('/backup/download/{filename}', [\App\Http\Controllers\BackupController::class, 'download'])->name('backup.download');
+    Route::delete('/backup/delete/{filename}', [\App\Http\Controllers\BackupController::class, 'delete'])->name('backup.delete');
+    Route::post('/backup/restore', [\App\Http\Controllers\BackupController::class, 'restore'])->name('backup.restore');
+    // Google Drive
+    Route::post('/backup/drive/restore', [\App\Http\Controllers\BackupController::class, 'restoreFromDrive'])->name('backup.drive.restore');
+    Route::delete('/backup/drive/delete', [\App\Http\Controllers\BackupController::class, 'deleteFromDrive'])->name('backup.drive.delete');
+    Route::get('/backup/drive/auth', [\App\Http\Controllers\GoogleDriveAuthController::class, 'redirect'])->name('backup.drive.auth');
+    Route::get('/backup/drive/callback', [\App\Http\Controllers\GoogleDriveAuthController::class, 'callback'])->name('backup.drive.callback');
+    Route::post('/backup/drive/disconnect', [\App\Http\Controllers\GoogleDriveAuthController::class, 'disconnect'])->name('backup.drive.disconnect');
 
     // Settings
     Route::get('/settings', [\App\Http\Controllers\AdminController::class, 'settings'])->name('settings');

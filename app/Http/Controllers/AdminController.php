@@ -15,12 +15,12 @@ class AdminController extends Controller
     {
         // Get stats
         $stats = [
-            'total_users'        => User::where('account_type', 'pengguna')->count(),
-            'total_lembaga'      => User::where('account_type', 'lembaga')->count(),
-            'total_sertifikat'   => Certificate::count(),
-            'sertifikat_aktif'   => Certificate::where('status', 'active')->count(),
+            'total_users' => User::where('account_type', 'pengguna')->count(),
+            'total_lembaga' => User::where('account_type', 'lembaga')->count(),
+            'total_sertifikat' => Certificate::count(),
+            'sertifikat_aktif' => Certificate::where('status', 'active')->count(),
             'sertifikat_dicabut' => Certificate::where('status', 'revoked')->count(),
-            'total_verifikasi'   => Certificate::count(), // Using certificate count as verification proxy
+            'total_verifikasi' => Certificate::count(), // Using certificate count as verification proxy
         ];
 
         // Get recent certificates
@@ -94,10 +94,10 @@ class AdminController extends Controller
         $users = $query->latest()->paginate(15);
 
         $userStats = [
-            'total'    => User::count(),
+            'total' => User::count(),
             'pengguna' => User::where('account_type', 'pengguna')->count(),
-            'lembaga'  => User::where('account_type', 'lembaga')->count(),
-            'active'   => User::where('profile_completed', true)->count(),
+            'lembaga' => User::where('account_type', 'lembaga')->count(),
+            'active' => User::where('profile_completed', true)->count(),
         ];
 
         return view('admin.users', compact('users', 'userStats'));
@@ -108,11 +108,23 @@ class AdminController extends Controller
      */
     public function toggleUser(User $user)
     {
+        // Prevent deactivating admins, masters, or self
+        $isAdmin = in_array($user->role, ['admin', 'master']) || $user->account_type === 'admin';
+        if ($isAdmin) {
+            return back()->with('error', 'Tidak dapat menonaktifkan akun Admin atau Master.');
+        }
+
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'Tidak dapat menonaktifkan akun sendiri.');
+        }
+
         $user->update([
-            'profile_completed' => ! $user->profile_completed,
+            'profile_completed' => !$user->profile_completed,
         ]);
 
-        return back()->with('success', "Status pengguna {$user->name} berhasil diubah.");
+        $status = $user->profile_completed ? 'diaktifkan' : 'dinonaktifkan';
+
+        return back()->with('success', "Pengguna {$user->name} berhasil {$status}.");
     }
 
     /**
@@ -130,7 +142,7 @@ class AdminController extends Controller
     public function backup()
     {
         // Get backup history from storage
-        $backups    = [];
+        $backups = [];
         $backupPath = storage_path('app/backups');
 
         if (file_exists($backupPath)) {
@@ -150,9 +162,9 @@ class AdminController extends Controller
         usort($backups, fn($a, $b) => strtotime($b['date']) - strtotime($a['date']));
 
         $exportStats = [
-            'users'        => User::count(),
+            'users' => User::count(),
             'certificates' => Certificate::count(),
-            'lembaga'      => User::where('account_type', 'lembaga')->count(),
+            'lembaga' => User::where('account_type', 'lembaga')->count(),
         ];
 
         return view('admin.backup', compact('backups', 'exportStats'));
@@ -163,14 +175,14 @@ class AdminController extends Controller
      */
     public function exportData(Request $request)
     {
-        $type   = $request->get('type', 'certificates');
+        $type = $request->get('type', 'certificates');
         $format = $request->get('format', 'csv');
 
         $data = match ($type) {
-            'users'        => User::all()->toArray(),
+            'users' => User::all()->toArray(),
             'certificates' => Certificate::with('user:id,name,email')->get()->toArray(),
-            'lembaga'      => User::where('account_type', 'lembaga')->get()->toArray(),
-            default        => Certificate::all()->toArray(),
+            'lembaga' => User::where('account_type', 'lembaga')->get()->toArray(),
+            default => Certificate::all()->toArray(),
         };
 
         $filename = "{$type}_export_" . date('Y-m-d_His');
@@ -182,14 +194,14 @@ class AdminController extends Controller
 
         // CSV format
         $headers = [
-            'Content-Type'        => 'text/csv',
+            'Content-Type' => 'text/csv',
             'Content-Disposition' => "attachment; filename={$filename}.csv",
         ];
 
         $callback = function () use ($data) {
             $file = fopen('php://output', 'w');
 
-            if (! empty($data)) {
+            if (!empty($data)) {
                 // Header row
                 fputcsv($file, array_keys($data[0]));
 
@@ -214,15 +226,15 @@ class AdminController extends Controller
     {
         $backupPath = storage_path('app/backups');
 
-        if (! file_exists($backupPath)) {
+        if (!file_exists($backupPath)) {
             mkdir($backupPath, 0755, true);
         }
 
         $filename = 'backup_' . date('Y-m-d_His') . '.json';
 
         $data = [
-            'created_at'   => now()->toDateTimeString(),
-            'users'        => User::all()->toArray(),
+            'created_at' => now()->toDateTimeString(),
+            'users' => User::all()->toArray(),
             'certificates' => Certificate::all()->toArray(),
         ];
 
@@ -237,8 +249,8 @@ class AdminController extends Controller
     public function settings()
     {
         $settings = [
-            'site_name'   => config('app.name'),
-            'site_url'    => config('app.url'),
+            'site_name' => config('app.name'),
+            'site_url' => config('app.url'),
             'admin_email' => auth()->user()->email,
         ];
 
@@ -269,20 +281,20 @@ class AdminController extends Controller
     public function updateProfile(Request $request)
     {
         $request->validate([
-            'name'   => 'required|string|max:255',
-            'email'  => 'required|email|unique:users,email,' . auth()->id(),
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . auth()->id(),
             'avatar' => 'nullable|image|max:2048',
         ]);
 
         $user = auth()->user();
 
         $data = [
-            'name'  => $request->name,
+            'name' => $request->name,
             'email' => $request->email,
         ];
 
         if ($request->hasFile('avatar')) {
-            $path           = $request->file('avatar')->store('avatars', 'public');
+            $path = $request->file('avatar')->store('avatars', 'public');
             $data['avatar'] = $path;
         }
 
@@ -298,12 +310,12 @@ class AdminController extends Controller
     {
         $request->validate([
             'current_password' => 'required',
-            'password'         => 'required|min:8|confirmed',
+            'password' => 'required|min:8|confirmed',
         ]);
 
         $user = auth()->user();
 
-        if (! Hash::check($request->current_password, $user->password)) {
+        if (!Hash::check($request->current_password, $user->password)) {
             return back()->withErrors(['current_password' => 'Password saat ini tidak sesuai.']);
         }
 
@@ -319,13 +331,13 @@ class AdminController extends Controller
      */
     private function getAnalyticsStats($days)
     {
-        $now             = now();
-        $periodStart     = $now->copy()->subDays($days);
+        $now = now();
+        $periodStart = $now->copy()->subDays($days);
         $prevPeriodStart = $periodStart->copy()->subDays($days);
 
         // Current period counts
         $currentVerifications = Certificate::where('updated_at', '>=', $periodStart)->count();
-        $currentCertificates  = Certificate::where('status', 'active')
+        $currentCertificates = Certificate::where('status', 'active')
             ->where('created_at', '>=', $periodStart)->count();
         $currentLembaga = User::where('account_type', 'lembaga')
             ->where('created_at', '>=', $periodStart)->count();
@@ -333,27 +345,27 @@ class AdminController extends Controller
 
         // Previous period counts
         $prevVerifications = Certificate::whereBetween('updated_at', [$prevPeriodStart, $periodStart])->count();
-        $prevCertificates  = Certificate::where('status', 'active')
+        $prevCertificates = Certificate::where('status', 'active')
             ->whereBetween('created_at', [$prevPeriodStart, $periodStart])->count();
         $prevLembaga = User::where('account_type', 'lembaga')
             ->whereBetween('created_at', [$prevPeriodStart, $periodStart])->count();
         $prevUsers = User::whereBetween('created_at', [$prevPeriodStart, $periodStart])->count();
 
         return [
-            'total_verifikasi'  => [
-                'value'  => Certificate::count(),
+            'total_verifikasi' => [
+                'value' => Certificate::count(),
                 'change' => $this->calculatePercentChange($prevVerifications, $currentVerifications),
             ],
-            'sertifikat_aktif'  => [
-                'value'  => Certificate::where('status', 'active')->count(),
+            'sertifikat_aktif' => [
+                'value' => Certificate::where('status', 'active')->count(),
                 'change' => $this->calculatePercentChange($prevCertificates, $currentCertificates),
             ],
             'lembaga_terdaftar' => [
-                'value'  => User::where('account_type', 'lembaga')->count(),
+                'value' => User::where('account_type', 'lembaga')->count(),
                 'change' => $this->calculatePercentChange($prevLembaga, $currentLembaga),
             ],
-            'pengguna_aktif'    => [
-                'value'  => User::where('profile_completed', true)->count(),
+            'pengguna_aktif' => [
+                'value' => User::where('profile_completed', true)->count(),
                 'change' => $this->calculatePercentChange($prevUsers, $currentUsers),
             ],
         ];
@@ -373,7 +385,7 @@ class AdminController extends Controller
         // Generate sample data for last 12 months
         $data = [];
         for ($i = 11; $i >= 0; $i--) {
-            $month  = now()->subMonths($i);
+            $month = now()->subMonths($i);
             $data[] = [
                 'month' => $month->format('M'),
                 'count' => Certificate::whereMonth('updated_at', $month->month)
@@ -402,14 +414,14 @@ class AdminController extends Controller
     public function blockchain()
     {
         $blockchainService = new \App\Services\BlockchainService();
-        $walletInfo        = $blockchainService->getWalletInfo();
+        $walletInfo = $blockchainService->getWalletInfo();
 
         // Get blockchain certificates stats
         $blockchainStats = [
             'total_blockchain' => Certificate::whereNotNull('blockchain_tx_hash')->count(),
-            'pending'          => Certificate::where('blockchain_status', 'pending')->count(),
-            'confirmed'        => Certificate::where('blockchain_status', 'confirmed')->count(),
-            'failed'           => Certificate::where('blockchain_status', 'failed')->count(),
+            'pending' => Certificate::where('blockchain_status', 'pending')->count(),
+            'confirmed' => Certificate::where('blockchain_status', 'confirmed')->count(),
+            'failed' => Certificate::where('blockchain_status', 'failed')->count(),
         ];
 
         // Recent blockchain transactions
