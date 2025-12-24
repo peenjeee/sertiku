@@ -10,17 +10,20 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('sertifikat', function (Blueprint $table) {
-            if (!Schema::hasColumn('sertifikat', 'ipfs_cid')) {
+        // Support both table names (sertifikat for local, certificates for production)
+        $tableName = Schema::hasTable('sertifikat') ? 'sertifikat' : 'certificates';
+
+        Schema::table($tableName, function (Blueprint $table) use ($tableName) {
+            if (!Schema::hasColumn($tableName, 'ipfs_cid')) {
                 $table->string('ipfs_cid')->nullable();
             }
-            if (!Schema::hasColumn('sertifikat', 'ipfs_metadata_cid')) {
+            if (!Schema::hasColumn($tableName, 'ipfs_metadata_cid')) {
                 $table->string('ipfs_metadata_cid')->nullable();
             }
-            if (!Schema::hasColumn('sertifikat', 'ipfs_url')) {
+            if (!Schema::hasColumn($tableName, 'ipfs_url')) {
                 $table->string('ipfs_url')->nullable();
             }
-            if (!Schema::hasColumn('sertifikat', 'ipfs_uploaded_at')) {
+            if (!Schema::hasColumn($tableName, 'ipfs_uploaded_at')) {
                 $table->timestamp('ipfs_uploaded_at')->nullable();
             }
         });
@@ -31,7 +34,9 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('sertifikat', function (Blueprint $table) {
+        $tableName = Schema::hasTable('sertifikat') ? 'sertifikat' : 'certificates';
+
+        Schema::table($tableName, function (Blueprint $table) {
             $table->dropColumn(['ipfs_cid', 'ipfs_metadata_cid', 'ipfs_url', 'ipfs_uploaded_at']);
         });
     }

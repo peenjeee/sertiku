@@ -2,28 +2,28 @@
 namespace App\Services;
 
 use App\Models\Certificate;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Process;
 
 class IpfsService
 {
     protected bool $enabled;
-    protected string $scriptsPath;
+    protected string $pinataJwt;
     protected string $gatewayUrl;
 
     public function __construct()
     {
         $this->enabled = config('ipfs.enabled', false);
-        $this->scriptsPath = base_path('scripts');
-        $this->gatewayUrl = config('ipfs.gateway_url', 'https://w3s.link/ipfs');
+        $this->pinataJwt = config('ipfs.pinata_jwt', '');
+        $this->gatewayUrl = config('ipfs.gateway_url', 'https://gateway.pinata.cloud/ipfs');
     }
 
     /**
-     * Check if IPFS/Storacha is enabled
+     * Check if IPFS is enabled
      */
     public function isEnabled(): bool
     {
-        return $this->enabled;
+        return $this->enabled && !empty($this->pinataJwt);
     }
 
     /**
@@ -35,7 +35,54 @@ class IpfsService
     }
 
     /**
-     * Upload a file to IPFS via Storacha Node script
+     * Upload JSON metadata to IPFS via Pinata
+     */
+    public function uploadJson(array $data, string $name): ?array
+    {
+        if (!$this->isEnabled()) {
+            Log::warning('IpfsService: IPFS not enabled or Pinata JWT not configured');
+            return null;
+        }
+
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->pinataJwt,
+                'Content-Type' => 'application/json',
+            ])->timeout(60)->post('https://api.pinata.cloud/pinning/pinJSONToIPFS', [
+                        'pinataContent' => $data,
+                        'pinataMetadata' => [
+                            'name' => $name . '.json',
+                        ],
+                        'pinataOptions' => [
+                            'cidVersion' => 1,
+                        ],
+                    ]);
+
+            if ($response->successful()) {
+                $result = $response->json();
+                $cid = $result['IpfsHash'];
+
+                Log::info("IpfsService: JSON uploaded to Pinata. CID: {$cid}");
+
+                return [
+                    'success' => true,
+                    'cid' => $cid,
+                    'url' => $this->getGatewayUrl($cid),
+                    'name' => $name,
+                ];
+            }
+
+            Log::error('IpfsService: Pinata upload failed. Status: ' . $response->status() . ' Body: ' . $response->body());
+            return null;
+
+        } catch (\Exception $e) {
+            Log::error('IpfsService: Upload error: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Upload a file to IPFS via Pinata
      */
     public function uploadFile(string $filePath, string $fileName): ?array
     {
@@ -50,94 +97,36 @@ class IpfsService
         }
 
         try {
-            $result = Process::path($this->scriptsPath)
-                ->timeout(120)
-                ->run(['node', 'storacha_upload.js', $filePath]);
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->pinataJwt,
+            ])->timeout(120)->attach(
+                    'file',
+                    file_get_contents($filePath),
+                    $fileName
+                )->post('https://api.pinata.cloud/pinning/pinFileToIPFS', [
+                        'pinataMetadata' => json_encode(['name' => $fileName]),
+                        'pinataOptions' => json_encode(['cidVersion' => 1]),
+                    ]);
 
-            if ($result->successful()) {
-                $output = json_decode(trim($result->output()), true);
+            if ($response->successful()) {
+                $result = $response->json();
+                $cid = $result['IpfsHash'];
 
-                if ($output && $output['success']) {
-                    Log::info("IpfsService: File uploaded to Storacha. CID: {$output['cid']}");
-                    return [
-                        'success' => true,
-                        'cid' => $output['cid'],
-                        'url' => $output['url'],
-                        'name' => $fileName,
-                    ];
-                }
+                Log::info("IpfsService: File uploaded to Pinata. CID: {$cid}");
+
+                return [
+                    'success' => true,
+                    'cid' => $cid,
+                    'url' => $this->getGatewayUrl($cid),
+                    'name' => $fileName,
+                ];
             }
 
-            Log::error('IpfsService: Upload failed. Output: ' . $result->output() . ' Error: ' . $result->errorOutput());
+            Log::error('IpfsService: File upload failed. Status: ' . $response->status());
             return null;
 
         } catch (\Exception $e) {
-            Log::error('IpfsService: Upload error: ' . $e->getMessage());
-            return null;
-        }
-    }
-
-    /**
-     * Upload JSON metadata to IPFS via Storacha
-     */
-    public function uploadJson(array $data, string $name): ?array
-    {
-        if (!$this->isEnabled()) {
-            return null;
-        }
-
-        try {
-            $jsonString = json_encode($data, JSON_UNESCAPED_UNICODE);
-
-            // Create temp file with meaningful name (certificate number)
-            $jsonFile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $name . '.json';
-            file_put_contents($jsonFile, $jsonString);
-
-            try {
-                // Build command with full path context
-                $scriptPath = $this->scriptsPath . DIRECTORY_SEPARATOR . 'storacha_upload.js';
-                $command = 'node ' . escapeshellarg($scriptPath) . ' ' . escapeshellarg($jsonFile);
-
-                // Change to scripts directory so npx can find node_modules
-                $oldPath = getcwd();
-                chdir($this->scriptsPath);
-
-                // Execute with shell to ensure PATH is available
-                $output = shell_exec($command . ' 2>&1');
-
-                chdir($oldPath);
-
-                Log::info('IpfsService: Command executed. Raw output: ' . ($output ?: 'empty'));
-
-                if ($output) {
-                    $parsed = json_decode(trim($output), true);
-
-                    if ($parsed && isset($parsed['success']) && $parsed['success']) {
-                        Log::info("IpfsService: JSON uploaded to Storacha. CID: {$parsed['cid']}");
-                        return [
-                            'success' => true,
-                            'cid' => $parsed['cid'],
-                            'url' => $parsed['url'],
-                            'name' => $name,
-                        ];
-                    } else {
-                        Log::error('IpfsService: Upload failed or parse error. Parsed: ' . json_encode($parsed));
-                    }
-                } else {
-                    Log::error('IpfsService: No output from command');
-                }
-
-                return null;
-
-            } finally {
-                // Clean up temp file
-                if (file_exists($jsonFile)) {
-                    unlink($jsonFile);
-                }
-            }
-
-        } catch (\Exception $e) {
-            Log::error('IpfsService: JSON upload error: ' . $e->getMessage());
+            Log::error('IpfsService: File upload error: ' . $e->getMessage());
             return null;
         }
     }
@@ -149,7 +138,7 @@ class IpfsService
     {
         $metadata = [
             'name' => 'Certificate: ' . $certificate->certificate_number,
-            'description' => 'Digital certificate issued by SertiKu - Stored on IPFS via Storacha',
+            'description' => 'Digital certificate issued by SertiKu - Stored on IPFS via Pinata',
             'certificate_number' => $certificate->certificate_number,
             'recipient_name' => $certificate->recipient_name,
             'course_name' => $certificate->course_name,
@@ -161,12 +150,12 @@ class IpfsService
             'blockchain_tx_hash' => $certificate->blockchain_tx_hash,
             'issued_at' => $certificate->created_at?->toIso8601String(),
             'storage' => [
-                'provider' => 'Storacha Network',
-                'network' => 'IPFS + Filecoin',
+                'provider' => 'Pinata',
+                'network' => 'IPFS',
             ],
         ];
 
-        return $this->uploadJson($metadata, 'cert-' . $certificate->certificate_number);
+        return $this->uploadJson($metadata, $certificate->certificate_number);
     }
 
     /**
@@ -176,7 +165,7 @@ class IpfsService
     {
         return [
             'enabled' => $this->isEnabled(),
-            'provider' => 'Storacha (IPFS + Filecoin)',
+            'provider' => 'Pinata (IPFS)',
             'gateway_url' => $this->gatewayUrl,
         ];
     }

@@ -129,8 +129,8 @@ class LembagaController extends Controller
                 ]);
 
                 // Dispatch job to process blockchain in background
-                // Note: IPFS is dispatched inside this job after blockchain confirms
-                \App\Jobs\ProcessBlockchainCertificate::dispatch($certificate);
+                // Pass ipfsEnabled so IPFS is only dispatched if user requested it
+                \App\Jobs\ProcessBlockchainCertificate::dispatch($certificate, $ipfsEnabled);
             } else {
                 // Blockchain not configured
                 $certificate->update([

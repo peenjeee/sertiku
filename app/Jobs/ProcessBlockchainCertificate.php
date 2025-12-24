@@ -31,11 +31,17 @@ class ProcessBlockchainCertificate implements ShouldQueue
     protected Certificate $certificate;
 
     /**
+     * Whether IPFS upload was requested by user.
+     */
+    protected bool $ipfsEnabled;
+
+    /**
      * Create a new job instance.
      */
-    public function __construct(Certificate $certificate)
+    public function __construct(Certificate $certificate, bool $ipfsEnabled = false)
     {
         $this->certificate = $certificate;
+        $this->ipfsEnabled = $ipfsEnabled;
     }
 
     /**
@@ -66,11 +72,14 @@ class ProcessBlockchainCertificate implements ShouldQueue
                 );
 
                 // Dispatch IPFS job after blockchain confirms (so metadata includes tx_hash)
-                $ipfsService = new \App\Services\IpfsService();
-                if ($ipfsService->isEnabled()) {
-                    // Refresh certificate to get updated blockchain data
-                    $this->certificate->refresh();
-                    \App\Jobs\ProcessIpfsCertificate::dispatch($this->certificate);
+                // Only if user explicitly requested IPFS upload
+                if ($this->ipfsEnabled) {
+                    $ipfsService = new \App\Services\IpfsService();
+                    if ($ipfsService->isEnabled()) {
+                        // Refresh certificate to get updated blockchain data
+                        $this->certificate->refresh();
+                        \App\Jobs\ProcessIpfsCertificate::dispatch($this->certificate);
+                    }
                 }
             } else {
                 Log::warning("Failed to store certificate {$this->certificate->certificate_number} on blockchain");
