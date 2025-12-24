@@ -13,9 +13,9 @@ class IpfsService
 
     public function __construct()
     {
-        $this->enabled     = config('ipfs.enabled', false);
+        $this->enabled = config('ipfs.enabled', false);
         $this->scriptsPath = base_path('scripts');
-        $this->gatewayUrl  = config('ipfs.gateway_url', 'https://w3s.link/ipfs');
+        $this->gatewayUrl = config('ipfs.gateway_url', 'https://w3s.link/ipfs');
     }
 
     /**
@@ -39,12 +39,12 @@ class IpfsService
      */
     public function uploadFile(string $filePath, string $fileName): ?array
     {
-        if (! $this->isEnabled()) {
+        if (!$this->isEnabled()) {
             Log::warning('IpfsService: IPFS not enabled');
             return null;
         }
 
-        if (! file_exists($filePath)) {
+        if (!file_exists($filePath)) {
             Log::error('IpfsService: File not found: ' . $filePath);
             return null;
         }
@@ -61,9 +61,9 @@ class IpfsService
                     Log::info("IpfsService: File uploaded to Storacha. CID: {$output['cid']}");
                     return [
                         'success' => true,
-                        'cid'     => $output['cid'],
-                        'url'     => $output['url'],
-                        'name'    => $fileName,
+                        'cid' => $output['cid'],
+                        'url' => $output['url'],
+                        'name' => $fileName,
                     ];
                 }
             }
@@ -82,39 +82,51 @@ class IpfsService
      */
     public function uploadJson(array $data, string $name): ?array
     {
-        if (! $this->isEnabled()) {
+        if (!$this->isEnabled()) {
             return null;
         }
 
         try {
             $jsonString = json_encode($data, JSON_UNESCAPED_UNICODE);
 
-            // Create temp file with JSON data
-            $tempFile = tempnam(sys_get_temp_dir(), 'storacha_');
-            $jsonFile = $tempFile . '.json';
-            rename($tempFile, $jsonFile);
+            // Create temp file with meaningful name (certificate number)
+            $jsonFile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $name . '.json';
             file_put_contents($jsonFile, $jsonString);
 
             try {
-                $result = Process::path($this->scriptsPath)
-                    ->timeout(60)
-                    ->run(['node', 'storacha_upload.js', $jsonFile]);
+                // Build command with full path context
+                $scriptPath = $this->scriptsPath . DIRECTORY_SEPARATOR . 'storacha_upload.js';
+                $command = 'node ' . escapeshellarg($scriptPath) . ' ' . escapeshellarg($jsonFile);
 
-                if ($result->successful()) {
-                    $output = json_decode(trim($result->output()), true);
+                // Change to scripts directory so npx can find node_modules
+                $oldPath = getcwd();
+                chdir($this->scriptsPath);
 
-                    if ($output && $output['success']) {
-                        Log::info("IpfsService: JSON uploaded to Storacha. CID: {$output['cid']}");
+                // Execute with shell to ensure PATH is available
+                $output = shell_exec($command . ' 2>&1');
+
+                chdir($oldPath);
+
+                Log::info('IpfsService: Command executed. Raw output: ' . ($output ?: 'empty'));
+
+                if ($output) {
+                    $parsed = json_decode(trim($output), true);
+
+                    if ($parsed && isset($parsed['success']) && $parsed['success']) {
+                        Log::info("IpfsService: JSON uploaded to Storacha. CID: {$parsed['cid']}");
                         return [
                             'success' => true,
-                            'cid'     => $output['cid'],
-                            'url'     => $output['url'],
-                            'name'    => $name,
+                            'cid' => $parsed['cid'],
+                            'url' => $parsed['url'],
+                            'name' => $name,
                         ];
+                    } else {
+                        Log::error('IpfsService: Upload failed or parse error. Parsed: ' . json_encode($parsed));
                     }
+                } else {
+                    Log::error('IpfsService: No output from command');
                 }
 
-                Log::error('IpfsService: JSON upload failed. Output: ' . $result->output());
                 return null;
 
             } finally {
@@ -136,21 +148,21 @@ class IpfsService
     public function uploadCertificateMetadata(Certificate $certificate): ?array
     {
         $metadata = [
-            'name'               => 'Certificate: ' . $certificate->certificate_number,
-            'description'        => 'Digital certificate issued by SertiKu - Stored on IPFS via Storacha',
+            'name' => 'Certificate: ' . $certificate->certificate_number,
+            'description' => 'Digital certificate issued by SertiKu - Stored on IPFS via Storacha',
             'certificate_number' => $certificate->certificate_number,
-            'recipient_name'     => $certificate->recipient_name,
-            'course_name'        => $certificate->course_name,
-            'issue_date'         => $certificate->issue_date?->format('Y-m-d'),
-            'expire_date'        => $certificate->expire_date?->format('Y-m-d'),
-            'issuer'             => $certificate->user?->institution_name ?? $certificate->user?->name,
-            'verification_url'   => $certificate->verification_url,
-            'blockchain_hash'    => $certificate->blockchain_hash,
+            'recipient_name' => $certificate->recipient_name,
+            'course_name' => $certificate->course_name,
+            'issue_date' => $certificate->issue_date?->format('Y-m-d'),
+            'expire_date' => $certificate->expire_date?->format('Y-m-d'),
+            'issuer' => $certificate->user?->institution_name ?? $certificate->user?->name,
+            'verification_url' => $certificate->verification_url,
+            'blockchain_hash' => $certificate->blockchain_hash,
             'blockchain_tx_hash' => $certificate->blockchain_tx_hash,
-            'issued_at'          => $certificate->created_at?->toIso8601String(),
-            'storage'            => [
+            'issued_at' => $certificate->created_at?->toIso8601String(),
+            'storage' => [
                 'provider' => 'Storacha Network',
-                'network'  => 'IPFS + Filecoin',
+                'network' => 'IPFS + Filecoin',
             ],
         ];
 
@@ -163,8 +175,8 @@ class IpfsService
     public function getInfo(): array
     {
         return [
-            'enabled'     => $this->isEnabled(),
-            'provider'    => 'Storacha (IPFS + Filecoin)',
+            'enabled' => $this->isEnabled(),
+            'provider' => 'Storacha (IPFS + Filecoin)',
             'gateway_url' => $this->gatewayUrl,
         ];
     }

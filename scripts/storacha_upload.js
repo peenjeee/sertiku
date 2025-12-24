@@ -33,18 +33,14 @@ async function uploadToStoracha(targetPath) {
 
         const fileName = path.basename(absPath);
 
-        // Resolve local w3 executable path (Windows specific check could be added, but .cmd is safe for now on Windows)
-        // Fallback to 'w3' if local not found, but we prefer local
-        const localW3 = path.join(__dirname, 'node_modules', '.bin', 'w3.cmd');
-        const w3Exec = fs.existsSync(localW3) ? localW3 : 'w3';
-
-        // Execute w3 up
-        // Quote paths to handle spaces
-        const command = `"${w3Exec}" up "${absPath}"`;
+        // Use npx to run w3 - more reliable across different execution contexts
+        // This ensures the local node_modules/.bin/w3 is used
+        const command = `npx w3 up "${absPath}"`;
 
         const output = execSync(command, {
             encoding: 'utf-8',
             timeout: 120000, // 2 minutes
+            cwd: __dirname, // Run from scripts directory where node_modules is
             stdio: ['ignore', 'pipe', 'pipe'] // Capture stdout/stderr
         });
 

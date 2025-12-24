@@ -1,0 +1,8 @@
+{
+    "name": "sertiku-scripts",
+    "type": "module",
+    "dependencies": {
+        "@web3-storage/w3cli": "^7.0.0",
+        "ethers": "^6.0.0"
+    }
+}
