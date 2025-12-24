@@ -41,6 +41,11 @@ class Certificate extends Model
         'ipfs_metadata_cid',
         'ipfs_url',
         'ipfs_uploaded_at',
+        // File hash fields
+        'certificate_sha256',
+        'certificate_md5',
+        'qr_sha256',
+        'qr_md5',
     ];
 
     protected $casts = [
@@ -321,5 +326,53 @@ class Certificate extends Model
     {
         return $query->whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year);
+    }
+
+    /**
+     * Generate SHA256 and MD5 hashes for certificate and QR code files.
+     * Returns array of generated hashes.
+     */
+    public function generateFileHashes(): array
+    {
+        $hashes = [];
+
+        // Generate hashes for certificate PDF/image if exists
+        $certificatePath = $this->pdf_path ?? $this->image_path;
+        if ($certificatePath && Storage::disk('public')->exists($certificatePath)) {
+            $content = Storage::disk('public')->get($certificatePath);
+            $hashes['certificate_sha256'] = hash('sha256', $content);
+            $hashes['certificate_md5'] = md5($content);
+        }
+
+        // Generate hashes for QR code if exists
+        if ($this->qr_code_path && Storage::disk('public')->exists($this->qr_code_path)) {
+            $qrContent = Storage::disk('public')->get($this->qr_code_path);
+            $hashes['qr_sha256'] = hash('sha256', $qrContent);
+            $hashes['qr_md5'] = md5($qrContent);
+        }
+
+        // Update certificate with hashes
+        if (!empty($hashes)) {
+            $this->update($hashes);
+        }
+
+        return $hashes;
+    }
+
+    /**
+     * Get all file hashes as array (for blockchain/IPFS metadata).
+     */
+    public function getFileHashes(): array
+    {
+        return [
+            'certificate' => [
+                'sha256' => $this->certificate_sha256,
+                'md5' => $this->certificate_md5,
+            ],
+            'qr_code' => [
+                'sha256' => $this->qr_sha256,
+                'md5' => $this->qr_md5,
+            ],
+        ];
     }
 }

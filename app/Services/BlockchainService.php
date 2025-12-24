@@ -44,6 +44,7 @@ class BlockchainService
 
     /**
      * Generate SHA-256 hash of certificate data
+     * Includes file integrity hashes for verification
      */
     public function generateCertificateHash(Certificate $certificate): string
     {
@@ -55,6 +56,8 @@ class BlockchainService
             'issue_date' => $certificate->issue_date->format('Y-m-d'),
             'issuer_id' => $certificate->user_id,
             'created_at' => $certificate->created_at->format('Y-m-d H:i:s'),
+            // Include file integrity hashes
+            'file_hashes' => $certificate->getFileHashes(),
         ]);
 
         return '0x' . hash('sha256', $data);

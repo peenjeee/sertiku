@@ -29,7 +29,8 @@ class ProcessIpfsCertificate implements ShouldQueue
      */
     public function __construct(
         public Certificate $certificate
-    ) {}
+    ) {
+    }
 
     /**
      * Execute the job.
@@ -44,10 +45,18 @@ class ProcessIpfsCertificate implements ShouldQueue
 
             if ($result && $result['success']) {
                 $this->certificate->update([
-                    'ipfs_cid'         => $result['cid'],
-                    'ipfs_url'         => $result['url'],
+                    'ipfs_cid' => $result['cid'],
+                    'ipfs_url' => $result['url'],
                     'ipfs_uploaded_at' => now(),
                 ]);
+
+                // Log activity for IPFS upload
+                \App\Models\ActivityLog::log(
+                    'ipfs_upload',
+                    "Sertifikat {$this->certificate->certificate_number} berhasil diupload ke IPFS",
+                    $this->certificate,
+                    ['cid' => $result['cid'], 'url' => $result['url']]
+                );
 
                 Log::info("ProcessIpfsCertificate: Successfully uploaded to IPFS. CID: {$result['cid']}");
             } else {

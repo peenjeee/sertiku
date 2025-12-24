@@ -89,6 +89,9 @@ class LembagaController extends Controller
         // Generate QR code for the certificate
         $certificate->generateQrCode();
 
+        // Generate file hashes (SHA256/MD5) for certificate and QR
+        $certificate->generateFileHashes();
+
         // Increment template usage if template was used
         if ($certificate->template_id) {
             $certificate->template->incrementUsage();

@@ -153,6 +153,8 @@ class IpfsService
                 'provider' => 'Pinata',
                 'network' => 'IPFS',
             ],
+            // File integrity hashes
+            'file_hashes' => $certificate->getFileHashes(),
         ];
 
         return $this->uploadJson($metadata, $certificate->certificate_number);
