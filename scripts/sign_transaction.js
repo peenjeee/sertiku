@@ -6,11 +6,12 @@
  * Requirements: npm install ethers
  */
 
-const { ethers } = require('ethers');
+import { ethers } from 'ethers';
+import process from 'process';
 
 async function signAndSendTransaction() {
     const args = process.argv.slice(2);
-    
+
     if (args.length < 4) {
         console.error('Usage: node sign_transaction.js <privateKey> <walletAddress> <dataHash> <rpcUrl>');
         process.exit(1);
@@ -21,7 +22,7 @@ async function signAndSendTransaction() {
     try {
         // Connect to provider
         const provider = new ethers.JsonRpcProvider(rpcUrl);
-        
+
         // Create wallet from private key
         const wallet = new ethers.Wallet(privateKey, provider);
 
@@ -43,7 +44,7 @@ async function signAndSendTransaction() {
 
         // Sign and send transaction
         const txResponse = await wallet.sendTransaction(tx);
-        
+
         // Wait for confirmation (1 block)
         const receipt = await txResponse.wait(1);
 

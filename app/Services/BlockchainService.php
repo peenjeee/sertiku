@@ -125,7 +125,7 @@ class BlockchainService
 
         if (!file_exists($scriptPath)) {
             Log::warning('BlockchainService: Node script not found at ' . $scriptPath);
-            return null;
+            throw new \Exception("Node Script NOT FOUND at: " . $scriptPath);
         }
 
         try {
@@ -152,13 +152,14 @@ class BlockchainService
             // Check if output contains error
             if (str_contains($output, 'Error:')) {
                 Log::error('BlockchainService Node.js Error: ' . $output);
+                throw new \Exception("NodeJS Script Error: " . $output);
             }
 
             return null;
 
         } catch (\Exception $e) {
             Log::error('BlockchainService: Node.js execution failed: ' . $e->getMessage());
-            return null;
+            throw $e;
         }
     }
 

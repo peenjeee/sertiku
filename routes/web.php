@@ -21,10 +21,13 @@ Route::get('/', function () {
 // SEO Sitemap
 Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
 
-// API Documentation
 Route::get('/api-docs', function () {
     return view('pages.api');
 })->name('api.docs');
+
+
+
+// Temporary route removed
 
 /*
 |--------------------------------------------------------------------------
