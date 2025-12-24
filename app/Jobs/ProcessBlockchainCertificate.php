@@ -67,11 +67,9 @@ class ProcessBlockchainCertificate implements ShouldQueue
 
                 // Dispatch IPFS job after blockchain confirms (so metadata includes tx_hash)
                 $ipfsService = new \App\Services\IpfsService();
-                Log::info("Blockchain job: Checking IPFS enabled: " . ($ipfsService->isEnabled() ? 'yes' : 'no'));
                 if ($ipfsService->isEnabled()) {
                     // Refresh certificate to get updated blockchain data
                     $this->certificate->refresh();
-                    Log::info("Blockchain job: Dispatching ProcessIpfsCertificate for {$this->certificate->certificate_number}");
                     \App\Jobs\ProcessIpfsCertificate::dispatch($this->certificate);
                 }
             } else {
