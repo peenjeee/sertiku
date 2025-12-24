@@ -110,7 +110,7 @@
                                 </div>
                             </div>
                             <div class="py-1">
-                                <a href="@if(Auth::user()->role === 'master'){{ route('master.dashboard') }}@elseif(Auth::user()->role === 'admin'){{ route('admin.dashboard') }}@elseif(Auth::user()->role === 'superadmin'){{ route('superadmin.dashboard') }}@elseif(Auth::user()->role === 'lembaga' || Auth::user()->account_type === 'institution'){{ route('lembaga.dashboard') }}@else{{ route('user.dashboard') }}@endif"
+                                <a href="@if(Auth::user()->is_master){{ route('master.dashboard') }}@elseif(Auth::user()->is_admin){{ route('admin.dashboard') }}@elseif(Auth::user()->account_type === 'institution'){{ route('lembaga.dashboard') }}@else{{ route('user.dashboard') }}@endif"
                                     class="flex items-center gap-2 px-4 py-2 text-sm text-[#0F172A] hover:bg-gray-100">
                                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -222,7 +222,7 @@
                     </div>
 
                     {{-- Dashboard mobile --}}
-                    <a href="@if(Auth::user()->role === 'master'){{ route('master.dashboard') }}@elseif(Auth::user()->role === 'admin'){{ route('admin.dashboard') }}@elseif(Auth::user()->role === 'superadmin'){{ route('superadmin.dashboard') }}@elseif(Auth::user()->role === 'lembaga' || Auth::user()->account_type === 'institution'){{ route('lembaga.dashboard') }}@else{{ route('user.dashboard') }}@endif"
+                    <a href="@if(Auth::user()->is_master){{ route('master.dashboard') }}@elseif(Auth::user()->is_admin){{ route('admin.dashboard') }}@elseif(Auth::user()->account_type === 'institution'){{ route('lembaga.dashboard') }}@else{{ route('user.dashboard') }}@endif"
                         class="inline-flex w-full items-center justify-center gap-2 rounded-[10px] border border-[#CBD5E1] bg-white px-4 py-2 text-center text-sm font-medium text-[#0F172A]">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

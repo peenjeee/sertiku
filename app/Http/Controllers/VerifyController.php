@@ -35,42 +35,42 @@ class VerifyController extends Controller
                 $owner = \App\Models\User::where('email', $certificate->recipient_email)->first();
                 if ($owner) {
                     $owner->notify(new \App\Notifications\CertificateViewed($certificate, [
-                        'ip'         => $request->ip(),
+                        'ip' => $request->ip(),
                         'user_agent' => $request->userAgent(),
                     ]));
                 }
             }
 
             $certificateData = [
-                'id'                 => $certificate->id,
-                'nama'               => $certificate->recipient_name,
-                'email'              => $certificate->recipient_email,
-                'judul'              => $certificate->course_name,
-                'kategori'           => $certificate->category,
-                'deskripsi'          => $certificate->description,
-                'tanggal'            => $certificate->issue_date->format('d F Y'),
-                'kadaluarsa'         => $certificate->expire_date?->format('d F Y'),
-                'nomor'              => $certificate->certificate_number,
-                'penerbit'           => $certificate->issuer->institution_name ?? $certificate->issuer->name,
-                'status'             => $certificate->status,
-                'is_valid'           => $isValid,
+                'id' => $certificate->id,
+                'nama' => $certificate->recipient_name,
+                'email' => $certificate->recipient_email,
+                'judul' => $certificate->course_name,
+                'kategori' => $certificate->category,
+                'deskripsi' => $certificate->description,
+                'tanggal' => $certificate->issue_date->format('d F Y'),
+                'kadaluarsa' => $certificate->expire_date?->format('d F Y'),
+                'nomor' => $certificate->certificate_number,
+                'penerbit' => $certificate->issuer->institution_name ?? $certificate->issuer->name,
+                'status' => $certificate->status,
+                'is_valid' => $isValid,
                 'blockchain_tx_hash' => $certificate->blockchain_tx_hash,
-                'blockchain_status'  => $certificate->blockchain_status,
-                'ipfs_cid'           => $certificate->ipfs_cid,
-                'ipfs_url'           => $certificate->ipfs_url,
+                'blockchain_status' => $certificate->blockchain_status,
+                'ipfs_cid' => $certificate->ipfs_cid,
+                'ipfs_url' => $certificate->ipfs_url,
             ];
 
             // Return JSON for AJAX/API request (check POST method or Accept header)
             if ($request->isMethod('post') || $request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
                 return response()->json([
-                    'valid'       => $isValid,
-                    'hash'        => $certificate->hash,
+                    'valid' => $isValid,
+                    'hash' => $certificate->hash,
                     'certificate' => $certificateData,
                 ]);
             }
 
             return view('verifikasi.valid', [
-                'hash'        => $certificate->hash,
+                'hash' => $certificate->hash,
                 'certificate' => $certificateData,
             ]);
         }
@@ -78,8 +78,8 @@ class VerifyController extends Controller
         // Certificate not found
         if ($request->isMethod('post') || $request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
             return response()->json([
-                'valid'   => false,
-                'hash'    => $hash,
+                'valid' => false,
+                'hash' => $hash,
                 'message' => 'Sertifikat tidak ditemukan dalam sistem kami',
             ]);
         }
@@ -100,6 +100,17 @@ class VerifyController extends Controller
         if ($certificate) {
             $isValid = $certificate->isValid();
 
+            // Increment verification count and log the verification
+            $certificate->increment('verification_count');
+
+            // Log verification activity
+            \App\Models\ActivityLog::log(
+                'verify_certificate',
+                "Sertifikat {$certificate->certificate_number} diverifikasi",
+                $certificate,
+                ['ip' => request()->ip(), 'user_agent' => request()->userAgent()]
+            );
+
             // Get template image if exists
             $templateImage = null;
             if ($certificate->template && $certificate->template->file_path) {
@@ -107,28 +118,28 @@ class VerifyController extends Controller
             }
 
             $certificateData = [
-                'id'                 => $certificate->id,
-                'nama'               => $certificate->recipient_name,
-                'email'              => $certificate->recipient_email,
-                'judul'              => $certificate->course_name,
-                'kategori'           => $certificate->category,
-                'deskripsi'          => $certificate->description,
-                'tanggal'            => $certificate->issue_date->format('d F Y'),
-                'kadaluarsa'         => $certificate->expire_date?->format('d F Y'),
-                'nomor'              => $certificate->certificate_number,
-                'penerbit'           => $certificate->issuer->institution_name ?? $certificate->issuer->name,
-                'status'             => $certificate->status,
-                'is_valid'           => $isValid,
-                'template_image'     => $templateImage,
-                'qr_code_url'        => $certificate->qr_code_url,
+                'id' => $certificate->id,
+                'nama' => $certificate->recipient_name,
+                'email' => $certificate->recipient_email,
+                'judul' => $certificate->course_name,
+                'kategori' => $certificate->category,
+                'deskripsi' => $certificate->description,
+                'tanggal' => $certificate->issue_date->format('d F Y'),
+                'kadaluarsa' => $certificate->expire_date?->format('d F Y'),
+                'nomor' => $certificate->certificate_number,
+                'penerbit' => $certificate->issuer->institution_name ?? $certificate->issuer->name,
+                'status' => $certificate->status,
+                'is_valid' => $isValid,
+                'template_image' => $templateImage,
+                'qr_code_url' => $certificate->qr_code_url,
                 'blockchain_tx_hash' => $certificate->blockchain_tx_hash,
-                'blockchain_status'  => $certificate->blockchain_status,
-                'ipfs_cid'           => $certificate->ipfs_cid,
-                'ipfs_url'           => $certificate->ipfs_url,
+                'blockchain_status' => $certificate->blockchain_status,
+                'ipfs_cid' => $certificate->ipfs_cid,
+                'ipfs_url' => $certificate->ipfs_url,
             ];
 
             return view('verifikasi.valid', [
-                'hash'        => $certificate->hash,
+                'hash' => $certificate->hash,
                 'certificate' => $certificateData,
             ]);
         }
@@ -143,33 +154,33 @@ class VerifyController extends Controller
     public function storeFraudReport(Request $request)
     {
         $validated = $request->validate([
-            'reported_hash'  => 'required|string|max:255',
-            'reporter_name'  => 'required|string|max:255',
+            'reported_hash' => 'required|string|max:255',
+            'reporter_name' => 'required|string|max:255',
             'reporter_email' => 'required|email|max:255',
             'reporter_phone' => 'nullable|string|max:20',
-            'description'    => 'required|string|min:10|max:2000',
+            'description' => 'required|string|min:10|max:2000',
         ], [
-            'reported_hash.required'  => 'Hash sertifikat wajib diisi.',
-            'reporter_name.required'  => 'Nama lengkap wajib diisi.',
+            'reported_hash.required' => 'Hash sertifikat wajib diisi.',
+            'reporter_name.required' => 'Nama lengkap wajib diisi.',
             'reporter_email.required' => 'Email wajib diisi.',
-            'reporter_email.email'    => 'Format email tidak valid.',
-            'description.required'    => 'Deskripsi pemalsuan wajib diisi.',
-            'description.min'         => 'Deskripsi minimal 10 karakter.',
+            'reporter_email.email' => 'Format email tidak valid.',
+            'description.required' => 'Deskripsi pemalsuan wajib diisi.',
+            'description.min' => 'Deskripsi minimal 10 karakter.',
         ]);
 
         // Create fraud report
         $report = \App\Models\FraudReport::create([
-            'reported_hash'  => $validated['reported_hash'],
-            'reporter_name'  => $validated['reporter_name'],
+            'reported_hash' => $validated['reported_hash'],
+            'reporter_name' => $validated['reporter_name'],
             'reporter_email' => $validated['reporter_email'],
             'reporter_phone' => $validated['reporter_phone'] ?? null,
-            'description'    => $validated['description'],
-            'status'         => 'pending',
+            'description' => $validated['description'],
+            'status' => 'pending',
         ]);
 
         return response()->json([
-            'success'   => true,
-            'message'   => 'Laporan berhasil dikirim. Terima kasih atas kontribusi Anda.',
+            'success' => true,
+            'message' => 'Laporan berhasil dikirim. Terima kasih atas kontribusi Anda.',
             'report_id' => $report->id,
         ]);
     }

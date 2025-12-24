@@ -337,11 +337,21 @@ class Certificate extends Model
         $hashes = [];
 
         // Generate hashes for certificate PDF/image if exists
+        // Generate hashes for certificate PDF/image if exists
         $certificatePath = $this->pdf_path ?? $this->image_path;
+
         if ($certificatePath && Storage::disk('public')->exists($certificatePath)) {
             $content = Storage::disk('public')->get($certificatePath);
             $hashes['certificate_sha256'] = hash('sha256', $content);
             $hashes['certificate_md5'] = md5($content);
+        } elseif ($this->template_id && $this->template) {
+            // If no custom file but using template, use template's hashes
+            if ($this->template->sha256) {
+                $hashes['certificate_sha256'] = $this->template->sha256;
+            }
+            if ($this->template->md5) {
+                $hashes['certificate_md5'] = $this->template->md5;
+            }
         }
 
         // Generate hashes for QR code if exists

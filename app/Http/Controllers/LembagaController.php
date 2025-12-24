@@ -25,9 +25,11 @@ class LembagaController extends Controller
             'certificates_this_month' => $user->getCertificatesUsedThisMonth(),
             'total_templates' => $user->templates()->where('is_active', true)->count(),
             'recent_certificates' => $user->certificates()->latest()->take(5)->get(),
-            // Total verifications could be tracked via a verification_count field or logs
-            // For now, we'll use a placeholder based on certificates count * average views
-            'total_verifications' => $user->certificates()->count() * 10, // Placeholder
+            // Count verifications from activity_logs where certificates belong to this user
+            'total_verifications' => \App\Models\ActivityLog::where('action', 'verify_certificate')
+                ->whereHasMorph('subject', [\App\Models\Certificate::class], function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                })->count(),
         ];
 
         return view('lembaga.dashboard', compact('stats'));
@@ -280,6 +282,10 @@ class LembagaController extends Controller
             list($width, $height) = getimagesize($file->getRealPath());
         }
 
+        // Calculate hashes
+        $sha256 = hash_file('sha256', $file->getRealPath());
+        $md5 = md5_file($file->getRealPath());
+
         // Create template record
         $template = $user->templates()->create([
             'name' => $validated['name'],
@@ -289,6 +295,8 @@ class LembagaController extends Controller
             'orientation' => $validated['orientation'],
             'width' => $width,
             'height' => $height,
+            'sha256' => $sha256,
+            'md5' => $md5,
         ]);
 
         return redirect()->route('lembaga.template.index')
