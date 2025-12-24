@@ -27,8 +27,13 @@ class VerifyController extends Controller
         if ($certificate) {
             $isValid = $certificate->isValid();
 
-            // Increment verification count
-            $certificate->increment('verification_count');
+            // Perform verification logging
+            \App\Models\ActivityLog::log(
+                'verify_certificate',
+                "Sertifikat {$certificate->certificate_number} diverifikasi via check",
+                $certificate,
+                ['ip' => request()->ip(), 'user_agent' => request()->userAgent()]
+            );
 
             // Send notification to certificate owner if they exist in system
             if ($certificate->recipient_email) {
@@ -100,8 +105,7 @@ class VerifyController extends Controller
         if ($certificate) {
             $isValid = $certificate->isValid();
 
-            // Increment verification count and log the verification
-            $certificate->increment('verification_count');
+            // Log verification activity
 
             // Log verification activity
             \App\Models\ActivityLog::log(
