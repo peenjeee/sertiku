@@ -188,6 +188,26 @@
                                 </p>
                             </div>
                             @endif
+
+                            {{-- IPFS Verification Section --}}
+                            @if(isset($certificate['ipfs_cid']) && $certificate['ipfs_cid'])
+                            <div class="mt-3">
+                                <a href="{{ config('ipfs.gateway_url', 'https://w3s.link/ipfs') }}/{{ $certificate['ipfs_cid'] }}"
+                                   target="_blank"
+                                   class="flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600/20 to-teal-600/20 border border-cyan-500/40 rounded-lg py-3 px-4 hover:from-cyan-600/30 hover:to-teal-600/30 transition group">
+                                    <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                                    </svg>
+                                    <span class="text-cyan-300 font-semibold text-sm">Tersimpan di IPFS (Desentralisasi)</span>
+                                    <svg class="w-4 h-4 text-cyan-400 opacity-0 group-hover:opacity-100 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                    </svg>
+                                </a>
+                                <p class="text-center text-xs text-cyan-400/60 mt-2 font-mono break-all px-4">
+                                    CID: {{ $certificate['ipfs_cid'] }}
+                                </p>
+                            </div>
+                            @endif
                         </div>
                     </div>
 

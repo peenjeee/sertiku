@@ -1,0 +1,1 @@
+{"version":3,"file":"cbor.d.ts","sourceRoot":"","sources":["../../../src/ipld/cbor.js"],"names":[],"mappings":"AAGA;;GAEG;AACH,mBAFU,IAAI,cAAc,CAAC,OAAO,SAAS,EAAE,OAAO,SAAS,CAAC,CAEnC;AAE7B,8BAA6B;AAGhB,0FAA4C;AAI5C,0FAA4C;qBAfpC,WAAW;sBACV,gBAAgB"}

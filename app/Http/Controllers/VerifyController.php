@@ -56,6 +56,8 @@ class VerifyController extends Controller
                 'is_valid'           => $isValid,
                 'blockchain_tx_hash' => $certificate->blockchain_tx_hash,
                 'blockchain_status'  => $certificate->blockchain_status,
+                'ipfs_cid'           => $certificate->ipfs_cid,
+                'ipfs_url'           => $certificate->ipfs_url,
             ];
 
             // Return JSON for AJAX/API request (check POST method or Accept header)
@@ -121,6 +123,8 @@ class VerifyController extends Controller
                 'qr_code_url'        => $certificate->qr_code_url,
                 'blockchain_tx_hash' => $certificate->blockchain_tx_hash,
                 'blockchain_status'  => $certificate->blockchain_status,
+                'ipfs_cid'           => $certificate->ipfs_cid,
+                'ipfs_url'           => $certificate->ipfs_url,
             ];
 
             return view('verifikasi.valid', [

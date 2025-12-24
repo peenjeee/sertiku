@@ -326,6 +326,58 @@
                     </div>
                 @endif
 
+                <!-- IPFS Option -->
+                @if(config('ipfs.enabled'))
+                    <div class="glass-card rounded-2xl p-6">
+                        <div class="flex items-center pb-3 border-b border-gray-200 mb-4">
+                            <svg class="w-5 h-5 text-cyan-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            <span class="text-gray-800 text-base font-bold">IPFS Storage</span>
+                            <span
+                                class="ml-2 px-2 py-0.5 bg-cyan-100 text-cyan-600 text-xs font-medium rounded-full">Web3</span>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" name="ipfs_enabled" value="1" class="sr-only peer" {{ old('ipfs_enabled') ? 'checked' : '' }}>
+                                <div
+                                    class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-cyan-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-600">
+                                </div>
+                            </label>
+                            <div class="flex-1">
+                                <p class="text-gray-800 font-medium text-sm">Upload ke IPFS (Storacha)</p>
+                                <p class="text-gray-500 text-xs mt-1">Simpan metadata sertifikat ke jaringan IPFS + Filecoin untuk
+                                    penyimpanan desentralisasi permanen.</p>
+                                <div class="flex items-center gap-4 mt-3 text-xs">
+                                    <span class="flex items-center gap-1 text-emerald-600">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        Desentralisasi
+                                    </span>
+                                    <span class="flex items-center gap-1 text-emerald-600">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        Permanen
+                                    </span>
+                                    <span class="flex items-center gap-1 text-cyan-600">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9" />
+                                        </svg>
+                                        IPFS Gateway
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 <!-- Info Box -->
                 <div class="bg-blue-100 border border-blue-300 rounded-xl p-5">
                     <div class="flex gap-3">
