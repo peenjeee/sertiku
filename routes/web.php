@@ -403,6 +403,16 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 | Master (Superadmin) Subdomain Routing
 |--------------------------------------------------------------------------
 */
+
+// Redirect legacy /master/... routes to master.sertiku.web.id subdomain
+Route::get('/master/login', function () {
+    return redirect()->to('https://master.sertiku.web.id/login', 301);
+})->name('master.login.redirect');
+
+Route::get('/master', function () {
+    return redirect()->to('https://master.sertiku.web.id/', 301);
+})->name('master.dashboard.redirect');
+
 Route::domain('master.sertiku.web.id')->group(function () {
 
     // Guest: Login
