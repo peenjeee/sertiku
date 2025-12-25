@@ -559,7 +559,8 @@
         </button>
 
         <!-- Main Content -->
-        <main class="main-content flex-1 p-4 pt-16 md:pt-6 lg:p-8 relative z-10 overflow-x-hidden max-w-full w-full" id="mainContent">
+        <main class="main-content flex-1 p-4 pt-16 md:pt-6 lg:p-8 relative z-10 overflow-x-hidden max-w-full w-full"
+            id="mainContent">
             <div class="max-w-full overflow-x-hidden">
                 {{ $slot }}
             </div>
@@ -755,7 +756,7 @@
             },
             'hubungi_admin': {
                 question: 'Hubungi Admin',
-                answer: '📞 <strong>Hubungi Kami:</strong><br><br>📧 Email: <a href="mailto:support@sertiku.web.id" class="text-blue-400 underline">support@sertiku.web.id</a><br>📱 WhatsApp: <a href="https://wa.me/6281234567890" class="text-blue-400 underline">+62 812-3456-7890</a><br>🕐 Jam Operasional: Senin-Jumat, 09:00-17:00 WIB<br><br>💬 Atau kirim pesan langsung di chat ini dan kami akan segera merespons!'
+                answer: '📞 <strong>Hubungi Kami:</strong><br><br>📧 Email: <a href="mailto:support@sertiku.web.id" class="text-blue-400 underline">support@sertiku.web.id</a><br>📱 WhatsApp: <a href="https://wa.me/6285777419874" class="text-blue-400 underline">+62 857-7741-9874</a><br>🕐 Jam Operasional: Senin-Jumat, 09:00-17:00 WIB<br><br>💬 Atau kirim pesan langsung di chat ini dan kami akan segera merespons!'
             }
         };
 

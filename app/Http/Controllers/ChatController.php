@@ -103,7 +103,7 @@ class ChatController extends Controller
         }
 
         if (str_contains($message, 'hubungi') || str_contains($message, 'kontak') || str_contains($message, 'admin')) {
-            return '📞 Hubungi kami: Email support@sertiku.web.id atau WhatsApp +62 812-3456-7890. Jam operasional: Senin-Jumat, 09:00-17:00 WIB.';
+            return '📞 Hubungi kami: Email support@sertiku.web.id atau WhatsApp +62 857-7741-9874. Jam operasional: Senin-Jumat, 09:00-17:00 WIB.';
         }
 
         // Default response
