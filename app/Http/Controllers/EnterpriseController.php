@@ -41,7 +41,8 @@ class EnterpriseController extends Controller
         $enterpriseData = [
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'phone' => $validated['phone'],
+            // Prefix with ' to force Google Sheets to treat as text (preserves leading 0)
+            'phone' => "'" . $validated['phone'],
             'institution' => $validated['institution'],
             'message' => $validated['message'],
             'source' => 'enterprise_form',
