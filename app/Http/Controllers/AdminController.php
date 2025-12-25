@@ -294,6 +294,11 @@ class AdminController extends Controller
         ];
 
         if ($request->hasFile('avatar')) {
+            // Delete old avatar if exists
+            if ($user->avatar && !str_starts_with($user->avatar, 'http')) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete(str_replace('/storage/', '', $user->avatar));
+            }
+
             $path = $request->file('avatar')->store('avatars', 'public');
             $data['avatar'] = '/storage/' . $path;
         }

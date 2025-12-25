@@ -51,7 +51,7 @@ class SettingsController extends Controller
 
         // Delete old avatar if exists and is local file
         if ($user->avatar && !str_starts_with($user->avatar, 'http')) {
-            Storage::disk('public')->delete($user->avatar);
+            Storage::disk('public')->delete(str_replace('/storage/', '', $user->avatar));
         }
 
         // Store new avatar
@@ -120,7 +120,7 @@ class SettingsController extends Controller
         ]);
 
         $user = Auth::user();
-        
+
         Auth::logout();
         $user->delete();
 

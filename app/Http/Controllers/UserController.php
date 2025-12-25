@@ -253,7 +253,8 @@ class UserController extends Controller
 
         // Delete old avatar if exists
         if ($user->avatar) {
-            \Storage::disk('public')->delete($user->avatar);
+            $oldPath = str_replace('/storage/', '', $user->avatar);
+            \Storage::disk('public')->delete($oldPath);
         }
 
         // Store new avatar
@@ -272,7 +273,8 @@ class UserController extends Controller
         $user = Auth::user();
 
         if ($user->avatar) {
-            \Storage::disk('public')->delete($user->avatar);
+            $path = str_replace('/storage/', '', $user->avatar);
+            \Storage::disk('public')->delete($path);
             $user->update(['avatar' => null]);
         }
 
