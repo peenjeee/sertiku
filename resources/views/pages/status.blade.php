@@ -155,16 +155,92 @@
             <div class="rounded-2xl bg-gradient-to-r from-[#1E3A8F]/30 to-[#3B82F6]/30 border border-[#3B82F6]/30 p-8">
                 <h3 class="text-xl font-semibold text-white mb-2">Dapatkan Notifikasi Status</h3>
                 <p class="text-[#BEDBFF]/80 mb-6">Dapatkan update jika ada gangguan layanan</p>
-                <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                    <input type="email" placeholder="email@contoh.com"
+                <form id="statusSubscribeForm" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                    @csrf
+                    <input type="email" id="statusEmail" placeholder="email@contoh.com" required
                         class="flex-1 rounded-lg bg-white/10 border border-white/20 px-4 py-3 text-white text-sm placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]">
-                    <button type="button"
-                        class="w-full sm:w-auto rounded-lg bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-6 py-3 text-sm font-medium text-white hover:brightness-110 transition">
-                        Subscribe
+                    <button type="submit" id="statusSubmitBtn"
+                        class="w-full sm:w-auto rounded-lg bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-6 py-3 text-sm font-medium text-white hover:brightness-110 transition flex items-center justify-center gap-2 disabled:opacity-50">
+                        <span id="statusBtnText">Subscribe</span>
+                        <svg id="statusSpinner" class="hidden animate-spin h-4 w-4 text-white"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
                     </button>
                 </form>
             </div>
         </div>
     </section>
+
+    <script>
+        document.getElementById('statusSubscribeForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('statusEmail').value;
+            const btn = document.getElementById('statusSubmitBtn');
+            const spinner = document.getElementById('statusSpinner');
+            const btnText = document.getElementById('statusBtnText');
+
+            // Disable button and show loading
+            btn.disabled = true;
+            spinner.classList.remove('hidden');
+            btnText.textContent = 'Memproses...';
+
+            try {
+                const response = await fetch('{{ route("leads.subscribe-status") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ email: email })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Berhasil subscribe notifikasi!',
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                    } else {
+                        alert('Berhasil subscribe notifikasi status!');
+                    }
+                    document.getElementById('statusEmail').value = '';
+                } else {
+                    throw new Error(data.message || 'Gagal subscribe');
+                }
+            } catch (error) {
+                console.error('Status Subscribe Error:', error);
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'error',
+                        title: 'Terjadi kesalahan, coba lagi',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                } else {
+                    alert('Terjadi kesalahan, silakan coba lagi.');
+                }
+            } finally {
+                // Reset button
+                btn.disabled = false;
+                spinner.classList.add('hidden');
+                btnText.textContent = 'Subscribe';
+            }
+        });
+    </script>
 
 </x-layouts.app>

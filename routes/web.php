@@ -25,6 +25,14 @@ Route::get('/api-docs', function () {
     return view('pages.api');
 })->name('api.docs');
 
+// Lead Collection (CTA form on landing page -> n8n webhook)
+Route::post('/leads/subscribe-cta', [\App\Http\Controllers\LeadController::class, 'subscribeCta'])
+    ->name('leads.subscribe-cta');
+
+// Status Notification Subscription (status page -> n8n webhook)
+Route::post('/leads/subscribe-status', [\App\Http\Controllers\LeadController::class, 'subscribeStatus'])
+    ->name('leads.subscribe-status');
+
 
 
 // Temporary route removed
