@@ -1,5 +1,5 @@
 {{-- resources/views/auth/register.blade.php --}}
-<x-layouts.app title="SertiKu – Daftar Akun">
+<x-layouts.app title="SertiKu – Daftar Akun Baru" description="Daftar akun SertiKu sekarang. Platform sertifikat digital berbasis blockchain untuk institusi dan profesional.">
 
     <main class="min-h-screen bg-gradient-to-b from-[#0F172A] via-[#1E293B] to-[#0F172A] px-4 py-10 flex items-center justify-center overflow-x-hidden">
 

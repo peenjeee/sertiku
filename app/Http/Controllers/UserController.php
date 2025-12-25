@@ -20,8 +20,11 @@ class UserController extends Controller
             ->orWhere('user_id', $user->id)
             ->get();
 
+        $currentMonthCount = $certificates->where('created_at', '>=', now()->startOfMonth())->count();
+
         $stats = [
             'total_sertifikat' => $certificates->count(),
+            'growth_sertifikat' => $currentMonthCount,
             'terverifikasi' => $certificates->where('status', 'active')->count(),
             'total_verifikasi' => $certificates->sum('verification_count') ?? 0,
             'pending' => $certificates->where('status', 'pending')->count(),

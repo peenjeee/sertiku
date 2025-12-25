@@ -1,5 +1,6 @@
 {{-- resources/views/auth/verify-otp.blade.php --}}
-<x-layouts.app title="Verifikasi Email - SertiKu">
+<x-layouts.app title="SertiKu – Verifikasi Kode OTP"
+    description="Masukkan kode OTP 6 digit yang dikirim ke email Anda untuk memverifikasi akun SertiKu. Amankan aset digital dan sertifikat Anda.">
 
     <div class="min-h-screen flex items-center justify-center px-4 py-16">
         <div class="w-full max-w-md">
@@ -46,9 +47,9 @@
                     <div class="flex justify-center gap-2 mb-6" x-data="otpInput()">
                         @for($i = 0; $i < 6; $i++)
                             <input type="text" maxlength="1" class="w-12 h-14 text-center text-2xl font-bold rounded-xl border-2 
-                                              bg-white/5 text-white
-                                              border-white/20 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50
-                                              transition-all duration-200" x-ref="input{{ $i }}"
+                                                  bg-white/5 text-white
+                                                  border-white/20 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50
+                                                  transition-all duration-200" x-ref="input{{ $i }}"
                                 @input="handleInput($event, {{ $i }})" @keydown="handleKeydown($event, {{ $i }})"
                                 @paste="handlePaste($event)" inputmode="numeric" pattern="[0-9]*">
                         @endfor

@@ -115,7 +115,8 @@
                     </div>
                     <div>
                         <h3 class="text-[#166534] font-bold text-sm lg:text-lg">Galeri Sertifikat</h3>
-                        <p class="text-[#22C55E] text-xs lg:text-sm">3 template tersimpan</p>
+                        <p class="text-[#22C55E] text-xs lg:text-sm">{{ $stats['total_templates'] ?? 0 }} template
+                            tersimpan</p>
                     </div>
                 </div>
             </a>
@@ -261,7 +262,8 @@
                     </svg>
                     <div>
                         <h2 class="text-[#1E293B] text-base lg:text-xl font-bold">Sertifikat Terbaru</h2>
-                        <p class="text-[#64748B] text-xs lg:text-sm">5 sertifikat yang baru diterbitkan</p>
+                        <p class="text-[#64748B] text-xs lg:text-sm">{{ $stats['recent_certificates']->count() }}
+                            sertifikat yang baru diterbitkan</p>
                     </div>
                 </div>
                 <a href="{{ route('lembaga.sertifikat.index') }}"

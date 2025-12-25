@@ -5,6 +5,11 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="theme-color" content="#3B82F6">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>{{ $title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -245,7 +250,7 @@
             <div class="flex items-center gap-3 mb-3">
                 <div
                     class="master-badge w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm overflow-hidden">
-                    @if(auth()->user()->avatar && str_starts_with(auth()->user()->avatar, '/storage/'))
+                    @if(auth()->user()->avatar && (str_starts_with(auth()->user()->avatar, '/storage/') || str_starts_with(auth()->user()->avatar, 'http')))
                         <img src="{{ auth()->user()->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                     @else
                         <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&email={{ urlencode(auth()->user()->email) }}&background=8B5CF6&color=fff&bold=true&size=40"

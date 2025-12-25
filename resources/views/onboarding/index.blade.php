@@ -1,8 +1,8 @@
 {{-- resources/views/onboarding/index.blade.php --}}
 <x-layouts.app title="SertiKu – Lengkapi Profil">
 
-    <main
-        class="min-h-screen bg-gradient-to-b from-[#0F172A] via-[#1E293B] to-[#0F172A] px-4 py-10 flex items-center justify-center">
+    <div
+        class="min-h-[calc(100vh-80px)] bg-gradient-to-b from-[#0F172A] via-[#1E293B] to-[#0F172A] px-4 py-10 flex items-center justify-center overflow-x-hidden">
         <div class="relative w-full max-w-4xl">
             {{-- Glow effects --}}
             <div
@@ -332,7 +332,7 @@
                 </div>
             </div>
         </div>
-    </main>
+    </div>
 
     <script>
         function switchAccountType(type) {

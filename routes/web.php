@@ -162,6 +162,10 @@ Route::get('/verify-email', [EmailVerificationController::class, 'show'])
     ->middleware('auth')
     ->name('verification.otp');
 
+Route::get('/email/verify', function () {
+    return redirect()->route('verification.otp');
+})->middleware('auth')->name('verification.notice');
+
 // Verify OTP
 Route::post('/verify-email', [EmailVerificationController::class, 'verify'])
     ->middleware('auth')
@@ -216,9 +220,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/feedback', [\App\Http\Controllers\FeedbackController::class, 'store'])->name('feedback.store');
 
     // Onboarding - complete profile after Google/Wallet login
-    Route::get('/onboarding', [OnboardingController::class, 'show'])->name('onboarding');
-    Route::post('/onboarding', [OnboardingController::class, 'store'])->name('onboarding.store');
-    Route::get('/onboarding/skip', [OnboardingController::class, 'skip'])->name('onboarding.skip');
+    Route::middleware(['auth', 'verified'])->group(function () {
+        Route::get('/onboarding', [OnboardingController::class, 'show'])->name('onboarding');
+        Route::post('/onboarding', [OnboardingController::class, 'store'])->name('onboarding.store');
+        Route::get('/onboarding/skip', [OnboardingController::class, 'skip'])->name('onboarding.skip');
+    });
 
     // Dashboard - redirect based on account type
     Route::get('/dashboard', function () {

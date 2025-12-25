@@ -1,5 +1,6 @@
 {{-- resources/views/auth/input-email.blade.php --}}
-<x-layouts.app title="Masukkan Email - SertiKu">
+<x-layouts.app title="SertiKu – Input Email Verifikasi"
+    description="Masukkan alamat email aktif untuk menerima kode verifikasi OTP. Langkah penting menjaga keamanan akun SertiKu Anda.">
 
     <div class="min-h-screen flex items-center justify-center px-4 py-16">
         <div class="w-full max-w-md">
