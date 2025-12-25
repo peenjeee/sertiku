@@ -44,6 +44,6 @@ class EnsureUserIsLembaga
         }
 
         // Default: redirect to landing page
-        return redirect()->route('landing')->with('error', $message);
+        return redirect()->route('home')->with('error', $message);
     }
 }
