@@ -37,6 +37,9 @@ Route::post('/leads/subscribe-status', [\App\Http\Controllers\LeadController::cl
 Route::post('/kontak/send', [\App\Http\Controllers\ContactController::class, 'send'])
     ->name('kontak.send');
 
+// Enterprise Form Submission (enterprise page -> n8n webhook + email)
+Route::post('/contact/enterprise/send', [\App\Http\Controllers\EnterpriseController::class, 'send'])
+    ->name('contact.enterprise.send');
 
 // Temporary route removed
 
