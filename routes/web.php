@@ -251,6 +251,10 @@ Route::middleware('auth')->group(function () {
         }
 
         // Redirect based on account type
+        if ($user->is_master) {
+            return redirect()->route('master.dashboard');
+        }
+
         if ($user->is_admin) {
             return redirect()->route('admin.dashboard');
         }
