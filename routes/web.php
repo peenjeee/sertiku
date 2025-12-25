@@ -16,55 +16,47 @@ use App\Http\Controllers\VerifyController;
 
 /*
 |--------------------------------------------------------------------------
-| Master (Superadmin) Subdomain Routing
+| MASTER AUTH & DASHBOARD
 |--------------------------------------------------------------------------
 */
 
-// Redirect legacy /master/... routes to master.sertiku.web.id subdomain
-Route::get('/master/login', function () {
-    return redirect()->to('https://master.sertiku.web.id/login', 301);
-})->name('master.login.redirect');
+// Master Login (separate login page)
+Route::get('/master/login', [\App\Http\Controllers\Auth\MasterLoginController::class, 'showLoginForm'])
+    ->middleware('guest')
+    ->name('master.login');
 
-Route::get('/master', function () {
-    return redirect()->to('https://master.sertiku.web.id/', 301);
-})->name('master.dashboard.redirect');
+Route::post('/master/login', [\App\Http\Controllers\Auth\MasterLoginController::class, 'login'])
+    ->middleware('guest')
+    ->name('master.login.submit');
 
-Route::domain('master.sertiku.web.id')->group(function () {
+Route::post('/master/logout', [\App\Http\Controllers\Auth\MasterLoginController::class, 'logout'])
+    ->middleware('auth')
+    ->name('master.logout');
 
-    // Guest: Login
-    Route::middleware('guest')->group(function () {
-        Route::get('/login', [\App\Http\Controllers\Auth\MasterLoginController::class, 'showLoginForm'])->name('master.login');
-        Route::post('/login', [\App\Http\Controllers\Auth\MasterLoginController::class, 'login'])->name('master.login.submit');
-    });
+// Master Dashboard Routes (protected by master.only middleware)
+Route::prefix('master')->name('master.')->middleware(['auth', 'master.only'])->group(function () {
 
-    // Auth: Dashboard & Features
-    Route::middleware(['auth', \App\Http\Middleware\EnsureUserIsMaster::class])->name('master.')->group(function () {
+    // Dashboard root
+    Route::get('/', [\App\Http\Controllers\MasterController::class, 'dashboard'])->name('dashboard');
 
-        // Dashboard root
-        Route::get('/', [\App\Http\Controllers\MasterController::class, 'dashboard'])->name('dashboard');
+    // Manage Admins
+    Route::get('/admins', [\App\Http\Controllers\MasterController::class, 'manageAdmins'])->name('admins');
+    Route::post('/admins/{user}/promote', [\App\Http\Controllers\MasterController::class, 'promoteToAdmin'])->name('admins.promote');
+    Route::post('/admins/{user}/demote', [\App\Http\Controllers\MasterController::class, 'demoteAdmin'])->name('admins.demote');
 
-        // Logout
-        Route::post('/logout', [\App\Http\Controllers\Auth\MasterLoginController::class, 'logout'])->name('logout');
+    // Blockchain Wallet
+    Route::get('/blockchain', [\App\Http\Controllers\MasterController::class, 'blockchain'])->name('blockchain');
 
-        // Manage Admins
-        Route::get('/admins', [\App\Http\Controllers\MasterController::class, 'manageAdmins'])->name('admins');
-        Route::post('/admins/{user}/promote', [\App\Http\Controllers\MasterController::class, 'promoteToAdmin'])->name('admins.promote');
-        Route::post('/admins/{user}/demote', [\App\Http\Controllers\MasterController::class, 'demoteAdmin'])->name('admins.demote');
+    // Settings
+    Route::get('/settings', [\App\Http\Controllers\MasterController::class, 'settings'])->name('settings');
 
-        // Blockchain Wallet
-        Route::get('/blockchain', [\App\Http\Controllers\MasterController::class, 'blockchain'])->name('blockchain');
+    // Logs
+    Route::get('/logs', [\App\Http\Controllers\MasterController::class, 'logs'])->name('logs');
 
-        // Settings
-        Route::get('/settings', [\App\Http\Controllers\MasterController::class, 'settings'])->name('settings');
-
-        // Logs
-        Route::get('/logs', [\App\Http\Controllers\MasterController::class, 'logs'])->name('logs');
-
-        // Support Tickets
-        Route::get('/support', [\App\Http\Controllers\SupportController::class, 'masterIndex'])->name('support');
-        Route::get('/support/{ticket}', [\App\Http\Controllers\SupportController::class, 'masterShow'])->name('support.show');
-        Route::post('/support/{ticket}/reply', [\App\Http\Controllers\SupportController::class, 'adminReply'])->name('support.reply');
-    });
+    // Support Tickets
+    Route::get('/support', [\App\Http\Controllers\SupportController::class, 'masterIndex'])->name('support');
+    Route::get('/support/{ticket}', [\App\Http\Controllers\SupportController::class, 'masterShow'])->name('support.show');
+    Route::post('/support/{ticket}/reply', [\App\Http\Controllers\SupportController::class, 'adminReply'])->name('support.reply');
 });
 
 
@@ -73,11 +65,7 @@ Route::get('/', [\App\Http\Controllers\LandingController::class, 'index'])->name
 // SEO Sitemap
 Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
 
-Route::domain('api.sertiku.web.id')->group(function () {
-    Route::get('/', function () {
-        return view('pages.api');
-    })->name('api.docs.domain');
-});
+
 
 Route::get('/api-docs', function () {
     return view('pages.api');
