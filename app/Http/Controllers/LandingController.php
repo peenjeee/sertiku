@@ -19,7 +19,7 @@ class LandingController extends Controller
         $lembagas = User::whereIn('account_type', ['lembaga', 'institution'])
             ->whereNotNull('institution_name')
             ->withCount('certificates')
-            ->inRandomOrder()
+            ->orderByDesc('certificates_count')
             ->take(6)
             ->get();
 
