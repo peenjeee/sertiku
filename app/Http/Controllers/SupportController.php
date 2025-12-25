@@ -19,22 +19,22 @@ class SupportController extends Controller
         ]);
 
         $ticket = SupportTicket::create([
-            'user_id'         => Auth::id(),
-            'subject'         => $validated['subject'],
-            'status'          => 'open',
+            'user_id' => Auth::id(),
+            'subject' => $validated['subject'],
+            'status' => 'open',
             'last_message_at' => now(),
         ]);
 
         SupportMessage::create([
-            'ticket_id'     => $ticket->id,
-            'sender_id'     => Auth::id(),
-            'message'       => $validated['message'],
+            'ticket_id' => $ticket->id,
+            'sender_id' => Auth::id(),
+            'message' => $validated['message'],
             'is_from_admin' => false,
         ]);
 
         return response()->json([
             'success' => true,
-            'ticket'  => $ticket->load('messages.sender'),
+            'ticket' => $ticket->load('messages.sender'),
         ]);
     }
 
@@ -45,21 +45,21 @@ class SupportController extends Controller
     {
         $validated = $request->validate([
             'ticket_id' => 'required|exists:support_tickets,id',
-            'message'   => 'required|string|max:2000',
+            'message' => 'required|string|max:2000',
         ]);
 
         $ticket = SupportTicket::findOrFail($validated['ticket_id']);
-        $user   = Auth::user();
+        $user = Auth::user();
 
         // Check permission: user can only send to their own tickets, admin can send to any
-        if (! $user->is_admin && $ticket->user_id !== $user->id) {
+        if (!$user->is_admin && $ticket->user_id !== $user->id) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         $message = SupportMessage::create([
-            'ticket_id'     => $ticket->id,
-            'sender_id'     => $user->id,
-            'message'       => $validated['message'],
+            'ticket_id' => $ticket->id,
+            'sender_id' => $user->id,
+            'message' => $validated['message'],
             'is_from_admin' => $user->is_admin || $user->is_master,
         ]);
 
@@ -69,7 +69,7 @@ class SupportController extends Controller
         // If admin replies and ticket is open, set to in_progress
         if (($user->is_admin || $user->is_master) && $ticket->status === 'open') {
             $ticket->update([
-                'status'            => 'in_progress',
+                'status' => 'in_progress',
                 'assigned_admin_id' => $user->id,
             ]);
         }
@@ -88,7 +88,7 @@ class SupportController extends Controller
         $user = Auth::user();
 
         // Check permission
-        if (! $user->is_admin && ! $user->is_master && $ticket->user_id !== $user->id) {
+        if (!$user->is_admin && !$user->is_master && $ticket->user_id !== $user->id) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -104,7 +104,7 @@ class SupportController extends Controller
             ->get();
 
         return response()->json([
-            'ticket'   => $ticket,
+            'ticket' => $ticket,
             'messages' => $messages,
         ]);
     }
@@ -115,9 +115,11 @@ class SupportController extends Controller
     public function userTickets()
     {
         $tickets = SupportTicket::where('user_id', Auth::id())
-            ->with(['messages' => function ($q) {
-                $q->latest()->take(1);
-            }])
+            ->with([
+                'messages' => function ($q) {
+                    $q->latest()->take(1);
+                }
+            ])
             ->latest('last_message_at')
             ->get();
 
@@ -131,7 +133,7 @@ class SupportController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user->is_admin && ! $user->is_master && $ticket->user_id !== $user->id) {
+        if (!$user->is_admin && !$user->is_master && $ticket->user_id !== $user->id) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -148,10 +150,12 @@ class SupportController extends Controller
     public function adminIndex(Request $request)
     {
         $query = SupportTicket::with(['user:id,name,email,avatar', 'assignedAdmin:id,name'])
-            ->withCount(['messages as unread_count' => function ($q) {
-                $q->whereNull('read_at')
-                    ->where('is_from_admin', false);
-            }]);
+            ->withCount([
+                'messages as unread_count' => function ($q) {
+                    $q->whereNull('read_at')
+                        ->where('is_from_admin', false);
+                }
+            ]);
 
         // Filter by status
         if ($request->status && $request->status !== 'all') {
@@ -169,10 +173,12 @@ class SupportController extends Controller
     public function masterIndex(Request $request)
     {
         $query = SupportTicket::with(['user:id,name,email,avatar', 'assignedAdmin:id,name'])
-            ->withCount(['messages as unread_count' => function ($q) {
-                $q->whereNull('read_at')
-                    ->where('is_from_admin', false);
-            }]);
+            ->withCount([
+                'messages as unread_count' => function ($q) {
+                    $q->whereNull('read_at')
+                        ->where('is_from_admin', false);
+                }
+            ]);
 
         if ($request->status && $request->status !== 'all') {
             $query->where('status', $request->status);
@@ -226,15 +232,15 @@ class SupportController extends Controller
         $user = Auth::user();
 
         $message = SupportMessage::create([
-            'ticket_id'     => $ticket->id,
-            'sender_id'     => $user->id,
-            'message'       => $validated['message'],
+            'ticket_id' => $ticket->id,
+            'sender_id' => $user->id,
+            'message' => $validated['message'],
             'is_from_admin' => true,
         ]);
 
         $ticket->update([
-            'last_message_at'   => now(),
-            'status'            => $ticket->status === 'open' ? 'in_progress' : $ticket->status,
+            'last_message_at' => now(),
+            'status' => $ticket->status === 'open' ? 'in_progress' : $ticket->status,
             'assigned_admin_id' => $ticket->assigned_admin_id ?? $user->id,
         ]);
 
@@ -269,13 +275,17 @@ class SupportController extends Controller
     public function contactAdmin()
     {
         $tickets = SupportTicket::where('user_id', Auth::id())
-            ->with(['messages' => function ($q) {
-                $q->latest()->take(1);
-            }])
-            ->withCount(['messages as unread_count' => function ($q) {
-                $q->whereNull('read_at')
-                    ->where('is_from_admin', true);
-            }])
+            ->with([
+                'messages' => function ($q) {
+                    $q->latest()->take(1);
+                }
+            ])
+            ->withCount([
+                'messages as unread_count' => function ($q) {
+                    $q->whereNull('read_at')
+                        ->where('is_from_admin', true);
+                }
+            ])
             ->latest('last_message_at')
             ->get();
 
@@ -296,16 +306,16 @@ class SupportController extends Controller
         ]);
 
         $ticket = SupportTicket::create([
-            'user_id'         => Auth::id(),
-            'subject'         => $validated['subject'],
-            'status'          => 'open',
+            'user_id' => Auth::id(),
+            'subject' => $validated['subject'],
+            'status' => 'open',
             'last_message_at' => now(),
         ]);
 
         SupportMessage::create([
-            'ticket_id'     => $ticket->id,
-            'sender_id'     => Auth::id(),
-            'message'       => $validated['message'],
+            'ticket_id' => $ticket->id,
+            'sender_id' => Auth::id(),
+            'message' => $validated['message'],
             'is_from_admin' => false,
         ]);
 
@@ -318,8 +328,8 @@ class SupportController extends Controller
      */
     public function showTicket(SupportTicket $ticket)
     {
-        // Ensure user owns the ticket
-        if ($ticket->user_id !== Auth::id()) {
+        // Ensure user owns the ticket (using loose comparison for type safety)
+        if ((int) $ticket->user_id !== (int) Auth::id()) {
             abort(403, 'Unauthorized');
         }
 
@@ -342,7 +352,7 @@ class SupportController extends Controller
     public function sendMessageWeb(Request $request, SupportTicket $ticket)
     {
         // Ensure user owns the ticket
-        if ($ticket->user_id !== Auth::id()) {
+        if ((int) $ticket->user_id !== (int) Auth::id()) {
             abort(403, 'Unauthorized');
         }
 
@@ -351,9 +361,9 @@ class SupportController extends Controller
         ]);
 
         SupportMessage::create([
-            'ticket_id'     => $ticket->id,
-            'sender_id'     => Auth::id(),
-            'message'       => $validated['message'],
+            'ticket_id' => $ticket->id,
+            'sender_id' => Auth::id(),
+            'message' => $validated['message'],
             'is_from_admin' => false,
         ]);
 
