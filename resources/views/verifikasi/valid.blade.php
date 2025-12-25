@@ -45,16 +45,17 @@
 
                     {{-- GAMBAR SERTIFIKAT (jika ada template) --}}
                     @if($certificate['template_image'] ?? null)
-                    <div class="mb-8 print-only-cert">
-                        <p class="text-sm font-normal text-[#8EC5FF] mb-3 no-print text-center">Preview Sertifikat</p>
-                        <div class="rounded-xl overflow-hidden border border-[rgba(255,255,255,0.2)] bg-white">
-                            <img src="{{ $certificate['template_image'] }}" alt="Sertifikat" class="w-full h-auto">
+                        <div class="mb-8 print-only-cert print-page-break">
+                            <p class="text-sm font-normal text-[#8EC5FF] mb-3 no-print text-center">Preview Sertifikat</p>
+                            <div class="rounded-xl overflow-hidden border border-[rgba(255,255,255,0.2)] bg-white">
+                                <img src="{{ $certificate['template_image'] }}" alt="Sertifikat" class="w-full h-auto">
+                            </div>
                         </div>
-                    </div>
                     @endif
 
                     {{-- PANEL DETAIL SERTIFIKAT DENGAN QR CODE --}}
-                    <div class="mb-8 rounded-2xl border border-[#22C55E]/30 bg-[rgba(15,23,42,0.5)] px-6 py-6 max-[640px]:px-4 print-info">
+                    <div
+                        class="mb-8 rounded-2xl border border-[#22C55E]/30 bg-[rgba(15,23,42,0.5)] px-6 py-6 max-[640px]:px-4 print-info">
                         <div class="flex flex-col lg:flex-row gap-6">
                             {{-- Left: Certificate Details --}}
                             <div class="flex-1">
@@ -68,7 +69,8 @@
                                 </div>
 
                                 {{-- List detail --}}
-                                <div class="mt-3 grid gap-3 text-sm text-[rgba(190,219,255,0.8)] max-[640px]:gap-2 print-detail-list">
+                                <div
+                                    class="mt-3 grid gap-3 text-sm text-[rgba(190,219,255,0.8)] max-[640px]:gap-2 print-detail-list">
                                     <div class="flex items-start gap-3">
                                         <span class="mt-1 h-1.5 w-1.5 rounded-full bg-[#22C55E] print-bullet"></span>
                                         <p>
@@ -126,87 +128,101 @@
 
                                     {{-- Blockchain Verification --}}
                                     @if(isset($certificate['blockchain_tx_hash']) && $certificate['blockchain_tx_hash'])
-                                    <div class="flex items-start gap-3 mt-2 pt-2 border-t border-[#3B82F6]/20">
-                                        <span class="mt-1 h-1.5 w-1.5 rounded-full bg-purple-500 print-bullet"></span>
-                                        <div>
-                                            <span class="font-semibold text-purple-400">Blockchain Verified:</span>
-                                            <a href="{{ config('blockchain.explorer_url', 'https://amoy.polygonscan.com') }}/tx/{{ $certificate['blockchain_tx_hash'] }}"
-                                               target="_blank"
-                                               class="ml-1 text-purple-300 hover:text-purple-200 underline transition">
-                                                Lihat di PolygonScan →
-                                            </a>
-                                            <p class="text-xs text-purple-400/60 mt-1 font-mono break-all">
-                                                TX: {{ Str::limit($certificate['blockchain_tx_hash'], 30) }}
-                                            </p>
+                                        <div class="flex items-start gap-3 mt-2 pt-2 border-t border-[#3B82F6]/20">
+                                            <span class="mt-1 h-1.5 w-1.5 rounded-full bg-purple-500 print-bullet"></span>
+                                            <div>
+                                                <span class="font-semibold text-purple-400">Blockchain Verified:</span>
+                                                <a href="{{ config('blockchain.explorer_url', 'https://amoy.polygonscan.com') }}/tx/{{ $certificate['blockchain_tx_hash'] }}"
+                                                    target="_blank"
+                                                    class="ml-1 text-purple-300 hover:text-purple-200 underline transition">
+                                                    Lihat di PolygonScan →
+                                                </a>
+                                                <p class="text-xs text-purple-400/60 mt-1 font-mono break-all">
+                                                    TX: {{ Str::limit($certificate['blockchain_tx_hash'], 30) }}
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
                                     @endif
                                 </div>
                             </div>
 
                             {{-- Right: QR Code --}}
                             @if($certificate['qr_code_url'] ?? null)
-                            <div class="lg:w-48 flex-shrink-0">
-                                <div class="text-center p-4 bg-[rgba(30,41,59,0.95)] rounded-xl border border-[#3B82F6]/40">
-                                    <p class="text-sm font-bold text-white mb-3">Scan untuk Verifikasi</p>
-                                    <div class="bg-white p-3 rounded-lg inline-block">
-                                        <img src="{{ $certificate['qr_code_url'] }}" alt="QR Code" class="w-28 h-28">
+                                <div class="lg:w-48 flex-shrink-0">
+                                    <div
+                                        class="text-center p-4 bg-[rgba(30,41,59,0.95)] rounded-xl border border-[#3B82F6]/40">
+                                        <p class="text-sm font-bold text-white mb-3">Scan untuk Verifikasi</p>
+                                        <div class="bg-white p-3 rounded-lg inline-block">
+                                            <img src="{{ $certificate['qr_code_url'] }}" alt="QR Code" class="w-28 h-28">
+                                        </div>
+                                        <p class="text-xs text-white/90 mt-3 break-all font-mono">
+                                            {{ $certificate['nomor'] ?? '' }}
+                                        </p>
                                     </div>
-                                    <p class="text-xs text-white/90 mt-3 break-all font-mono">
-                                        {{ $certificate['nomor'] ?? '' }}
-                                    </p>
                                 </div>
-                            </div>
                             @endif
                         </div>
 
                         {{-- Verification Badge --}}
                         <div class="mt-6 pt-4 border-t border-[rgba(255,255,255,0.1)] print-verification-badge">
                             <div class="flex items-center justify-center gap-2 bg-[#22C55E]/20 rounded-lg py-3 px-4">
-                                <svg class="w-5 h-5 text-[#22C55E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                <svg class="w-5 h-5 text-[#22C55E]" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                 </svg>
-                                <span class="text-[#22C55E] font-semibold text-sm">Terverifikasi di sertiku.web.id</span>
+                                <span class="text-[#22C55E] font-semibold text-sm">Terverifikasi di
+                                    sertiku.web.id</span>
                             </div>
 
                             {{-- Blockchain Verification Section --}}
                             @if(isset($certificate['blockchain_tx_hash']) && $certificate['blockchain_tx_hash'])
-                            <div class="mt-3">
-                                <a href="{{ config('blockchain.explorer_url', 'https://amoy.polygonscan.com') }}/tx/{{ $certificate['blockchain_tx_hash'] }}"
-                                   target="_blank"
-                                   class="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 border border-purple-500/40 rounded-lg py-3 px-4 hover:from-purple-600/30 hover:to-indigo-600/30 transition group">
-                                    <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
-                                    </svg>
-                                    <span class="text-purple-300 font-semibold text-sm">Tersimpan di Blockchain (Polygon)</span>
-                                    <svg class="w-4 h-4 text-purple-400 opacity-0 group-hover:opacity-100 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                                    </svg>
-                                </a>
-                                <p class="text-center text-xs text-purple-400/60 mt-2 font-mono break-all px-4">
-                                    TX: {{ $certificate['blockchain_tx_hash'] }}
-                                </p>
-                            </div>
+                                <div class="mt-3">
+                                    <a href="{{ config('blockchain.explorer_url', 'https://amoy.polygonscan.com') }}/tx/{{ $certificate['blockchain_tx_hash'] }}"
+                                        target="_blank"
+                                        class="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 border border-purple-500/40 rounded-lg py-3 px-4 hover:from-purple-600/30 hover:to-indigo-600/30 transition group">
+                                        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                        </svg>
+                                        <span class="text-purple-300 font-semibold text-sm">Tersimpan di Blockchain
+                                            (Polygon)</span>
+                                        <svg class="w-4 h-4 text-purple-400 opacity-0 group-hover:opacity-100 transition"
+                                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                        </svg>
+                                    </a>
+                                    <p class="text-center text-xs text-purple-400/60 mt-2 font-mono break-all px-4">
+                                        TX: {{ $certificate['blockchain_tx_hash'] }}
+                                    </p>
+                                </div>
                             @endif
 
                             {{-- IPFS Verification Section --}}
                             @if(isset($certificate['ipfs_cid']) && $certificate['ipfs_cid'])
-                            <div class="mt-3">
-                                <a href="{{ config('ipfs.gateway_url', 'https://w3s.link/ipfs') }}/{{ $certificate['ipfs_cid'] }}"
-                                   target="_blank"
-                                   class="flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600/20 to-teal-600/20 border border-cyan-500/40 rounded-lg py-3 px-4 hover:from-cyan-600/30 hover:to-teal-600/30 transition group">
-                                    <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-                                    </svg>
-                                    <span class="text-cyan-300 font-semibold text-sm">Tersimpan di IPFS (Desentralisasi)</span>
-                                    <svg class="w-4 h-4 text-cyan-400 opacity-0 group-hover:opacity-100 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                                    </svg>
-                                </a>
-                                <p class="text-center text-xs text-cyan-400/60 mt-2 font-mono break-all px-4">
-                                    CID: {{ $certificate['ipfs_cid'] }}
-                                </p>
-                            </div>
+                                <div class="mt-3">
+                                    <a href="{{ config('ipfs.gateway_url', 'https://w3s.link/ipfs') }}/{{ $certificate['ipfs_cid'] }}"
+                                        target="_blank"
+                                        class="flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600/20 to-teal-600/20 border border-cyan-500/40 rounded-lg py-3 px-4 hover:from-cyan-600/30 hover:to-teal-600/30 transition group">
+                                        <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                        </svg>
+                                        <span class="text-cyan-300 font-semibold text-sm">Tersimpan di IPFS
+                                            (Desentralisasi)</span>
+                                        <svg class="w-4 h-4 text-cyan-400 opacity-0 group-hover:opacity-100 transition"
+                                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                        </svg>
+                                    </a>
+                                    <p class="text-center text-xs text-cyan-400/60 mt-2 font-mono break-all px-4">
+                                        CID: {{ $certificate['ipfs_cid'] }}
+                                    </p>
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -321,6 +337,7 @@
     {{-- Print-only styles --}}
     <style>
         @media print {
+
             /* Reset and base print styles */
             * {
                 -webkit-print-color-adjust: exact !important;
@@ -355,12 +372,16 @@
 
             /* Position certificate at top center */
             .print-only-cert {
-                position: absolute !important;
-                left: 50% !important;
-                top: 10px !important;
-                transform: translateX(-50%) !important;
+                display: block !important;
                 width: 90% !important;
                 max-width: 650px !important;
+                margin: 0 auto 20px auto !important;
+            }
+
+            /* Page break after certificate image */
+            .print-page-break {
+                page-break-after: always !important;
+                break-after: page !important;
             }
 
             .print-only-cert img {
@@ -370,22 +391,21 @@
                 border: 1px solid #e5e7eb !important;
             }
 
-            /* Position info below certificate */
+            /* Position info on next page */
             .print-info {
-                position: absolute !important;
-                left: 50% !important;
-                top: 420px !important;
-                transform: translateX(-50%) !important;
+                display: block !important;
                 width: 90% !important;
                 max-width: 650px !important;
+                margin: 0 auto !important;
                 background: #f8fafc !important;
                 border: 1px solid #e5e7eb !important;
                 border-radius: 12px !important;
                 padding: 20px !important;
+                page-break-before: auto !important;
             }
 
             /* Keep flex layout for print */
-            .print-info > .flex {
+            .print-info>.flex {
                 display: flex !important;
                 flex-direction: row !important;
                 gap: 20px !important;
@@ -402,7 +422,7 @@
                 flex-shrink: 0 !important;
             }
 
-            .print-info .lg\\:w-48 > div {
+            .print-info .lg\\:w-48>div {
                 background: #f1f5f9 !important;
                 border: 1px solid #e5e7eb !important;
                 padding: 16px !important;
@@ -425,6 +445,25 @@
                 font-size: 9px !important;
                 color: #475569 !important;
                 font-weight: 500 !important;
+            }
+
+            /* QR Card specific styles - preserve background and white text */
+            .print-info .lg\:w-48>div {
+                background: #1e293b !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            .print-info .lg\:w-48 .text-white,
+            .print-info .lg\:w-48 .text-white\/90 {
+                color: #ffffff !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .print-info .lg\:w-48 .font-mono {
+                color: #ffffff !important;
             }
 
             /* Print-friendly text colors */
@@ -458,7 +497,7 @@
                 padding-top: 16px !important;
             }
 
-            .print-verification-badge > div {
+            .print-verification-badge>div {
                 background: #dcfce7 !important;
                 border-radius: 8px !important;
                 padding: 12px !important;

@@ -217,7 +217,8 @@ class BackupController extends Controller
         $filename = "storage_{$timestamp}.zip";
         $zipPath = $this->backupPath . '/' . $filename;
 
-        $storagePath = base_path('public/storage');
+        // Use the actual storage path (where files are stored by Laravel)
+        $storagePath = storage_path('app/public');
 
         if (!File::exists($storagePath)) {
             return null;
@@ -326,23 +327,15 @@ class BackupController extends Controller
 
         // Check if this is a storage backup (by filename)
         if (str_contains($filename, 'storage_')) {
-            $storagePath = base_path('public/storage');
+            // Use the actual storage path (where files are stored by Laravel)
+            $storagePath = storage_path('app/public');
 
-            // If it's a symlink, remove it first
-            if (is_link($storagePath)) {
-                if (PHP_OS_FAMILY === 'Windows') {
-                    rmdir($storagePath);
-                } else {
-                    unlink($storagePath);
-                }
-            }
-
-            // Create real directory if not exists
+            // Create directory if not exists
             if (!File::exists($storagePath)) {
                 File::makeDirectory($storagePath, 0755, true);
             }
 
-            // Extract directly to public/storage folder
+            // Extract directly to storage/app/public folder
             $zip->extractTo($storagePath);
             $restoredFiles = $zip->numFiles;
             $zip->close();
@@ -660,23 +653,15 @@ class BackupController extends Controller
 
         // Check if this is a storage backup (by filename)
         if (str_contains($filename, 'storage_')) {
-            $storagePath = base_path('public/storage');
+            // Use the actual storage path (where files are stored by Laravel)
+            $storagePath = storage_path('app/public');
 
-            // If it's a symlink, remove it first
-            if (is_link($storagePath)) {
-                if (PHP_OS_FAMILY === 'Windows') {
-                    rmdir($storagePath);
-                } else {
-                    unlink($storagePath);
-                }
-            }
-
-            // Create real directory if not exists
+            // Create directory if not exists
             if (!File::exists($storagePath)) {
                 File::makeDirectory($storagePath, 0755, true);
             }
 
-            // Extract directly to public/storage folder
+            // Extract directly to storage/app/public folder
             $zip->extractTo($storagePath);
             $restoredFiles = $zip->numFiles;
             $zip->close();
