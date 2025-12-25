@@ -19,6 +19,12 @@ Route::get('/', [\App\Http\Controllers\LandingController::class, 'index'])->name
 // SEO Sitemap
 Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
 
+Route::domain('api.sertiku.web.id')->group(function () {
+    Route::get('/', function () {
+        return view('pages.api');
+    })->name('api.docs.domain');
+});
+
 Route::get('/api-docs', function () {
     return view('pages.api');
 })->name('api.docs');
@@ -83,6 +89,13 @@ Route::post('/logout', [GoogleController::class, 'logout'])
 */
 
 // Master Login (separate login page)
+// Master Subdomain Routing
+Route::domain('master.sertiku.web.id')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Auth\MasterLoginController::class, 'showLoginForm'])->name('master.login.domain');
+    Route::post('/login', [\App\Http\Controllers\Auth\MasterLoginController::class, 'login'])->name('master.login.submit.domain');
+});
+
+// Fallback for Master Login (standard route)
 Route::get('/master/login', [\App\Http\Controllers\Auth\MasterLoginController::class, 'showLoginForm'])
     ->middleware('guest')
     ->name('master.login');
