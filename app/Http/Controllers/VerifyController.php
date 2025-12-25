@@ -8,7 +8,10 @@ class VerifyController extends Controller
 {
     public function index()
     {
-        return view('verifikasi.index');
+        $totalCertificates = \App\Models\Certificate::count();
+        $totalLembaga = \App\Models\User::whereIn('account_type', ['lembaga', 'institution'])->count();
+
+        return view('verifikasi.index', compact('totalCertificates', 'totalLembaga'));
     }
 
     public function check(Request $request)

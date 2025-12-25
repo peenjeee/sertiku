@@ -26,12 +26,7 @@
                     class="rounded-xl lg:rounded-2xl bg-white/5 border border-white/10 p-5 sm:p-6 lg:p-8 order-1 lg:order-2 animate-fade-in-up hover-lift">
                     <h2 class="text-lg sm:text-xl font-bold text-white mb-5 lg:mb-6">Kirim Pesan</h2>
 
-                    @if(session('success'))
-                        <div
-                            class="mb-5 lg:mb-6 rounded-lg bg-[#10B981]/20 border border-[#10B981]/30 p-3 lg:p-4 text-sm text-[#10B981]">
-                            {{ session('success') }}
-                        </div>
-                    @endif
+
 
                     <form action="{{ route('kontak.send') }}" method="POST" class="space-y-4 lg:space-y-5">
                         @csrf

@@ -295,6 +295,19 @@
                                     });
                                 } else {
                                     navigator.clipboard.writeText(url).then(() => {
+                                        // Use SweetAlert2 Toast
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'success',
+                                            title: 'Link berhasil disalin!',
+                                            showConfirmButton: false,
+                                            timer: 3000,
+                                            timerProgressBar: true,
+                                            background: '#151f32',
+                                            color: '#fff'
+                                        });
+
                                         shareText.textContent = '✓ Link berhasil disalin! Share sekarang!';
                                         setTimeout(() => {
                                             shareText.textContent = 'Tunjukkan pencapaianmu! Buat yang lain tahu SertiKu 🎉';

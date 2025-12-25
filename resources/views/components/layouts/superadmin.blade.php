@@ -257,6 +257,8 @@
     </main>
 
     @stack('scripts')
+    {{-- SweetAlert Session --}}
+    <x-sweetalert-session />
 </body>
 
 </html>

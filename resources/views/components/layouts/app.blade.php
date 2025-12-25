@@ -265,51 +265,8 @@
     <x-footer />
 
     {{-- SweetAlert untuk session messages --}}
-    @if(session('success'))
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: '{{ session('success') }}',
-                showConfirmButton: false,
-                timer: 2500,
-                timerProgressBar: true
-            });
-        </script>
-    @endif
-
-    @if(session('error'))
-        <script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops!',
-                text: '{{ session('error') }}',
-                confirmButtonColor: '#3085d6'
-            });
-        </script>
-    @endif
-
-    @if(session('warning'))
-        <script>
-            Swal.fire({
-                icon: 'warning',
-                title: 'Perhatian!',
-                text: '{{ session('warning') }}',
-                confirmButtonColor: '#f59e0b'
-            });
-        </script>
-    @endif
-
-    @if(session('info'))
-        <script>
-            Swal.fire({
-                icon: 'info',
-                title: 'Informasi',
-                text: '{{ session('info') }}',
-                confirmButtonColor: '#3085d6'
-            });
-        </script>
-    @endif
+    {{-- SweetAlert untuk session messages --}}
+    <x-sweetalert-session />
 
     {{-- Scroll Animation Script --}}
     <style>

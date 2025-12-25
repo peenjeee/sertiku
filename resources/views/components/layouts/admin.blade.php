@@ -317,11 +317,14 @@
         <aside id="sidebar" class="sidebar fixed left-0 top-0 h-screen flex flex-col z-40">
             <!-- Logo Section -->
             <div class="logo-section flex items-center gap-3 px-6 py-6 border-b border-white/10">
-                <img src="{{ asset('favicon.svg') }}" alt="SertiKu" class="w-10 h-10 flex-shrink-0">
-                <div class="logo-text">
-                    <p class="text-white font-bold text-lg">SertiKu</p>
-                    <p class="text-white/50 text-xs">Admin Dashboard</p>
-                </div>
+                <a href="{{ route('home') }}" class="flex items-center gap-3 hover:opacity-80 transition group">
+                    <img src="{{ asset('favicon.svg') }}" alt="SertiKu"
+                        class="w-10 h-10 flex-shrink-0 group-hover:scale-105 transition">
+                    <div class="logo-text">
+                        <p class="text-white font-bold text-lg">SertiKu</p>
+                        <p class="text-white/50 text-xs">Admin Dashboard</p>
+                    </div>
+                </a>
                 <button id="toggleBtn" onclick="toggleSidebar()"
                     class="ml-auto w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition hidden md:flex">
                     <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -490,45 +493,8 @@
     </script>
 
     <!-- SweetAlert2 Toast Notifications -->
-    @if(session('success'))
-        <script>
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            });
-            Toast.fire({
-                icon: 'success',
-                title: '{{ session('success') }}'
-            });
-        </script>
-    @endif
-
-    @if(session('error'))
-        <script>
-            const ToastError = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 4000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            });
-            ToastError.fire({
-                icon: 'error',
-                title: '{{ session('error') }}'
-            });
-        </script>
-    @endif
+    {{-- SweetAlert Session --}}
+    <x-sweetalert-session />
 </body>
 
 </html>

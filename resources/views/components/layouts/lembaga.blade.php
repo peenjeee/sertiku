@@ -970,6 +970,8 @@
                 .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-400 underline" target="_blank">$1</a>');
         }
     </script>
+    {{-- SweetAlert Session --}}
+    <x-sweetalert-session />
 </body>
 
 </html>

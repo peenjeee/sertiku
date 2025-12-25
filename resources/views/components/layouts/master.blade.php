@@ -278,6 +278,8 @@
     <x-admin-support-widget />
 
     @stack('scripts')
+    {{-- SweetAlert Session --}}
+    <x-sweetalert-session />
 </body>
 
 </html>

@@ -14,9 +14,7 @@ use App\Http\Controllers\VerifyController;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function () {
-    return view('landing');
-})->name('home');
+Route::get('/', [\App\Http\Controllers\LandingController::class, 'index'])->name('home');
 
 // SEO Sitemap
 Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
