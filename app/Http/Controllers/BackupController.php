@@ -523,7 +523,8 @@ class BackupController extends Controller
      */
     protected function getStorageStats()
     {
-        $storagePath = base_path('public/storage');
+        // Use the actual storage path (consistent with backup/restore)
+        $storagePath = storage_path('app/public');
 
         $totalSize = 0;
         $fileCount = 0;
