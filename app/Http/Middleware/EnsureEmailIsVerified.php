@@ -25,6 +25,11 @@ class EnsureEmailIsVerified
             return $next($request);
         }
 
+        // Skip for internal domain
+        if (str_ends_with($user->email ?? '', '@sertiku.web.id')) {
+            return $next($request);
+        }
+
         // Skip if admin/master (optional - remove if you want admins to verify too)
         // if ($user->is_admin || $user->is_master) {
         //     return $next($request);

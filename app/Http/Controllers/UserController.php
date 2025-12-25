@@ -22,9 +22,9 @@ class UserController extends Controller
 
         $stats = [
             'total_sertifikat' => $certificates->count(),
-            'terverifikasi'    => $certificates->where('status', 'active')->count(),
+            'terverifikasi' => $certificates->where('status', 'active')->count(),
             'total_verifikasi' => $certificates->sum('verification_count') ?? 0,
-            'pending'          => $certificates->where('status', 'pending')->count(),
+            'pending' => $certificates->where('status', 'pending')->count(),
         ];
 
         // Chart data - certificates by month
@@ -48,11 +48,11 @@ class UserController extends Controller
             ->map(function ($notification) {
                 $data = $notification->data;
                 return [
-                    'type'     => $data['type'] ?? 'general',
-                    'title'    => $data['title'] ?? 'Notifikasi',
+                    'type' => $data['type'] ?? 'general',
+                    'title' => $data['title'] ?? 'Notifikasi',
                     'subtitle' => $data['subtitle'] ?? '',
-                    'time'     => $notification->created_at->diffForHumans(),
-                    'read'     => $notification->read_at !== null,
+                    'time' => $notification->created_at->diffForHumans(),
+                    'read' => $notification->read_at !== null,
                 ];
             })->toArray();
 
@@ -85,8 +85,8 @@ class UserController extends Controller
         $certificates = $query->latest()->paginate(10);
 
         $stats = [
-            'total'   => Certificate::where('recipient_email', $user->email)->orWhere('user_id', $user->id)->count(),
-            'aktif'   => Certificate::where(function ($q) use ($user) {
+            'total' => Certificate::where('recipient_email', $user->email)->orWhere('user_id', $user->id)->count(),
+            'aktif' => Certificate::where(function ($q) use ($user) {
                 $q->where('recipient_email', $user->email)->orWhere('user_id', $user->id);
             })->where('status', 'active')->count(),
             'dicabut' => Certificate::where(function ($q) use ($user) {
@@ -112,9 +112,9 @@ class UserController extends Controller
         // Stats
         $stats = [
             'total_sertifikat' => $certificates->count(),
-            'terverifikasi'    => $certificates->where('status', 'active')->count(),
-            'total_lembaga'    => $certificates->pluck('user_id')->unique()->count(),
-            'total_kategori'   => $certificates->pluck('category')->filter()->unique()->count(),
+            'terverifikasi' => $certificates->where('status', 'active')->count(),
+            'total_lembaga' => $certificates->pluck('user_id')->unique()->count(),
+            'total_kategori' => $certificates->pluck('category')->filter()->unique()->count(),
         ];
 
         // Recent certificates
@@ -140,59 +140,59 @@ class UserController extends Controller
      */
     private function calculateAchievements($certificates)
     {
-        $totalCerts  = $certificates->count();
+        $totalCerts = $certificates->count();
         $activeCerts = $certificates->where('status', 'active')->count();
-        $categories  = $certificates->pluck('category')->filter()->unique()->count();
-        $lembaga     = $certificates->pluck('user_id')->unique()->count();
+        $categories = $certificates->pluck('category')->filter()->unique()->count();
+        $lembaga = $certificates->pluck('user_id')->unique()->count();
 
         return [
             [
-                'name'        => 'Pemula',
+                'name' => 'Pemula',
                 'description' => 'Dapatkan sertifikat pertama',
-                'icon'        => '🎯',
-                'unlocked'    => $totalCerts >= 1,
+                'icon' => '🎯',
+                'unlocked' => $totalCerts >= 1,
             ],
             [
-                'name'        => 'Kolektor',
+                'name' => 'Kolektor',
                 'description' => 'Kumpulkan 5 sertifikat',
-                'icon'        => '📚',
-                'unlocked'    => $totalCerts >= 5,
+                'icon' => '📚',
+                'unlocked' => $totalCerts >= 5,
             ],
             [
-                'name'        => 'Master',
+                'name' => 'Master',
                 'description' => 'Kumpulkan 10 sertifikat',
-                'icon'        => '🏆',
-                'unlocked'    => $totalCerts >= 10,
+                'icon' => '🏆',
+                'unlocked' => $totalCerts >= 10,
             ],
             [
-                'name'        => 'Terverifikasi',
+                'name' => 'Terverifikasi',
                 'description' => '3 sertifikat aktif',
-                'icon'        => '✅',
-                'unlocked'    => $activeCerts >= 3,
+                'icon' => '✅',
+                'unlocked' => $activeCerts >= 3,
             ],
             [
-                'name'        => 'Multitalenta',
+                'name' => 'Multitalenta',
                 'description' => '3 kategori berbeda',
-                'icon'        => '🌟',
-                'unlocked'    => $categories >= 3,
+                'icon' => '🌟',
+                'unlocked' => $categories >= 3,
             ],
             [
-                'name'        => 'Networker',
+                'name' => 'Networker',
                 'description' => 'Dari 3 lembaga berbeda',
-                'icon'        => '🤝',
-                'unlocked'    => $lembaga >= 3,
+                'icon' => '🤝',
+                'unlocked' => $lembaga >= 3,
             ],
             [
-                'name'        => 'Legend',
+                'name' => 'Legend',
                 'description' => 'Kumpulkan 25 sertifikat',
-                'icon'        => '👑',
-                'unlocked'    => $totalCerts >= 25,
+                'icon' => '👑',
+                'unlocked' => $totalCerts >= 25,
             ],
             [
-                'name'        => 'Elite',
+                'name' => 'Elite',
                 'description' => 'Kumpulkan 50 sertifikat',
-                'icon'        => '💎',
-                'unlocked'    => $totalCerts >= 50,
+                'icon' => '💎',
+                'unlocked' => $totalCerts >= 50,
             ],
         ];
     }
@@ -205,11 +205,11 @@ class UserController extends Controller
         $user = Auth::user();
 
         $validated = $request->validate([
-            'name'        => 'required|string|max:255',
-            'phone'       => 'nullable|string|max:50',
-            'occupation'  => 'nullable|string|max:255',
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:50',
+            'occupation' => 'nullable|string|max:255',
             'institution' => 'nullable|string|max:255',
-            'country'     => 'nullable|string|max:100',
+            'country' => 'nullable|string|max:100',
         ]);
 
         $user->update($validated);
@@ -224,12 +224,12 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'current_password' => 'required',
-            'password'         => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
         $user = Auth::user();
 
-        if (! Hash::check($validated['current_password'], $user->password)) {
+        if (!Hash::check($validated['current_password'], $user->password)) {
             return back()->withErrors(['current_password' => 'Password saat ini tidak sesuai.']);
         }
 
@@ -259,7 +259,7 @@ class UserController extends Controller
         // Store new avatar
         $path = $request->file('avatar')->store('avatars', 'public');
 
-        $user->update(['avatar' => $path]);
+        $user->update(['avatar' => '/storage/' . $path]);
 
         return redirect()->route('user.profil.edit')->with('avatar_success', 'Foto profil berhasil diperbarui!');
     }
@@ -284,7 +284,7 @@ class UserController extends Controller
      */
     public function notifikasi()
     {
-        $user          = Auth::user();
+        $user = Auth::user();
         $notifications = $user->notifications()->paginate(20);
 
         return view('user.notifikasi', compact('notifications'));

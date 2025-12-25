@@ -295,7 +295,7 @@ class AdminController extends Controller
 
         if ($request->hasFile('avatar')) {
             $path = $request->file('avatar')->store('avatars', 'public');
-            $data['avatar'] = $path;
+            $data['avatar'] = '/storage/' . $path;
         }
 
         $user->update($data);
