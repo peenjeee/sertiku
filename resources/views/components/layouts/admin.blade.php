@@ -433,7 +433,8 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="main-content flex-1 p-4 pt-16 md:pt-6 lg:p-8 relative z-10" id="mainContent">
+        <main class="main-content flex-1 p-4 pt-16 md:pt-6 lg:p-8 relative z-10 overflow-x-hidden max-w-full"
+            id="mainContent">
             {{ $slot }}
         </main>
     </div>

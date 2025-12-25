@@ -13,49 +13,51 @@
     </div>
 
     <!-- Stats Cards -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <div class="glass-card rounded-xl p-4 animate-fade-in-up stagger-1">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
+        <div class="glass-card rounded-xl p-3 sm:p-4 min-w-0 animate-fade-in-up stagger-1">
             <p class="text-gray-500 text-xs font-medium mb-1">Total</p>
-            <p class="text-gray-800 text-2xl font-bold">{{ number_format($userStats['total']) }}</p>
+            <p class="text-gray-800 text-xl sm:text-2xl font-bold">{{ number_format($userStats['total']) }}</p>
         </div>
-        <div class="glass-card rounded-xl p-4 animate-fade-in-up stagger-2">
+        <div class="glass-card rounded-xl p-3 sm:p-4 min-w-0 animate-fade-in-up stagger-2">
             <p class="text-gray-500 text-xs font-medium mb-1">Pengguna</p>
-            <p class="text-blue-600 text-2xl font-bold">{{ number_format($userStats['pengguna']) }}</p>
+            <p class="text-blue-600 text-xl sm:text-2xl font-bold">{{ number_format($userStats['pengguna']) }}</p>
         </div>
-        <div class="glass-card rounded-xl p-4 animate-fade-in-up stagger-3">
+        <div class="glass-card rounded-xl p-3 sm:p-4 min-w-0 animate-fade-in-up stagger-3">
             <p class="text-gray-500 text-xs font-medium mb-1">Lembaga</p>
-            <p class="text-green-600 text-2xl font-bold">{{ number_format($userStats['lembaga']) }}</p>
+            <p class="text-green-600 text-xl sm:text-2xl font-bold">{{ number_format($userStats['lembaga']) }}</p>
         </div>
-        <div class="glass-card rounded-xl p-4 animate-fade-in-up stagger-4">
+        <div class="glass-card rounded-xl p-3 sm:p-4 min-w-0 animate-fade-in-up stagger-4">
             <p class="text-gray-500 text-xs font-medium mb-1">Aktif</p>
-            <p class="text-purple-600 text-2xl font-bold">{{ number_format($userStats['active']) }}</p>
+            <p class="text-purple-600 text-xl sm:text-2xl font-bold">{{ number_format($userStats['active']) }}</p>
         </div>
     </div>
 
     <!-- Filters -->
-    <div class="glass-card rounded-2xl p-4 mb-6 animate-fade-in">
-        <form method="GET" class="flex flex-col md:flex-row gap-4">
-            <div class="flex-1">
+    <div class="glass-card rounded-2xl p-3 sm:p-4 mb-6 animate-fade-in">
+        <form method="GET" class="flex flex-col gap-3 sm:gap-4">
+            <div class="w-full">
                 <input type="text" name="search" value="{{ request('search') }}"
                     placeholder="Cari nama, email, atau lembaga..."
-                    class="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    class="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
-            <select name="type"
-                class="px-4 py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="">Semua Tipe</option>
-                <option value="pengguna" {{ request('type') === 'pengguna' ? 'selected' : '' }}>Pengguna</option>
-                <option value="lembaga" {{ request('type') === 'lembaga' ? 'selected' : '' }}>Lembaga</option>
-            </select>
-            <select name="status"
-                class="px-4 py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="">Semua Status</option>
-                <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Aktif</option>
-                <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
-            </select>
-            <button type="submit"
-                class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition">
-                Cari
-            </button>
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <select name="type"
+                    class="w-full sm:w-auto px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Semua Tipe</option>
+                    <option value="pengguna" {{ request('type') === 'pengguna' ? 'selected' : '' }}>Pengguna</option>
+                    <option value="lembaga" {{ request('type') === 'lembaga' ? 'selected' : '' }}>Lembaga</option>
+                </select>
+                <select name="status"
+                    class="w-full sm:w-auto px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Semua Status</option>
+                    <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Aktif</option>
+                    <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
+                </select>
+                <button type="submit"
+                    class="w-full sm:w-auto px-6 py-2.5 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition">
+                    Cari
+                </button>
+            </div>
         </form>
     </div>
 
