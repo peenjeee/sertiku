@@ -19,7 +19,8 @@ class TestimonialSeeder extends Seeder
                 'institution' => 'Universitas AMIKOM Yogyakarta',
                 'content' => '“SertiKu merevolusi cara kami menerbitkan sertifikat. Prosesnya sangat cepat dan efisien.”',
                 'initial' => 'P',
-                'rating' => 5
+                'rating' => 5,
+                'is_featured' => true,
             ],
             [
                 'name' => 'Rama Danadipa',
@@ -27,7 +28,8 @@ class TestimonialSeeder extends Seeder
                 'institution' => 'Universitas AMIKOM Yogyakarta',
                 'content' => '“Platform yang sangat membantu dalam digitalisasi sertifikat. Sistem verifikasinya sangat canggih.”',
                 'initial' => 'R',
-                'rating' => 5
+                'rating' => 5,
+                'is_featured' => true,
             ],
             [
                 'name' => 'Nakada Alpha',
@@ -35,7 +37,8 @@ class TestimonialSeeder extends Seeder
                 'institution' => 'Universitas AMIKOM Yogyakarta',
                 'content' => '“Mahasiswa seperti kami sangat terbantu dengan sertifikat digital yang bisa diverifikasi kapan saja.”',
                 'initial' => 'N',
-                'rating' => 5
+                'rating' => 5,
+                'is_featured' => true,
             ],
         ];
 

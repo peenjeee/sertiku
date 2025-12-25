@@ -24,7 +24,8 @@ class LandingController extends Controller
             ->get();
 
         // Fetch Random Testimonials
-        $testimonials = Testimonial::inRandomOrder()->take(3)->get();
+        // Fetch Random Featured Testimonials
+        $testimonials = Testimonial::where('is_featured', true)->inRandomOrder()->take(3)->get();
 
         return view('landing', compact('totalCertificates', 'totalLembaga', 'lembagas', 'testimonials'));
     }

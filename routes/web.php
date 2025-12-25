@@ -184,6 +184,10 @@ Route::post('/register/lembaga', [RegisterController::class, 'storeLembaga'])
 */
 
 Route::middleware('auth')->group(function () {
+    // Route for Feedback
+    Route::get('/feedback', [\App\Http\Controllers\FeedbackController::class, 'create'])->name('feedback.create');
+    Route::post('/feedback', [\App\Http\Controllers\FeedbackController::class, 'store'])->name('feedback.store');
+
     // Onboarding - complete profile after Google/Wallet login
     Route::get('/onboarding', [OnboardingController::class, 'show'])->name('onboarding');
     Route::post('/onboarding', [OnboardingController::class, 'store'])->name('onboarding.store');
