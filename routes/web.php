@@ -88,35 +88,7 @@ Route::post('/logout', [GoogleController::class, 'logout'])
 |--------------------------------------------------------------------------
 */
 
-// Master Login (separate login page)
-// Master Subdomain Routing
-Route::domain('master.sertiku.web.id')->group(function () {
-    Route::get('/', [\App\Http\Controllers\Auth\MasterLoginController::class, 'showLoginForm'])->name('master.login.domain');
-    Route::post('/login', [\App\Http\Controllers\Auth\MasterLoginController::class, 'login'])->name('master.login.submit.domain');
-});
 
-// Fallback for Master Login (standard route)
-Route::get('/master/login', [\App\Http\Controllers\Auth\MasterLoginController::class, 'showLoginForm'])
-    ->middleware('guest')
-    ->name('master.login');
-
-Route::post('/master/login', [\App\Http\Controllers\Auth\MasterLoginController::class, 'login'])
-    ->middleware('guest')
-    ->name('master.login.submit');
-
-Route::post('/master/logout', [\App\Http\Controllers\Auth\MasterLoginController::class, 'logout'])
-    ->middleware('auth')
-    ->name('master.logout');
-
-// Master Dashboard Routes (protected by master.only middleware)
-Route::prefix('master')->name('master.')->middleware(['auth', 'master.only'])->group(function () {
-    Route::get('/', [\App\Http\Controllers\MasterController::class, 'dashboard'])->name('dashboard');
-    Route::get('/admins', [\App\Http\Controllers\MasterController::class, 'manageAdmins'])->name('admins');
-    Route::post('/admins/{user}/promote', [\App\Http\Controllers\MasterController::class, 'promoteToAdmin'])->name('promote');
-    Route::post('/admins/{user}/demote', [\App\Http\Controllers\MasterController::class, 'demoteAdmin'])->name('demote');
-    Route::get('/settings', [\App\Http\Controllers\MasterController::class, 'settings'])->name('settings');
-    Route::get('/logs', [\App\Http\Controllers\MasterController::class, 'logs'])->name('logs');
-});
 
 // Password Reset
 Route::get('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetController::class, 'showForgotForm'])
@@ -428,32 +400,45 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
 /*
 |--------------------------------------------------------------------------
-| Master (Superadmin) Routes
+| Master (Superadmin) Subdomain Routing
 |--------------------------------------------------------------------------
 */
+Route::domain('master.sertiku.web.id')->group(function () {
 
-Route::middleware(['auth', \App\Http\Middleware\EnsureUserIsMaster::class])->prefix('master')->name('master.')->group(function () {
-    // Dashboard
-    Route::get('/', [\App\Http\Controllers\MasterController::class, 'dashboard'])->name('dashboard');
+    // Guest: Login
+    Route::middleware('guest')->group(function () {
+        Route::get('/login', [\App\Http\Controllers\Auth\MasterLoginController::class, 'showLoginForm'])->name('master.login');
+        Route::post('/login', [\App\Http\Controllers\Auth\MasterLoginController::class, 'login'])->name('master.login.submit');
+    });
 
-    // Manage Admins
-    Route::get('/admins', [\App\Http\Controllers\MasterController::class, 'manageAdmins'])->name('admins');
-    Route::post('/admins/{user}/promote', [\App\Http\Controllers\MasterController::class, 'promoteToAdmin'])->name('admins.promote');
-    Route::post('/admins/{user}/demote', [\App\Http\Controllers\MasterController::class, 'demoteAdmin'])->name('admins.demote');
+    // Auth: Dashboard & Features
+    Route::middleware(['auth', \App\Http\Middleware\EnsureUserIsMaster::class])->name('master.')->group(function () {
 
-    // Blockchain Wallet
-    Route::get('/blockchain', [\App\Http\Controllers\MasterController::class, 'blockchain'])->name('blockchain');
+        // Dashboard root
+        Route::get('/', [\App\Http\Controllers\MasterController::class, 'dashboard'])->name('dashboard');
 
-    // Settings
-    Route::get('/settings', [\App\Http\Controllers\MasterController::class, 'settings'])->name('settings');
+        // Logout
+        Route::post('/logout', [\App\Http\Controllers\Auth\MasterLoginController::class, 'logout'])->name('logout');
 
-    // Logs
-    Route::get('/logs', [\App\Http\Controllers\MasterController::class, 'logs'])->name('logs');
+        // Manage Admins
+        Route::get('/admins', [\App\Http\Controllers\MasterController::class, 'manageAdmins'])->name('admins');
+        Route::post('/admins/{user}/promote', [\App\Http\Controllers\MasterController::class, 'promoteToAdmin'])->name('admins.promote');
+        Route::post('/admins/{user}/demote', [\App\Http\Controllers\MasterController::class, 'demoteAdmin'])->name('admins.demote');
 
-    // Support Tickets (Master can see all)
-    Route::get('/support', [\App\Http\Controllers\SupportController::class, 'masterIndex'])->name('support');
-    Route::get('/support/{ticket}', [\App\Http\Controllers\SupportController::class, 'masterShow'])->name('support.show');
-    Route::post('/support/{ticket}/reply', [\App\Http\Controllers\SupportController::class, 'adminReply'])->name('support.reply');
+        // Blockchain Wallet
+        Route::get('/blockchain', [\App\Http\Controllers\MasterController::class, 'blockchain'])->name('blockchain');
+
+        // Settings
+        Route::get('/settings', [\App\Http\Controllers\MasterController::class, 'settings'])->name('settings');
+
+        // Logs
+        Route::get('/logs', [\App\Http\Controllers\MasterController::class, 'logs'])->name('logs');
+
+        // Support Tickets
+        Route::get('/support', [\App\Http\Controllers\SupportController::class, 'masterIndex'])->name('support');
+        Route::get('/support/{ticket}', [\App\Http\Controllers\SupportController::class, 'masterShow'])->name('support.show');
+        Route::post('/support/{ticket}/reply', [\App\Http\Controllers\SupportController::class, 'adminReply'])->name('support.reply');
+    });
 });
 
 /*
