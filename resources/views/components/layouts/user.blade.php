@@ -308,7 +308,7 @@
             <div class="flex items-center gap-3 mb-3">
                 <div
                     class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0 overflow-hidden">
-                    @if(auth()->user()->avatar && str_starts_with(auth()->user()->avatar, '/storage/'))
+                    @if(auth()->user()->avatar && (str_starts_with(auth()->user()->avatar, '/storage/') || str_starts_with(auth()->user()->avatar, 'http')))
                         <img src="{{ auth()->user()->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                     @else
                         <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&email={{ urlencode(auth()->user()->email) }}&background=3B82F6&color=fff&bold=true&size=40"

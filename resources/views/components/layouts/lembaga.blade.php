@@ -504,7 +504,7 @@
             <!-- Profile Section -->
             <div class="p-4 border-t border-white/10">
                 <div class="flex items-center gap-3 mb-4 profile-section">
-                    @if(Auth::user()->avatar && str_starts_with(Auth::user()->avatar, '/storage/'))
+                    @if(Auth::user()->avatar && (str_starts_with(Auth::user()->avatar, '/storage/') || str_starts_with(Auth::user()->avatar, 'http')))
                         <img src="{{ Auth::user()->avatar }}" alt="Avatar"
                             class="w-10 h-10 rounded-full object-cover flex-shrink-0">
                     @else
