@@ -2,7 +2,8 @@
 <x-layouts.superadmin title="Dashboard – Super Admin SertiKu">
 
     {{-- Welcome Banner --}}
-    <div class="rounded-2xl p-6 mb-6 animate-fade-in-up" style="background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 50%, #a855f7 100%); border: 1px solid rgba(139, 92, 246, 0.3);">
+    <div class="rounded-2xl p-6 mb-6 animate-fade-in-up"
+        style="background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 50%, #a855f7 100%); border: 1px solid rgba(139, 92, 246, 0.3);">
         <div class="flex items-center justify-between">
             <div>
                 <h1 class="text-2xl font-bold text-white mb-2">
@@ -12,11 +13,11 @@
             </div>
             <div class="hidden md:flex items-center gap-3">
                 <a href="{{ route('superadmin.admins') }}"
-                   class="px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white text-sm hover:bg-white/20 transition">
+                    class="px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white text-sm hover:bg-white/20 transition">
                     Kelola Admin
                 </a>
                 <a href="{{ route('superadmin.settings') }}"
-                   class="px-4 py-2 rounded-lg bg-white text-purple-700 font-medium text-sm hover:bg-white/90 transition">
+                    class="px-4 py-2 rounded-lg bg-white text-purple-700 font-medium text-sm hover:bg-white/90 transition">
                     Pengaturan Sistem
                 </a>
             </div>
@@ -30,7 +31,8 @@
             <div class="flex items-center justify-between mb-3">
                 <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
                     <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
                 </div>
             </div>
@@ -43,7 +45,8 @@
             <div class="flex items-center justify-between mb-3">
                 <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
                     <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
                 </div>
             </div>
@@ -56,7 +59,8 @@
             <div class="flex items-center justify-between mb-3">
                 <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center">
                     <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
                 </div>
             </div>
@@ -69,7 +73,8 @@
             <div class="flex items-center justify-between mb-3">
                 <div class="w-12 h-12 rounded-xl bg-yellow-500/20 flex items-center justify-center">
                     <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
             </div>
@@ -90,23 +95,29 @@
             </div>
             <div class="space-y-3">
                 @forelse($admins as $admin)
-                <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5">
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm
-                        {{ $admin->is_superadmin ? 'bg-gradient-to-br from-purple-500 to-pink-500' : 'bg-gradient-to-br from-blue-500 to-indigo-600' }}">
-                        {{ strtoupper(substr($admin->name, 0, 2)) }}
+                    <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5">
+                        <div
+                            class="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden
+                                {{ $admin->is_superadmin ? 'bg-gradient-to-br from-purple-500 to-pink-500' : 'bg-gradient-to-br from-blue-500 to-indigo-600' }}">
+                            @if($admin->avatar && str_starts_with($admin->avatar, '/storage/'))
+                                <img src="{{ $admin->avatar }}" alt="Avatar" class="w-full h-full object-cover">
+                            @else
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($admin->name) }}&email={{ urlencode($admin->email) }}&background={{ $admin->is_superadmin ? 'A855F7' : '3B82F6' }}&color=fff&bold=true&size=40"
+                                    alt="Avatar" class="w-full h-full object-cover">
+                            @endif
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-white font-medium text-sm truncate">{{ $admin->name }}</p>
+                            <p class="text-white/50 text-xs">{{ $admin->email }}</p>
+                        </div>
+                        @if($admin->is_superadmin)
+                            <span class="px-2 py-1 rounded-full bg-purple-500/20 text-purple-400 text-xs">Super Admin</span>
+                        @else
+                            <span class="px-2 py-1 rounded-full bg-blue-500/20 text-blue-400 text-xs">Admin</span>
+                        @endif
                     </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-white font-medium text-sm truncate">{{ $admin->name }}</p>
-                        <p class="text-white/50 text-xs">{{ $admin->email }}</p>
-                    </div>
-                    @if($admin->is_superadmin)
-                    <span class="px-2 py-1 rounded-full bg-purple-500/20 text-purple-400 text-xs">Super Admin</span>
-                    @else
-                    <span class="px-2 py-1 rounded-full bg-blue-500/20 text-blue-400 text-xs">Admin</span>
-                    @endif
-                </div>
                 @empty
-                <p class="text-white/50 text-sm text-center py-4">Belum ada admin</p>
+                    <p class="text-white/50 text-sm text-center py-4">Belum ada admin</p>
                 @endforelse
             </div>
         </div>
@@ -118,22 +129,28 @@
             </div>
             <div class="space-y-3">
                 @forelse($recentUsers as $user)
-                <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5">
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center text-white font-bold text-sm">
-                        {{ strtoupper(substr($user->name ?? 'U', 0, 2)) }}
+                    <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5">
+                        <div
+                            class="w-10 h-10 rounded-full bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center overflow-hidden">
+                            @if($user->avatar && str_starts_with($user->avatar, '/storage/'))
+                                <img src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
+                            @else
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name ?? 'U') }}&email={{ urlencode($user->email) }}&background=6B7280&color=fff&bold=true&size=40"
+                                    alt="Avatar" class="w-full h-full object-cover">
+                            @endif
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-white font-medium text-sm truncate">{{ $user->name ?? 'Unnamed' }}</p>
+                            <p class="text-white/50 text-xs">{{ $user->created_at->diffForHumans() }}</p>
+                        </div>
+                        <span class="px-2 py-1 rounded-full text-xs
+                                @if($user->account_type === 'admin') bg-blue-500/20 text-blue-400
+                                @elseif($user->account_type === 'lembaga') bg-green-500/20 text-green-400
+                                @else bg-gray-500/20 text-gray-400 @endif
+                            ">{{ ucfirst($user->account_type ?? 'user') }}</span>
                     </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-white font-medium text-sm truncate">{{ $user->name ?? 'Unnamed' }}</p>
-                        <p class="text-white/50 text-xs">{{ $user->created_at->diffForHumans() }}</p>
-                    </div>
-                    <span class="px-2 py-1 rounded-full text-xs
-                        @if($user->account_type === 'admin') bg-blue-500/20 text-blue-400
-                        @elseif($user->account_type === 'lembaga') bg-green-500/20 text-green-400
-                        @else bg-gray-500/20 text-gray-400 @endif
-                    ">{{ ucfirst($user->account_type ?? 'user') }}</span>
-                </div>
                 @empty
-                <p class="text-white/50 text-sm text-center py-4">Belum ada user</p>
+                    <p class="text-white/50 text-sm text-center py-4">Belum ada user</p>
                 @endforelse
             </div>
         </div>

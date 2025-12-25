@@ -341,4 +341,97 @@ class LembagaController extends Controller
         $status = $template->is_active ? 'diaktifkan' : 'dinonaktifkan';
         return back()->with('success', "Template berhasil {$status}.");
     }
+
+    /**
+     * Show the settings page.
+     */
+    public function settings()
+    {
+        $user = Auth::user();
+        return view('lembaga.pengaturan', compact('user'));
+    }
+
+    /**
+     * Update profile information.
+     */
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'institution_name' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'occupation' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+        ]);
+
+        $user = Auth::user();
+        $user->update($request->only(['name', 'institution_name', 'phone', 'occupation', 'city']));
+
+        return back()->with('success', 'Profil berhasil diperbarui!');
+    }
+
+    /**
+     * Update avatar.
+     */
+    public function updateAvatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
+        $user = Auth::user();
+
+        // Delete old avatar if exists and is local file
+        if ($user->avatar && str_starts_with($user->avatar, '/storage/')) {
+            Storage::disk('public')->delete(str_replace('/storage/', '', $user->avatar));
+        }
+
+        // Store new avatar
+        $path = $request->file('avatar')->store('avatars', 'public');
+
+        $user->update([
+            'avatar' => '/storage/' . $path,
+        ]);
+
+        return back()->with('success', 'Foto profil berhasil diperbarui!');
+    }
+
+    /**
+     * Remove avatar.
+     */
+    public function removeAvatar()
+    {
+        $user = Auth::user();
+
+        if ($user->avatar && str_starts_with($user->avatar, '/storage/')) {
+            Storage::disk('public')->delete(str_replace('/storage/', '', $user->avatar));
+        }
+
+        $user->update(['avatar' => null]);
+
+        return back()->with('success', 'Foto profil berhasil dihapus!');
+    }
+
+    /**
+     * Update password.
+     */
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = Auth::user();
+
+        if (!password_verify($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Password saat ini salah.']);
+        }
+
+        $user->update([
+            'password' => bcrypt($request->password),
+        ]);
+
+        return back()->with('password_success', 'Password berhasil diperbarui!');
+    }
 }

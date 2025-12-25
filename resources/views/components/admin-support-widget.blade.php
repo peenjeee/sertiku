@@ -3,12 +3,17 @@
 
 @php
     $openTickets = \App\Models\SupportTicket::whereIn('status', ['open', 'in_progress'])
-        ->with(['user:id,name,avatar', 'messages' => function($q) {
-            $q->latest()->take(1);
-        }])
-        ->withCount(['messages as unread_count' => function($q) {
-            $q->whereNull('read_at')->where('is_from_admin', false);
-        }])
+        ->with([
+            'user:id,name,avatar',
+            'messages' => function ($q) {
+                $q->latest()->take(1);
+            }
+        ])
+        ->withCount([
+            'messages as unread_count' => function ($q) {
+                $q->whereNull('read_at')->where('is_from_admin', false);
+            }
+        ])
         ->latest('last_message_at')
         ->take(10)
         ->get();
@@ -18,21 +23,24 @@
 
 <div class="fixed bottom-6 right-6 z-50" id="adminSupportWidget">
     {{-- Chat Modal --}}
-    <div id="adminSupportModal" class="hidden mb-4 w-80 sm:w-96 rounded-2xl overflow-hidden shadow-2xl border border-white/10"
+    <div id="adminSupportModal"
+        class="hidden mb-4 w-80 sm:w-96 rounded-2xl overflow-hidden shadow-2xl border border-white/10"
         style="background: linear-gradient(180deg, #0c1829 0%, #0f1f35 100%);">
 
         {{-- Header --}}
-        <div id="adminSupportHeader" class="flex items-center justify-between p-4 border-b border-white/10 bg-gradient-to-r from-green-600 to-emerald-600">
+        <div id="adminSupportHeader"
+            class="flex items-center justify-between p-4 border-b border-white/10 bg-gradient-to-r from-green-600 to-emerald-600">
             <div class="flex items-center gap-3">
-                <button onclick="backToTicketList()" id="backToListBtn" class="hidden p-1 rounded-lg hover:bg-white/20 transition">
+                <button onclick="backToTicketList()" id="backToListBtn"
+                    class="hidden p-1 rounded-lg hover:bg-white/20 transition">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
                 </button>
                 <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center" id="headerIcon">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+                            d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
                 </div>
                 <div>
@@ -42,7 +50,7 @@
             </div>
             <button onclick="toggleAdminSupport()" class="text-white/70 hover:text-white transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
         </div>
@@ -50,37 +58,44 @@
         {{-- Tickets List View --}}
         <div id="ticketListView" class="overflow-y-auto" style="max-height: 380px;">
             @forelse($openTickets as $ticket)
-            <div onclick="openTicketChat({{ $ticket->id }}, '{{ addslashes($ticket->user->name ?? 'User') }}', '{{ addslashes($ticket->subject) }}')"
-               class="block p-4 border-b border-white/5 hover:bg-white/5 transition cursor-pointer">
-                <div class="flex items-start gap-3">
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-                        {{ strtoupper(substr($ticket->user->name ?? 'U', 0, 2)) }}
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <div class="flex items-center justify-between">
-                            <p class="text-white font-medium text-sm truncate">{{ $ticket->user->name ?? 'User' }}</p>
-                            @if($ticket->unread_count > 0)
-                            <span class="w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
-                                {{ $ticket->unread_count }}
-                            </span>
+                <div onclick="openTicketChat({{ $ticket->id }}, '{{ addslashes($ticket->user->name ?? 'User') }}', '{{ addslashes($ticket->subject) }}')"
+                    class="block p-4 border-b border-white/5 hover:bg-white/5 transition cursor-pointer">
+                    <div class="flex items-start gap-3">
+                        <div
+                            class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                            @if($ticket->user->avatar && str_starts_with($ticket->user->avatar, '/storage/'))
+                                <img src="{{ $ticket->user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
+                            @else
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($ticket->user->name ?? 'U') }}&email={{ urlencode($ticket->user->email ?? '') }}&background=3B82F6&color=fff&bold=true&size=40"
+                                    alt="Avatar" class="w-full h-full object-cover">
                             @endif
                         </div>
-                        <p class="text-white/60 text-xs truncate mt-0.5">{{ $ticket->subject }}</p>
-                        <p class="text-white/40 text-xs mt-1">
-                            Tiket #{{ $ticket->id }} • {{ $ticket->last_message_at?->diffForHumans() ?? 'Baru' }}
-                        </p>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between">
+                                <p class="text-white font-medium text-sm truncate">{{ $ticket->user->name ?? 'User' }}</p>
+                                @if($ticket->unread_count > 0)
+                                    <span
+                                        class="w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
+                                        {{ $ticket->unread_count }}
+                                    </span>
+                                @endif
+                            </div>
+                            <p class="text-white/60 text-xs truncate mt-0.5">{{ $ticket->subject }}</p>
+                            <p class="text-white/40 text-xs mt-1">
+                                Tiket #{{ $ticket->id }} • {{ $ticket->last_message_at?->diffForHumans() ?? 'Baru' }}
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
             @empty
-            <div class="p-8 text-center">
-                <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-white/5 flex items-center justify-center">
-                    <svg class="w-6 h-6 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                    </svg>
+                <div class="p-8 text-center">
+                    <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-white/5 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <p class="text-white/50 text-sm">Tidak ada tiket aktif</p>
                 </div>
-                <p class="text-white/50 text-sm">Tidak ada tiket aktif</p>
-            </div>
             @endforelse
         </div>
 
@@ -100,7 +115,8 @@
                     <button onclick="sendAdminReply()"
                         class="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white hover:brightness-110 transition flex-shrink-0">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                         </svg>
                     </button>
                 </div>
@@ -113,16 +129,18 @@
         class="w-14 h-14 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300 relative">
         <svg id="adminSupportIconOpen" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+                d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
         </svg>
-        <svg id="adminSupportIconClose" class="w-6 h-6 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        <svg id="adminSupportIconClose" class="w-6 h-6 text-white hidden" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
 
         @if($totalUnread > 0)
-        <span class="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-red-500 text-white text-xs font-bold flex items-center justify-center animate-pulse">
-            {{ $totalUnread > 99 ? '99+' : $totalUnread }}
-        </span>
+            <span
+                class="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-red-500 text-white text-xs font-bold flex items-center justify-center animate-pulse">
+                {{ $totalUnread > 99 ? '99+' : $totalUnread }}
+            </span>
         @endif
     </button>
 </div>

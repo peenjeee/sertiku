@@ -8,7 +8,11 @@
     <title>Dashboard Lembaga - SertiKu</title>
 
     <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -393,7 +397,7 @@
         <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
         <!-- Sidebar -->
-        <aside class="sidebar min-h-screen flex flex-col fixed left-0 top-0 z-40" id="sidebar">
+        <aside class="sidebar h-screen flex flex-col fixed left-0 top-0 z-40 overflow-hidden" id="sidebar">
             <!-- Logo Section -->
             <div class="p-4 border-b border-white/10">
                 <div class="flex items-center justify-between logo-section">
@@ -500,14 +504,12 @@
             <!-- Profile Section -->
             <div class="p-4 border-t border-white/10">
                 <div class="flex items-center gap-3 mb-4 profile-section">
-                    @if(Auth::user()->avatar)
+                    @if(Auth::user()->avatar && str_starts_with(Auth::user()->avatar, '/storage/'))
                         <img src="{{ Auth::user()->avatar }}" alt="Avatar"
                             class="w-10 h-10 rounded-full object-cover flex-shrink-0">
                     @else
-                        <div
-                            class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold flex-shrink-0">
-                            {{ strtoupper(substr(Auth::user()->institution_name ?? Auth::user()->name ?? 'L', 0, 1)) }}
-                        </div>
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->institution_name ?? Auth::user()->name) }}&email={{ urlencode(Auth::user()->email) }}&background=3B82F6&color=fff&bold=true&size=40"
+                            alt="Avatar" class="w-10 h-10 rounded-full object-cover flex-shrink-0">
                     @endif
                     <div class="flex-1 min-w-0 profile-text">
                         <p class="text-white text-sm font-medium truncate">
@@ -524,7 +526,7 @@
                 </div>
 
                 <!-- Settings Button -->
-                <a href="{{ route('settings') }}"
+                <a href="{{ route('lembaga.settings') }}"
                     class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition mb-3"
                     title="Pengaturan">
                     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -985,6 +987,8 @@
     </script>
     {{-- SweetAlert Session --}}
     <x-sweetalert-session />
+
+    @stack('scripts')
 </body>
 
 </html>

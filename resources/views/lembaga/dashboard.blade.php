@@ -5,7 +5,8 @@
             <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h1 class="text-xl sm:text-2xl lg:text-3xl text-white font-bold mb-1 lg:mb-2">Selamat Datang,
-                        {{ Auth::user()->institution_name ?? Auth::user()->name }}! 👋</h1>
+                        {{ Auth::user()->institution_name ?? Auth::user()->name }}! 👋
+                    </h1>
                     <p class="text-[#DBEAFE] text-sm lg:text-lg">Kelola dan terbitkan sertifikat digital dengan mudah
                     </p>
                 </div>
@@ -144,24 +145,24 @@
             @endphp
 
             @if($canAccessApi)
-            <!-- API Tokens - Only for Professional/Enterprise -->
-            <a href="{{ route('lembaga.api-tokens.index') }}"
-                class="bg-gradient-to-br from-cyan-50 to-sky-100 border border-cyan-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-4">
-                <div class="flex items-center gap-3 lg:gap-4">
-                    <div
-                        class="bg-gradient-to-br from-cyan-500 to-sky-600 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-                        </svg>
+                <!-- API Tokens - Only for Professional/Enterprise -->
+                <a href="{{ route('lembaga.api-tokens.index') }}"
+                    class="bg-gradient-to-br from-cyan-50 to-sky-100 border border-cyan-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-4">
+                    <div class="flex items-center gap-3 lg:gap-4">
+                        <div
+                            class="bg-gradient-to-br from-cyan-500 to-sky-600 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-[#0E7490] font-bold text-sm lg:text-lg">API Tokens</h3>
+                            <p class="text-[#0891B2] text-xs lg:text-sm">Integrasi API</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="text-[#0E7490] font-bold text-sm lg:text-lg">API Tokens</h3>
-                        <p class="text-[#0891B2] text-xs lg:text-sm">Integrasi API</p>
-                    </div>
-                </div>
-            </a>
+                </a>
             @endif
         </div>
 
@@ -173,7 +174,8 @@
                     <div>
                         <p class="text-[#1E40AF] text-xs lg:text-sm font-medium">Total Sertifikat</p>
                         <p class="text-[#1E3A8A] text-xl lg:text-3xl font-bold mt-1">
-                            {{ number_format($stats['total_certificates'] ?? 0) }}</p>
+                            {{ number_format($stats['total_certificates'] ?? 0) }}
+                        </p>
                     </div>
                     <div
                         class="stat-icon-blue w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
@@ -192,7 +194,8 @@
                     <div>
                         <p class="text-[#166534] text-xs lg:text-sm font-medium">Sertifikat Aktif</p>
                         <p class="text-[#15803D] text-xl lg:text-3xl font-bold mt-1">
-                            {{ number_format($stats['active_certificates'] ?? 0) }}</p>
+                            {{ number_format($stats['active_certificates'] ?? 0) }}
+                        </p>
                     </div>
                     <div
                         class="stat-icon-green w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
@@ -211,7 +214,8 @@
                     <div>
                         <p class="text-[#9A3412] text-xs lg:text-sm font-medium">Bulan Ini</p>
                         <p class="text-[#C2410C] text-xl lg:text-3xl font-bold mt-1">
-                            {{ number_format($stats['certificates_this_month'] ?? 0) }}</p>
+                            {{ number_format($stats['certificates_this_month'] ?? 0) }}
+                        </p>
                     </div>
                     <div
                         class="stat-icon-orange w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
@@ -230,7 +234,8 @@
                     <div>
                         <p class="text-[#6B21A8] text-xs lg:text-sm font-medium">Total Verifikasi</p>
                         <p class="text-[#7C3AED] text-xl lg:text-3xl font-bold mt-1">
-                            {{ number_format($stats['total_verifications'] ?? 0) }}</p>
+                            {{ number_format($stats['total_verifications'] ?? 0) }}
+                        </p>
                     </div>
                     <div
                         class="stat-icon-purple w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
@@ -311,6 +316,22 @@
                                     $colors = ['from-blue-500 to-indigo-600', 'from-emerald-500 to-teal-600', 'from-purple-500 to-pink-600', 'from-orange-500 to-red-600', 'from-cyan-500 to-blue-600'];
                                     $colorIndex = $loop->index % count($colors);
                                     $initials = collect(explode(' ', $cert->recipient_name))->map(fn($n) => strtoupper(substr($n, 0, 1)))->take(2)->join('');
+
+                                    // Check if recipient is registered in system
+                                    $registeredUser = null;
+                                    $avatarUrl = null;
+
+                                    if ($cert->recipient_email) {
+                                        $registeredUser = \App\Models\User::where('email', $cert->recipient_email)->first();
+
+                                        if ($registeredUser && $registeredUser->avatar && str_starts_with($registeredUser->avatar, '/storage/')) {
+                                            // User is registered and has custom avatar
+                                            $avatarUrl = $registeredUser->avatar;
+                                        } else {
+                                            // Email exists but user not registered or no custom avatar - use UI Avatars
+                                            $avatarUrl = 'https://ui-avatars.com/api/?name=' . urlencode($cert->recipient_name) . '&email=' . urlencode($cert->recipient_email) . '&background=random&color=fff&bold=true&size=40';
+                                        }
+                                    }
                                 @endphp
                                 <tr class="border-b border-[#F1F5F9] hover:bg-[#F8FAFC] cert-row"
                                     data-status="{{ $cert->status }}" data-name="{{ strtolower($cert->recipient_name) }}"
@@ -318,12 +339,18 @@
                                     <td class="py-4 px-4">
                                         <div class="flex items-center gap-3">
                                             <div
-                                                class="w-10 h-10 rounded-full bg-gradient-to-br {{ $colors[$colorIndex] }} flex items-center justify-center text-white font-bold text-sm">
-                                                {{ $initials }}</div>
+                                                class="w-10 h-10 rounded-full bg-gradient-to-br {{ $colors[$colorIndex] }} flex items-center justify-center overflow-hidden">
+                                                @if($avatarUrl)
+                                                    <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover">
+                                                @else
+                                                    <span class="text-white font-bold text-sm">{{ $initials }}</span>
+                                                @endif
+                                            </div>
                                             <div>
                                                 <p class="text-[#1E293B] font-medium">{{ $cert->recipient_name }}</p>
                                                 <p class="text-[#94A3B8] text-sm">
-                                                    {{ $cert->recipient_email ?? 'Email tidak tersedia' }}</p>
+                                                    {{ $cert->recipient_email ?? 'Email tidak tersedia' }}
+                                                </p>
                                             </div>
                                         </div>
                                     </td>

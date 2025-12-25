@@ -5,9 +5,10 @@
         {{-- Header --}}
         <div class="flex items-center justify-between mb-6 animate-fade-in-up">
             <div class="flex items-center gap-4">
-                <a href="{{ route('master.support') }}" class="p-2 rounded-lg bg-white/10 text-white/70 hover:bg-white/20 transition">
+                <a href="{{ route('master.support') }}"
+                    class="p-2 rounded-lg bg-white/10 text-white/70 hover:bg-white/20 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
                 </a>
                 <div>
@@ -15,22 +16,23 @@
                     <p class="text-white/50 text-sm">
                         {{ $ticket->user->name }} •
                         @if($ticket->status === 'open')
-                        <span class="text-green-400">Open</span>
+                            <span class="text-green-400">Open</span>
                         @elseif($ticket->status === 'in_progress')
-                        <span class="text-yellow-400">In Progress</span>
+                            <span class="text-yellow-400">In Progress</span>
                         @else
-                        <span class="text-gray-400">Closed</span>
+                            <span class="text-gray-400">Closed</span>
                         @endif
                     </p>
                 </div>
             </div>
             @if($ticket->status !== 'closed')
-            <form action="{{ route('support.ticket.close', $ticket) }}" method="POST" class="inline">
-                @csrf
-                <button type="submit" class="px-4 py-2 rounded-lg bg-red-500/20 text-red-400 text-sm hover:bg-red-500/30 transition">
-                    Tutup Tiket
-                </button>
-            </form>
+                <form action="{{ route('support.ticket.close', $ticket) }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit"
+                        class="px-4 py-2 rounded-lg bg-red-500/20 text-red-400 text-sm hover:bg-red-500/30 transition">
+                        Tutup Tiket
+                    </button>
+                </form>
             @endif
         </div>
 
@@ -39,52 +41,60 @@
             {{-- Messages --}}
             <div class="h-[500px] overflow-y-auto p-6 space-y-4" id="chatMessages">
                 @foreach($ticket->messages as $message)
-                <div class="flex {{ $message->is_from_admin ? 'justify-end' : 'justify-start' }}">
-                    <div class="max-w-[70%]">
-                        <div class="flex items-center gap-2 mb-1 {{ $message->is_from_admin ? 'justify-end' : '' }}">
-                            @if(!$message->is_from_admin)
-                            <div class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold">
-                                {{ strtoupper(substr($message->sender->name ?? 'U', 0, 1)) }}
+                    <div class="flex {{ $message->is_from_admin ? 'justify-end' : 'justify-start' }}">
+                        <div class="max-w-[70%]">
+                            <div class="flex items-center gap-2 mb-1 {{ $message->is_from_admin ? 'justify-end' : '' }}">
+                                @if(!$message->is_from_admin)
+                                    <div
+                                        class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center overflow-hidden">
+                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($message->sender->name ?? 'U') }}&email={{ urlencode($message->sender->email ?? '') }}&background=3B82F6&color=fff&bold=true&size=24"
+                                            alt="Avatar" class="w-full h-full object-cover">
+                                    </div>
+                                @endif
+                                <span class="text-white/50 text-xs">
+                                    {{ $message->sender->name ?? 'User' }}
+                                </span>
+                                @if($message->is_from_admin)
+                                    <div
+                                        class="w-6 h-6 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center overflow-hidden">
+                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($message->sender->name ?? 'A') }}&email={{ urlencode($message->sender->email ?? '') }}&background=A855F7&color=fff&bold=true&size=24"
+                                            alt="Avatar" class="w-full h-full object-cover">
+                                    </div>
+                                @endif
                             </div>
-                            @endif
-                            <span class="text-white/50 text-xs">
-                                {{ $message->sender->name ?? 'User' }}
-                            </span>
-                            @if($message->is_from_admin)
-                            <div class="w-6 h-6 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-white text-xs font-bold">
-                                {{ strtoupper(substr($message->sender->name ?? 'A', 0, 1)) }}
+                            <div
+                                class="rounded-2xl px-4 py-3 {{ $message->is_from_admin ? 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white' : 'bg-white/10 text-white' }}">
+                                <p class="text-sm">{{ $message->message }}</p>
                             </div>
-                            @endif
+                            <p class="text-white/30 text-xs mt-1 {{ $message->is_from_admin ? 'text-right' : '' }}">
+                                {{ $message->created_at->format('d M Y H:i') }}
+                            </p>
                         </div>
-                        <div class="rounded-2xl px-4 py-3 {{ $message->is_from_admin ? 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white' : 'bg-white/10 text-white' }}">
-                            <p class="text-sm">{{ $message->message }}</p>
-                        </div>
-                        <p class="text-white/30 text-xs mt-1 {{ $message->is_from_admin ? 'text-right' : '' }}">
-                            {{ $message->created_at->format('d M Y H:i') }}
-                        </p>
                     </div>
-                </div>
                 @endforeach
             </div>
 
             {{-- Reply Form --}}
             @if($ticket->status !== 'closed')
-            <form action="{{ route('master.support.reply', $ticket) }}" method="POST" class="p-4 border-t border-white/10">
-                @csrf
-                <div class="flex gap-3">
-                    <input type="text" name="message" placeholder="Ketik balasan..." required
-                        class="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-purple-500 transition">
-                    <button type="submit" class="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-medium hover:opacity-90 transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-                        </svg>
-                    </button>
-                </div>
-            </form>
+                <form action="{{ route('master.support.reply', $ticket) }}" method="POST"
+                    class="p-4 border-t border-white/10">
+                    @csrf
+                    <div class="flex gap-3">
+                        <input type="text" name="message" placeholder="Ketik balasan..." required
+                            class="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-purple-500 transition">
+                        <button type="submit"
+                            class="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-medium hover:opacity-90 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                            </svg>
+                        </button>
+                    </div>
+                </form>
             @else
-            <div class="p-4 border-t border-white/10 text-center text-white/50">
-                Tiket ini sudah ditutup
-            </div>
+                <div class="p-4 border-t border-white/10 text-center text-white/50">
+                    Tiket ini sudah ditutup
+                </div>
             @endif
         </div>
     </div>

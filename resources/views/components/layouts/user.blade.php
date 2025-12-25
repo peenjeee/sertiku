@@ -10,7 +10,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- Favicon --}}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
 
     {{-- Google Fonts - Poppins --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -286,7 +290,7 @@
                     <span class="notification-badge">{{ $unreadCount }}</span>
                 @endif
             </a>
-            </a>
+
 
             <!-- Beri Feedback -->
             <a href="{{ route('feedback.create') }}"
@@ -303,8 +307,13 @@
         <div class="user-profile-section p-4">
             <div class="flex items-center gap-3 mb-3">
                 <div
-                    class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-                    {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 2)) }}
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0 overflow-hidden">
+                    @if(auth()->user()->avatar && str_starts_with(auth()->user()->avatar, '/storage/'))
+                        <img src="{{ auth()->user()->avatar }}" alt="Avatar" class="w-full h-full object-cover">
+                    @else
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&email={{ urlencode(auth()->user()->email) }}&background=3B82F6&color=fff&bold=true&size=40"
+                            alt="Avatar" class="w-full h-full object-cover">
+                    @endif
                 </div>
                 <div class="user-info min-w-0">
                     <p class="text-white font-medium text-sm truncate">{{ auth()->user()->name ?? 'User' }}</p>

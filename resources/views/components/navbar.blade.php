@@ -121,7 +121,7 @@
                                     </svg>
                                     Dashboard
                                 </a>
-                                <a href="{{ route('settings') }}"
+                                <!-- <a href="{{ route('settings') }}"
                                     class="flex items-center gap-2 px-4 py-2 text-sm text-[#0F172A] hover:bg-gray-100">
                                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -131,7 +131,7 @@
                                             d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     </svg>
                                     Pengaturan
-                                </a>
+                                </a> -->
                                 <div class="border-t border-gray-100 my-1"></div>
                                 <form method="POST" action="{{ route('logout') }}" id="logout-form-desktop">
                                     @csrf

@@ -100,9 +100,29 @@
                             </div>
 
                             <div class="flex items-center gap-3">
-                                <div
-                                    class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-white text-lg font-bold">
-                                    {{ strtoupper(substr($certificate->recipient_name, 0, 1)) }}
+                                @php
+                                    // Check if recipient is registered in system
+                                    $registeredUser = null;
+                                    $avatarUrl = null;
+                                    
+                                    if ($certificate->recipient_email) {
+                                        $registeredUser = \App\Models\User::where('email', $certificate->recipient_email)->first();
+                                        
+                                        if ($registeredUser && $registeredUser->avatar && str_starts_with($registeredUser->avatar, '/storage/')) {
+                                            // User is registered and has custom avatar
+                                            $avatarUrl = $registeredUser->avatar;
+                                        } else {
+                                            // Email exists but user not registered or no custom avatar - use UI Avatars
+                                            $avatarUrl = 'https://ui-avatars.com/api/?name=' . urlencode($certificate->recipient_name) . '&email=' . urlencode($certificate->recipient_email) . '&background=random&color=fff&bold=true';
+                                        }
+                                    }
+                                @endphp
+                                <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center overflow-hidden">
+                                    @if($avatarUrl)
+                                        <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover">
+                                    @else
+                                        <span class="text-white text-lg font-bold">{{ strtoupper(substr($certificate->recipient_name, 0, 1)) }}</span>
+                                    @endif
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <h3 class="text-white font-bold truncate">{{ $certificate->recipient_name }}</h3>

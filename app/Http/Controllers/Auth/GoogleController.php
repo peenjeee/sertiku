@@ -32,17 +32,34 @@ class GoogleController extends Controller
                 ->orWhere('email', $googleUser->getEmail())
                 ->first();
 
-            $isNewUser = ! $existingUser;
+            $isNewUser = !$existingUser;
 
-            $user = User::updateOrCreate(
-                ['google_id' => $googleUser->getId()],
-                [
-                    'name'   => $googleUser->getName(),
-                    'email'  => $googleUser->getEmail(),
+            // For new users, create with Google avatar
+            // For existing users, preserve their custom avatar if they have one
+            if ($isNewUser) {
+                $user = User::create([
+                    'google_id' => $googleUser->getId(),
+                    'name' => $googleUser->getName(),
+                    'email' => $googleUser->getEmail(),
                     'avatar' => $googleUser->getAvatar(),
-                    // Do NOT auto-verify email - user must verify via OTP
-                ]
-            );
+                ]);
+            } else {
+                $user = $existingUser;
+                // Update google_id if not set
+                if (!$user->google_id) {
+                    $user->google_id = $googleUser->getId();
+                }
+                // Only update avatar if user doesn't have a custom local avatar
+                // Custom avatars start with /storage/
+                if (!$user->avatar || !str_starts_with($user->avatar, '/storage/')) {
+                    $user->avatar = $googleUser->getAvatar();
+                }
+                // Update name if empty
+                if (!$user->name) {
+                    $user->name = $googleUser->getName();
+                }
+                $user->save();
+            }
 
             Auth::login($user);
 
@@ -50,7 +67,7 @@ class GoogleController extends Controller
             ActivityLog::log('login', 'Login via Google: ' . $user->email, $user);
 
             // If email not verified, send OTP and redirect to verification
-            if (! $user->email_verified_at) {
+            if (!$user->email_verified_at) {
                 // Generate and send OTP
                 $verification = EmailVerification::generateOtp($user);
                 Mail::to($user->email)->send(new OtpMail($verification));
@@ -63,7 +80,7 @@ class GoogleController extends Controller
             }
 
             // Check if profile is completed
-            if (! $user->isProfileCompleted()) {
+            if (!$user->isProfileCompleted()) {
                 return redirect()->route('onboarding')->with('info', 'Silakan lengkapi profil Anda.');
             }
 

@@ -82,8 +82,13 @@
                             <td class="py-4 px-4">
                                 <div class="flex items-center gap-3">
                                     <div
-                                        class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm">
-                                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                                        class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center overflow-hidden">
+                                        @if($user->avatar && str_starts_with($user->avatar, '/storage/'))
+                                            <img src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
+                                        @else
+                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&email={{ urlencode($user->email) }}&background=3B82F6&color=fff&bold=true&size=40"
+                                                alt="Avatar" class="w-full h-full object-cover">
+                                        @endif
                                     </div>
                                     <div>
                                         <p class="text-gray-800 font-medium text-sm">{{ $user->name }}</p>
@@ -177,8 +182,13 @@
                 <div class="p-4 hover:bg-gray-50 transition">
                     <div class="flex items-start gap-3">
                         <div
-                            class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-                            {{ strtoupper(substr($user->name, 0, 1)) }}
+                            class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                            @if($user->avatar && str_starts_with($user->avatar, '/storage/'))
+                                <img src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
+                            @else
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&email={{ urlencode($user->email) }}&background=3B82F6&color=fff&bold=true&size=40"
+                                    alt="Avatar" class="w-full h-full object-cover">
+                            @endif
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-start justify-between gap-2">

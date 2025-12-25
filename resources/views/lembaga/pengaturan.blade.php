@@ -1,20 +1,11 @@
-{{-- resources/views/user/edit-profil.blade.php --}}
-<x-layouts.user title="Edit Profil – SertiKu">
+{{-- resources/views/lembaga/pengaturan.blade.php --}}
+<x-layouts.lembaga>
+    <x-slot name="title">Pengaturan Akun – SertiKu</x-slot>
 
-    {{-- Header Banner --}}
-    <div class="welcome-banner rounded-2xl lg:rounded-3xl p-5 lg:p-8 mb-6 animate-fade-in-up">
-        <div class="flex items-center gap-4">
-            <a href="{{ route('user.profil') }}" class="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-            </a>
-            <div>
-                <h1 class="text-xl lg:text-2xl font-bold text-white">Edit Profil</h1>
-                <p class="text-white/60 mt-1">Perbarui informasi profil dan keamanan akun Anda</p>
-            </div>
-        </div>
+    {{-- Header --}}
+    <div class="mb-8 animate-fade-in">
+        <h1 class="text-2xl lg:text-3xl font-bold text-white">Pengaturan Akun</h1>
+        <p class="text-white/60 mt-2">Kelola informasi profil dan keamanan akun lembaga Anda</p>
     </div>
 
     {{-- Session Messages --}}
@@ -28,16 +19,6 @@
         </div>
     @endif
 
-    @if(session('avatar_success'))
-        <div
-            class="mb-6 p-4 rounded-xl bg-green-500/20 border border-green-500/30 text-green-400 text-sm flex items-center gap-2 animate-fade-in-up">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
-            {{ session('avatar_success') }}
-        </div>
-    @endif
-
     @if(session('password_success'))
         <div
             class="mb-6 p-4 rounded-xl bg-green-500/20 border border-green-500/30 text-green-400 text-sm flex items-center gap-2 animate-fade-in-up">
@@ -48,12 +29,22 @@
         </div>
     @endif
 
+    @if($errors->any())
+        <div class="mb-6 p-4 rounded-xl bg-red-500/20 border border-red-500/30 text-red-400 text-sm">
+            <ul class="list-disc list-inside space-y-1">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     {{-- ============================================= --}}
     {{-- SECTION 1: Foto Profil --}}
     {{-- ============================================= --}}
-    <div x-data="photoUpload()" class="glass-card rounded-2xl p-5 lg:p-6 mb-6 animate-fade-in-up">
-        <h3 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div x-data="photoUpload()" class="bg-white rounded-2xl shadow-lg p-5 lg:p-6 mb-6 animate-fade-in-up">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
@@ -65,16 +56,11 @@
             <div class="relative group">
                 <div
                     class="w-24 h-24 lg:w-28 lg:h-28 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                    @if($user->avatar)
+                    @if($user->avatar && str_starts_with($user->avatar, '/storage/'))
                         <img src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                     @else
-                        <template x-if="previewUrl">
-                            <img :src="previewUrl" alt="Avatar" class="w-full h-full object-cover">
-                        </template>
-                        <template x-if="!previewUrl">
-                            <span
-                                class="text-white font-bold text-3xl lg:text-4xl">{{ strtoupper(substr($user->name ?? 'U', 0, 1)) }}</span>
-                        </template>
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&email={{ urlencode($user->email) }}&background=3B82F6&color=fff&bold=true&size=128"
+                            alt="Avatar" class="w-full h-full object-cover">
                     @endif
                 </div>
 
@@ -92,10 +78,10 @@
 
             {{-- Upload Info --}}
             <div class="text-center sm:text-left">
-                <p class="text-white/50 text-sm">JPG, PNG atau GIF. Maksimal 2MB</p>
+                <p class="text-gray-500 text-sm">JPG, PNG atau GIF. Maksimal 2MB</p>
                 <div class="mt-3 flex flex-wrap gap-2 justify-center sm:justify-start">
                     <button type="button" @click="showModal = true"
-                        class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500/20 text-blue-400 text-sm hover:bg-blue-500/30 transition">
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 text-white text-sm hover:bg-blue-600 transition">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -103,11 +89,11 @@
                         Ubah Foto
                     </button>
                     @if($user->avatar)
-                        <form action="{{ route('user.profil.avatar.remove') }}" method="POST" class="inline">
+                        <form action="{{ route('lembaga.settings.avatar.remove') }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit"
-                                class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/20 text-red-400 text-sm hover:bg-red-500/30 transition">
+                                class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500 text-white text-sm hover:bg-red-600 transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -120,7 +106,7 @@
             </div>
         </div>
 
-        {{-- Upload Modal - Teleported to body to avoid stacking context issues --}}
+        {{-- Upload Modal - Teleported to body --}}
         <template x-teleport="body">
             <div x-show="showModal" x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
@@ -146,7 +132,7 @@
                     </div>
 
                     {{-- Modal Body --}}
-                    <form action="{{ route('user.profil.avatar') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('lembaga.settings.avatar') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="p-5">
                             {{-- Drag & Drop Zone --}}
@@ -191,7 +177,7 @@
 
                             {{-- Error Message --}}
                             <template x-if="error">
-                                <div class="mt-3 p-2 rounded-lg bg-red-500/20 border border-red-500/30 text-red-400 text-xs"
+                                <div class="mt-4 p-3 rounded-lg bg-red-500/20 border border-red-500/30 text-red-400 text-sm"
                                     x-text="error"></div>
                             </template>
                         </div>
@@ -226,75 +212,77 @@
     {{-- ============================================= --}}
     {{-- SECTION 2: Informasi Profil --}}
     {{-- ============================================= --}}
-    <div class="glass-card rounded-2xl p-5 lg:p-6 mb-6 animate-fade-in-up">
-        <h3 class="text-lg font-semibold text-white mb-6 flex items-center gap-2">
-            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="bg-white rounded-2xl shadow-lg p-5 lg:p-6 mb-6 animate-fade-in-up">
+        <h3 class="text-lg font-semibold text-gray-800 mb-6 flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
             Informasi Profil
         </h3>
 
-        <form action="{{ route('user.profil.update') }}" method="POST">
+        <form action="{{ route('lembaga.settings.update') }}" method="POST">
             @csrf
             @method('PUT')
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {{-- Nama Lengkap --}}
                 <div>
-                    <label class="block text-sm text-white mb-2">Nama Lengkap <span
-                            class="text-red-400">*</span></label>
-                    <input type="text" name="name" id="nama" value="{{ old('name', $user->name) }}"
-                        class="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+                    <label class="block text-sm text-gray-600 font-medium mb-2">Nama Lengkap <span
+                            class="text-red-500">*</span></label>
+                    <input type="text" name="name" value="{{ old('name', $user->name) }}"
+                        class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500">
                     @error('name')
-                        <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                     @enderror
+                </div>
+
+                {{-- Nama Lembaga --}}
+                <div>
+                    <label class="block text-sm text-gray-600 font-medium mb-2">Nama Lembaga</label>
+                    <input type="text" name="institution_name"
+                        value="{{ old('institution_name', $user->institution_name) }}"
+                        class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                        placeholder="Nama institusi/perusahaan">
                 </div>
 
                 {{-- Email --}}
                 <div>
-                    <label class="block text-sm text-white mb-2">Email</label>
+                    <label class="block text-sm text-gray-600 font-medium mb-2">Email</label>
                     <input type="email" value="{{ $user->email }}" disabled
-                        class="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-white/50 cursor-not-allowed">
-                    <p class="mt-1 text-xs text-white/40">Email tidak dapat diubah</p>
+                        class="w-full rounded-xl bg-gray-100 border border-gray-200 px-4 py-3 text-gray-500 cursor-not-allowed">
+                    <p class="mt-1 text-xs text-gray-400">Email tidak dapat diubah</p>
                 </div>
 
                 {{-- No. Telepon --}}
                 <div>
-                    <label class="block text-sm text-white mb-2">No. Telepon</label>
-                    <input type="text" name="phone" value="{{ old('phone', $user->phone) }}"
-                        class="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                        placeholder="+62...">
+                    <label class="block text-sm text-gray-600 font-medium mb-2">No. Telepon</label>
+                    <input type="tel" name="phone" value="{{ old('phone', $user->phone) }}"
+                        class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                        placeholder="08123456789">
                 </div>
 
                 {{-- Pekerjaan --}}
                 <div>
-                    <label class="block text-sm text-white mb-2">Pekerjaan</label>
+                    <label class="block text-sm text-gray-600 font-medium mb-2">Bidang/Industri</label>
                     <input type="text" name="occupation" value="{{ old('occupation', $user->occupation) }}"
-                        class="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                        placeholder="Contoh: Software Developer">
+                        class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                        placeholder="Contoh: Pendidikan">
                 </div>
 
-                {{-- Institusi/Perusahaan --}}
+                {{-- Kota --}}
                 <div>
-                    <label class="block text-sm text-white mb-2">Institusi/Perusahaan</label>
-                    <input type="text" name="institution" value="{{ old('institution', $user->institution) }}"
-                        class="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                        placeholder="Contoh: PT. Tech Indonesia">
-                </div>
-
-                {{-- Lokasi --}}
-                <div>
-                    <label class="block text-sm text-white mb-2">Lokasi</label>
-                    <input type="text" name="country" value="{{ old('country', $user->country) }}"
-                        class="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                        placeholder="Contoh: Jakarta, Indonesia">
+                    <label class="block text-sm text-gray-600 font-medium mb-2">Kota</label>
+                    <input type="text" name="city" value="{{ old('city', $user->city) }}"
+                        class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                        placeholder="Contoh: Jakarta">
                 </div>
             </div>
 
+            {{-- Submit Button --}}
             <div class="mt-6 flex justify-end">
                 <button type="submit"
-                    class="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium hover:brightness-110 transition">
+                    class="px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium hover:brightness-110 transition">
                     Simpan Perubahan
                 </button>
             </div>
@@ -305,57 +293,48 @@
     {{-- SECTION 3: Keamanan (Hidden for Google users) --}}
     {{-- ============================================= --}}
     @if(!$user->google_id)
-        <div class="glass-card rounded-2xl p-5 lg:p-6 animate-fade-in-up">
-            <h3 class="text-lg font-semibold text-white mb-6 flex items-center gap-2">
-                <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="bg-white rounded-2xl shadow-lg p-5 lg:p-6 animate-fade-in-up">
+            <h3 class="text-lg font-semibold text-gray-800 mb-6 flex items-center gap-2">
+                <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
                 Keamanan
             </h3>
 
-            @if($errors->has('current_password'))
-                <div class="mb-6 p-4 rounded-xl bg-red-500/20 border border-red-500/30 text-red-400 text-sm">
-                    {{ $errors->first('current_password') }}
-                </div>
-            @endif
-
-            <form action="{{ route('user.profil.password') }}" method="POST">
+            <form action="{{ route('lembaga.settings.password') }}" method="POST">
                 @csrf
                 @method('PUT')
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {{-- Password Saat Ini --}}
                     <div>
-                        <label class="block text-sm text-white mb-2">Password Saat Ini</label>
+                        <label class="block text-sm text-gray-600 font-medium mb-2">Password Saat Ini</label>
                         <input type="password" name="current_password"
-                            class="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                            class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                             placeholder="Masukkan password saat ini">
                     </div>
 
                     {{-- Password Baru --}}
                     <div>
-                        <label class="block text-sm text-white mb-2">Password Baru</label>
+                        <label class="block text-sm text-gray-600 font-medium mb-2">Password Baru</label>
                         <input type="password" name="password"
-                            class="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                            class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                             placeholder="Minimal 8 karakter">
-                        @error('password')
-                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     {{-- Konfirmasi Password --}}
                     <div>
-                        <label class="block text-sm text-white mb-2">Konfirmasi Password</label>
+                        <label class="block text-sm text-gray-600 font-medium mb-2">Konfirmasi Password</label>
                         <input type="password" name="password_confirmation"
-                            class="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                            class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                             placeholder="Ulangi password baru">
                     </div>
                 </div>
 
                 <div class="mt-6 flex items-center justify-between">
                     {{-- Security Tips --}}
-                    <div class="hidden lg:flex items-center gap-2 text-white/40 text-sm">
+                    <div class="hidden lg:flex items-center gap-2 text-gray-400 text-sm">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -392,11 +371,6 @@
                         this.isDragging = false;
                         const file = event.dataTransfer.files[0];
                         this.processFile(file);
-
-                        // Update the file input
-                        const dataTransfer = new DataTransfer();
-                        dataTransfer.items.add(file);
-                        this.$refs.fileInput.files = dataTransfer.files;
                     },
 
                     processFile(file) {
@@ -405,8 +379,8 @@
                         if (!file) return;
 
                         // Validate file type
-                        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-                        if (!allowedTypes.includes(file.type)) {
+                        const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                        if (!validTypes.includes(file.type)) {
                             this.error = 'Format file tidak didukung. Gunakan JPG, PNG, atau GIF.';
                             return;
                         }
@@ -447,4 +421,4 @@
         </script>
     @endpush
 
-</x-layouts.user>
+</x-layouts.lembaga>

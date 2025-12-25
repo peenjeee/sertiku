@@ -5,7 +5,7 @@ if (document.querySelector('meta[name="walletconnect-project-id"]')) {
     import('./web3modal.js');
 }
 
-// import Alpine from 'alpinejs';
+import Alpine from 'alpinejs';
 
-// window.Alpine = Alpine;
-// Alpine.start();
+window.Alpine = Alpine;
+Alpine.start();

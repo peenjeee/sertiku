@@ -281,6 +281,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/template', [\App\Http\Controllers\LembagaController::class, 'storeTemplate'])->name('template.store');
         Route::delete('/template/{template}', [\App\Http\Controllers\LembagaController::class, 'destroyTemplate'])->name('template.destroy');
         Route::post('/template/{template}/toggle', [\App\Http\Controllers\LembagaController::class, 'toggleTemplate'])->name('template.toggle');
+
+        // Settings/Pengaturan
+        Route::get('/pengaturan', [\App\Http\Controllers\LembagaController::class, 'settings'])->name('settings');
+        Route::put('/pengaturan/profile', [\App\Http\Controllers\LembagaController::class, 'updateProfile'])->name('settings.update');
+        Route::post('/pengaturan/avatar', [\App\Http\Controllers\LembagaController::class, 'updateAvatar'])->name('settings.avatar');
+        Route::delete('/pengaturan/avatar', [\App\Http\Controllers\LembagaController::class, 'removeAvatar'])->name('settings.avatar.remove');
+        Route::put('/pengaturan/password', [\App\Http\Controllers\LembagaController::class, 'updatePassword'])->name('settings.password');
     });
 
     // User (Personal) Routes - Only for personal (pengguna) accounts
