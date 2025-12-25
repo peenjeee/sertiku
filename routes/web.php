@@ -67,21 +67,17 @@ Route::domain('master.sertiku.web.id')->group(function () {
     });
 });
 
-/*
-|--------------------------------------------------------------------------
-| API Subdomain Routing
-|--------------------------------------------------------------------------
-*/
-Route::domain('api.sertiku.web.id')->group(function () {
-    Route::get('/', function () {
-        return view('pages.api');
-    })->name('api.docs.domain');
-});
 
 Route::get('/', [\App\Http\Controllers\LandingController::class, 'index'])->name('home');
 
 // SEO Sitemap
 Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
+
+Route::domain('api.sertiku.web.id')->group(function () {
+    Route::get('/', function () {
+        return view('pages.api');
+    })->name('api.docs.domain');
+});
 
 Route::get('/api-docs', function () {
     return view('pages.api');
@@ -146,11 +142,7 @@ Route::post('/logout', [GoogleController::class, 'logout'])
 |--------------------------------------------------------------------------
 */
 
-/*
-|--------------------------------------------------------------------------
-| MASTER AUTH & DASHBOARD (Moved to Subdomain above)
-|--------------------------------------------------------------------------
-*/
+
 
 // Password Reset
 Route::get('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetController::class, 'showForgotForm'])
@@ -463,12 +455,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/profile', [\App\Http\Controllers\AdminController::class, 'updateProfile'])->name('profile.update');
     Route::post('/profile/password', [\App\Http\Controllers\AdminController::class, 'updatePassword'])->name('profile.password');
 });
-
-/*
-|--------------------------------------------------------------------------
-| Master (Superadmin) Routes
-|--------------------------------------------------------------------------
-*/
 
 
 
