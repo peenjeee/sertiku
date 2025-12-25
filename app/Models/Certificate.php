@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class Certificate extends Model
 {
@@ -372,6 +373,9 @@ class Certificate extends Model
     /**
      * Get all file hashes as array (for blockchain/IPFS metadata).
      */
+    /**
+     * Get all file hashes as array (for blockchain/IPFS metadata).
+     */
     public function getFileHashes(): array
     {
         return [
@@ -384,5 +388,29 @@ class Certificate extends Model
                 'md5' => $this->qr_md5,
             ],
         ];
+    }
+
+    /**
+     * Generate PDF for the certificate.
+     */
+    public function generatePdf()
+    {
+        // Ensure PDF directory exists
+        if (!Storage::disk('public')->exists('certificates/pdf')) {
+            Storage::disk('public')->makeDirectory('certificates/pdf');
+        }
+
+        // Load view and generate PDF
+        $pdf = Pdf::loadView('lembaga.sertifikat.pdf', ['certificate' => $this]);
+        $pdf->setPaper('a4', 'landscape');
+
+        // Save to storage
+        $filename = 'certificates/pdf/' . $this->certificate_number . '.pdf';
+        Storage::disk('public')->put($filename, $pdf->output());
+
+        // Update model
+        $this->update(['pdf_path' => $filename]);
+
+        return $filename;
     }
 }

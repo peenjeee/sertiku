@@ -345,7 +345,8 @@ Route::get('/verifikasi', [VerifyController::class, 'index'])->name('verifikasi'
 Route::post('/verifikasi/check', [VerifyController::class, 'check'])->name('verifikasi.check');
 
 // Halaman hasil dengan hash di URL
-Route::get('/verifikasi/{hash}', [VerifyController::class, 'show'])->name('verifikasi.show');
+Route::post('/verifikasi/file', [\App\Http\Controllers\VerifyController::class, 'verifyFile'])->name('verifikasi.file');
+Route::get('/verifikasi/{hash}', [\App\Http\Controllers\VerifyController::class, 'show'])->name('verifikasi.show');
 
 // Fraud Report - Laporan Pemalsuan Sertifikat
 Route::post('/lapor-pemalsuan', [VerifyController::class, 'storeFraudReport'])->name('fraud.report.store');

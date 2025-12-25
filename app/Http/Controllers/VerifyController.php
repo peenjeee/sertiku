@@ -191,4 +191,53 @@ class VerifyController extends Controller
             'report_id' => $report->id,
         ]);
     }
+    /**
+     * Verify certificate by file upload (Hash Check)
+     */
+    public function verifyFile(Request $request)
+    {
+        $request->validate([
+            'document' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240', // Max 10MB
+        ]);
+
+        $file = $request->file('document');
+
+        // Calculate hash of uploaded file
+        $sha256 = hash_file('sha256', $file->getRealPath());
+        $md5 = hash_file('md5', $file->getRealPath());
+
+        // Find certificate by hash
+        $certificate = Certificate::where('certificate_sha256', $sha256)
+            ->orWhere('certificate_md5', $md5)
+            ->first();
+
+        if ($certificate) {
+            // Log verification
+            \App\Models\ActivityLog::log(
+                'verify_certificate',
+                "Sertifikat {$certificate->certificate_number} diverifikasi via Upload File",
+                $certificate,
+                ['ip' => request()->ip(), 'user_agent' => request()->userAgent()]
+            );
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'redirect_url' => route('verifikasi.show', $certificate->hash)
+                ]);
+            }
+
+            return redirect()->route('verifikasi.show', $certificate->hash);
+        }
+
+        // Invalid file
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Dokumen tidak dikenali atau telah dimodifikasi. Pastikan Anda mengunggah file asli (original) yang belum diedit.'
+            ]);
+        }
+
+        return back()->with('error', 'Dokumen tidak dikenali atau telah dimodifikasi.');
+    }
 }

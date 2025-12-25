@@ -59,39 +59,81 @@
                 <form id="verifyForm" class="space-y-5">
                     @csrf
 
-                    {{-- Label --}}
-                    <label class="block space-y-2">
-                        <div class="relative flex items-center text-[16px] text-white">
-                            {{-- icon gembok --}}
-                            <span class="mr-2 inline-flex h-4 w-4 items-center justify-center">
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M4.66667 7.33333V5.99999C4.66667 4.15904 5.99204 2.66666 7.66667 2.66666C9.3413 2.66666 10.6667 4.15904 10.6667 5.99999V7.33333"
-                                        stroke="white" stroke-width="1.33333" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                    <rect x="3.33333" y="7.33334" width="8.66667" height="6" rx="2" stroke="white"
-                                        stroke-width="1.33333" />
-                                </svg>
-                            </span>
-                            <span>Masukkan Kode Hash Sertifikat</span>
-                        </div>
+                    {{-- Tab Switcher --}}
+                    <div class="flex gap-4 border-b border-white/10 pb-4">
+                        <button type="button" onclick="switchTab('hash')" id="tab-hash"
+                            class="text-white border-b-2 border-blue-500 pb-2 font-medium transition">
+                            Kode Hash
+                        </button>
+                        <button type="button" onclick="switchTab('file')" id="tab-file"
+                            class="text-[#BEDBFF] hover:text-white pb-2 font-medium transition">
+                            Upload File
+                        </button>
+                    </div>
 
-                        {{-- Input --}}
-                        <div class="mt-2 flex items-center rounded-[8px]
+                    {{-- Form Hash (Default) --}}
+                    <div id="panel-hash" class="space-y-5 animate-fade-in block">
+                        <label class="block space-y-2">
+                            <div class="relative flex items-center text-[16px] text-white">
+                                <span class="mr-2 inline-flex h-4 w-4 items-center justify-center">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M4.66667 7.33333V5.99999C4.66667 4.15904 5.99204 2.66666 7.66667 2.66666C9.3413 2.66666 10.6667 4.15904 10.6667 5.99999V7.33333"
+                                            stroke="white" stroke-width="1.33333" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <rect x="3.33333" y="7.33334" width="8.66667" height="6" rx="2" stroke="white"
+                                            stroke-width="1.33333" />
+                                    </svg>
+                                </span>
+                                <span>Masukkan Kode Hash Sertifikat</span>
+                            </div>
+
+                            <div class="mt-2 flex items-center rounded-[8px]
                                        border border-[rgba(255,255,255,0.2)]
                                        bg-[rgba(255,255,255,0.10)]
                                        px-3 py-2">
-                            <input type="text" name="hash" id="hashInput" value="{{ old('hash') }}"
-                                class="w-full bg-transparent text-sm text-white placeholder:text-[rgba(255,255,255,0.5)] focus:outline-none"
-                                placeholder="Contoh: ABC123XYZ" required>
-                        </div>
-                        @error('hash')
-                            <p class="mt-1 text-xs text-[#FCA5A5]">
-                                {{ $message }}
-                            </p>
-                        @enderror
-                    </label>
+                                <input type="text" name="hash" id="hashInput" value="{{ old('hash') }}"
+                                    class="w-full bg-transparent text-sm text-white placeholder:text-[rgba(255,255,255,0.5)] focus:outline-none"
+                                    placeholder="Contoh: SERT-202412-ABCDEF" required>
+                            </div>
+                        </label>
+                    </div>
+
+                    {{-- Form File (Hidden) --}}
+                    <div id="panel-file" class="space-y-5 animate-fade-in hidden">
+                        <label class="block space-y-2">
+                            <div class="relative flex items-center text-[16px] text-white">
+                                <span class="mr-2 inline-flex h-4 w-4 items-center justify-center">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                </span>
+                                <span>Upload Dokumen Sertifikat</span>
+                            </div>
+
+                            <div class="mt-2 relative">
+                                <input type="file" id="fileInput" name="document" accept=".pdf,.jpg,.jpeg,.png"
+                                    class="hidden" onchange="updateFileName(this)">
+                                <label for="fileInput"
+                                    class="flex flex-col items-center justify-center w-full h-32 border-2 border-[rgba(255,255,255,0.2)] border-dashed rounded-[8px] cursor-pointer hover:bg-[rgba(255,255,255,0.05)] transition bg-[rgba(255,255,255,0.02)]">
+                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                        <svg class="w-8 h-8 mb-3 text-gray-400" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                                            </path>
+                                        </svg>
+                                        <p class="mb-2 text-sm text-gray-300" id="fileNameDisplay">
+                                            <span class="font-semibold">Klik untuk upload</span> atau drag & drop
+                                        </p>
+                                        <p class="text-xs text-gray-500">PDF, JPG, PNG (Max 10MB)</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </label>
+                    </div>
 
                     {{-- Tombol Verifikasi & Scan QR --}}
                     <div class="relative mt-2 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -175,9 +217,9 @@
                     @if(config('blockchain.enabled'))
                         <div class="mt-4 pt-4 border-t border-white/10">
                             <a href="{{ route('blockchain.verify') }}" class="flex items-center justify-center gap-2 w-full py-3 rounded-[8px]
-                                                           border border-purple-500/30 bg-purple-500/10
-                                                           text-purple-300 text-sm font-medium
-                                                           hover:bg-purple-500/20 transition">
+                                                               border border-purple-500/30 bg-purple-500/10
+                                                               text-purple-300 text-sm font-medium
+                                                               hover:bg-purple-500/20 transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
@@ -566,15 +608,98 @@
                 }
             });
 
-            // Form submission handler - langsung redirect ke halaman verifikasi
+            let activeTab = 'hash';
+
+            function switchTab(tab) {
+                activeTab = tab;
+                const tabHash = document.getElementById('tab-hash');
+                const tabFile = document.getElementById('tab-file');
+                const paneHash = document.getElementById('panel-hash');
+                const paneFile = document.getElementById('panel-file');
+                const inputHash = document.getElementById('hashInput');
+
+                if (tab === 'hash') {
+                    tabHash.classList.add('border-b-2', 'border-blue-500', 'text-white');
+                    tabHash.classList.remove('text-[#BEDBFF]');
+                    tabFile.classList.remove('border-b-2', 'border-blue-500', 'text-white');
+                    tabFile.classList.add('text-[#BEDBFF]');
+
+                    paneHash.classList.remove('hidden');
+                    paneFile.classList.add('hidden');
+                    inputHash.required = true;
+                } else {
+                    tabFile.classList.add('border-b-2', 'border-blue-500', 'text-white');
+                    tabFile.classList.remove('text-[#BEDBFF]');
+                    tabHash.classList.remove('border-b-2', 'border-blue-500', 'text-white');
+                    tabHash.classList.add('text-[#BEDBFF]');
+
+                    paneFile.classList.remove('hidden');
+                    paneHash.classList.add('hidden');
+                    inputHash.required = false;
+                }
+            }
+
+            function updateFileName(input) {
+                const display = document.getElementById('fileNameDisplay');
+                if (input.files && input.files[0]) {
+                    display.innerHTML = `<span class="text-white font-medium">${input.files[0].name}</span>`;
+                } else {
+                    display.innerHTML = '<span class="font-semibold">Klik untuk upload</span> atau drag & drop';
+                }
+            }
+
+            // Form submission handler
             document.getElementById('verifyForm').addEventListener('submit', function (e) {
                 e.preventDefault();
-                const hash = document.getElementById('hashInput').value.trim();
-                if (hash) {
-                    // Langsung redirect ke halaman verifikasi
-                    window.location.href = `{{ url('/verifikasi') }}/${hash}`;
+
+                if (activeTab === 'hash') {
+                    const hash = document.getElementById('hashInput').value.trim();
+                    if (hash) {
+                        window.location.href = `{{ url('/verifikasi') }}/${hash}`;
+                    } else {
+                        alert('Silakan masukkan kode hash sertifikat');
+                    }
                 } else {
-                    alert('Silakan masukkan kode hash sertifikat');
+                    // File upload
+                    const fileInput = document.getElementById('fileInput');
+                    if (!fileInput.files || !fileInput.files[0]) {
+                        alert('Silakan pilih file sertifikat terlebih dahulu');
+                        return;
+                    }
+
+                    // Show loading state
+                    const btn = document.getElementById('verifyBtn');
+                    const originalText = btn.innerHTML;
+                    btn.disabled = true;
+                    btn.innerHTML = 'Scan File...';
+
+                    const formData = new FormData();
+                    formData.append('document', fileInput.files[0]);
+                    formData.append('_token', '{{ csrf_token() }}');
+
+                    fetch('{{ route("verifikasi.file") }}', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.location.href = data.redirect_url;
+                        } else {
+                            alert(data.message || 'Verifikasi gagal');
+                            btn.disabled = false;
+                            btn.innerHTML = originalText;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan saat memproses file');
+                        btn.disabled = false;
+                        btn.innerHTML = originalText;
+                    });
                 }
             });
         </script>

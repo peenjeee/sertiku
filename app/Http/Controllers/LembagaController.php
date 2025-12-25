@@ -91,6 +91,14 @@ class LembagaController extends Controller
         // Generate QR code for the certificate
         $certificate->generateQrCode();
 
+        // Generate PDF for the certificate (Critical for File Verification)
+        try {
+            $certificate->generatePdf();
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Failed to generate PDF: " . $e->getMessage());
+            // Continue without PDF, but verifying file integrity will fail for uploaded files
+        }
+
         // Generate file hashes (SHA256/MD5) for certificate and QR
         $certificate->generateFileHashes();
 

@@ -146,67 +146,83 @@
                                     accept="image/jpeg,image/png,image/gif" class="hidden">
 
                                 <template x-if="!previewUrl">
-                                    <div>
-                                        <div
-                                            class="w-16 h-16 mx-auto mb-4 rounded-full bg-blue-500/20 flex items-center justify-center">
-                                            <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                            </svg>
+                                    <div class="flex items-center gap-6">
+                                        <div class="relative">
+                                            @if(Auth::user()->avatar && file_exists(storage_path('app/public/' . Auth::user()->avatar)))
+                                                <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="Avatar"
+                                                    class="w-24 h-24 rounded-full object-cover border-4 border-[#1E3A8F]">
+                                            @else
+                                                <div
+                                                    class="w-24 h-24 rounded-full bg-blue-500 flex items-center justify-center text-white text-3xl font-bold border-4 border-[#1E3A8F]">
+                                                    {{ substr(Auth::user()->institution_name ?? Auth::user()->name, 0, 2) }}
+                                                </div>
+                                            @endif
+
+                                            {{-- Edit Button overlay --}}
+                                            <label for="avatar-upload"
+                                                class="absolute bottom-0 right-0 bg-white p-1.5 rounded-full shadow-lg border border-gray-200 cursor-pointer hover:bg-gray-50 transition">
+                                                <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                </svg>
+                                            </label>
                                         </div>
-                                        <p class="text-white font-medium">Drag & drop foto di sini</p>
-                                        <p class="text-white/50 text-sm mt-1">atau klik untuk memilih file</p>
-                                        <p class="text-white/30 text-xs mt-3">JPG, PNG, GIF • Maks 2MB</p>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                        </svg>
                                     </div>
-                                </template>
-
-                                <template x-if="previewUrl">
-                                    <div>
-                                        <img :src="previewUrl" alt="Preview"
-                                            class="w-32 h-32 mx-auto rounded-full object-cover border-4 border-blue-500/30">
-                                        <p class="text-white font-medium mt-4" x-text="fileName"></p>
-                                        <p class="text-white/50 text-sm" x-text="fileSize"></p>
-                                        <button type="button" @click.stop="clearFile()"
-                                            class="mt-3 text-red-400 text-sm hover:text-red-300">
-                                            Pilih foto lain
-                                        </button>
-                                    </div>
-                                </template>
+                                    <p class="text-white font-medium">Drag & drop foto di sini</p>
+                                    <p class="text-white/50 text-sm mt-1">atau klik untuk memilih file</p>
+                                    <p class="text-white/30 text-xs mt-3">JPG, PNG, GIF • Maks 2MB</p>
                             </div>
+        </template>
 
-                            {{-- Error Message --}}
-                            <template x-if="error">
-                                <div class="mt-4 p-3 rounded-lg bg-red-500/20 border border-red-500/30 text-red-400 text-sm"
-                                    x-text="error"></div>
-                            </template>
-                        </div>
-
-                        {{-- Modal Footer --}}
-                        <div class="flex items-center justify-end gap-3 p-5 border-t border-white/10">
-                            <button type="button" @click="showModal = false; clearFile()"
-                                class="px-4 py-2 rounded-lg bg-white/10 text-white font-medium hover:bg-white/20 transition">
-                                Batal
-                            </button>
-                            <button type="submit" :disabled="!previewUrl || uploading"
-                                :class="previewUrl && !uploading ? 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:brightness-110' : 'bg-white/10 cursor-not-allowed'"
-                                class="px-4 py-2 rounded-lg text-white font-medium transition flex items-center gap-2">
-                                <template x-if="uploading">
-                                    <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                            stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor"
-                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                        </path>
-                                    </svg>
-                                </template>
-                                <span x-text="uploading ? 'Mengupload...' : 'Upload Foto'"></span>
-                            </button>
-                        </div>
-                    </form>
-                </div>
+        <template x-if="previewUrl">
+            <div>
+                <img :src="previewUrl" alt="Preview"
+                    class="w-32 h-32 mx-auto rounded-full object-cover border-4 border-blue-500/30">
+                <p class="text-white font-medium mt-4" x-text="fileName"></p>
+                <p class="text-white/50 text-sm" x-text="fileSize"></p>
+                <button type="button" @click.stop="clearFile()" class="mt-3 text-red-400 text-sm hover:text-red-300">
+                    Pilih foto lain
+                </button>
             </div>
         </template>
+    </div>
+
+    {{-- Error Message --}}
+    <template x-if="error">
+        <div class="mt-4 p-3 rounded-lg bg-red-500/20 border border-red-500/30 text-red-400 text-sm" x-text="error">
+        </div>
+    </template>
+    </div>
+
+    {{-- Modal Footer --}}
+    <div class="flex items-center justify-end gap-3 p-5 border-t border-white/10">
+        <button type="button" @click="showModal = false; clearFile()"
+            class="px-4 py-2 rounded-lg bg-white/10 text-white font-medium hover:bg-white/20 transition">
+            Batal
+        </button>
+        <button type="submit" :disabled="!previewUrl || uploading"
+            :class="previewUrl && !uploading ? 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:brightness-110' : 'bg-white/10 cursor-not-allowed'"
+            class="px-4 py-2 rounded-lg text-white font-medium transition flex items-center gap-2">
+            <template x-if="uploading">
+                <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                    </path>
+                </svg>
+            </template>
+            <span x-text="uploading ? 'Mengupload...' : 'Upload Foto'"></span>
+        </button>
+    </div>
+    </form>
+    </div>
+    </div>
+    </template>
     </div>
 
     {{-- ============================================= --}}
