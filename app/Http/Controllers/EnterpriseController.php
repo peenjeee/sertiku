@@ -57,6 +57,22 @@ class EnterpriseController extends Controller
         // 2. Send email notification to admin
         $this->sendEmailNotification($enterpriseData);
 
+        // 3. Log activity
+        try {
+            \App\Models\ActivityLog::log(
+                'enterprise_form',
+                'Permintaan Enterprise baru: ' . $validated['institution'],
+                null,
+                [
+                    'email' => $validated['email'],
+                    'name' => $validated['name'],
+                    'institution' => $validated['institution']
+                ]
+            );
+        } catch (\Exception $e) {
+            Log::error('Failed to log enterprise activity', ['error' => $e->getMessage()]);
+        }
+
         // Always show success to user
         return back()->with('success', 'Permintaan Anda berhasil dikirim! Tim kami akan menghubungi Anda dalam 1x24 jam.');
     }

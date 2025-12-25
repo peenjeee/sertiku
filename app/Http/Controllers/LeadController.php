@@ -56,6 +56,20 @@ class LeadController extends Controller
             ]);
 
             if ($response->successful()) {
+
+
+                // Log activity
+                try {
+                    \App\Models\ActivityLog::log(
+                        'cta_lead',
+                        'Email CTA baru: ' . $validated['email'],
+                        null,
+                        ['email' => $validated['email'], 'source' => 'landing_page']
+                    );
+                } catch (\Exception $e) {
+                    Log::error('Failed to log CTA activity', ['error' => $e->getMessage()]);
+                }
+
                 return response()->json([
                     'success' => true,
                     'message' => 'Email berhasil didaftarkan!',
@@ -117,6 +131,20 @@ class LeadController extends Controller
             ]);
 
             if ($response->successful()) {
+
+
+                // Log activity
+                try {
+                    \App\Models\ActivityLog::log(
+                        'status_notification',
+                        'Subscribe status baru: ' . $validated['email'],
+                        null,
+                        ['email' => $validated['email'], 'source' => 'status_page']
+                    );
+                } catch (\Exception $e) {
+                    Log::error('Failed to log status activity', ['error' => $e->getMessage()]);
+                }
+
                 return response()->json([
                     'success' => true,
                     'message' => 'Berhasil subscribe notifikasi status!',

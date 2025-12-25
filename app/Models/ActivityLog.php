@@ -80,6 +80,10 @@ class ActivityLog extends Model
             'verify_certificate' => '👁️',
             'backup' => '💾',
             'restore' => '📥',
+            'contact_form' => '📧',
+            'enterprise_form' => '🏢',
+            'cta_lead' => '🎣',
+            'status_notification' => '🔔',
             default => '📝',
         };
     }
@@ -102,6 +106,10 @@ class ActivityLog extends Model
             'verify_certificate' => 'green',
             'backup' => 'cyan',
             'restore' => 'orange',
+            'contact_form' => 'pink',
+            'enterprise_form' => 'indigo',
+            'cta_lead' => 'cyan',
+            'status_notification' => 'blue',
             default => 'indigo',
         };
     }

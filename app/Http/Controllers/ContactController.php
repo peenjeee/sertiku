@@ -54,6 +54,18 @@ class ContactController extends Controller
         // 2. Send email notification to admin
         $this->sendEmailNotification($contactData);
 
+        // 3. Log activity
+        try {
+            \App\Models\ActivityLog::log(
+                'contact_form',
+                'Pesan kontak baru dari: ' . $validated['email'],
+                null,
+                ['name' => $validated['name'], 'subject' => $validated['subject']]
+            );
+        } catch (\Exception $e) {
+            Log::error('Failed to log contact activity', ['error' => $e->getMessage()]);
+        }
+
         // Always show success to user
         return back()->with('success', 'Pesan Anda berhasil dikirim! Kami akan merespon secepatnya.');
     }

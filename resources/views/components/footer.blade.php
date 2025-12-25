@@ -57,7 +57,7 @@
 
                 {{-- Socials --}}
                 <div class="mt-6 flex items-center gap-3">
-                    <a href="#"
+                    <a href="https://instagram.com/sertiku.web.id" target="_blank"
                         class="flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(15,23,42,0.98)] text-[#E5E7EB] border border-[rgba(31,41,55,0.8)] hover:border-[#8EC5FF] hover:text-white transition">
                         <span class="sr-only">Instagram</span>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -71,7 +71,7 @@
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </a>
-                    <a href="#"
+                    <a href="https://tiktok.com/@sertiku.web.id" target="_blank"
                         class="flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(15,23,42,0.98)] text-[#E5E7EB] border border-[rgba(31,41,55,0.8)] hover:border-[#8EC5FF] hover:text-white transition">
                         <span class="sr-only">Tiktok</span>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -81,7 +81,7 @@
                         </svg>
 
                     </a>
-                    <a href="#"
+                    <a href="mailto:contact@sertiku.web.id"
                         class="flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(15,23,42,0.98)] text-[#E5E7EB] border border-[rgba(31,41,55,0.8)] hover:border-[#8EC5FF] hover:text-white transition">
                         <span class="sr-only">Email</span>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -94,7 +94,7 @@
                         </svg>
 
                     </a>
-                    <a href="#"
+                    <a href="https://sertiku.web.id" target="_blank"
                         class="flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(15,23,42,0.98)] text-[#E5E7EB] border border-[rgba(31,41,55,0.8)] hover:border-[#8EC5FF] hover:text-white transition">
                         <span class="sr-only">Website</span>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -116,10 +116,10 @@
             <div>
                 <h4 class="text-sm font-semibold tracking-wide text-[#F9FAFB] uppercase">Produk</h4>
                 <ul class="mt-4 space-y-3 text-sm text-[rgba(219,234,254,0.8)]">
-                    <li><a href="#fitur" class="hover:text-white transition">Beranda</a></li>
-                    <li><a href="#harga" class="hover:text-white transition">Fitur</a></li>
-                    <li><a href="#api" class="hover:text-white transition">Harga</a></li>
-                    <li><a href="#integrasi" class="hover:text-white transition">FAQ</a></li>
+                    <li><a href="{{ url('/') }}#beranda" class="hover:text-white transition">Beranda</a></li>
+                    <li><a href="{{ url('/') }}#fitur" class="hover:text-white transition">Fitur</a></li>
+                    <li><a href="{{ url('/') }}#harga" class="hover:text-white transition">Harga</a></li>
+                    <li><a href="{{ url('/') }}#faq" class="hover:text-white transition">FAQ</a></li>
                 </ul>
             </div>
 

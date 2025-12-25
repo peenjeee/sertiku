@@ -23,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'master.only' => \App\Http\Middleware\EnsureUserIsMaster::class,
             'lembaga.only' => \App\Http\Middleware\EnsureUserIsLembaga::class,
             'pengguna.only' => \App\Http\Middleware\EnsureUserIsPengguna::class,
+            'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

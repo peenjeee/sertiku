@@ -397,14 +397,15 @@
             <!-- Logo Section -->
             <div class="p-4 border-b border-white/10">
                 <div class="flex items-center justify-between logo-section">
-                    <div class="flex items-center gap-3">
+                    <a href="{{ route('home') }}" class="flex items-center gap-3 hover:opacity-80 transition group">
                         <!-- SertiKu Logo -->
-                        <img src="{{ asset('favicon.svg') }}" alt="SertiKu" class="w-10 h-10 flex-shrink-0">
+                        <img src="{{ asset('favicon.svg') }}" alt="SertiKu"
+                            class="w-10 h-10 flex-shrink-0 group-hover:scale-105 transition">
                         <div class="logo-text">
                             <h1 class="text-white font-bold text-xl tracking-tight drop-shadow-lg">SertiKu</h1>
                             <p class="text-[#BEDBFF] text-xs">Dashboard Lembaga</p>
                         </div>
-                    </div>
+                    </a>
                     <button onclick="toggleSidebar()" class="text-white/70 hover:text-white p-2 toggle-btn"
                         id="toggleBtn">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

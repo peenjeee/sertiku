@@ -48,10 +48,10 @@
 
             {{-- Menu desktop (hidden on mobile) --}}
             <div class="desktop-only-menu hidden lg:flex items-center gap-8 text-sm font-medium text-[#0F172A]">
-                <a href="#beranda" class="hover:text-[#2563EB] transition">Beranda</a>
-                <a href="#fitur" class="hover:text-[#2563EB] transition">Fitur</a>
-                <a href="#harga" class="hover:text-[#2563EB] transition">Harga</a>
-                <a href="#faq" class="hover:text-[#2563EB] transition">FAQ</a>
+                <a href="{{ url('/') }}#beranda" class="hover:text-white transition">Beranda</a>
+                <a href="{{ url('/') }}#fitur" class="hover:text-white transition">Fitur</a>
+                <a href="{{ url('/') }}#harga" class="hover:text-white transition">Harga</a>
+                <a href="{{ url('/') }}#faq" class="hover:text-white transition">FAQ</a>
             </div>
 
             {{-- Kanan desktop (hidden on mobile) --}}
@@ -101,11 +101,13 @@
                                 <div class="flex items-center gap-3">
                                     <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) }}"
                                         alt="Profile" class="h-10 w-10 rounded-full object-cover">
-                                    <div>
-                                        <p class="text-sm font-semibold text-[#0F172A]">{{ Auth::user()->name }}</p>
-                                        <p class="text-xs text-gray-500">
+                                    <div class="min-w-0 flex-1">
+                                        <p class="text-sm font-semibold text-[#0F172A] truncate"
+                                            title="{{ Auth::user()->name }}">{{ Auth::user()->name }}</p>
+                                        <p class="text-xs text-gray-500 truncate" title="{{ Auth::user()->email }}">
                                             @if(str_contains(Auth::user()->email, '@wallet.local')){{ substr(Auth::user()->email, 0, 6) }}...{{ substr(Auth::user()->wallet_address ?? Auth::user()->email, -4) }}@wallet.local
-                                            @else{{ Auth::user()->email }}@endif</p>
+                                            @else{{ Auth::user()->email }}@endif
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -183,10 +185,10 @@
     {{-- Mobile dropdown --}}
     <div x-show="open" x-transition.origin.top class="border-b border-[#CBD5E1] bg-[#F9FAFB] lg:hidden">
         <div class="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-3 text-sm font-medium text-[#0F172A]">
-            <a href="#beranda" @click="open = false" class="py-1">Beranda</a>
-            <a href="#fitur" @click="open = false" class="py-1">Fitur</a>
-            <a href="#harga" @click="open = false" class="py-1">Harga</a>
-            <a href="#faq" @click="open = false" class="py-1">FAQ</a>
+            <a href="{{ url('/') }}#beranda" @click="open = false" class="py-1">Beranda</a>
+            <a href="{{ url('/') }}#fitur" @click="open = false" class="py-1">Fitur</a>
+            <a href="{{ url('/') }}#harga" @click="open = false" class="py-1">Harga</a>
+            <a href="{{ url('/') }}#faq" @click="open = false" class="py-1">FAQ</a>
 
             <div class="mt-3 flex flex-col gap-2">
                 {{-- Verifikasi mobile --}}
@@ -213,11 +215,12 @@
                     <div class="flex items-center gap-3 rounded-[10px] border border-[#CBD5E1] bg-white px-4 py-3">
                         <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) }}"
                             alt="Profile" class="h-10 w-10 rounded-full object-cover">
-                        <div>
-                            <p class="text-sm font-semibold text-[#0F172A]">{{ Auth::user()->name }}</p>
-                            <p class="text-xs text-gray-500">
+                        <div class="min-w-0 flex-1">
+                            <p class="text-sm font-semibold text-[#0F172A] truncate">{{ Auth::user()->name }}</p>
+                            <p class="text-xs text-gray-500 truncate">
                                 @if(str_contains(Auth::user()->email, '@wallet.local')){{ substr(Auth::user()->email, 0, 6) }}...{{ substr(Auth::user()->wallet_address ?? Auth::user()->email, -4) }}@wallet.local
-                                @else{{ Auth::user()->email }}@endif</p>
+                                @else{{ Auth::user()->email }}@endif
+                            </p>
                         </div>
                     </div>
 
