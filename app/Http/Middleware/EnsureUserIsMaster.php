@@ -13,11 +13,11 @@ class EnsureUserIsMaster
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! auth()->check()) {
-            return redirect()->route('login');
+        if (!auth()->check()) {
+            return redirect()->route('master.login');
         }
 
-        if (! auth()->user()->is_master) {
+        if (!auth()->user()->is_master) {
             // Redirect based on account type
             if (auth()->user()->is_admin) {
                 return redirect()->route('admin.dashboard')
