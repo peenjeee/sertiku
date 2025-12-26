@@ -73,6 +73,15 @@ class VerifyController extends Controller
                 'ipfs_cid' => $certificate->ipfs_cid,
                 'ipfs_url' => $certificate->ipfs_url,
                 'qr_code_url' => $certificate->qr_code_path ? asset('storage/' . $certificate->qr_code_path) : null,
+                // Template positioning
+                'template_orientation' => $certificate->template->orientation ?? 'landscape',
+                'name_position_x' => $certificate->template->name_position_x ?? 50,
+                'name_position_y' => $certificate->template->name_position_y ?? 45,
+                'name_font_size' => $certificate->template->name_font_size ?? 52,
+                'name_font_color' => $certificate->template->name_font_color ?? '#1a1a1a',
+                'qr_position_x' => $certificate->template->qr_position_x ?? 90,
+                'qr_position_y' => $certificate->template->qr_position_y ?? 85,
+                'qr_size' => $certificate->template->qr_size ?? 80,
                 // File Integrity Hashes
                 'certificate_sha256' => $certificate->certificate_sha256,
                 'certificate_md5' => $certificate->certificate_md5,
@@ -165,6 +174,15 @@ class VerifyController extends Controller
                 'blockchain_status' => $certificate->blockchain_status,
                 'ipfs_cid' => $certificate->ipfs_cid,
                 'ipfs_url' => $certificate->ipfs_url,
+                // Template positioning
+                'template_orientation' => $certificate->template->orientation ?? 'landscape',
+                'name_position_x' => $certificate->template->name_position_x ?? 50,
+                'name_position_y' => $certificate->template->name_position_y ?? 45,
+                'name_font_size' => $certificate->template->name_font_size ?? 52,
+                'name_font_color' => $certificate->template->name_font_color ?? '#1a1a1a',
+                'qr_position_x' => $certificate->template->qr_position_x ?? 90,
+                'qr_position_y' => $certificate->template->qr_position_y ?? 85,
+                'qr_size' => $certificate->template->qr_size ?? 80,
             ];
 
             return view('verifikasi.valid', [

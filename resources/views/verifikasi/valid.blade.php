@@ -80,8 +80,49 @@
                     @if($certificate['template_image'] ?? null)
                         <div class="mb-8 print-only-cert print-page-break">
                             <p class="text-sm font-normal text-[#8EC5FF] mb-3 no-print text-center">Preview Sertifikat</p>
-                            <div class="rounded-xl overflow-hidden border border-[rgba(255,255,255,0.2)] bg-white">
-                                <img src="{{ $certificate['template_image'] }}" alt="Sertifikat" class="w-full h-auto">
+
+                            {{-- Font Load --}}
+                            <style>
+                                @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+                                .font-script {
+                                    font-family: 'Great Vibes', cursive;
+                                }
+                            </style>
+
+                            <div
+                                class="relative rounded-xl overflow-hidden border border-[rgba(255,255,255,0.2)] bg-white shadow-2xl">
+                                {{-- Background Image --}}
+                                <img src="{{ $certificate['template_image'] }}" alt="Sertifikat"
+                                    class="w-full h-auto block select-none">
+
+                                {{-- Overlays Container --}}
+                                <div class="absolute inset-0 pointer-events-none">
+                                    {{-- Name Overlay --}}
+                                    <div class="absolute w-full text-center"
+                                        style="top: {{ $certificate['name_position_y'] ?? 45 }}%;">
+                                        <div class="font-script transform -translate-y-1/2" style="
+                                                    color: {{ $certificate['name_font_color'] ?? '#1a1a1a' }}; 
+                                                    font-size: clamp(16px, {{ ($certificate['name_font_size'] ?? 52) / 10 }}vw, {{ ($certificate['name_font_size'] ?? 52) * 1.5 }}px);
+                                                    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                                                 ">
+                                            {{ $certificate['nama'] }}
+                                        </div>
+                                    </div>
+
+                                    {{-- QR Code Overlay --}}
+                                    @if($certificate['qr_code_url'] ?? null)
+                                        <div class="absolute bg-white p-[0.5%]" style="
+                                                        left: {{ ($certificate['qr_position_x'] ?? 90) - 2 }}%; 
+                                                        top: {{ ($certificate['qr_position_y'] ?? 85) - 2 }}%; 
+                                                        width: {{ ($certificate['qr_size'] ?? 80) / 6 }}%;
+                                                        aspect-ratio: 1/1;
+                                                        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                                                     ">
+                                            <img src="{{ $certificate['qr_code_url'] }}" class="w-full h-full object-contain">
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     @endif
