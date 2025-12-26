@@ -231,9 +231,10 @@
                     } else {
                         html += `
                             <div class="flex items-start gap-2">
-                                <div class="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                                    ${(msg.sender?.name || 'U').charAt(0).toUpperCase()}
-                                </div>
+                                ${msg.sender?.avatar
+                                ? `<img src="${msg.sender.avatar}" alt="Avatar" class="w-7 h-7 rounded-full object-cover flex-shrink-0">`
+                                : `<img src="https://ui-avatars.com/api/?name=${encodeURIComponent(msg.sender?.name || 'User')}&background=3B82F6&color=fff&bold=true&size=28" alt="Avatar" class="w-7 h-7 rounded-full object-cover flex-shrink-0">`
+                            }
                                 <div class="bg-white/10 rounded-xl rounded-tl-none px-3 py-2 max-w-[80%]">
                                     <p class="text-white text-sm">${escapeAdminHtml(msg.message)}</p>
                                     <p class="text-white/40 text-xs mt-1">${time}</p>
