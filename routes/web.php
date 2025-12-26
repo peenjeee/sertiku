@@ -280,6 +280,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/sertifikat', [\App\Http\Controllers\LembagaController::class, 'storeSertifikat'])->name('sertifikat.store');
         Route::get('/sertifikat/{certificate}', [\App\Http\Controllers\LembagaController::class, 'showSertifikat'])->name('sertifikat.show');
         Route::post('/sertifikat/{certificate}/revoke', [\App\Http\Controllers\LembagaController::class, 'revokeSertifikat'])->name('sertifikat.revoke');
+        Route::post('/sertifikat/{certificate}/reactivate', [\App\Http\Controllers\LembagaController::class, 'reactivateSertifikat'])->name('sertifikat.reactivate');
 
         // Templates
         Route::get('/template', [\App\Http\Controllers\LembagaController::class, 'indexTemplate'])->name('template.index');
@@ -294,6 +295,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/pengaturan/avatar', [\App\Http\Controllers\LembagaController::class, 'updateAvatar'])->name('settings.avatar');
         Route::delete('/pengaturan/avatar', [\App\Http\Controllers\LembagaController::class, 'removeAvatar'])->name('settings.avatar.remove');
         Route::put('/pengaturan/password', [\App\Http\Controllers\LembagaController::class, 'updatePassword'])->name('settings.password');
+
+        // Activity Log
+        Route::get('/activity-log', [\App\Http\Controllers\LembagaController::class, 'activityLog'])->name('activity-log');
     });
 
     // User (Personal) Routes - Only for personal (pengguna) accounts

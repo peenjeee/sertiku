@@ -91,7 +91,8 @@
                 </div>
 
                 <!-- File Input -->
-                <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer bg-gray-50"
+                <div id="drop-zone"
+                    class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-blue-500 transition-all duration-200 cursor-pointer bg-gray-50"
                     onclick="document.getElementById('template-file').click()">
                     <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -138,12 +139,81 @@
     </div>
 
     <script>
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('template-file');
+
+        // Update file name display
         function updateFileName(input) {
             if (input.files && input.files[0]) {
                 const fileName = input.files[0].name;
                 const fileNameEl = document.getElementById('file-name');
-                fileNameEl.textContent = '📄 ' + fileName;
+                fileNameEl.innerHTML = '<svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' + fileName;
                 fileNameEl.classList.remove('hidden');
+                dropZone.classList.add('border-green-500', 'bg-green-50');
+                dropZone.classList.remove('border-gray-300', 'bg-gray-50');
+            }
+        }
+
+        // Prevent default drag behaviors
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        // Highlight drop zone when dragging over
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            dropZone.classList.add('border-blue-500', 'bg-blue-50', 'scale-[1.02]');
+            dropZone.classList.remove('border-gray-300', 'bg-gray-50');
+        }
+
+        function unhighlight(e) {
+            dropZone.classList.remove('border-blue-500', 'bg-blue-50', 'scale-[1.02]');
+            if (!fileInput.files || !fileInput.files[0]) {
+                dropZone.classList.add('border-gray-300', 'bg-gray-50');
+            }
+        }
+
+        // Handle dropped files
+        dropZone.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+
+            if (files.length > 0) {
+                const file = files[0];
+                const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf'];
+
+                if (!validTypes.includes(file.type)) {
+                    alert('Format file tidak didukung. Gunakan PNG, JPG, atau PDF.');
+                    return;
+                }
+
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('Ukuran file terlalu besar. Maksimal 10MB.');
+                    return;
+                }
+
+                // Create a new DataTransfer to set the file
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                fileInput.files = dataTransfer.files;
+
+                // Update display
+                updateFileName(fileInput);
             }
         }
     </script>

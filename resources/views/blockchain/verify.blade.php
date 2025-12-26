@@ -61,7 +61,39 @@
         @if($query ?? false)
             {{-- Result Section --}}
             <div class="space-y-6 animate-fade-in-up stagger-3">
-                @if(($result ?? '') === 'found' && ($onChainData ?? false))
+                @php
+                    $isRevoked = ($certificate ?? false) && $certificate->status === 'revoked';
+                @endphp
+
+                @if($isRevoked)
+                    {{-- REVOKED Certificate Warning --}}
+                    <div
+                        class="rounded-[16px] overflow-hidden border-2 border-red-500/50 bg-[rgba(15,23,42,0.9)] backdrop-blur-xl">
+                        <div class="p-4 bg-red-500/20 border-b border-red-500/30 flex items-center gap-3">
+                            <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="text-red-400 font-bold text-lg flex items-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg> SERTIFIKAT DICABUT</h2>
+                                <p class="text-red-300/70 text-sm">Sertifikat ini telah DICABUT oleh penerbit dan tidak lagi
+                                    valid</p>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-white/70 mb-4">Sertifikat <strong>{{ $certificate->certificate_number }}</strong>
+                                telah dicabut pada
+                                {{ $certificate->revoked_at?->format('d F Y') ?? 'tanggal tidak diketahui' }}.
+                            </p>
+                            @if($certificate->revoked_reason)
+                                <p class="text-white/50 text-sm">Alasan: {{ $certificate->revoked_reason }}</p>
+                            @endif
+                        </div>
+                    </div>
+
+                @elseif(($result ?? '') === 'found' && ($onChainData ?? false))
                     {{-- Success: Found on Blockchain --}}
                     <div
                         class="rounded-[16px] overflow-hidden border-2 border-green-500/50 bg-[rgba(15,23,42,0.9)] backdrop-blur-xl">
@@ -109,21 +141,115 @@
                                 @endif
 
                                 @if(isset($onChainData['issuerName']) && $onChainData['issuerName'])
+                                    @php
+                                        // Extract issuer name only (before the hash separator | )
+                                        $issuerDisplay = explode(' | ', $onChainData['issuerName'])[0];
+                                    @endphp
                                     <div class="bg-white/5 rounded-xl p-4">
                                         <p class="text-white/50 text-xs mb-1">Penerbit</p>
-                                        <p class="text-white font-bold">{{ $onChainData['issuerName'] }}</p>
+                                        <p class="text-white font-bold">{{ $issuerDisplay }}</p>
                                     </div>
                                 @endif
 
                                 @if(isset($onChainData['timestamp']))
                                     <div class="bg-white/5 rounded-xl p-4">
-                                        <p class="text-white/50 text-xs mb-1">Waktu Penyimpanan Blockchain</p>
+                                        <p class="text-white/50 text-xs mb-1">Waktu Penyimpanan</p>
                                         <p class="text-white font-bold">
                                             {{ isset($onChainData['date']) ? $onChainData['date'] : date('Y-m-d H:i:s', $onChainData['timestamp']) }}
                                         </p>
                                     </div>
                                 @endif
                             </div>
+
+                            {{-- File Integrity Section --}}
+                            @if(($certificate ?? false) && ($certificate->certificate_sha256 || $certificate->certificate_md5))
+                                <div class="border-t border-white/10 pt-4 mt-4">
+                                    <h3 class="text-white/70 text-sm font-bold mb-3 flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                        </svg>
+                                        File Integrity (Integritas File)
+                                    </h3>
+
+                                    <div class="space-y-3">
+                                        {{-- PDF Hashes --}}
+                                        @if($certificate->certificate_sha256)
+                                            <div class="bg-cyan-500/10 rounded-xl p-3">
+                                                <p class="text-cyan-400 text-xs font-semibold mb-2 flex items-center gap-1"><svg
+                                                        class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                    </svg> PDF File</p>
+                                                <div class="space-y-2">
+                                                    <div class="flex flex-col">
+                                                        <span class="text-white/50 text-xs">SHA256:</span>
+                                                        <span
+                                                            class="text-cyan-300 text-xs font-mono break-all">{{ $certificate->certificate_sha256 }}</span>
+                                                    </div>
+                                                    @if($certificate->certificate_md5)
+                                                        <div class="flex flex-col">
+                                                            <span class="text-white/50 text-xs">MD5:</span>
+                                                            <span
+                                                                class="text-cyan-300 text-xs font-mono break-all">{{ $certificate->certificate_md5 }}</span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                        {{-- QR Code Hashes --}}
+                                        @if($certificate->qr_sha256)
+                                            <div class="bg-green-500/10 rounded-xl p-3">
+                                                <p class="text-green-400 text-xs font-semibold mb-2 flex items-center gap-1"><svg
+                                                        class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                                                    </svg> QR Code</p>
+                                                <div class="space-y-2">
+                                                    <div class="flex flex-col">
+                                                        <span class="text-white/50 text-xs">SHA256:</span>
+                                                        <span
+                                                            class="text-green-300 text-xs font-mono break-all">{{ $certificate->qr_sha256 }}</span>
+                                                    </div>
+                                                    @if($certificate->qr_md5)
+                                                        <div class="flex flex-col">
+                                                            <span class="text-white/50 text-xs">MD5:</span>
+                                                            <span
+                                                                class="text-green-300 text-xs font-mono break-all">{{ $certificate->qr_md5 }}</span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                        {{-- Template Hashes --}}
+                                        @if($certificate->template && $certificate->template->sha256)
+                                            <div class="bg-purple-500/10 rounded-xl p-3">
+                                                <p class="text-purple-400 text-xs font-semibold mb-2 flex items-center gap-1"><svg
+                                                        class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                                                    </svg> Template</p>
+                                                <div class="space-y-2">
+                                                    <div class="flex flex-col">
+                                                        <span class="text-white/50 text-xs">SHA256:</span>
+                                                        <span
+                                                            class="text-purple-300 text-xs font-mono break-all">{{ $certificate->template->sha256 }}</span>
+                                                    </div>
+                                                    @if($certificate->template->md5)
+                                                        <div class="flex flex-col">
+                                                            <span class="text-white/50 text-xs">MD5:</span>
+                                                            <span
+                                                                class="text-purple-300 text-xs font-mono break-all">{{ $certificate->template->md5 }}</span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
 
                             {{-- Blockchain Details --}}
                             <div class="border-t border-white/10 pt-4 mt-4">
@@ -182,6 +308,18 @@
                                                 d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                         </svg>
                                         Lihat di PolygonScan
+                                    </a>
+                                @endif
+
+                                @if(($certificate ?? false) && $certificate->ipfs_cid)
+                                    <a href="{{ $certificate->ipfs_url ?? 'https://gateway.pinata.cloud/ipfs/' . $certificate->ipfs_cid }}"
+                                        target="_blank"
+                                        class="px-4 py-2 bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 rounded-lg text-sm font-medium hover:bg-cyan-500/30 transition flex items-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                                        </svg>
+                                        Lihat di IPFS
                                     </a>
                                 @endif
 
@@ -273,8 +411,8 @@
         {{-- Contract Info --}}
         @if(isset($walletInfo) && $walletInfo)
             <div class="rounded-[16px] border border-[rgba(255,255,255,0.14)]
-                       bg-[rgba(15,23,42,0.9)]
-                       p-6 backdrop-blur-xl animate-fade-in-up stagger-4">
+                                   bg-[rgba(15,23,42,0.9)]
+                                   p-6 backdrop-blur-xl animate-fade-in-up stagger-4">
                 <h3 class="text-white font-bold mb-4 flex items-center gap-2">
                     <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -291,7 +429,8 @@
                         <div class="bg-white/5 rounded-xl p-4 text-center">
                             <p class="text-white/50 text-xs mb-1">Total Sertifikat On-Chain</p>
                             <p class="text-purple-400 font-bold text-2xl">
-                                {{ number_format($contractStats['totalCertificates']) }}</p>
+                                {{ number_format($contractStats['totalCertificates']) }}
+                            </p>
                         </div>
                     @endif
                     <div class="bg-white/5 rounded-xl p-4 text-center">

@@ -255,6 +255,19 @@
                                         Cabut
                                     </button>
                                 </form>
+                            @elseif($certificate->status === 'revoked')
+                                <form action="{{ route('lembaga.sertifikat.reactivate', $certificate) }}" method="POST" class="flex-1"
+                                    onsubmit="return confirm('Aktifkan kembali sertifikat ini?')">
+                                    @csrf
+                                    <button type="submit"
+                                        class="w-full flex items-center justify-center gap-1 py-2 bg-green-100 rounded-lg text-green-600 text-xs font-medium hover:bg-green-200 transition">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        Aktifkan
+                                    </button>
+                                </form>
                             @endif
                         </div>
                     </div>

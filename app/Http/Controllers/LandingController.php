@@ -25,8 +25,13 @@ class LandingController extends Controller
 
         // Fetch Random Testimonials
         // Fetch Random Featured Testimonials
+        // Fetch Random Featured Testimonials
         $testimonials = Testimonial::where('is_featured', true)->inRandomOrder()->take(3)->get();
 
-        return view('landing', compact('totalCertificates', 'totalLembaga', 'lembagas', 'testimonials'));
+        // Total rating/feedback count
+        $totalRatings = Testimonial::count();
+        $averageRating = Testimonial::avg('rating') ?? 0;
+
+        return view('landing', compact('totalCertificates', 'totalLembaga', 'lembagas', 'testimonials', 'totalRatings', 'averageRating'));
     }
 }

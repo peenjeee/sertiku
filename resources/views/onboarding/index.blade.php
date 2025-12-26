@@ -15,7 +15,7 @@
             <div class="relative mx-auto max-w-3xl text-white">
                 {{-- Header --}}
                 <div class="text-center mb-8">
-                    <h1 class="text-3xl md:text-4xl font-normal">Selamat Datang! 👋</h1>
+                    <h1 class="text-3xl md:text-4xl font-normal">Selamat Datang!</h1>
                     <p class="mt-2 text-[#BEDBFF] text-base md:text-lg">
                         Lengkapi profil Anda untuk mulai menggunakan SertiKu
                     </p>

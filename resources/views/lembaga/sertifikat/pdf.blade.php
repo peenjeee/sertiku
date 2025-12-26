@@ -35,38 +35,25 @@
             z-index: -1;
         }
 
-        .content {
+        /* Header info at top - horizontal layout */
+        .header-info {
             position: absolute;
-            top: 0;
+            top: 20px;
             left: 0;
             width: 100%;
-            height: 100%;
             text-align: center;
+            z-index: 10;
         }
 
-        .recipient-name {
-            font-size: 40px;
+        .header-text {
+            display: inline-block;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #ffffff;
+            font-size: 14px;
             font-weight: bold;
-            color: #1e1e1e;
-            margin-top: 280px;
-            /* Adjust based on template */
-            text-transform: uppercase;
-        }
-
-        .course-name {
-            font-size: 24px;
-            color: #4a4a4a;
-            margin-top: 20px;
-            opacity: 0.7;
-            /* Disguise/Blend middle text */
-            mix-blend-mode: multiply;
-            /* Optional: better blending if supported */
-        }
-
-        .date {
-            font-size: 16px;
-            color: #666;
-            margin-top: 40px;
+            padding: 8px 20px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
         }
 
         .qr-code {
@@ -84,10 +71,14 @@
 
         .number {
             position: absolute;
-            bottom: 30px;
-            left: 50px;
-            font-size: 12px;
-            color: #888;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 11px;
+            color: #ffffff;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 8px 0;
         }
     </style>
 </head>
@@ -99,18 +90,12 @@
             <img src="{{ public_path('storage/' . $certificate->template->file_path) }}" class="background">
         @endif
 
-        <div class="content">
-            <div class="recipient-name">
-                {{ $certificate->recipient_name }}
-            </div>
-
-            <div class="course-name">
-                Running in {{ $certificate->course_name }}
-            </div>
-
-            <div class="date">
-                Given on {{ \Carbon\Carbon::parse($certificate->issue_date)->isoFormat('D MMMM Y') }}
-            </div>
+        {{-- Header info at top: Nama • Kursus • Tanggal --}}
+        <div class="header-info">
+            <span class="header-text">
+                {{ $certificate->recipient_name }} &nbsp;•&nbsp; {{ $certificate->course_name }} &nbsp;•&nbsp;
+                {{ \Carbon\Carbon::parse($certificate->issue_date)->isoFormat('D MMMM Y') }}
+            </span>
         </div>
 
         <div class="qr-code">

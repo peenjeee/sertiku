@@ -7,13 +7,15 @@
         <div class="rounded-3xl border border-white/10 bg-gradient-to-br from-[#0F172A] to-[#1E293B] p-8 shadow-2xl">
             <!-- Header -->
             <div class="text-center mb-8">
-                <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div
+                    class="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                 </div>
                 <h1 class="text-3xl font-bold text-white mb-2">
-                    Selamat Datang, {{ auth()->user()->name }}! 👋
+                    Selamat Datang, {{ auth()->user()->name }}!
                 </h1>
                 <p class="text-[#BEDBFF]/70 text-lg">
                     Lengkapi profil Anda untuk mulai menggunakan SertiKu
@@ -25,27 +27,34 @@
                 <div class="flex items-start gap-4">
                     <div class="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center flex-shrink-0">
                         <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
                     <div>
                         <h3 class="text-white font-bold text-lg mb-2">Mengapa perlu melengkapi profil?</h3>
                         <ul class="text-[#BEDBFF]/80 space-y-2 text-sm">
                             <li class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
                                 </svg>
                                 Akses fitur sesuai jenis akun Anda
                             </li>
                             <li class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
                                 </svg>
                                 Terbitkan atau terima sertifikat digital
                             </li>
                             <li class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
                                 </svg>
                                 Kelola dan verifikasi sertifikat dengan mudah
                             </li>
@@ -59,13 +68,14 @@
                 <h2 class="text-white font-bold text-xl mb-4 text-center">Pilih Jenis Akun Anda</h2>
                 <div class="grid md:grid-cols-2 gap-4 mb-6">
                     <!-- Personal Account -->
-                    <div onclick="selectAccountType('personal')"
-                         id="card-personal"
-                         class="account-card bg-gradient-to-br from-emerald-500/10 to-green-600/5 border-2 border-emerald-500/30 rounded-2xl p-6 hover:border-emerald-400 transition cursor-pointer group">
+                    <div onclick="selectAccountType('personal')" id="card-personal"
+                        class="account-card bg-gradient-to-br from-emerald-500/10 to-green-600/5 border-2 border-emerald-500/30 rounded-2xl p-6 hover:border-emerald-400 transition cursor-pointer group">
                         <div class="flex items-center gap-4 mb-4">
-                            <div class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full flex items-center justify-center group-hover:scale-110 transition">
+                            <div
+                                class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full flex items-center justify-center group-hover:scale-110 transition">
                                 <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
                             </div>
                             <div>
@@ -73,13 +83,16 @@
                                 <p class="text-emerald-300/60 text-sm">Untuk individu</p>
                             </div>
                             <div class="ml-auto hidden" id="check-personal">
-                                <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                             </div>
                         </div>
                         <p class="text-[#BEDBFF]/70 text-sm mb-4">
-                            Cocok untuk Anda yang ingin menerima, menyimpan, dan membagikan sertifikat digital dari berbagai lembaga.
+                            Cocok untuk Anda yang ingin menerima, menyimpan, dan membagikan sertifikat digital dari
+                            berbagai lembaga.
                         </p>
                         <ul class="text-[#BEDBFF]/60 text-xs space-y-1">
                             <li>✓ Simpan sertifikat di portofolio</li>
@@ -89,13 +102,14 @@
                     </div>
 
                     <!-- Institution Account -->
-                    <div onclick="selectAccountType('institution')"
-                         id="card-institution"
-                         class="account-card bg-gradient-to-br from-blue-500/10 to-indigo-600/5 border-2 border-blue-500/30 rounded-2xl p-6 hover:border-blue-400 transition cursor-pointer group">
+                    <div onclick="selectAccountType('institution')" id="card-institution"
+                        class="account-card bg-gradient-to-br from-blue-500/10 to-indigo-600/5 border-2 border-blue-500/30 rounded-2xl p-6 hover:border-blue-400 transition cursor-pointer group">
                         <div class="flex items-center gap-4 mb-4">
-                            <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center group-hover:scale-110 transition">
+                            <div
+                                class="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center group-hover:scale-110 transition">
                                 <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                 </svg>
                             </div>
                             <div>
@@ -103,8 +117,10 @@
                                 <p class="text-blue-300/60 text-sm">Untuk organisasi</p>
                             </div>
                             <div class="ml-auto hidden" id="check-institution">
-                                <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                             </div>
                         </div>
@@ -120,13 +136,12 @@
                 </div>
 
                 <!-- Continue Button -->
-                <button onclick="goToStep2()"
-                        id="btn-continue"
-                        disabled
-                        class="w-full py-4 px-6 bg-gradient-to-r from-gray-600 to-gray-700 text-white/50 font-bold text-center rounded-xl transition cursor-not-allowed">
+                <button onclick="goToStep2()" id="btn-continue" disabled
+                    class="w-full py-4 px-6 bg-gradient-to-r from-gray-600 to-gray-700 text-white/50 font-bold text-center rounded-xl transition cursor-not-allowed">
                     <span class="flex items-center justify-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 7l5 5m0 0l-5 5m5-5H6" />
                         </svg>
                         Pilih jenis akun terlebih dahulu
                     </span>
@@ -136,9 +151,10 @@
             <!-- Step 2: Personal Form -->
             <div id="step2-personal" class="hidden">
                 <div class="flex items-center gap-3 mb-6">
-                    <button onclick="goBackToStep1()" class="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-lg transition">
+                    <button onclick="goBackToStep1()"
+                        class="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-lg transition">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                         </svg>
                     </button>
                     <h2 class="text-white font-bold text-xl">Lengkapi Profil Personal</h2>
@@ -152,12 +168,12 @@
                         <div>
                             <label class="block text-white/80 text-sm font-medium mb-2">Nama Lengkap *</label>
                             <input type="text" name="name" value="{{ auth()->user()->name }}" required
-                                   class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                                class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
                         </div>
                         <div>
                             <label class="block text-white/80 text-sm font-medium mb-2">Nomor Telepon</label>
                             <input type="tel" name="phone" placeholder="08xxxxxxxxxx"
-                                   class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                                class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
                         </div>
                     </div>
 
@@ -165,33 +181,37 @@
                         <div>
                             <label class="block text-white/80 text-sm font-medium mb-2">Pekerjaan</label>
                             <input type="text" name="occupation" placeholder="Contoh: Software Engineer"
-                                   class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                                class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
                         </div>
                         <div>
                             <label class="block text-white/80 text-sm font-medium mb-2">Instansi/Perusahaan</label>
                             <input type="text" name="user_institution" placeholder="Nama tempat Anda bekerja/belajar"
-                                   class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                                class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-white/80 text-sm font-medium mb-2">Kota</label>
                         <input type="text" name="city" placeholder="Kota tempat tinggal"
-                               class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                            class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
                     </div>
 
                     <button type="submit" id="btn-submit-personal"
-                            class="w-full py-4 px-6 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold text-center rounded-xl shadow-lg shadow-emerald-500/25 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        class="w-full py-4 px-6 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold text-center rounded-xl shadow-lg shadow-emerald-500/25 transition disabled:opacity-50 disabled:cursor-not-allowed">
                         <span class="btn-text flex items-center justify-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
                             </svg>
                             Simpan & Lanjutkan ke Dashboard
                         </span>
                         <span class="btn-loading hidden flex items-center justify-center gap-2">
                             <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
                             </svg>
                             Menyimpan...
                         </span>
@@ -202,9 +222,10 @@
             <!-- Step 2: Institution Form -->
             <div id="step2-institution" class="hidden">
                 <div class="flex items-center gap-3 mb-6">
-                    <button onclick="goBackToStep1()" class="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-lg transition">
+                    <button onclick="goBackToStep1()"
+                        class="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-lg transition">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                         </svg>
                     </button>
                     <h2 class="text-white font-bold text-xl">Lengkapi Profil Lembaga</h2>
@@ -218,7 +239,8 @@
                     <div class="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 mb-4">
                         <h3 class="text-blue-400 font-bold mb-3 flex items-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5" />
                             </svg>
                             Informasi Lembaga
                         </h3>
@@ -226,12 +248,12 @@
                             <div>
                                 <label class="block text-white/80 text-sm font-medium mb-2">Nama Lembaga *</label>
                                 <input type="text" name="institution_name" placeholder="Nama resmi lembaga" required
-                                       class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                                    class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
                             </div>
                             <div>
                                 <label class="block text-white/80 text-sm font-medium mb-2">Jenis Lembaga *</label>
                                 <select name="institution_type" required
-                                        class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white focus:outline-none focus:border-blue-500">
+                                    class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white focus:outline-none focus:border-blue-500">
                                     <option value="" class="bg-gray-800">Pilih jenis</option>
                                     <option value="university" class="bg-gray-800">Universitas/Perguruan Tinggi</option>
                                     <option value="school" class="bg-gray-800">Sekolah</option>
@@ -246,12 +268,12 @@
                             <div>
                                 <label class="block text-white/80 text-sm font-medium mb-2">Website</label>
                                 <input type="url" name="website" placeholder="https://contoh.com"
-                                       class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                                    class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
                             </div>
                             <div>
                                 <label class="block text-white/80 text-sm font-medium mb-2">Kota *</label>
                                 <input type="text" name="city" placeholder="Kota lokasi lembaga" required
-                                       class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                                    class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
                             </div>
                         </div>
                     </div>
@@ -260,7 +282,8 @@
                     <div class="bg-purple-500/10 border border-purple-500/20 rounded-xl p-4">
                         <h3 class="text-purple-400 font-bold mb-3 flex items-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                             Informasi Admin/PIC
                         </h3>
@@ -268,33 +291,37 @@
                             <div>
                                 <label class="block text-white/80 text-sm font-medium mb-2">Nama Admin *</label>
                                 <input type="text" name="admin_name" value="{{ auth()->user()->name }}" required
-                                       class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                                    class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
                             </div>
                             <div>
                                 <label class="block text-white/80 text-sm font-medium mb-2">Jabatan</label>
                                 <input type="text" name="admin_position" placeholder="Contoh: Manager HRD"
-                                       class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                                    class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
                             </div>
                         </div>
                         <div class="mt-4">
                             <label class="block text-white/80 text-sm font-medium mb-2">Nomor Telepon Admin</label>
                             <input type="tel" name="admin_phone" placeholder="08xxxxxxxxxx"
-                                   class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
+                                class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500">
                         </div>
                     </div>
 
                     <button type="submit" id="btn-submit-institution"
-                            class="w-full py-4 px-6 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-center rounded-xl shadow-lg shadow-blue-500/25 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        class="w-full py-4 px-6 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-center rounded-xl shadow-lg shadow-blue-500/25 transition disabled:opacity-50 disabled:cursor-not-allowed">
                         <span class="btn-text flex items-center justify-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
                             </svg>
                             Simpan & Lanjutkan ke Dashboard Lembaga
                         </span>
                         <span class="btn-loading hidden flex items-center justify-center gap-2">
                             <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
                             </svg>
                             Menyimpan...
                         </span>
@@ -315,25 +342,25 @@
         function showToast(type, message, countdown = 0, redirectUrl = null) {
             const container = document.getElementById('toast-container');
             const toastId = 'toast-' + Date.now();
-            
-            const bgColor = type === 'success' 
-                ? 'bg-gradient-to-r from-emerald-500 to-green-600' 
+
+            const bgColor = type === 'success'
+                ? 'bg-gradient-to-r from-emerald-500 to-green-600'
                 : 'bg-gradient-to-r from-red-500 to-rose-600';
-            
-            const icon = type === 'success' 
+
+            const icon = type === 'success'
                 ? `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                    </svg>`
                 : `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                    </svg>`;
-            
-            const countdownHtml = countdown > 0 
+
+            const countdownHtml = countdown > 0
                 ? `<div class="mt-2 text-sm opacity-90">
                        Mengarahkan ke dashboard dalam <span id="${toastId}-countdown" class="font-bold">${countdown}</span> detik...
                    </div>`
                 : '';
-            
+
             const toast = document.createElement('div');
             toast.id = toastId;
             toast.className = `${bgColor} text-white px-5 py-4 rounded-xl shadow-2xl flex items-start gap-3 min-w-[320px] max-w-[400px] transform translate-x-full transition-transform duration-300`;
@@ -349,23 +376,23 @@
                     </svg>
                 </button>
             `;
-            
+
             container.appendChild(toast);
-            
+
             // Animate in
             setTimeout(() => {
                 toast.classList.remove('translate-x-full');
             }, 10);
-            
+
             // Handle countdown
             if (countdown > 0 && redirectUrl) {
                 let remaining = countdown;
                 const countdownEl = document.getElementById(`${toastId}-countdown`);
-                
+
                 const interval = setInterval(() => {
                     remaining--;
                     if (countdownEl) countdownEl.textContent = remaining;
-                    
+
                     if (remaining <= 0) {
                         clearInterval(interval);
                         window.location.href = redirectUrl;
@@ -373,7 +400,7 @@
                 }, 1000);
             }
         }
-        
+
         function removeToast(toastId) {
             const toast = document.getElementById(toastId);
             if (toast) {
@@ -387,15 +414,15 @@
             const button = document.getElementById(buttonId);
             const btnText = button.querySelector('.btn-text');
             const btnLoading = button.querySelector('.btn-loading');
-            
+
             // Show loading state
             button.disabled = true;
             btnText.classList.add('hidden');
             btnLoading.classList.remove('hidden');
-            
+
             try {
                 const formData = new FormData(form);
-                
+
                 const response = await fetch('{{ route("onboarding.store") }}', {
                     method: 'POST',
                     headers: {
@@ -404,9 +431,9 @@
                     },
                     body: formData,
                 });
-                
+
                 const data = await response.json();
-                
+
                 if (data.success) {
                     // Show success toast with countdown
                     showToast('success', data.message || 'Profil berhasil disimpan!', 5, data.redirect_url);
@@ -420,20 +447,20 @@
                 resetButton(button, btnText, btnLoading);
             }
         }
-        
+
         function resetButton(button, btnText, btnLoading) {
             button.disabled = false;
             btnText.classList.remove('hidden');
             btnLoading.classList.add('hidden');
         }
-        
+
         // Attach form handlers
-        document.getElementById('form-personal').addEventListener('submit', function(e) {
+        document.getElementById('form-personal').addEventListener('submit', function (e) {
             e.preventDefault();
             submitForm(this, 'btn-submit-personal');
         });
-        
-        document.getElementById('form-institution').addEventListener('submit', function(e) {
+
+        document.getElementById('form-institution').addEventListener('submit', function (e) {
             e.preventDefault();
             submitForm(this, 'btn-submit-institution');
         });

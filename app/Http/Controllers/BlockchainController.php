@@ -19,17 +19,18 @@ class BlockchainController extends Controller
      */
     public function verify(Request $request)
     {
-        $query       = $request->input('q');
-        $result      = null;
+        $query = $request->input('q');
+        $result = null;
         $certificate = null;
         $onChainData = null;
-        $error       = null;
+        $error = null;
 
         if ($query) {
-            // Try to find certificate by number or hash
+            // Try to find certificate by number, hash, or IPFS CID
             $certificate = Certificate::where('certificate_number', $query)
                 ->orWhere('blockchain_hash', $query)
                 ->orWhere('blockchain_tx_hash', $query)
+                ->orWhere('ipfs_cid', $query)
                 ->first();
 
             if ($certificate && $certificate->blockchain_hash) {
@@ -60,7 +61,7 @@ class BlockchainController extends Controller
 
         // Get contract stats
         $contractStats = $this->blockchain->getContractStats();
-        $walletInfo    = $this->blockchain->getWalletInfo();
+        $walletInfo = $this->blockchain->getWalletInfo();
 
         return view('blockchain.verify', compact(
             'query',
@@ -80,30 +81,42 @@ class BlockchainController extends Controller
     {
         $query = $request->input('q');
 
-        if (! $query) {
+        if (!$query) {
             return response()->json(['error' => 'Query required'], 400);
         }
 
         $certificate = Certificate::where('certificate_number', $query)
             ->orWhere('blockchain_hash', $query)
+            ->orWhere('ipfs_cid', $query)
             ->first();
 
         if ($certificate && $certificate->blockchain_hash) {
             $onChainData = $this->blockchain->verifyCertificateOnChain($certificate->blockchain_hash);
 
-            return response()->json([
-                'success'     => true,
+            $response = [
+                'success' => true,
                 'certificate' => [
                     'certificate_number' => $certificate->certificate_number,
-                    'recipient_name'     => $certificate->recipient_name,
-                    'course_name'        => $certificate->course_name,
-                    'issue_date'         => $certificate->issue_date?->format('Y-m-d'),
-                    'blockchain_hash'    => $certificate->blockchain_hash,
+                    'recipient_name' => $certificate->recipient_name,
+                    'course_name' => $certificate->course_name,
+                    'issue_date' => $certificate->issue_date?->format('Y-m-d'),
+                    'blockchain_hash' => $certificate->blockchain_hash,
                     'blockchain_tx_hash' => $certificate->blockchain_tx_hash,
-                    'blockchain_status'  => $certificate->blockchain_status,
+                    'blockchain_status' => $certificate->blockchain_status,
+                    'status' => $certificate->status,
                 ],
-                'on_chain'    => $onChainData,
-            ]);
+                'on_chain' => $onChainData,
+                'is_revoked' => $certificate->status === 'revoked',
+            ];
+
+            // Add warning message for revoked certificates
+            if ($certificate->status === 'revoked') {
+                $response['revoked_message'] = 'Sertifikat ini telah DICABUT oleh penerbit dan tidak lagi valid.';
+                $response['revoked_at'] = $certificate->revoked_at?->toIso8601String();
+                $response['revoked_reason'] = $certificate->revoked_reason;
+            }
+
+            return response()->json($response);
         }
 
         return response()->json([

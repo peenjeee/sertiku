@@ -521,6 +521,19 @@
                     </div>
                     <span class="text-white/70 text-base nav-text">Beri Feedback</span>
                 </a>
+
+                <!-- Activity Log -->
+                <a href="{{ route('lembaga.activity-log') }}"
+                    class="nav-item flex items-center gap-3 px-4 py-4 rounded-xl {{ request()->routeIs('lembaga.activity-log') ? 'active' : '' }}"
+                    title="Activity Log">
+                    <div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                        </svg>
+                    </div>
+                    <span class="text-white/70 text-base nav-text">Activity Log</span>
+                </a>
             </nav>
 
             <!-- Profile Section -->
@@ -643,7 +656,7 @@
                             </svg>
                         </div>
                         <div class="bg-white/10 rounded-lg rounded-tl-none px-3 py-2 max-w-[85%]">
-                            <p class="text-white text-sm">Halo! 👋 Saya asisten virtual SertiKu. Pilih topik di bawah
+                            <p class="text-white text-sm">Halo! Saya asisten virtual SertiKu. Pilih topik di bawah
                                 atau ketik pertanyaan Anda.</p>
                         </div>
                     </div>
@@ -1005,7 +1018,7 @@
                 .replace(/\n/g, '<br>')
                 // Links
                 .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-400 underline" target="_blank">$1</a>');
-    }
+        }
     </script>
     {{-- SweetAlert Session --}}
     <x-sweetalert-session />

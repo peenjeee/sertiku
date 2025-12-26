@@ -50,6 +50,7 @@ return [
 
     'n8n' => [
         'webhook_url' => env('N8N_WEBHOOK_URL'),
+        'webhook_report_url' => env('N8N_WEBHOOK_REPORT_URL'),
     ],
 
     'fonnte' => [

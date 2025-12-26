@@ -49,6 +49,12 @@ class VerifyController extends Controller
                 }
             }
 
+            // Auto-generate file hashes if they don't exist
+            if (empty($certificate->certificate_sha256)) {
+                $certificate->generateFileHashes();
+                $certificate->refresh();
+            }
+
             $certificateData = [
                 'id' => $certificate->id,
                 'nama' => $certificate->recipient_name,
@@ -66,15 +72,31 @@ class VerifyController extends Controller
                 'blockchain_status' => $certificate->blockchain_status,
                 'ipfs_cid' => $certificate->ipfs_cid,
                 'ipfs_url' => $certificate->ipfs_url,
+                'qr_code_url' => $certificate->qr_code_path ? asset('storage/' . $certificate->qr_code_path) : null,
+                // File Integrity Hashes
+                'certificate_sha256' => $certificate->certificate_sha256,
+                'certificate_md5' => $certificate->certificate_md5,
+                'qr_sha256' => $certificate->qr_sha256,
+                'qr_md5' => $certificate->qr_md5,
+                'template_sha256' => $certificate->template?->sha256,
+                'template_md5' => $certificate->template?->md5,
             ];
 
             // Return JSON for AJAX/API request (check POST method or Accept header)
             if ($request->isMethod('post') || $request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
-                return response()->json([
+                $response = [
                     'valid' => $isValid,
                     'hash' => $certificate->hash,
                     'certificate' => $certificateData,
-                ]);
+                    'is_revoked' => $certificate->status === 'revoked',
+                ];
+
+                // Add warning message for revoked certificates
+                if ($certificate->status === 'revoked') {
+                    $response['revoked_message'] = 'Sertifikat ini telah DICABUT oleh penerbit dan tidak lagi valid.';
+                }
+
+                return response()->json($response);
             }
 
             return view('verifikasi.valid', [
@@ -184,6 +206,68 @@ class VerifyController extends Controller
             'description' => $validated['description'],
             'status' => 'pending',
         ]);
+
+        // Send to n8n webhook
+        $webhookUrl = config('services.n8n.webhook_report_url');
+        if (!empty($webhookUrl)) {
+            try {
+                \Illuminate\Support\Facades\Http::timeout(10)->post($webhookUrl, [
+                    'type' => 'fraud_report',
+                    'report_id' => $report->id,
+                    'reported_hash' => $validated['reported_hash'],
+                    'reporter_name' => $validated['reporter_name'],
+                    'reporter_email' => $validated['reporter_email'],
+                    'reporter_phone' => $validated['reporter_phone'] ?? null,
+                    'description' => $validated['description'],
+                    'timestamp' => now()->toIso8601String(),
+                    'ip' => $request->ip(),
+                    'user_agent' => $request->userAgent(),
+                ]);
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('n8n fraud report webhook error', [
+                    'error' => $e->getMessage(),
+                    'report_id' => $report->id,
+                ]);
+            }
+        }
+
+        // Log activity
+        try {
+            \App\Models\ActivityLog::log(
+                'fraud_report',
+                'Laporan pemalsuan baru: ' . $validated['reported_hash'],
+                null,
+                [
+                    'report_id' => $report->id,
+                    'reporter_email' => $validated['reporter_email'],
+                ]
+            );
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to log fraud report activity', ['error' => $e->getMessage()]);
+        }
+
+        // Send email notification to admin
+        try {
+            \Illuminate\Support\Facades\Mail::raw(
+                "📢 Laporan Pemalsuan Sertifikat Baru\n\n" .
+                "ID Laporan: #{$report->id}\n" .
+                "Hash yang Dilaporkan: {$validated['reported_hash']}\n" .
+                "Nama Pelapor: {$validated['reporter_name']}\n" .
+                "Email Pelapor: {$validated['reporter_email']}\n" .
+                "Telepon: " . ($validated['reporter_phone'] ?? 'Tidak diisi') . "\n\n" .
+                "Deskripsi:\n{$validated['description']}\n\n" .
+                "Waktu: " . now()->format('d M Y H:i:s') . " WIB\n" .
+                "IP Address: " . $request->ip() . "\n\n" .
+                "---\n" .
+                "SertiKu - Sistem Verifikasi Sertifikat Digital",
+                function ($message) use ($report) {
+                    $message->to('sertikuofficial@gmail.com')
+                        ->subject("[SertiKu] Laporan Pemalsuan Baru #{$report->id}");
+                }
+            );
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to send fraud report email', ['error' => $e->getMessage()]);
+        }
 
         return response()->json([
             'success' => true,

@@ -236,6 +236,30 @@ class LembagaController extends Controller
     }
 
     /**
+     * Reactivate a revoked certificate.
+     */
+    public function reactivateSertifikat(Request $request, Certificate $certificate)
+    {
+        // Ensure user owns this certificate
+        if ($certificate->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        // Only allow reactivating revoked certificates
+        if ($certificate->status !== 'revoked') {
+            return back()->with('error', 'Sertifikat tidak dalam status dicabut.');
+        }
+
+        $certificate->update([
+            'status' => 'active',
+            'revoked_at' => null,
+            'revoked_reason' => null,
+        ]);
+
+        return back()->with('success', 'Sertifikat berhasil diaktifkan kembali.');
+    }
+
+    /**
      * Show the template gallery.
      */
     public function indexTemplate()
@@ -441,5 +465,23 @@ class LembagaController extends Controller
         ]);
 
         return back()->with('password_success', 'Password berhasil diperbarui!');
+    }
+
+    /**
+     * Show activity log for the institution.
+     */
+    public function activityLog(Request $request)
+    {
+        $user = Auth::user();
+
+        // Get activity logs related to this user
+        $logs = ActivityLog::where('user_id', $user->id)
+            ->orWhereHasMorph('loggable', [Certificate::class], function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->latest()
+            ->paginate(20);
+
+        return view('lembaga.activity-log', compact('logs'));
     }
 }

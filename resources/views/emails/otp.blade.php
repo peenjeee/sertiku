@@ -59,7 +59,7 @@
                             <div
                                 style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 15px; margin: 20px 0;">
                                 <p style="margin: 0; color: #FCA5A5; font-size: 13px;">
-                                    ⚠️ <strong>Jangan bagikan kode ini kepada siapapun.</strong>
+                                    <strong>Penting:</strong> Jangan bagikan kode ini kepada siapapun.
                                     Tim SertiKu tidak akan pernah meminta kode OTP Anda.
                                 </p>
                             </div>
