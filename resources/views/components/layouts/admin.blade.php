@@ -522,12 +522,14 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // Global SweetAlert Confirmation
+        // Global SweetAlert Confirmation
         window.confirmAction = function (e, message) {
             e.preventDefault();
-            let form = e.target;
+            let trigger = e.target;
 
-            // If the element is a link (a tag), not a form
-            if (form.tagName === 'A') {
+            // Check if it's a link
+            let link = trigger.tagName === 'A' ? trigger : trigger.closest('a');
+            if (link) {
                 Swal.fire({
                     title: 'Konfirmasi',
                     text: message,
@@ -541,30 +543,33 @@
                     color: '#fff' // Dark mode text
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = form.href;
+                        window.location.href = link.href;
                     }
                 });
                 return false;
             }
 
-            // If it's a form
-            Swal.fire({
-                title: 'Konfirmasi',
-                text: message,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#6366f1', // Indigo
-                cancelButtonColor: '#ef4444', // Red
-                confirmButtonText: 'Ya, lanjutkan!',
-                cancelButtonText: 'Batal',
-                background: '#1f2937', // Dark mode bg
-                color: '#fff' // Dark mode text
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-            return false;
+            // Check if it's a form (or button inside form)
+            let form = trigger.tagName === 'FORM' ? trigger : trigger.closest('form');
+            if (form) {
+                Swal.fire({
+                    title: 'Konfirmasi',
+                    text: message,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#6366f1', // Indigo
+                    cancelButtonColor: '#ef4444', // Red
+                    confirmButtonText: 'Ya, lanjutkan!',
+                    cancelButtonText: 'Batal',
+                    background: '#1f2937', // Dark mode bg
+                    color: '#fff' // Dark mode text
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+                return false;
+            }
         }
     </script>
 </body>

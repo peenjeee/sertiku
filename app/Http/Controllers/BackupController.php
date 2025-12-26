@@ -56,7 +56,7 @@ class BackupController extends Controller
     public function createBackup(Request $request)
     {
         $type = $request->get('type', 'full'); // full, database, storage
-        $timestamp = date('Y-m-d_His');
+        $timestamp = now()->setTimezone('Asia/Jakarta')->format('Y-m-d_His');
 
         // Check if Google Drive is configured
         if (!$this->googleDrive->isConfigured()) {
@@ -507,7 +507,7 @@ class BackupController extends Controller
                 'type' => $type,
                 'size' => $this->formatBytes($file->getSize()),
                 'size_bytes' => $file->getSize(),
-                'date' => date('Y-m-d H:i:s', $file->getMTime()),
+                'date' => \Carbon\Carbon::createFromTimestamp($file->getMTime())->setTimezone('Asia/Jakarta')->format('Y-m-d H:i:s'),
                 'timestamp' => $file->getMTime(),
             ];
         }
