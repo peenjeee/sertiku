@@ -77,9 +77,6 @@
         $qrX = $certificate->template->qr_position_x ?? 90;
         $qrY = $certificate->template->qr_position_y ?? 85;
         $qrSize = $certificate->template->qr_size ?? 80;
-
-        // Calculate QR left position (adjust for centering)
-        $qrLeft = $qrX - 5; // Offset for approximate centering
     @endphp
 
     <div class="container">
@@ -89,21 +86,27 @@
         @endif
 
         {{-- Recipient Name - Full width centered at Y position --}}
+        {{-- Use margin-top to simulate vertical centering based on font size --}}
         <div class="recipient-name" style="
             left: 0;
             top: {{ $nameY }}%;
             font-size: {{ $nameFontSize }}px;
             color: {{ $nameFontColor }};
+            margin-top: -{{ $nameFontSize / 2 }}px; 
+            line-height: 1;
         ">{{ $certificate->recipient_name }}</div>
 
         {{-- QR Code - Positioned at X,Y --}}
+        {{-- Use negative margins to center using fixed pixel size --}}
         @if($certificate->qr_code_path)
             <div class="qr-code" style="
-                    left: {{ $qrLeft }}%;
-                    top: {{ $qrY }}%;
-                    width: {{ $qrSize }}px;
-                    height: {{ $qrSize }}px;
-                ">
+                            left: {{ $qrX }}%;
+                            top: {{ $qrY }}%;
+                            width: {{ $qrSize }}px;
+                            height: {{ $qrSize }}px;
+                            margin-left: -{{ $qrSize / 2 }}px;
+                            margin-top: -{{ $qrSize / 2 }}px;
+                        ">
                 <img src="{{ storage_path('app/public/' . $certificate->qr_code_path) }}">
             </div>
         @endif

@@ -102,10 +102,10 @@
                                     <div class="absolute w-full text-center"
                                         style="top: {{ $certificate['name_position_y'] ?? 45 }}%;">
                                         <div class="font-script transform -translate-y-1/2" style="
-                                                    color: {{ $certificate['name_font_color'] ?? '#1a1a1a' }}; 
-                                                    font-size: clamp(16px, {{ ($certificate['name_font_size'] ?? 52) / 10 }}vw, {{ ($certificate['name_font_size'] ?? 52) * 1.5 }}px);
-                                                    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                                                 ">
+                                                        color: {{ $certificate['name_font_color'] ?? '#1a1a1a' }}; 
+                                                        font-size: clamp(16px, {{ ($certificate['name_font_size'] ?? 52) / 10 }}vw, {{ ($certificate['name_font_size'] ?? 52) * 1.5 }}px);
+                                                        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                                                     ">
                                             {{ $certificate['nama'] }}
                                         </div>
                                     </div>
@@ -113,10 +113,11 @@
                                     {{-- QR Code Overlay --}}
                                     @if($certificate['qr_code_url'] ?? null)
                                         <div class="absolute bg-white p-[0.5%]" style="
-                                                        left: {{ ($certificate['qr_position_x'] ?? 90) - 2 }}%; 
-                                                        top: {{ ($certificate['qr_position_y'] ?? 85) - 2 }}%; 
+                                                        left: {{ $certificate['qr_position_x'] ?? 90 }}%; 
+                                                        top: {{ $certificate['qr_position_y'] ?? 85 }}%; 
                                                         width: {{ ($certificate['qr_size'] ?? 80) / 6 }}%;
                                                         aspect-ratio: 1/1;
+                                                        transform: translate(-50%, -50%);
                                                         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                                                      ">
                                             <img src="{{ $certificate['qr_code_url'] }}" class="w-full h-full object-contain">
