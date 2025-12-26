@@ -144,7 +144,7 @@
                             <div class="flex items-center gap-4">
                                 <div
                                     class="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center flex-shrink-0
-                                                                                                {{ str_contains($file['name'], 'database') ? 'bg-purple-600/30' : 'bg-green-600/30' }}">
+                                                                                                            {{ str_contains($file['name'], 'database') ? 'bg-purple-600/30' : 'bg-green-600/30' }}">
                                     @if(str_contains($file['name'], 'database'))
                                         <svg class="w-5 h-5 md:w-6 md:h-6 text-purple-400" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
@@ -164,7 +164,7 @@
                                     <p class="text-gray-400 text-xs md:text-sm">
                                         {{ isset($file['size']) ? number_format($file['size'] / 1024 / 1024, 2) . ' MB' : '-' }}
                                         •
-                                        {{ isset($file['createdTime']) ? \Carbon\Carbon::parse($file['createdTime'])->format('d M Y, H:i') : '-' }}
+                                        {{ isset($file['createdTime']) ? \Carbon\Carbon::parse($file['createdTime'])->setTimezone('Asia/Jakarta')->format('d M Y, H:i') : '-' }}
                                     </p>
                                 </div>
                             </div>

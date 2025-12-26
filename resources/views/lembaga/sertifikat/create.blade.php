@@ -223,7 +223,8 @@
                         <div class="space-y-2">
                             <label class="text-gray-700 text-sm font-bold">Tanggal Penerbitan<span
                                     class="text-red-500">*</span></label>
-                            <input type="date" name="issue_date" value="{{ old('issue_date', date('Y-m-d')) }}" required
+                            <input type="date" name="issue_date" value="{{ old('issue_date', now()->format('Y-m-d')) }}"
+                                required
                                 class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div class="space-y-2">
