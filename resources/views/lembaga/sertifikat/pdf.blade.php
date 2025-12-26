@@ -110,19 +110,22 @@
 </head>
 @php
     // Calculate precise coordinates using Editor's scaling logic
-    // Editor uses "794px" as the base width for calculating percentages (cqw)
-    // We must scale the raw inputs (which are treated as pixels relative to 794px in editor)
-    // to the actual PDF page width.
+    // Editor uses cqw (container query width) with formula: value / 7.94
+    // We must scale to match this behavior in PDF
 
     $orientation = $certificate->template->orientation ?? 'landscape';
     // A4 PT Dimensions
     $pageWidth = ($orientation === 'portrait') ? 595.28 : 841.89;
     $pageHeight = ($orientation === 'portrait') ? 841.89 : 595.28;
 
-    // Scaling Factor (Editor Base Width = 794px)
-    // Formula: (Input / 794) * PageWidthPT
-    $scaledNameFontSize = ($nameFontSize / 794) * $pageWidth;
-    $scaledQrSize = ($qrSize / 794) * $pageWidth;
+    // Editor uses: value / 7.94 to get cqw percentage
+    // So if qrSize = 80, editor shows: 80 / 7.94 = 10.08% of container width
+    // In PDF: 10.08% of page width = 0.1008 * 841.89 = 84.86pt
+    // Simplified formula: (qrSize / 100) * pageWidth (treating qrSize as percentage * 7.94)
+
+    // Convert editor px values to percentage of page
+    $scaledNameFontSize = ($nameFontSize / 7.94) * ($pageWidth / 100);
+    $scaledQrSize = ($qrSize / 7.94) * ($pageWidth / 100);
     $scaledQrHalfSize = $scaledQrSize / 2;
 
     $nameLeft = ($nameX / 100) * 100; 
@@ -154,10 +157,10 @@
         @if($certificate->qr_code_path)
             <div class="qr-code-anchor" style="left: {{ $qrX }}%; top: {{ $qrY }}%;">
                 <div class="qr-code-box" style="
-                            width: {{ $scaledQrSize }}pt; 
-                            height: {{ $scaledQrSize }}pt; 
-                            margin-left: -{{ $scaledQrHalfSize }}pt; 
-                            margin-top: -{{ $scaledQrHalfSize }}pt;">
+                                width: {{ $scaledQrSize }}pt; 
+                                height: {{ $scaledQrSize }}pt; 
+                                margin-left: -{{ $scaledQrHalfSize }}pt; 
+                                margin-top: -{{ $scaledQrHalfSize }}pt;">
                     <img src="{{ storage_path('app/public/' . $certificate->qr_code_path) }}"
                         style="width: 100%; height: 100%;">
                 </div>
