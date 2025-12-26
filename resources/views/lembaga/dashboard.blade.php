@@ -210,10 +210,7 @@
             @endif
             </svg>
         </div>
-        <div>
-            <h3 class="text-[#4338CA] font-bold text-sm lg:text-lg">Import Bulk</h3>
-            <p class="text-[#4F46E5] text-xs lg:text-sm">Upload Excel / CSV</p>
-        </div>
+        
     </div>
     </a>
     </div>
