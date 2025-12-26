@@ -502,6 +502,49 @@
                     <span class="text-white/70 text-base nav-text">Daftar Sertifikat</span>
                 </a>
 
+                <!-- Buat Template (System) - Professional Only -->
+                @if(Auth::user()->isProfessionalPlan() || Auth::user()->isEnterprisePlan())
+                    <a href="{{ route('lembaga.template.create') }}"
+                        class="nav-item flex items-center gap-3 px-4 py-4 rounded-xl {{ request()->routeIs('lembaga.template.create') ? 'active' : '' }}"
+                        title="Buat Template">
+                        <div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67"
+                                    d="M12 4v16m8-8H4" />
+                            </svg>
+                        </div>
+                        <span class="text-white/70 text-base nav-text">Buat Template</span>
+                    </a>
+                @endif
+
+                <!-- Upload Template (User) -->
+                <a href="{{ route('lembaga.template.upload') }}"
+                    class="nav-item flex items-center gap-3 px-4 py-4 rounded-xl {{ request()->routeIs('lembaga.template.upload') ? 'active' : '' }}"
+                    title="Upload Template">
+                    <div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                        </svg>
+                    </div>
+                    <span class="text-white/70 text-base nav-text">Upload Template</span>
+                </a>
+
+                <!-- Import Data (Bulk) - Professional Only -->
+                @if(Auth::user()->isProfessionalPlan() || Auth::user()->isEnterprisePlan())
+                    <a href="{{ route('lembaga.sertifikat.bulk') }}"
+                        class="nav-item flex items-center gap-3 px-4 py-4 rounded-xl {{ request()->routeIs('lembaga.sertifikat.bulk') ? 'active' : '' }}"
+                        title="Import Data (Bulk)">
+                        <div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67"
+                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                            </svg>
+                        </div>
+                        <span class="text-white/70 text-base nav-text">Import Data (Bulk)</span>
+                    </a>
+                @endif
+
                 <!-- Galeri Sertifikat -->
                 <a href="{{ route('lembaga.template.index') }}"
                     class="nav-item flex items-center gap-3 px-4 py-4 rounded-xl {{ request()->routeIs('lembaga.template.index') ? 'active' : '' }}"
@@ -515,18 +558,7 @@
                     <span class="text-white/70 text-base nav-text">Galeri Sertifikat</span>
                 </a>
 
-                <!-- Upload Sertifikat -->
-                <a href="{{ route('lembaga.template.upload') }}"
-                    class="nav-item flex items-center gap-3 px-4 py-4 rounded-xl {{ request()->routeIs('lembaga.template.upload') ? 'active' : '' }}"
-                    title="Upload Sertifikat">
-                    <div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67"
-                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                        </svg>
-                    </div>
-                    <span class="text-white/70 text-base nav-text">Upload Sertifikat</span>
-                </a>
+
 
                 <!-- Beri Feedback -->
                 <a href="{{ route('feedback.create') }}"

@@ -337,6 +337,110 @@ class LembagaController extends Controller
     }
 
     /**
+     * Show the system template picker.
+     */
+    public function createTemplate()
+    {
+        // Define system presets
+        $presets = [
+            [
+                'id' => 'blue_modern',
+                'name' => 'Blue Modern',
+                'description' => 'Desain profesional dengan nuansa biru.',
+                'color' => 'bg-blue-600',
+                'orientation' => 'landscape'
+            ],
+            [
+                'id' => 'gold_classic',
+                'name' => 'Gold Classic',
+                'description' => 'Desain klasik elegan dengan aksen emas.',
+                'color' => 'bg-yellow-500',
+                'orientation' => 'landscape'
+            ],
+            [
+                'id' => 'green_nature',
+                'name' => 'Green Nature',
+                'description' => 'Desain segar dengan nuansa hijau alam.',
+                'color' => 'bg-green-600',
+                'orientation' => 'landscape'
+            ],
+        ];
+
+        return view('lembaga.template.create', compact('presets'));
+    }
+
+    /**
+     * Store a selected system template.
+     */
+    public function storeSystemTemplate(Request $request)
+    {
+        $validated = $request->validate([
+            'preset_id' => 'required|string',
+            'name' => 'required|string|max:255',
+            'orientation' => 'required|in:landscape,portrait',
+        ]);
+
+        $user = Auth::user();
+        $presetId = $validated['preset_id'];
+        $orientation = $validated['orientation'];
+
+        // Define preset colors/styles map (Mocking generation)
+        $presets = [
+            'blue_modern' => ['r' => 37, 'g' => 99, 'b' => 235],
+            'gold_classic' => ['r' => 234, 'g' => 179, 'b' => 8],
+            'green_nature' => ['r' => 22, 'g' => 163, 'b' => 74],
+        ];
+
+        if (!isset($presets[$presetId])) {
+            return back()->with('error', 'Preset tidak valid.');
+        }
+
+        // Generate a simple image for this preset
+        // A4 Landscape: 1123x794, Portrait: 794x1123 (approx 96dpi)
+        if ($orientation === 'portrait') {
+            $width = 794;
+            $height = 1123;
+        } else {
+            $width = 1123;
+            $height = 794;
+        }
+
+        $img = imagecreatetruecolor($width, $height);
+
+        $color = $presets[$presetId];
+        $bgColor = imagecolorallocate($img, $color['r'], $color['g'], $color['b']);
+        imagefill($img, 0, 0, $bgColor);
+
+        // Add a white box in middle
+        $white = imagecolorallocate($img, 255, 255, 255);
+        imagefilledrectangle($img, 50, 50, $width - 50, $height - 50, $white);
+
+        // Add border
+        $borderColor = imagecolorallocate($img, $color['r'], $color['g'], $color['b']);
+        imagerectangle($img, 70, 70, $width - 70, $height - 70, $borderColor);
+
+        // Save to storage
+        $filename = 'templates/' . $user->id . '/' . uniqid() . '.jpg';
+        Storage::disk('public')->makeDirectory('templates/' . $user->id);
+        $fullPath = Storage::disk('public')->path($filename);
+        imagejpeg($img, $fullPath);
+        imagedestroy($img);
+
+        // Save DB record
+        $user->templates()->create([
+            'name' => $validated['name'],
+            'description' => 'Generated System Template (' . $presetId . ')',
+            'file_path' => $filename,
+            'thumbnail_path' => $filename,
+            'orientation' => $orientation,
+            'is_active' => true,
+        ]);
+
+        return redirect()->route('lembaga.template.index')
+            ->with('success', 'Template berhasil dibuat oleh sistem!');
+    }
+
+    /**
      * Delete a template.
      */
     public function destroyTemplate(Template $template)

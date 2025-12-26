@@ -24,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'lembaga.only' => \App\Http\Middleware\EnsureUserIsLembaga::class,
             'pengguna.only' => \App\Http\Middleware\EnsureUserIsPengguna::class,
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
+            'professional' => \App\Http\Middleware\CheckProfessionalPlan::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

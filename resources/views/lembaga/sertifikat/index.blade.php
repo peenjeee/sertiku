@@ -20,6 +20,22 @@
             </div>
         @endif
 
+        @if(session('warning'))
+            <div class="bg-amber-500/20 border border-amber-500/30 rounded-lg p-4 text-amber-400">
+                {{ session('warning') }}
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div class="bg-red-500/20 border border-red-500/30 rounded-lg p-4 text-red-400">
+                <ul class="list-disc list-inside text-sm">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <!-- Stats Cards -->
         <div class="grid grid-cols-3 gap-4">
             <div class="bg-blue-500/20 border border-blue-500/30 rounded-xl p-4 flex items-center gap-3">
@@ -134,9 +150,14 @@
 
                         <!-- Certificate Body -->
                         <div class="p-4 space-y-3">
-                            <div>
-                                <p class="text-gray-500 text-xs">Program/Kursus</p>
-                                <p class="text-gray-800 font-medium truncate">{{ $certificate->course_name }}</p>
+                            <div class="space-y-1">
+                                <div>
+                                    <p class="text-gray-500 text-xs">Program/Kursus</p>
+                                    <p class="text-gray-800 font-medium truncate">{{ $certificate->course_name }}</p>
+                                </div>
+                                <div class="text-xs text-gray-500 line-clamp-2" title="{{ $certificate->description }}">
+                                    {{ $certificate->description ?? '-' }}
+                                </div>
                             </div>
 
                             <div class="grid grid-cols-2 gap-3">
@@ -152,12 +173,11 @@
                             </div>
 
                             {{-- Category Badge --}}
-                            @if($certificate->category)
-                                <div class="flex items-center gap-2 flex-wrap">
-                                    <span
-                                        class="px-2 py-1 bg-blue-100 text-blue-600 text-xs rounded">{{ $certificate->category }}</span>
-                                </div>
-                            @endif
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="px-2 py-1 {{ $certificate->category ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500' }} text-xs rounded">
+                                    {{ $certificate->category ?? 'Tanpa Kategori' }}
+                                </span>
+                            </div>
 
                             {{-- Blockchain Badge - Always show if blockchain_enabled or has tx_hash --}}
                             @if($certificate->blockchain_enabled || $certificate->blockchain_tx_hash)

@@ -2,7 +2,7 @@
     <div class="space-y-6">
         <!-- Header -->
         <div>
-            <h1 class="text-white text-xl lg:text-2xl font-bold">Upload Sertifikat Sertifikat</h1>
+            <h1 class="text-white text-xl lg:text-2xl font-bold">Upload Template Sertifikat</h1>
             <p class="text-white/70 text-sm lg:text-base mt-1">Upload Sertifikat sertifikat untuk digunakan dalam
                 penerbitan</p>
         </div>

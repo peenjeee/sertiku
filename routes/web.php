@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\VerifyController;
+use App\Http\Controllers\BulkCertificateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -275,6 +276,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [\App\Http\Controllers\LembagaController::class, 'dashboard'])->name('dashboard');
 
         // Certificates
+        // Bulk Upload (Must be before wildcards)
+        Route::get('/sertifikat/bulk', [BulkCertificateController::class, 'index'])->name('sertifikat.bulk');
+        Route::post('/sertifikat/bulk', [BulkCertificateController::class, 'store'])->name('sertifikat.bulk.store');
+
         Route::get('/sertifikat', [\App\Http\Controllers\LembagaController::class, 'indexSertifikat'])->name('sertifikat.index');
         Route::get('/sertifikat/create', [\App\Http\Controllers\LembagaController::class, 'createSertifikat'])->name('sertifikat.create');
         Route::post('/sertifikat', [\App\Http\Controllers\LembagaController::class, 'storeSertifikat'])->name('sertifikat.store');
@@ -411,9 +416,22 @@ Route::middleware(['auth'])->prefix('lembaga')->name('lembaga.')->group(function
     Route::get('/sertifikat/create', [\App\Http\Controllers\LembagaController::class, 'createSertifikat'])->name('sertifikat.create');
     Route::post('/sertifikat', [\App\Http\Controllers\LembagaController::class, 'storeSertifikat'])->name('sertifikat.store');
 
+
+
+    // Bulk Upload (Professional & Enterprise Only)
+    Route::middleware(['professional'])->group(function () {
+        Route::get('/sertifikat/bulk', [BulkCertificateController::class, 'index'])->name('sertifikat.bulk');
+        Route::post('/sertifikat/bulk', [BulkCertificateController::class, 'store'])->name('sertifikat.bulk.store');
+        Route::get('/sertifikat/bulk/template-xlsx', [BulkCertificateController::class, 'downloadTemplateXlsx'])->name('sertifikat.bulk.template-xlsx');
+
+        // System Template Generator
+        Route::get('/template/create', [\App\Http\Controllers\LembagaController::class, 'createTemplate'])->name('template.create');
+        Route::post('/template/system', [\App\Http\Controllers\LembagaController::class, 'storeSystemTemplate'])->name('template.storeSystem');
+    });
+
     // Template
     Route::get('/template', [\App\Http\Controllers\LembagaController::class, 'indexTemplate'])->name('template.index');
-    Route::get('/template/upload', [\App\Http\Controllers\LembagaController::class, 'uploadTemplate'])->name('template.upload');
+    Route::get('/template/upload', [\App\Http\Controllers\LembagaController::class, 'uploadTemplate'])->name('template.upload'); // User Upload
     Route::post('/template', [\App\Http\Controllers\LembagaController::class, 'storeTemplate'])->name('template.store');
 
     // API Tokens (Professional & Enterprise only)
