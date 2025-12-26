@@ -370,9 +370,16 @@ class LembagaController extends Controller
      */
     public function editTemplatePosition(Template $template)
     {
-        // Check ownership (use loose comparison for type flexibility)
+        // TEMP DEBUG - remove after fixing
         if ($template->user_id != Auth::id()) {
-            abort(403, 'Unauthorized');
+            dd([
+                'template_user_id' => $template->user_id,
+                'template_user_id_type' => gettype($template->user_id),
+                'auth_id' => Auth::id(),
+                'auth_id_type' => gettype(Auth::id()),
+                'auth_check' => Auth::check(),
+                'comparison' => $template->user_id != Auth::id(),
+            ]);
         }
 
         return view('lembaga.template.edit-position', compact('template'));
