@@ -208,254 +208,250 @@
                     </div>
                 </a>
             @endif
-            </svg>
         </div>
-        
-    </div>
-    </a>
-    </div>
 
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-        <!-- Total Sertifikat -->
-        <div class="stat-card-blue rounded-xl lg:rounded-2xl p-4 lg:p-6 hover-lift animate-fade-in-up stagger-1">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-[#1E40AF] text-xs lg:text-sm font-medium">Total Sertifikat</p>
-                    <p class="text-[#1E3A8A] text-xl lg:text-3xl font-bold mt-1">
-                        {{ number_format($stats['total_certificates'] ?? 0) }}
-                    </p>
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mt-6">
+            <!-- Total Sertifikat -->
+            <div class="stat-card-blue rounded-xl lg:rounded-2xl p-4 lg:p-6 hover-lift animate-fade-in-up stagger-1">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-[#1E40AF] text-xs lg:text-sm font-medium">Total Sertifikat</p>
+                        <p class="text-[#1E3A8A] text-xl lg:text-3xl font-bold mt-1">
+                            {{ number_format($stats['total_certificates'] ?? 0) }}
+                        </p>
+                    </div>
+                    <div
+                        class="stat-icon-blue w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#3B82F6]" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                        </svg>
+                    </div>
                 </div>
-                <div
-                    class="stat-icon-blue w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
+            </div>
+
+            <!-- Sertifikat Aktif -->
+            <div class="stat-card-green rounded-xl lg:rounded-2xl p-4 lg:p-6 hover-lift animate-fade-in-up stagger-2">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-[#166534] text-xs lg:text-sm font-medium">Sertifikat Aktif</p>
+                        <p class="text-[#15803D] text-xl lg:text-3xl font-bold mt-1">
+                            {{ number_format($stats['active_certificates'] ?? 0) }}
+                        </p>
+                    </div>
+                    <div
+                        class="stat-icon-green w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#22C55E]" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bulan Ini -->
+            <div class="stat-card-orange rounded-xl lg:rounded-2xl p-4 lg:p-6 hover-lift animate-fade-in-up stagger-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-[#9A3412] text-xs lg:text-sm font-medium">Bulan Ini</p>
+                        <p class="text-[#C2410C] text-xl lg:text-3xl font-bold mt-1">
+                            {{ number_format($stats['certificates_this_month'] ?? 0) }}
+                        </p>
+                    </div>
+                    <div
+                        class="stat-icon-orange w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#F97316]" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Verifikasi -->
+            <div class="stat-card-purple rounded-xl lg:rounded-2xl p-4 lg:p-6 hover-lift animate-fade-in-up stagger-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-[#6B21A8] text-xs lg:text-sm font-medium">Total Verifikasi</p>
+                        <p class="text-[#7C3AED] text-xl lg:text-3xl font-bold mt-1">
+                            {{ number_format($stats['total_verifications'] ?? 0) }}
+                        </p>
+                    </div>
+                    <div
+                        class="stat-icon-purple w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#A855F7]" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Certificates Card -->
+        <div class="glass-card rounded-xl lg:rounded-2xl overflow-hidden animate-fade-in">
+            <!-- Header -->
+            <div class="header-gradient p-4 lg:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
                     <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#3B82F6]" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                     </svg>
+                    <div>
+                        <h2 class="text-[#1E293B] text-base lg:text-xl font-bold">Sertifikat Terbaru</h2>
+                        <p class="text-[#64748B] text-xs lg:text-sm">{{ $stats['recent_certificates']->count() }}
+                            sertifikat yang baru diterbitkan</p>
+                    </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Sertifikat Aktif -->
-        <div class="stat-card-green rounded-xl lg:rounded-2xl p-4 lg:p-6 hover-lift animate-fade-in-up stagger-2">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-[#166534] text-xs lg:text-sm font-medium">Sertifikat Aktif</p>
-                    <p class="text-[#15803D] text-xl lg:text-3xl font-bold mt-1">
-                        {{ number_format($stats['active_certificates'] ?? 0) }}
-                    </p>
-                </div>
-                <div
-                    class="stat-icon-green w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#22C55E]" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-
-        <!-- Bulan Ini -->
-        <div class="stat-card-orange rounded-xl lg:rounded-2xl p-4 lg:p-6 hover-lift animate-fade-in-up stagger-3">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-[#9A3412] text-xs lg:text-sm font-medium">Bulan Ini</p>
-                    <p class="text-[#C2410C] text-xl lg:text-3xl font-bold mt-1">
-                        {{ number_format($stats['certificates_this_month'] ?? 0) }}
-                    </p>
-                </div>
-                <div
-                    class="stat-icon-orange w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#F97316]" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Verifikasi -->
-        <div class="stat-card-purple rounded-xl lg:rounded-2xl p-4 lg:p-6 hover-lift animate-fade-in-up stagger-4">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-[#6B21A8] text-xs lg:text-sm font-medium">Total Verifikasi</p>
-                    <p class="text-[#7C3AED] text-xl lg:text-3xl font-bold mt-1">
-                        {{ number_format($stats['total_verifications'] ?? 0) }}
-                    </p>
-                </div>
-                <div
-                    class="stat-icon-purple w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#A855F7]" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Recent Certificates Card -->
-    <div class="glass-card rounded-xl lg:rounded-2xl overflow-hidden animate-fade-in">
-        <!-- Header -->
-        <div class="header-gradient p-4 lg:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div class="flex items-center gap-3">
-                <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#3B82F6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                </svg>
-                <div>
-                    <h2 class="text-[#1E293B] text-base lg:text-xl font-bold">Sertifikat Terbaru</h2>
-                    <p class="text-[#64748B] text-xs lg:text-sm">{{ $stats['recent_certificates']->count() }}
-                        sertifikat yang baru diterbitkan</p>
-                </div>
-            </div>
-            <a href="{{ route('lembaga.sertifikat.index') }}"
-                class="flex items-center justify-center gap-2 px-3 lg:px-4 py-2 lg:py-2.5 bg-white border border-[#E2E8F0] rounded-lg text-[#1E293B] text-xs lg:text-sm hover:bg-gray-50 transition shadow-sm">
-                Lihat Semua
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-            </a>
-        </div>
-
-        <!-- Content -->
-        <div class="p-4 lg:p-6">
-            <!-- Search & Filter -->
-            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-4 lg:mb-6">
-                <div class="relative flex-1 lg:max-w-xl">
-                    <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#94A3B8]" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
+                <a href="{{ route('lembaga.sertifikat.index') }}"
+                    class="flex items-center justify-center gap-2 px-3 lg:px-4 py-2 lg:py-2.5 bg-white border border-[#E2E8F0] rounded-lg text-[#1E293B] text-xs lg:text-sm hover:bg-gray-50 transition shadow-sm">
+                    Lihat Semua
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>
-                    <input type="text" id="search-input" placeholder="Cari nama atau ID..." onkeyup="filterTable()"
-                        class="w-full pl-10 pr-4 py-2.5 lg:py-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg text-sm text-[#1E293B] placeholder-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                </div>
-                <div class="flex items-center gap-2 overflow-x-auto" id="filter-buttons">
-                    <button onclick="setFilter('all')" data-filter="all"
-                        class="filter-btn active px-3 lg:px-4 py-2 lg:py-3 bg-[#1E3A8F] text-white text-xs lg:text-sm rounded-lg font-medium whitespace-nowrap">Semua</button>
-                    <button onclick="setFilter('active')" data-filter="active"
-                        class="filter-btn px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg hover:bg-gray-50 whitespace-nowrap">Aktif</button>
-                    <button onclick="setFilter('revoked')" data-filter="revoked"
-                        class="filter-btn px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg hover:bg-gray-50 whitespace-nowrap">Dicabut</button>
-                </div>
+                </a>
             </div>
 
-            <!-- Table -->
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead>
-                        <tr class="border-b border-[#E2E8F0]">
-                            <th class="text-left py-3 px-4 text-[#64748B] text-sm font-medium">Penerima</th>
-                            <th class="text-left py-3 px-4 text-[#64748B] text-sm font-medium">Program</th>
-                            <th class="text-left py-3 px-4 text-[#64748B] text-sm font-medium">ID Kredensial</th>
-                            <th class="text-left py-3 px-4 text-[#64748B] text-sm font-medium">Tanggal</th>
-                            <th class="text-left py-3 px-4 text-[#64748B] text-sm font-medium">Status</th>
-                            <th class="text-right py-3 px-4 text-[#64748B] text-sm font-medium">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="certificate-tbody">
-                        @forelse($stats['recent_certificates'] ?? [] as $cert)
-                            @php
-                                $colors = ['from-blue-500 to-indigo-600', 'from-emerald-500 to-teal-600', 'from-purple-500 to-pink-600', 'from-orange-500 to-red-600', 'from-cyan-500 to-blue-600'];
-                                $colorIndex = $loop->index % count($colors);
-                                $initials = collect(explode(' ', $cert->recipient_name))->map(fn($n) => strtoupper(substr($n, 0, 1)))->take(2)->join('');
+            <!-- Content -->
+            <div class="p-4 lg:p-6">
+                <!-- Search & Filter -->
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-4 lg:mb-6">
+                    <div class="relative flex-1 lg:max-w-xl">
+                        <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#94A3B8]" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <input type="text" id="search-input" placeholder="Cari nama atau ID..." onkeyup="filterTable()"
+                            class="w-full pl-10 pr-4 py-2.5 lg:py-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg text-sm text-[#1E293B] placeholder-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div class="flex items-center gap-2 overflow-x-auto" id="filter-buttons">
+                        <button onclick="setFilter('all')" data-filter="all"
+                            class="filter-btn active px-3 lg:px-4 py-2 lg:py-3 bg-[#1E3A8F] text-white text-xs lg:text-sm rounded-lg font-medium whitespace-nowrap">Semua</button>
+                        <button onclick="setFilter('active')" data-filter="active"
+                            class="filter-btn px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg hover:bg-gray-50 whitespace-nowrap">Aktif</button>
+                        <button onclick="setFilter('revoked')" data-filter="revoked"
+                            class="filter-btn px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg hover:bg-gray-50 whitespace-nowrap">Dicabut</button>
+                    </div>
+                </div>
 
-                                // Check if recipient is registered in system
-                                $registeredUser = null;
-                                $avatarUrl = null;
+                <!-- Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-[#E2E8F0]">
+                                <th class="text-left py-3 px-4 text-[#64748B] text-sm font-medium">Penerima</th>
+                                <th class="text-left py-3 px-4 text-[#64748B] text-sm font-medium">Program</th>
+                                <th class="text-left py-3 px-4 text-[#64748B] text-sm font-medium">ID Kredensial</th>
+                                <th class="text-left py-3 px-4 text-[#64748B] text-sm font-medium">Tanggal</th>
+                                <th class="text-left py-3 px-4 text-[#64748B] text-sm font-medium">Status</th>
+                                <th class="text-right py-3 px-4 text-[#64748B] text-sm font-medium">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="certificate-tbody">
+                            @forelse($stats['recent_certificates'] ?? [] as $cert)
+                                @php
+                                    $colors = ['from-blue-500 to-indigo-600', 'from-emerald-500 to-teal-600', 'from-purple-500 to-pink-600', 'from-orange-500 to-red-600', 'from-cyan-500 to-blue-600'];
+                                    $colorIndex = $loop->index % count($colors);
+                                    $initials = collect(explode(' ', $cert->recipient_name))->map(fn($n) => strtoupper(substr($n, 0, 1)))->take(2)->join('');
 
-                                if ($cert->recipient_email) {
-                                    $registeredUser = \App\Models\User::where('email', $cert->recipient_email)->first();
+                                    // Check if recipient is registered in system
+                                    $registeredUser = null;
+                                    $avatarUrl = null;
 
-                                    if ($registeredUser && $registeredUser->avatar && str_starts_with($registeredUser->avatar, '/storage/')) {
-                                        // User is registered and has custom avatar
-                                        $avatarUrl = $registeredUser->avatar;
-                                    } else {
-                                        // Email exists but user not registered or no custom avatar - use UI Avatars
-                                        $avatarUrl = 'https://ui-avatars.com/api/?name=' . urlencode($cert->recipient_name) . '&email=' . urlencode($cert->recipient_email) . '&background=random&color=fff&bold=true&size=40';
+                                    if ($cert->recipient_email) {
+                                        $registeredUser = \App\Models\User::where('email', $cert->recipient_email)->first();
+
+                                        if ($registeredUser && $registeredUser->avatar && str_starts_with($registeredUser->avatar, '/storage/')) {
+                                            // User is registered and has custom avatar
+                                            $avatarUrl = $registeredUser->avatar;
+                                        } else {
+                                            // Email exists but user not registered or no custom avatar - use UI Avatars
+                                            $avatarUrl = 'https://ui-avatars.com/api/?name=' . urlencode($cert->recipient_name) . '&email=' . urlencode($cert->recipient_email) . '&background=random&color=fff&bold=true&size=40';
+                                        }
                                     }
-                                }
-                            @endphp
-                            <tr class="border-b border-[#F1F5F9] hover:bg-[#F8FAFC] cert-row"
-                                data-status="{{ $cert->status }}" data-name="{{ strtolower($cert->recipient_name) }}"
-                                data-cert="{{ strtolower($cert->certificate_number) }}">
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-3">
-                                        <div
-                                            class="w-10 h-10 rounded-full bg-gradient-to-br {{ $colors[$colorIndex] }} flex items-center justify-center overflow-hidden">
-                                            @if($avatarUrl)
-                                                <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover">
-                                            @else
-                                                <span class="text-white font-bold text-sm">{{ $initials }}</span>
-                                            @endif
+                                @endphp
+                                <tr class="border-b border-[#F1F5F9] hover:bg-[#F8FAFC] cert-row"
+                                    data-status="{{ $cert->status }}" data-name="{{ strtolower($cert->recipient_name) }}"
+                                    data-cert="{{ strtolower($cert->certificate_number) }}">
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-10 h-10 rounded-full bg-gradient-to-br {{ $colors[$colorIndex] }} flex items-center justify-center overflow-hidden">
+                                                @if($avatarUrl)
+                                                    <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover">
+                                                @else
+                                                    <span class="text-white font-bold text-sm">{{ $initials }}</span>
+                                                @endif
+                                            </div>
+                                            <div>
+                                                <p class="text-[#1E293B] font-medium">{{ $cert->recipient_name }}</p>
+                                                <p class="text-[#94A3B8] text-sm">
+                                                    {{ $cert->recipient_email ?? 'Email tidak tersedia' }}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p class="text-[#1E293B] font-medium">{{ $cert->recipient_name }}</p>
-                                            <p class="text-[#94A3B8] text-sm">
-                                                {{ $cert->recipient_email ?? 'Email tidak tersedia' }}
+                                    </td>
+                                    <td class="py-4 px-4 text-[#1E293B]">{{ $cert->course_name }}</td>
+                                    <td class="py-4 px-4">
+                                        <code
+                                            class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">{{ Str::limit($cert->certificate_number, 14) }}</code>
+                                    </td>
+                                    <td class="py-4 px-4 text-[#64748B]">{{ $cert->issue_date->format('d M Y') }}</td>
+                                    <td class="py-4 px-4">
+                                        @if($cert->status === 'active')
+                                            <span
+                                                class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#ECFDF5] text-[#059669] text-sm rounded-full font-medium">
+                                                <span class="w-1.5 h-1.5 bg-[#059669] rounded-full"></span>
+                                                Aktif
+                                            </span>
+                                        @else
+                                            <span
+                                                class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FEF2F2] text-[#DC2626] text-sm rounded-full font-medium">
+                                                <span class="w-1.5 h-1.5 bg-[#DC2626] rounded-full"></span>
+                                                Dicabut
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="py-4 px-4 text-right">
+                                        <a href="{{ route('verifikasi.show', $cert->hash) }}" target="_blank"
+                                            class="text-[#3B82F6] hover:text-[#1D4ED8] text-sm font-medium">Lihat</a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="py-12 text-center">
+                                        <div class="flex flex-col items-center">
+                                            <div
+                                                class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                </svg>
+                                            </div>
+                                            <p class="text-gray-600 font-medium mb-1">Belum ada sertifikat</p>
+                                            <p class="text-gray-400 text-sm mb-4">Mulai terbitkan sertifikat pertama Anda
                                             </p>
+                                            <a href="{{ route('lembaga.sertifikat.create') }}"
+                                                class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition">Terbitkan
+                                                Sekarang</a>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4 text-[#1E293B]">{{ $cert->course_name }}</td>
-                                <td class="py-4 px-4">
-                                    <code
-                                        class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">{{ Str::limit($cert->certificate_number, 14) }}</code>
-                                </td>
-                                <td class="py-4 px-4 text-[#64748B]">{{ $cert->issue_date->format('d M Y') }}</td>
-                                <td class="py-4 px-4">
-                                    @if($cert->status === 'active')
-                                        <span
-                                            class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#ECFDF5] text-[#059669] text-sm rounded-full font-medium">
-                                            <span class="w-1.5 h-1.5 bg-[#059669] rounded-full"></span>
-                                            Aktif
-                                        </span>
-                                    @else
-                                        <span
-                                            class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FEF2F2] text-[#DC2626] text-sm rounded-full font-medium">
-                                            <span class="w-1.5 h-1.5 bg-[#DC2626] rounded-full"></span>
-                                            Dicabut
-                                        </span>
-                                    @endif
-                                </td>
-                                <td class="py-4 px-4 text-right">
-                                    <a href="{{ route('verifikasi.show', $cert->hash) }}" target="_blank"
-                                        class="text-[#3B82F6] hover:text-[#1D4ED8] text-sm font-medium">Lihat</a>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="6" class="py-12 text-center">
-                                    <div class="flex flex-col items-center">
-                                        <div
-                                            class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                            </svg>
-                                        </div>
-                                        <p class="text-gray-600 font-medium mb-1">Belum ada sertifikat</p>
-                                        <p class="text-gray-400 text-sm mb-4">Mulai terbitkan sertifikat pertama Anda
-                                        </p>
-                                        <a href="{{ route('lembaga.sertifikat.create') }}"
-                                            class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition">Terbitkan
-                                            Sekarang</a>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 
     {{-- Filter and Search JavaScript --}}
