@@ -309,7 +309,18 @@ class LembagaController extends Controller
 
         // Store the template file
         $file = $request->file('template_file');
+
+        // Check if file is valid before storing
+        if (!$file->isValid()) {
+            return back()->withErrors(['template_file' => 'File upload gagal: ' . $file->getErrorMessage()])->withInput();
+        }
+
         $path = $file->store('templates/' . $user->id, 'public');
+
+        // Check if file upload failed
+        if ($path === false || empty($path)) {
+            return back()->withErrors(['template_file' => 'Gagal menyimpan file. Silakan hubungi administrator.'])->withInput();
+        }
 
         // Create thumbnail (for images)
         $thumbnailPath = null;
@@ -359,8 +370,8 @@ class LembagaController extends Controller
      */
     public function editTemplatePosition(Template $template)
     {
-        // Check ownership
-        if ($template->user_id !== Auth::id()) {
+        // Check ownership (use loose comparison for type flexibility)
+        if ($template->user_id != Auth::id()) {
             abort(403, 'Unauthorized');
         }
 
@@ -372,8 +383,8 @@ class LembagaController extends Controller
      */
     public function updateTemplatePosition(Request $request, Template $template)
     {
-        // Check ownership
-        if ($template->user_id !== Auth::id()) {
+        // Check ownership (use loose comparison for type flexibility)
+        if ($template->user_id != Auth::id()) {
             abort(403, 'Unauthorized');
         }
 
