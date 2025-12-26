@@ -422,6 +422,7 @@ Route::middleware(['auth'])->prefix('lembaga')->name('lembaga.')->group(function
     Route::middleware(['professional'])->group(function () {
         Route::get('/sertifikat/bulk', [BulkCertificateController::class, 'index'])->name('sertifikat.bulk');
         Route::post('/sertifikat/bulk', [BulkCertificateController::class, 'store'])->name('sertifikat.bulk.store');
+        Route::get('/sertifikat/bulk/template-csv', [BulkCertificateController::class, 'downloadTemplateCsv'])->name('sertifikat.bulk.template-csv');
         Route::get('/sertifikat/bulk/template-xlsx', [BulkCertificateController::class, 'downloadTemplateXlsx'])->name('sertifikat.bulk.template-xlsx');
 
         // System Template Generator

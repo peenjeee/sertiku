@@ -21,7 +21,7 @@
                 </button>
                 <div x-show="open" @click.away="open = false" x-transition
                     class="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50">
-                    <a href="{{ asset('template_import.csv') }}" download
+                    <a href="{{ route('lembaga.sertifikat.bulk.template-csv') }}"
                         class="block px-4 py-3 text-sm text-white hover:bg-gray-700 rounded-t-lg flex items-center gap-2">
                         <span
                             class="w-6 h-6 bg-green-500/20 text-green-400 rounded flex items-center justify-center text-xs font-bold">CSV</span>

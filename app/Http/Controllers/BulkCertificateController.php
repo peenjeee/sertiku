@@ -28,6 +28,38 @@ class BulkCertificateController extends Controller
         return view('lembaga.sertifikat.bulk', compact('templates'));
     }
 
+
+    /**
+     * Download CSV template for bulk import.
+     */
+    public function downloadTemplateCsv()
+    {
+        $csvPath = public_path('template_import.csv');
+
+        if (file_exists($csvPath)) {
+            return response()->download($csvPath, 'template_import.csv', [
+                'Content-Type' => 'text/csv',
+            ]);
+        }
+
+        // Fallback: generate on-the-fly if file doesn't exist
+        $headers = ['recipient_name', 'recipient_email', 'course_name', 'category', 'description', 'issue_date'];
+        $sampleData = [
+            ['John Doe', 'john@example.com', 'Web Development', 'Seminar', 'Atas partisipasinya dalam kegiatan', '2025-01-15'],
+            ['Jane Smith', 'jane@example.com', 'Data Science', 'Workshop', 'Sebagai peserta workshop', '2025-01-16'],
+            ['Ahmad Fauzi', 'ahmad@example.com', 'UI/UX Design', 'Sertifikasi', 'Telah menyelesaikan sertifikasi', '2025-01-17'],
+        ];
+
+        $csvContent = implode(',', $headers) . "\n";
+        foreach ($sampleData as $row) {
+            $csvContent .= implode(',', $row) . "\n";
+        }
+
+        return response($csvContent)
+            ->header('Content-Type', 'text/csv')
+            ->header('Content-Disposition', 'attachment; filename="template_import.csv"');
+    }
+
     /**
      * Download XLSX template for bulk import.
      */
