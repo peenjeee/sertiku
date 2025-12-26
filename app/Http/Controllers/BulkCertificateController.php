@@ -168,13 +168,6 @@ class BulkCertificateController extends Controller
             'default_category' => 'nullable|string|max:50',
         ]);
 
-        // DEBUG: Log what we received
-        \Log::info('Bulk Upload Form Data:', [
-            'default_category' => $request->default_category,
-            'default_description' => $request->default_description,
-            'all_input' => $request->except(['file']),
-        ]);
-
         $file = $request->file('file');
         $path = $file->getRealPath();
         $extension = $file->getClientOriginalExtension();
