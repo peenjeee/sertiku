@@ -558,7 +558,7 @@
     <script>
         // Global Form Validation with SweetAlert2
         document.addEventListener('DOMContentLoaded', function() {
-            const forms = document.querySelectorAll('for m');
+            const forms = document.querySelectorAll('form');
             forms.forEach(form => {
                 // Add novalidate to prevent native browser tooltips
                 form.setAttribute('novalidate', true);
