@@ -151,11 +151,15 @@
                                     </div>
                                 @endif
 
-                                @if(isset($onChainData['timestamp']))
+                                @if(isset($onChainData['timestamp']) || isset($onChainData['date']))
                                     <div class="bg-white/5 rounded-xl p-4">
                                         <p class="text-white/50 text-xs mb-1">Waktu Penyimpanan</p>
                                         <p class="text-white font-bold">
-                                            {{ isset($onChainData['date']) ? $onChainData['date'] : date('Y-m-d H:i:s', $onChainData['timestamp']) }}
+                                            @if(isset($onChainData['timestamp']))
+                                                {{ \Carbon\Carbon::createFromTimestamp($onChainData['timestamp'])->timezone('Asia/Jakarta')->translatedFormat('d F Y, H:i:s') }} WIB
+                                            @else
+                                                {{ \Carbon\Carbon::parse($onChainData['date'])->timezone('Asia/Jakarta')->translatedFormat('d F Y, H:i:s') }} WIB
+                                            @endif
                                         </p>
                                     </div>
                                 @endif

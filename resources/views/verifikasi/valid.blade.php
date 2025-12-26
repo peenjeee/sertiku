@@ -364,7 +364,7 @@
                         </p>
 
                         {{-- Button 1: Unduh Sertifikat --}}
-                        <button type="button" onclick="window.print()"
+                        <a href="{{ route('verifikasi.pdf', $hash) }}"
                             class="group relative flex w-full items-center gap-3 rounded-lg border border-[#22C55E]/30 bg-[rgba(15,23,42,0.5)] px-6 py-4 text-left hover:bg-[rgba(34,197,94,0.1)] transition">
                             <div class="flex h-11 w-11 items-center justify-center rounded-[14px] bg-[#22C55E]/20">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none">
@@ -377,13 +377,13 @@
 
                             <div class="flex flex-col">
                                 <p class="text-sm font-normal text-white">
-                                    Unduh Sertifikat
+                                    Unduh Sertifikat (PDF)
                                 </p>
                                 <p class="text-sm font-normal text-[#22C55E]">
-                                    Simpan salinan sertifikat digital Anda.
+                                    Simpan dokumen resmi sertifikat Anda.
                                 </p>
                             </div>
-                        </button>
+                        </a>
 
                         {{-- Button 2: Bagikan Sertifikat --}}
                         <button type="button" onclick="shareCertificate()"

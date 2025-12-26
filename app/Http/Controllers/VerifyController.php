@@ -178,6 +178,26 @@ class VerifyController extends Controller
     }
 
     /**
+     * Download certificate PDF.
+     */
+    public function downloadPdf($hash)
+    {
+        $certificate = Certificate::where('hash', $hash)
+            ->orWhere('certificate_number', $hash)
+            ->firstOrFail();
+
+        // Check if PDF exists, if not generate it
+        if (!$certificate->pdf_path || !\Illuminate\Support\Facades\Storage::disk('public')->exists($certificate->pdf_path)) {
+            $certificate->generatePdf();
+        }
+
+        return \Illuminate\Support\Facades\Storage::disk('public')->download(
+            $certificate->pdf_path,
+            'Sertifikat-' . $certificate->certificate_number . '.pdf'
+        );
+    }
+
+    /**
      * Store a fraud report
      */
     public function storeFraudReport(Request $request)
