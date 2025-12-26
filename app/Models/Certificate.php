@@ -108,8 +108,8 @@ class Certificate extends Model
     public static function generateCertificateNumber(): string
     {
         $prefix = 'SERT';
-        $year = date('Y');
-        $month = date('m');
+        $year = now()->format('Y');
+        $month = now()->format('m');
         $random = strtoupper(Str::random(6));
 
         return "{$prefix}-{$year}{$month}-{$random}";

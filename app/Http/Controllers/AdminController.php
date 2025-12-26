@@ -152,7 +152,7 @@ class AdminController extends Controller
                     $backups[] = [
                         'name' => $file,
                         'size' => $this->formatBytes(filesize($backupPath . '/' . $file)),
-                        'date' => date('Y-m-d H:i:s', filemtime($backupPath . '/' . $file)),
+                        'date' => \Carbon\Carbon::createFromTimestamp(filemtime($backupPath . '/' . $file))->setTimezone('Asia/Jakarta')->format('Y-m-d H:i:s'),
                     ];
                 }
             }
@@ -185,7 +185,7 @@ class AdminController extends Controller
             default => Certificate::all()->toArray(),
         };
 
-        $filename = "{$type}_export_" . date('Y-m-d_His');
+        $filename = "{$type}_export_" . now()->format('Y-m-d_His');
 
         if ($format === 'json') {
             return response()->json($data)
@@ -230,7 +230,7 @@ class AdminController extends Controller
             mkdir($backupPath, 0755, true);
         }
 
-        $filename = 'backup_' . date('Y-m-d_His') . '.json';
+        $filename = 'backup_' . now()->format('Y-m-d_His') . '.json';
 
         $data = [
             'created_at' => now()->toDateTimeString(),
