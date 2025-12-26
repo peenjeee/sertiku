@@ -1,4 +1,4 @@
-<x-layouts.app title="API Tokens - SertiKu">
+<x-layouts.lembaga title="API Tokens - SertiKu">
     <div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-4xl mx-auto">
             {{-- Header --}}
@@ -519,4 +519,4 @@
             document.addEventListener('DOMContentLoaded', updateTestUI);
         </script>
     @endpush
-</x-layouts.app>
+</x-layouts.lembaga>
