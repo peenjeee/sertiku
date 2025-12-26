@@ -82,7 +82,7 @@
                                     {{-- Remove Avatar --}}
                                     @if($user->avatar)
                                         <form action="{{ route('settings.avatar.remove') }}" method="POST" class="inline"
-                                            onsubmit="return confirm('Hapus foto profil?')">
+                                            onsubmit="return confirmAction(event, 'Hapus foto profil?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"

@@ -47,7 +47,17 @@
         </div>
 
         {{-- Messages Area --}}
-        <div class="h-72 overflow-y-auto p-4 space-y-3" id="chatMessages">
+        <div class="h-72 overflow-y-auto p-4 space-y-3 scrollbar-hide" id="chatMessages">
+            <style>
+                .scrollbar-hide::-webkit-scrollbar {
+                    display: none;
+                }
+
+                .scrollbar-hide {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+            </style>
             {{-- Welcome Message --}}
             <div class="flex items-start gap-2">
                 <div

@@ -244,7 +244,7 @@
                             </a>
                             @if($certificate->status === 'active')
                                 <form action="{{ route('lembaga.sertifikat.revoke', $certificate) }}" method="POST" class="flex-1"
-                                    onsubmit="return confirm('Cabut sertifikat ini?')">
+                                    onsubmit="return confirmAction(event, 'Cabut sertifikat ini?')">
                                     @csrf
                                     <button type="submit"
                                         class="w-full flex items-center justify-center gap-1 py-2 bg-red-100 rounded-lg text-red-600 text-xs font-medium hover:bg-red-200 transition">
@@ -257,7 +257,7 @@
                                 </form>
                             @elseif($certificate->status === 'revoked')
                                 <form action="{{ route('lembaga.sertifikat.reactivate', $certificate) }}" method="POST" class="flex-1"
-                                    onsubmit="return confirm('Aktifkan kembali sertifikat ini?')">
+                                    onsubmit="return confirmAction(event, 'Aktifkan kembali sertifikat ini?')">
                                     @csrf
                                     <button type="submit"
                                         class="w-full flex items-center justify-center gap-1 py-2 bg-green-100 rounded-lg text-green-600 text-xs font-medium hover:bg-green-200 transition">

@@ -39,6 +39,19 @@
             min-height: 100vh;
         }
 
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        html {
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
         /* Sidebar */
         .sidebar {
             background: linear-gradient(180deg, #0c1829 0%, #0f1f35 100%);
@@ -388,6 +401,54 @@
     @stack('scripts')
     {{-- SweetAlert Session --}}
     <x-sweetalert-session />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Global SweetAlert Confirmation
+        window.confirmAction = function (e, message) {
+            e.preventDefault();
+            let form = e.target;
+
+            // If the element is a link (a tag), not a form
+            if (form.tagName === 'A') {
+                Swal.fire({
+                    title: 'Konfirmasi',
+                    text: message,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#6366f1', // Indigo
+                    cancelButtonColor: '#ef4444', // Red
+                    confirmButtonText: 'Ya, lanjutkan!',
+                    cancelButtonText: 'Batal',
+                    background: '#1f2937', // Dark mode bg
+                    color: '#fff' // Dark mode text
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = form.href;
+                    }
+                });
+                return false;
+            }
+
+            // If it's a form
+            Swal.fire({
+                title: 'Konfirmasi',
+                text: message,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#6366f1', // Indigo
+                cancelButtonColor: '#ef4444', // Red
+                confirmButtonText: 'Ya, lanjutkan!',
+                cancelButtonText: 'Batal',
+                background: '#1f2937', // Dark mode bg
+                color: '#fff' // Dark mode text
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+            return false;
+        }
+    </script>
 </body>
 
 </html>

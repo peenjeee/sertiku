@@ -27,7 +27,7 @@
                 <div class="flex items-center gap-4 p-4 rounded-xl bg-white/5">
                     <div
                         class="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden
-                            {{ $admin->is_master ? 'bg-gradient-to-br from-purple-500 to-pink-500' : 'bg-gradient-to-br from-blue-500 to-indigo-600' }}">
+                                    {{ $admin->is_master ? 'bg-gradient-to-br from-purple-500 to-pink-500' : 'bg-gradient-to-br from-blue-500 to-indigo-600' }}">
                         @if($admin->avatar && str_starts_with($admin->avatar, '/storage/'))
                             <img src="{{ $admin->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                         @else
@@ -46,7 +46,7 @@
                         @else
                             <span class="px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 text-sm">Admin</span>
                             <form action="{{ route('master.admins.demote', $admin) }}" method="POST" class="inline"
-                                onsubmit="return confirm('Yakin ingin menurunkan {{ $admin->name }} dari Admin?')">
+                                onsubmit="return confirmAction(event, 'Yakin ingin menurunkan {{ $admin->name }} dari Admin?')">
                                 @csrf
                                 <button type="submit"
                                     class="px-3 py-1 rounded-lg bg-red-500/20 text-red-400 text-sm hover:bg-red-500/30 transition">
@@ -84,11 +84,11 @@
                         <p class="text-white/50 text-xs">{{ $user->email }}</p>
                     </div>
                     <span class="px-2 py-1 rounded-full text-xs
-                            @if($user->account_type === 'lembaga') bg-green-500/20 text-green-400
-                            @else bg-gray-500/20 text-gray-400 @endif
-                        ">{{ ucfirst($user->account_type ?? 'user') }}</span>
+                                    @if($user->account_type === 'lembaga') bg-green-500/20 text-green-400
+                                    @else bg-gray-500/20 text-gray-400 @endif
+                                ">{{ ucfirst($user->account_type ?? 'user') }}</span>
                     <form action="{{ route('master.admins.promote', $user) }}" method="POST" class="inline"
-                        onsubmit="return confirm('Yakin ingin menjadikan {{ $user->name }} sebagai Admin?')">
+                        onsubmit="return confirmAction(event, 'Yakin ingin menjadikan {{ $user->name }} sebagai Admin?')">
                         @csrf
                         <button type="submit"
                             class="px-3 py-1 rounded-lg bg-blue-500/20 text-blue-400 text-sm hover:bg-blue-500/30 transition">

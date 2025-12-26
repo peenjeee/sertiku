@@ -50,7 +50,7 @@
                     @csrf
                     <button type="submit"
                         class="w-full sm:w-auto px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm font-medium"
-                        onclick="return confirm('Putuskan koneksi Google Drive?')">
+                        onclick="return confirmAction(event, 'Putuskan koneksi Google Drive?')">
                         Putuskan Koneksi
                     </button>
                 </form>
@@ -144,7 +144,7 @@
                             <div class="flex items-center gap-4">
                                 <div
                                     class="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center flex-shrink-0
-                                                            {{ str_contains($file['name'], 'database') ? 'bg-purple-600/30' : 'bg-green-600/30' }}">
+                                                                                                {{ str_contains($file['name'], 'database') ? 'bg-purple-600/30' : 'bg-green-600/30' }}">
                                     @if(str_contains($file['name'], 'database'))
                                         <svg class="w-5 h-5 md:w-6 md:h-6 text-purple-400" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
@@ -175,12 +175,12 @@
                                     <input type="hidden" name="file_name" value="{{ $file['name'] }}">
                                     <button type="submit"
                                         class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-medium"
-                                        onclick="return confirm('Restore backup ini? Data saat ini akan ditimpa.')">
+                                        onclick="return confirmAction(event, 'Restore backup ini? Data saat ini akan ditimpa.')">
                                         Restore
                                     </button>
                                 </form>
                                 <form method="POST" action="{{ route('admin.backup.drive.delete') }}" class="inline"
-                                    onsubmit="return confirm('Hapus backup ini dari Google Drive?')">
+                                    onsubmit="return confirmAction(event, 'Hapus backup ini dari Google Drive?')">
                                     @csrf
                                     @method('DELETE')
                                     <input type="hidden" name="file_id" value="{{ $file['id'] }}">

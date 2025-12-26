@@ -94,7 +94,8 @@
                             </p>
                         </div>
                         <form action="{{ route('lembaga.api-tokens.destroy', $token->id) }}" method="POST"
-                            onsubmit="return confirm('Yakin ingin menghapus token ini?')" class="self-end sm:self-auto">
+                            onsubmit="return confirmAction(event, 'Yakin ingin menghapus token ini?')"
+                            class="self-end sm:self-auto">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-red-400 hover:text-red-300 transition p-2"
