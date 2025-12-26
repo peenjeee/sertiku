@@ -396,6 +396,7 @@ class Certificate extends Model
         // Load view and generate PDF
         $pdf = Pdf::loadView('lembaga.sertifikat.pdf', ['certificate' => $this]);
         $pdf->setPaper('a4', $this->template->orientation ?? 'landscape');
+        $pdf->setOption(['isRemoteEnabled' => true]);
 
         // Save to storage
         $filename = 'certificates/pdf/' . $this->certificate_number . '.pdf';

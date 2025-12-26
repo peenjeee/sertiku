@@ -1,4 +1,4 @@
-<x-layouts.app title="Hasil Verifikasi – SertiKu">
+<x-layouts.app title="Hasil Verifikasi â€“ SertiKu">
 
     @php
         $isRevoked = ($certificate['status'] ?? '') === 'revoked';
@@ -78,60 +78,25 @@
 
                     {{-- GAMBAR SERTIFIKAT (jika ada template) --}}
                     @if($certificate['template_image'] ?? null)
-                        <div class="mb-8 print-only-cert print-page-break">
-                            <p class="text-sm font-normal text-[#8EC5FF] mb-3 no-print text-center">Preview Sertifikat</p>
+                        {{-- PDF Preview (Iframe) --}}
+                        @php
+                            $isPortrait = ($certificate['template_orientation'] ?? 'landscape') === 'portrait';
+                            $aspectRatio = $isPortrait ? 'aspect-[794/1123]' : 'aspect-[1123/794]';
+                        @endphp
 
-                            {{-- Font Load --}}
-                            <style>
-                                @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
-
-                                .font-script {
-                                    font-family: 'Great Vibes', cursive;
-                                }
-                            </style>
-
-                            <div class="relative rounded-xl overflow-hidden border border-[rgba(255,255,255,0.2)] bg-white shadow-2xl"
-                                style="container-type: inline-size;">
-                                {{-- Background Image --}}
-                                <img src="{{ $certificate['template_image'] }}" alt="Sertifikat"
-                                    class="w-full h-auto block select-none">
-
-                                {{-- Overlays Container --}}
-                                <div class="absolute inset-0 pointer-events-none">
-                                    {{-- Name Overlay --}}
-                                    <div class="absolute w-full text-center"
-                                        style="top: {{ $certificate['name_position_y'] ?? 45 }}%;">
-                                        <div class="font-script transform -translate-y-1/2" style="
-                                                    color: {{ $certificate['name_font_color'] ?? '#1a1a1a' }};
-                                                    font-size: {{ ($certificate['name_font_size'] ?? 52) / 7.94 }}cqw;
-                                                    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                                                    line-height: 1;
-                                                 ">
-                                            {{ $certificate['nama'] }}
-                                        </div>
-                                    </div>
-
-                                    {{-- QR Code Overlay --}}
-                                    @if($certificate['qr_code_url'] ?? null)
-                                        <div class="absolute bg-white p-[0.5%]" style="
-                                                        left: {{ $certificate['qr_position_x'] ?? 90 }}%;
-                                                        top: {{ $certificate['qr_position_y'] ?? 85 }}%;
-                                                        width: {{ ($certificate['qr_size'] ?? 80) / 7.94 }}%;
-                                                        aspect-ratio: 1/1;
-                                                        transform: translate(-50%, -50%);
-                                                        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                                                     ">
-                                            <img src="{{ $certificate['qr_code_url'] }}" class="w-full h-full object-contain">
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
+                        <div
+                            class="relative w-full rounded-xl overflow-hidden border border-[rgba(255,255,255,0.2)] bg-gray-100 shadow-2xl {{ $aspectRatio }}">
+                            <iframe
+                                src="{{ route('verifikasi.pdf', ['hash' => $hash, 'stream' => 1]) }}#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+                                class="w-full h-full border-0" title="Preview Sertifikat" scrolling="no">
+                            </iframe>
                         </div>
                     @endif
 
+
                     {{-- PANEL DETAIL SERTIFIKAT DENGAN QR CODE --}}
                     <div
-                        class="mb-8 rounded-2xl border {{ $isRevoked ? 'border-[#EF4444]/30' : 'border-[#22C55E]/30' }} bg-[rgba(15,23,42,0.5)] px-6 py-6 max-[640px]:px-4 print-info">
+                        class="mb-8 mt-8 rounded-2xl border {{ $isRevoked ? 'border-[#EF4444]/30' : 'border-[#22C55E]/30' }} bg-[rgba(15,23,42,0.5)] px-6 py-6 max-[640px]:px-4 print-info">
                         <div class="flex flex-col lg:flex-row gap-6">
                             {{-- Left: Certificate Details --}}
                             <div class="flex-1">
@@ -211,7 +176,7 @@
                                                 <a href="{{ config('blockchain.explorer_url', 'https://amoy.polygonscan.com') }}/tx/{{ $certificate['blockchain_tx_hash'] }}"
                                                     target="_blank"
                                                     class="ml-1 text-purple-300 hover:text-purple-200 underline transition">
-                                                    Lihat di PolygonScan →
+                                                    Lihat di PolygonScan â†’
                                                 </a>
                                                 <p class="text-xs text-purple-400/60 mt-1 font-mono break-all">
                                                     TX: {{ Str::limit($certificate['blockchain_tx_hash'], 30) }}
@@ -447,10 +412,10 @@
 
                             <div class="flex flex-col">
                                 <p class="text-sm font-normal text-white">
-                                    Bagikan Sertifikat 🚀
+                                    Bagikan Sertifikat
                                 </p>
                                 <p class="text-sm font-normal text-[#3B82F6]" id="share-text">
-                                    Tunjukkan pencapaianmu! Buat yang lain tahu SertiKu 🎉
+                                    Tunjukkan pencapaianmu! Buat yang lain tahu SertiKu
                                 </p>
                             </div>
                         </button>
@@ -462,8 +427,8 @@
 
                                 if (navigator.share) {
                                     navigator.share({
-                                        title: '🎓 Sertifikat Terverifikasi - SertiKu',
-                                        text: '✨ Lihat sertifikat asli saya yang terverifikasi di SertiKu! Platform sertifikat digital terpercaya dengan teknologi blockchain. Yuk cobain SertiKu untuk sertifikatmu! 🚀',
+                                        title: 'Sertifikat Terverifikasi - SertiKu',
+                                        text: 'Lihat sertifikat asli saya yang terverifikasi di SertiKu! Platform sertifikat digital terpercaya dengan teknologi blockchain. Yuk cobain SertiKu untuk sertifikatmu!',
                                         url: url
                                     });
                                 } else {
@@ -481,9 +446,9 @@
                                             color: '#fff'
                                         });
 
-                                        shareText.textContent = '✓ Link berhasil disalin! Share sekarang!';
+                                        shareText.textContent = 'Link berhasil disalin! Share sekarang!';
                                         setTimeout(() => {
-                                            shareText.textContent = 'Tunjukkan pencapaianmu! Buat yang lain tahu SertiKu 🎉';
+                                            shareText.textContent = 'Tunjukkan pencapaianmu! Buat yang lain tahu SertiKu';
                                         }, 2000);
                                     });
                                 }

@@ -29,6 +29,7 @@ class Template extends Model
         'name_position_y',
         'name_font_size',
         'name_font_color',
+        'name_font_family',
         'qr_position_x',
         'qr_position_y',
         'qr_size',

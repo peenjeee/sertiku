@@ -4,7 +4,24 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>{{ $certificate->recipient_name }} - {{ $certificate->certificate_number }}</title>
+    @php
+        // Get position values from template or use defaults
+        $nameX = $certificate->template->name_position_x ?? 50;
+        $nameY = $certificate->template->name_position_y ?? 45;
+        $nameFontSize = $certificate->template->name_font_size ?? 52;
+        $nameFontColor = $certificate->template->name_font_color ?? '#1a1a1a';
+        $fontFamily = $certificate->template->name_font_family ?? 'Great Vibes';
+        $fontUrlValue = str_replace(' ', '+', $fontFamily);
+
+        $qrX = $certificate->template->qr_position_x ?? 90;
+        $qrY = $certificate->template->qr_position_y ?? 85;
+        $qrSize = $certificate->template->qr_size ?? 80;
+    @endphp
+
+    {{-- Load Google Font with @import (V1 API for better TTF support) --}}
     <style>
+        @import url('https://fonts.googleapis.com/css?family={{ $fontUrlValue }}');
+
         @page {
             margin: 0;
             size: A4
@@ -12,20 +29,12 @@
             ;
         }
 
-        @font-face {
-            font-family: 'Great Vibes';
-            src: url('{{ storage_path("app/public/fonts/GreatVibes-Regular.ttf") }}') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Times New Roman', serif;
+            font-family: '{{ $fontFamily }}', serif;
             width: 100%;
             height: 100%;
-            color: #333;
         }
 
         .container {
@@ -43,73 +52,115 @@
             z-index: 1;
         }
 
-        /* Dynamic positioned recipient name - centered using width and text-align */
+        /* Name Container - Anchored at specific point */
+        .recipient-name-anchor {
+            position: absolute;
+            width: 0;
+            height: 0;
+            overflow: visible;
+            z-index: 10;
+        }
+
         .recipient-name {
-            position: absolute;
-            width: 100%;
+            display: block;
+            width: 1000px;
+            margin-left: -500px;
+            /* Center text on anchor */
             text-align: center;
-            font-family: 'Great Vibes', 'Zapfino', 'Segoe Script', cursive;
-            z-index: 10;
+            font-family: '{{ $fontFamily }}', cursive;
+            font-size:
+                {{ $nameFontSize }}
+                px;
+            color:
+                {{ $nameFontColor }}
+            ;
+            line-height: 1;
+            white-space: nowrap;
+            /* Vertical align tweak */
+            /* Vertical align tweak for DOMPDF */
+            transform: translateY(-60%);
         }
 
-        /* Dynamic positioned QR Code */
-        .qr-code {
+        /* QR Anchor */
+        .qr-code-anchor {
             position: absolute;
-            padding: 5px;
-            background: #fff;
-            border: 1px solid #e2e8f0;
+            width: 0;
+            height: 0;
+            overflow: visible;
             z-index: 10;
         }
 
-        .qr-code img {
+        .qr-code-box {
+            background: #fff;
+            padding: 5px;
+            border: 1px solid #e2e8f0;
+            box-sizing: border-box;
+            /* Center box on anchor */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qr-code-box img {
             width: 100%;
             height: 100%;
+            display: block;
         }
     </style>
 </head>
+@php
+    // Calculate precise coordinates using Editor's scaling logic
+    // Editor uses "794px" as the base width for calculating percentages (cqw)
+    // We must scale the raw inputs (which are treated as pixels relative to 794px in editor)
+    // to the actual PDF page width.
+
+    $orientation = $certificate->template->orientation ?? 'landscape';
+    // A4 PT Dimensions
+    $pageWidth = ($orientation === 'portrait') ? 595.28 : 841.89;
+    $pageHeight = ($orientation === 'portrait') ? 841.89 : 595.28;
+
+    // Scaling Factor (Editor Base Width = 794px)
+    // Formula: (Input / 794) * PageWidthPT
+    $scaledNameFontSize = ($nameFontSize / 794) * $pageWidth;
+    $scaledQrSize = ($qrSize / 794) * $pageWidth;
+    $scaledQrHalfSize = $scaledQrSize / 2;
+
+    $nameLeft = ($nameX / 100) * 100; 
+@endphp
 
 <body>
-    @php
-        // Get position values from template or use defaults
-        $nameX = $certificate->template->name_position_x ?? 50;
-        $nameY = $certificate->template->name_position_y ?? 45;
-        $nameFontSize = $certificate->template->name_font_size ?? 52;
-        $nameFontColor = $certificate->template->name_font_color ?? '#1a1a1a';
-
-        $qrX = $certificate->template->qr_position_x ?? 90;
-        $qrY = $certificate->template->qr_position_y ?? 85;
-        $qrSize = $certificate->template->qr_size ?? 80;
-    @endphp
 
     <div class="container">
-        {{-- Background Template Image --}}
+        {{-- Background (Base64 Encoded for Reliability) --}}
         @if($certificate->template && $certificate->template->file_path)
-            <img src="{{ storage_path('app/public/' . $certificate->template->file_path) }}" class="background">
+            @php
+                $bgPath = storage_path('app/public/' . $certificate->template->file_path);
+                $bgType = pathinfo($bgPath, PATHINFO_EXTENSION);
+                $bgData = file_exists($bgPath) ? base64_encode(file_get_contents($bgPath)) : '';
+            @endphp
+            @if($bgData)
+                <img src="data:image/{{ $bgType }};base64,{{ $bgData }}" class="background">
+            @endif
         @endif
 
-        {{-- Recipient Name - Full width centered at Y position --}}
-        {{-- Use margin-top to simulate vertical centering based on font size --}}
-        <div class="recipient-name" style="
-            left: 0;
-            top: {{ $nameY }}%;
-            font-size: {{ $nameFontSize }}px;
-            color: {{ $nameFontColor }};
-            margin-top: -{{ $nameFontSize / 2 }}px; 
-            line-height: 1;
-        ">{{ $certificate->recipient_name }}</div>
+        {{-- Name --}}
+        <div class="recipient-name-anchor" style="left: {{ $nameX }}%; top: {{ $nameY }}%;">
+            <div class="recipient-name" style="font-size: {{ $scaledNameFontSize }}pt;">
+                {{ $certificate->recipient_name }}
+            </div>
+        </div>
 
-        {{-- QR Code - Positioned at X,Y --}}
-        {{-- Use negative margins to center using fixed pixel size --}}
+        {{-- QR Code --}}
         @if($certificate->qr_code_path)
-            <div class="qr-code" style="
-                                left: {{ $qrX }}%;
-                                top: {{ $qrY }}%;
-                                width: {{ $qrSize }}px;
-                                height: {{ $qrSize }}px;
-                                margin-left: -{{ $qrSize / 2 }}px;
-                                margin-top: -{{ $qrSize / 2 }}px;
-                            ">
-                <img src="{{ storage_path('app/public/' . $certificate->qr_code_path) }}">
+            <div class="qr-code-anchor" style="left: {{ $qrX }}%; top: {{ $qrY }}%;">
+                <div class="qr-code-box" style="
+                            width: {{ $scaledQrSize }}pt; 
+                            height: {{ $scaledQrSize }}pt; 
+                            margin-left: -{{ $scaledQrHalfSize }}pt; 
+                            margin-top: -{{ $scaledQrHalfSize }}pt;">
+                    <img src="{{ storage_path('app/public/' . $certificate->qr_code_path) }}"
+                        style="width: 100%; height: 100%;">
+                </div>
             </div>
         @endif
     </div>

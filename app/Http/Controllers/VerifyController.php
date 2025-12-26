@@ -180,6 +180,7 @@ class VerifyController extends Controller
                 'name_position_y' => $certificate->template->name_position_y ?? 45,
                 'name_font_size' => $certificate->template->name_font_size ?? 52,
                 'name_font_color' => $certificate->template->name_font_color ?? '#1a1a1a',
+                'name_font_family' => $certificate->template->name_font_family ?? 'Great Vibes',
                 'qr_position_x' => $certificate->template->qr_position_x ?? 90,
                 'qr_position_y' => $certificate->template->qr_position_y ?? 85,
                 'qr_size' => $certificate->template->qr_size ?? 80,
@@ -198,7 +199,7 @@ class VerifyController extends Controller
     /**
      * Download certificate PDF.
      */
-    public function downloadPdf($hash)
+    public function downloadPdf(Request $request, $hash)
     {
         $certificate = Certificate::where('hash', $hash)
             ->orWhere('certificate_number', $hash)
@@ -207,6 +208,11 @@ class VerifyController extends Controller
         // Check if PDF exists, if not generate it
         if (!$certificate->pdf_path || !\Illuminate\Support\Facades\Storage::disk('public')->exists($certificate->pdf_path)) {
             $certificate->generatePdf();
+        }
+
+        // Support inline streaming
+        if ($request->has('stream')) {
+            return \Illuminate\Support\Facades\Storage::disk('public')->response($certificate->pdf_path);
         }
 
         return \Illuminate\Support\Facades\Storage::disk('public')->download(
