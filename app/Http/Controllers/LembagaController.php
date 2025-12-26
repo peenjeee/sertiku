@@ -94,8 +94,8 @@ class LembagaController extends Controller
         // Generate PDF for the certificate (Critical for File Verification)
         try {
             $certificate->generatePdf();
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error("Failed to generate PDF: " . $e->getMessage());
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error("Failed to generate PDF (continuing without it): " . $e->getMessage());
             // Continue without PDF, but verifying file integrity will fail for uploaded files
         }
 

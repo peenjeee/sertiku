@@ -342,24 +342,17 @@ class Certificate extends Model
         $certificatePath = $this->pdf_path ?? $this->image_path;
 
         if ($certificatePath && Storage::disk('public')->exists($certificatePath)) {
-            $content = Storage::disk('public')->get($certificatePath);
-            $hashes['certificate_sha256'] = hash('sha256', $content);
-            $hashes['certificate_md5'] = md5($content);
-        } elseif ($this->template_id && $this->template) {
-            // If no custom file but using template, use template's hashes
-            if ($this->template->sha256) {
-                $hashes['certificate_sha256'] = $this->template->sha256;
-            }
-            if ($this->template->md5) {
-                $hashes['certificate_md5'] = $this->template->md5;
-            }
+            $fullPath = Storage::disk('public')->path($certificatePath);
+            $hashes['certificate_sha256'] = hash_file('sha256', $fullPath);
+            $hashes['certificate_md5'] = hash_file('md5', $fullPath);
         }
+        // Note: We do NOT fall back to template hashes - we only store hashes of the generated PDF
 
         // Generate hashes for QR code if exists
         if ($this->qr_code_path && Storage::disk('public')->exists($this->qr_code_path)) {
-            $qrContent = Storage::disk('public')->get($this->qr_code_path);
-            $hashes['qr_sha256'] = hash('sha256', $qrContent);
-            $hashes['qr_md5'] = md5($qrContent);
+            $qrFullPath = Storage::disk('public')->path($this->qr_code_path);
+            $hashes['qr_sha256'] = hash_file('sha256', $qrFullPath);
+            $hashes['qr_md5'] = hash_file('md5', $qrFullPath);
         }
 
         // Update certificate with hashes
@@ -402,7 +395,7 @@ class Certificate extends Model
 
         // Load view and generate PDF
         $pdf = Pdf::loadView('lembaga.sertifikat.pdf', ['certificate' => $this]);
-        $pdf->setPaper('a4', 'landscape');
+        $pdf->setPaper('a4', $this->template->orientation ?? 'landscape');
 
         // Save to storage
         $filename = 'certificates/pdf/' . $this->certificate_number . '.pdf';
@@ -410,6 +403,9 @@ class Certificate extends Model
 
         // Update model
         $this->update(['pdf_path' => $filename]);
+
+        // Generate and save file hashes for verification
+        $this->generateFileHashes();
 
         return $filename;
     }

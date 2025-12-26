@@ -68,6 +68,16 @@ class CertificateIssuedMail extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        $attachments = [];
+
+        if ($this->certificate->pdf_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($this->certificate->pdf_path)) {
+            $attachments[] = \Illuminate\Mail\Mailables\Attachment::fromStorageDisk(
+                'public',
+                $this->certificate->pdf_path
+            )->as('Sertifikat-' . $this->certificateNumber . '.pdf')
+                ->withMime('application/pdf');
+        }
+
+        return $attachments;
     }
 }

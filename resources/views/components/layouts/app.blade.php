@@ -537,7 +537,38 @@
                         console.log('[SW] Registration failed:', error);
                     });
             });
-        }
+         }
+    </script>
+    <script>
+        // Global Form Validation with SweetAlert2
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('for m');
+            forms.forEach(form => {
+                // Add novalidate to prevent native browser tooltips
+                form.setAttribute('novalidate', true);
+
+                form.addEventListener('submit', function(e) {
+                    if (!this.checkValidity()) {
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+
+                        const firstInvalid = this.querySelector(':invalid');
+                        if (firstInvalid) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Mohon Lengkapi Data',
+                                text: firstInvalid.validationMessage,
+                                confirmButtonColor: '#3B82F6',
+                                background: '#0f172a',
+                                color: '#fff'
+                            }).then(() => {
+                                setTimeout(() => firstInvalid.focus(), 300);
+                            });
+                        }
+                    }
+                });
+            });
+        });
     </script>
 </body>
 

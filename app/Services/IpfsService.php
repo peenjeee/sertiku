@@ -153,8 +153,21 @@ class IpfsService
                 'provider' => 'Pinata',
                 'network' => 'IPFS',
             ],
-            // File integrity hashes
-            'file_hashes' => $certificate->getFileHashes(),
+            // PDF file integrity hashes (generated from dompdf output)
+            'pdf_file_hashes' => [
+                'sha256' => $certificate->certificate_sha256,
+                'md5' => $certificate->certificate_md5,
+            ],
+            // QR code file hashes
+            'qr_code_hashes' => [
+                'sha256' => $certificate->qr_sha256,
+                'md5' => $certificate->qr_md5,
+            ],
+            // Template file hashes (if used)
+            'template_hashes' => $certificate->template ? [
+                'sha256' => $certificate->template->sha256,
+                'md5' => $certificate->template->md5,
+            ] : null,
         ];
 
         return $this->uploadJson($metadata, $certificate->certificate_number);

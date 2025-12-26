@@ -7,7 +7,9 @@
     <style>
         @page {
             margin: 0;
-            size: A4 landscape;
+            size: A4
+                {{ $certificate->template->orientation ?? 'landscape' }}
+            ;
         }
 
         body {
@@ -55,6 +57,10 @@
             font-size: 24px;
             color: #4a4a4a;
             margin-top: 20px;
+            opacity: 0.7;
+            /* Disguise/Blend middle text */
+            mix-blend-mode: multiply;
+            /* Optional: better blending if supported */
         }
 
         .date {
@@ -88,9 +94,9 @@
 
 <body>
     <div class="container">
-        @if($certificate->template && $certificate->template->background_image)
+        @if($certificate->template && $certificate->template->file_path)
             {{-- Use absolute path for dompdf --}}
-            <img src="{{ public_path('storage/' . $certificate->template->background_image) }}" class="background">
+            <img src="{{ public_path('storage/' . $certificate->template->file_path) }}" class="background">
         @endif
 
         <div class="content">

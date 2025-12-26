@@ -129,10 +129,10 @@
                 @forelse($recentActivity as $activity)
                     <div class="flex items-start gap-3">
                         <div class="w-2 h-2 rounded-full mt-2
-                            @if($activity['type'] === 'new') bg-blue-400
-                            @elseif($activity['type'] === 'view') bg-yellow-400
-                            @else bg-purple-400 @endif
-                        "></div>
+                                @if($activity['type'] === 'new') bg-blue-400
+                                @elseif($activity['type'] === 'view') bg-yellow-400
+                                @else bg-purple-400 @endif
+                            "></div>
                         <div class="flex-1 min-w-0">
                             <p class="text-white text-sm font-medium">{{ $activity['title'] }}</p>
                             <p class="text-white/50 text-xs truncate">{{ $activity['subtitle'] }}</p>
@@ -175,12 +175,19 @@
                             <p class="text-white/50 text-sm">{{ $cert->issuer->name ?? 'Lembaga' }}</p>
                         </div>
                         <span class="px-3 py-1 rounded-full text-xs
-                            @if($cert->status === 'active') bg-green-500/20 text-green-400
-                            @elseif($cert->status === 'pending') bg-yellow-500/20 text-yellow-400
-                            @else bg-red-500/20 text-red-400 @endif
-                        ">
-                            {{ ucfirst($cert->status) }}
-                        </span>
+                                    @if($cert->status === 'active') bg-green-500/20 text-green-400
+                                    @elseif($cert->status === 'pending') bg-yellow-500/20 text-yellow-400
+                                    @else bg-red-500/20 text-red-400 @endif
+                                ">
+                            @if($cert->pdf_url)
+                                <a href="{{ $cert->pdf_url }}" target="_blank" class="text-white/40 hover:text-white transition"
+                                    title="Download PDF">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                </a>
+                            @endif
                     </div>
                 @endforeach
             </div>

@@ -18,10 +18,14 @@ function loadEnv() {
     const envPath = path.join(__dirname, '..', '.env');
     const envContent = fs.readFileSync(envPath, 'utf8');
     const env = {};
-    envContent.split('\n').forEach(line => {
+    // Handle both Unix (\n) and Windows (\r\n) line endings
+    envContent.split(/\r?\n/).forEach(line => {
+        // Skip empty lines and comments
+        if (!line || line.startsWith('#')) return;
         const match = line.match(/^([^=]+)=(.*)$/);
         if (match) {
-            env[match[1].trim()] = match[2].trim().replace(/^["']|["']$/g, '');
+            // Trim and remove surrounding quotes, also remove any trailing \r
+            env[match[1].trim()] = match[2].trim().replace(/^["']|["']$/g, '').replace(/\r$/, '');
         }
     });
     return env;
@@ -33,7 +37,7 @@ function getContractABI() {
     if (fs.existsSync(abiPath)) {
         return JSON.parse(fs.readFileSync(abiPath, 'utf8'));
     }
-    
+
     // Fallback inline ABI
     return [
         "function storeCertificate(bytes32 _dataHash, string _certificateNumber, string _recipientName, string _courseName, string _issueDate, string _issuerName) external returns (bool)",

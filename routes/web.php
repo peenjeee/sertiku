@@ -483,3 +483,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin/support')->name('admin.suppo
 
 // API for unread count
 Route::middleware(['auth'])->get('/api/support/unread', [\App\Http\Controllers\SupportController::class, 'unreadCount']);
+
+// Utility to fix storage link on hosting
+Route::get('/fix-storage', function () {
+    try {
+        Artisan::call('storage:link');
+        return 'Storage Link Created Successfully! <br> Template images should work now. <a href="/lembaga/template">Back to Gallery</a>';
+    } catch (\Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+});

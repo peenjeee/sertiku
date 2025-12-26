@@ -467,7 +467,7 @@
                             </div>
 
                             {{-- FORM EMAIL / PASSWORD --}}
-                            <form action="{{ route('login.email') }}" method="POST" class="space-y-5 pt-2">
+                            <form action="{{ route('login.email') }}" method="POST" class="space-y-5 pt-2" novalidate>
                                 @csrf
 
                                 {{-- Email --}}

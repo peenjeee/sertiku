@@ -449,7 +449,42 @@ class BlockchainService
             $recipientName = escapeshellarg($certificate->recipient_name ?? '');
             $courseName = escapeshellarg($certificate->course_name ?? '');
             $issueDate = escapeshellarg($certificate->issue_date?->format('Y-m-d') ?? '');
-            $issuerName = escapeshellarg($certificate->user->institution_name ?? $certificate->user->name ?? '');
+
+            // Include PDF file hashes (SHA256 and MD5) in issuerName for visibility on blockchain explorer
+            $issuer = $certificate->user->institution_name ?? $certificate->user->name ?? '';
+
+            // Build hash info string with all file hashes (like IPFS metadata)
+            $hashParts = [];
+
+            // PDF file hashes (from dompdf)
+            if ($certificate->certificate_sha256) {
+                $hashParts[] = 'PDF_SHA256:' . $certificate->certificate_sha256;
+            }
+            if ($certificate->certificate_md5) {
+                $hashParts[] = 'PDF_MD5:' . $certificate->certificate_md5;
+            }
+
+            // QR code file hashes
+            if ($certificate->qr_sha256) {
+                $hashParts[] = 'QR_SHA256:' . $certificate->qr_sha256;
+            }
+            if ($certificate->qr_md5) {
+                $hashParts[] = 'QR_MD5:' . $certificate->qr_md5;
+            }
+
+            // Template file hashes (if template is used)
+            if ($certificate->template) {
+                if ($certificate->template->sha256) {
+                    $hashParts[] = 'TPL_SHA256:' . $certificate->template->sha256;
+                }
+                if ($certificate->template->md5) {
+                    $hashParts[] = 'TPL_MD5:' . $certificate->template->md5;
+                }
+            }
+
+            $hashInfo = !empty($hashParts) ? ' | ' . implode(' | ', $hashParts) : '';
+            $issuerWithHash = $issuer . $hashInfo;
+            $issuerName = escapeshellarg($issuerWithHash);
 
             // Use full path for hosting, fallback to 'node' for local
             $nodePath = env('NODE_PATH', 'node');

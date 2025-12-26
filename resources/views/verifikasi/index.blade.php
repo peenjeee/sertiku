@@ -56,7 +56,7 @@
 
 
                 {{-- FORM --}}
-                <form id="verifyForm" class="space-y-5">
+                <form id="verifyForm" class="space-y-5" novalidate>
                     @csrf
 
                     {{-- Tab Switcher --}}
@@ -95,7 +95,7 @@
                                        px-3 py-2">
                                 <input type="text" name="hash" id="hashInput" value="{{ old('hash') }}"
                                     class="w-full bg-transparent text-sm text-white placeholder:text-[rgba(255,255,255,0.5)] focus:outline-none"
-                                    placeholder="Contoh: SERT-202412-ABCDEF" required>
+                                    placeholder="Contoh: SERT-202412-ABCDEF">
                             </div>
                         </label>
                     </div>
@@ -116,7 +116,7 @@
                             <div class="mt-2 relative">
                                 <input type="file" id="fileInput" name="document" accept=".pdf,.jpg,.jpeg,.png"
                                     class="hidden" onchange="updateFileName(this)">
-                                <label for="fileInput"
+                                <label for="fileInput" id="dropZone"
                                     class="flex flex-col items-center justify-center w-full h-32 border-2 border-[rgba(255,255,255,0.2)] border-dashed rounded-[8px] cursor-pointer hover:bg-[rgba(255,255,255,0.05)] transition bg-[rgba(255,255,255,0.02)]">
                                     <div class="flex flex-col items-center justify-center pt-5 pb-6">
                                         <svg class="w-8 h-8 mb-3 text-gray-400" fill="none" stroke="currentColor"
@@ -216,10 +216,11 @@
                     {{-- Blockchain Verification Link --}}
                     @if(config('blockchain.enabled'))
                         <div class="mt-4 pt-4 border-t border-white/10">
-                            <a href="{{ route('blockchain.verify') }}" class="flex items-center justify-center gap-2 w-full py-3 rounded-[8px]
-                                                               border border-purple-500/30 bg-purple-500/10
-                                                               text-purple-300 text-sm font-medium
-                                                               hover:bg-purple-500/20 transition">
+                            <a href="{{ route('blockchain.verify') }}"
+                                class="flex items-center justify-center gap-2 w-full py-3 rounded-[8px]
+                                                                                               border border-purple-500/30 bg-purple-500/10
+                                                                                               text-purple-300 text-sm font-medium
+                                                                                               hover:bg-purple-500/20 transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
@@ -586,9 +587,18 @@
                         window.location.href = targetUrl;
                     }, 300);
                 } else {
-                    alert("QR Code tidak dikenali sebagai sertifikat SertiKu: " + decodedText.substring(0, 50));
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'QR Code Tidak Valid',
+                        text: 'QR Code tidak dikenali sebagai sertifikat SertiKu.',
+                        background: '#0f172a',
+                        color: '#fff',
+                        confirmButtonColor: '#3B82F6'
+                    });
                 }
             }
+
+
 
             function onScanFailure(error) {
                 // Ignore scan failures (normal saat belum ada QR code)
@@ -648,6 +658,51 @@
                 }
             }
 
+            // Drag and Drop Logic
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, unhighlight, false);
+            });
+
+            function highlight(e) {
+                dropZone.classList.add('border-blue-500', 'bg-[rgba(59,130,246,0.1)]');
+                dropZone.classList.remove('border-[rgba(255,255,255,0.2)]', 'bg-[rgba(255,255,255,0.02)]');
+            }
+
+            function unhighlight(e) {
+                dropZone.classList.remove('border-blue-500', 'bg-[rgba(59,130,246,0.1)]');
+                dropZone.classList.add('border-[rgba(255,255,255,0.2)]', 'bg-[rgba(255,255,255,0.02)]');
+            }
+
+            dropZone.addEventListener('drop', handleDrop, false);
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    updateFileName(fileInput);
+                }
+            }
+
+
+
             // Form submission handler
             document.getElementById('verifyForm').addEventListener('submit', function (e) {
                 e.preventDefault();
@@ -657,13 +712,27 @@
                     if (hash) {
                         window.location.href = `{{ url('/verifikasi') }}/${hash}`;
                     } else {
-                        alert('Silakan masukkan kode hash sertifikat');
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Mohon Maaf',
+                            text: 'Silakan masukkan kode hash sertifikat terlebih dahulu.',
+                            background: '#0f172a',
+                            color: '#fff',
+                            confirmButtonColor: '#3B82F6'
+                        });
                     }
                 } else {
                     // File upload
                     const fileInput = document.getElementById('fileInput');
                     if (!fileInput.files || !fileInput.files[0]) {
-                        alert('Silakan pilih file sertifikat terlebih dahulu');
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'File Belum Dipilih',
+                            text: 'Silakan pilih atau drag & drop file sertifikat terlebih dahulu.',
+                            background: '#0f172a',
+                            color: '#fff',
+                            confirmButtonColor: '#3B82F6'
+                        });
                         return;
                     }
 
@@ -684,22 +753,36 @@
                             'X-Requested-With': 'XMLHttpRequest'
                         }
                     })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            window.location.href = data.redirect_url;
-                        } else {
-                            alert(data.message || 'Verifikasi gagal');
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                window.location.href = data.redirect_url;
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Verifikasi Gagal',
+                                    text: data.message || 'Dokumen tidak dapat diverifikasi.',
+                                    background: '#0f172a',
+                                    color: '#fff',
+                                    confirmButtonColor: '#3B82F6'
+                                });
+                                btn.disabled = false;
+                                btn.innerHTML = originalText;
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Terjadi Kesalahan',
+                                text: 'Gagal memproses file. Silakan coba lagi.',
+                                background: '#0f172a',
+                                color: '#fff',
+                                confirmButtonColor: '#3B82F6'
+                            });
                             btn.disabled = false;
                             btn.innerHTML = originalText;
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Terjadi kesalahan saat memproses file');
-                        btn.disabled = false;
-                        btn.innerHTML = originalText;
-                    });
+                        });
                 }
             });
         </script>

@@ -43,6 +43,23 @@
             border-right: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
             width: 288px;
+            overflow-y: auto;
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
+        }
+
+        .sidebar nav {
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
+        }
+
+        .sidebar nav::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari and Opera */
         }
 
         .sidebar.collapsed {
@@ -988,7 +1005,7 @@
                 .replace(/\n/g, '<br>')
                 // Links
                 .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-400 underline" target="_blank">$1</a>');
-        }
+    }
     </script>
     {{-- SweetAlert Session --}}
     <x-sweetalert-session />

@@ -222,6 +222,16 @@
 
                         <!-- Certificate Actions -->
                         <div class="p-4 pt-0 flex items-center gap-2">
+                            @if($certificate->pdf_path)
+                                <a href="{{ asset('storage/' . $certificate->pdf_path) }}" target="_blank"
+                                   class="flex-1 flex items-center justify-center gap-1 py-2 bg-blue-100 rounded-lg text-blue-700 text-xs font-medium hover:bg-blue-200 transition">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    PDF
+                                </a>
+                            @endif
                             <a href="{{ route('verifikasi.show', $certificate->hash) }}" target="_blank"
                                 class="flex-1 flex items-center justify-center gap-1 py-2 bg-gray-100 rounded-lg text-gray-700 text-xs font-medium hover:bg-gray-200 transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
