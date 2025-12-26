@@ -311,6 +311,34 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Global Form Validation with SweetAlert2
+        document.addEventListener('DOMContentLoaded', function () {
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.setAttribute('novalidate', true);
+                form.addEventListener('submit', function (e) {
+                    if (!this.checkValidity()) {
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+                        const firstInvalid = this.querySelector(':invalid');
+                        if (firstInvalid) {
+                            const label = firstInvalid.closest('.space-y-2')?.querySelector('label')?.textContent?.replace('*', '').trim()
+                                || firstInvalid.name || 'Field';
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Mohon Lengkapi Data',
+                                text: `${label} wajib diisi`,
+                                confirmButtonColor: '#3B82F6',
+                                background: '#0f172a',
+                                color: '#fff'
+                            }).then(() => setTimeout(() => firstInvalid.focus(), 300));
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
         // Global SweetAlert Confirmation
         window.confirmAction = function (e, message) {
             e.preventDefault();

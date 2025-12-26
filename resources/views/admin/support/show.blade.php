@@ -47,8 +47,13 @@
                                 @if(!$message->is_from_admin)
                                     <div
                                         class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center overflow-hidden">
-                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($message->sender->name ?? 'U') }}&email={{ urlencode($message->sender->email ?? '') }}&background=3B82F6&color=fff&bold=true&size=24"
-                                            alt="Avatar" class="w-full h-full object-cover">
+                                        @if($message->sender->avatar && (str_starts_with($message->sender->avatar, '/storage/') || str_starts_with($message->sender->avatar, 'http')))
+                                            <img src="{{ $message->sender->avatar }}" alt="Avatar"
+                                                class="w-full h-full object-cover">
+                                        @else
+                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($message->sender->name ?? 'U') }}&email={{ urlencode($message->sender->email ?? '') }}&background=3B82F6&color=fff&bold=true&size=24"
+                                                alt="Avatar" class="w-full h-full object-cover">
+                                        @endif
                                     </div>
                                 @endif
                                 <span class="text-white/50 text-xs">
@@ -57,8 +62,13 @@
                                 @if($message->is_from_admin)
                                     <div
                                         class="w-6 h-6 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center overflow-hidden">
-                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($message->sender->name ?? 'A') }}&email={{ urlencode($message->sender->email ?? '') }}&background=A855F7&color=fff&bold=true&size=24"
-                                            alt="Avatar" class="w-full h-full object-cover">
+                                        @if($message->sender->avatar && (str_starts_with($message->sender->avatar, '/storage/') || str_starts_with($message->sender->avatar, 'http')))
+                                            <img src="{{ $message->sender->avatar }}" alt="Avatar"
+                                                class="w-full h-full object-cover">
+                                        @else
+                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($message->sender->name ?? 'A') }}&email={{ urlencode($message->sender->email ?? '') }}&background=A855F7&color=fff&bold=true&size=24"
+                                                alt="Avatar" class="w-full h-full object-cover">
+                                        @endif
                                     </div>
                                 @endif
                             </div>

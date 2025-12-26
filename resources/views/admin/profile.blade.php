@@ -13,7 +13,7 @@
             <div class="text-center">
                 <div
                     class="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mx-auto mb-4 overflow-hidden">
-                    @if($admin->avatar && str_starts_with($admin->avatar, '/storage/'))
+                    @if($admin->avatar && (str_starts_with($admin->avatar, '/storage/') || str_starts_with($admin->avatar, 'http')))
                         <img src="{{ $admin->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                     @else
                         <img src="https://ui-avatars.com/api/?name={{ urlencode($admin->name) }}&email={{ urlencode($admin->email) }}&background=3B82F6&color=fff&bold=true&size=96"

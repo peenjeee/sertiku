@@ -84,8 +84,8 @@
                     <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5">
                         <div
                             class="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden
-                                {{ $admin->is_master ? 'bg-gradient-to-br from-purple-500 to-pink-500' : 'bg-gradient-to-br from-blue-500 to-indigo-600' }}">
-                            @if($admin->avatar && str_starts_with($admin->avatar, '/storage/'))
+                                    {{ $admin->is_master ? 'bg-gradient-to-br from-purple-500 to-pink-500' : 'bg-gradient-to-br from-blue-500 to-indigo-600' }}">
+                            @if($admin->avatar && (str_starts_with($admin->avatar, '/storage/') || str_starts_with($admin->avatar, 'http')))
                                 <img src="{{ $admin->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                             @else
                                 <img src="https://ui-avatars.com/api/?name={{ urlencode($admin->name) }}&email={{ urlencode($admin->email) }}&background={{ $admin->is_master ? 'A855F7' : '3B82F6' }}&color=fff&bold=true&size=40"
@@ -115,7 +115,7 @@
                     <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5">
                         <div
                             class="w-10 h-10 rounded-full bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center overflow-hidden">
-                            @if($user->avatar && str_starts_with($user->avatar, '/storage/'))
+                            @if($user->avatar && (str_starts_with($user->avatar, '/storage/') || str_starts_with($user->avatar, 'http')))
                                 <img src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                             @else
                                 <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name ?? 'U') }}&email={{ urlencode($user->email) }}&background=6B7280&color=fff&bold=true&size=40"
@@ -127,10 +127,10 @@
                             <p class="text-white/50 text-xs">{{ $user->created_at->diffForHumans() }}</p>
                         </div>
                         <span class="px-2 py-1 rounded-full text-xs
-                                @if($user->account_type === 'admin') bg-blue-500/20 text-blue-400
-                                @elseif($user->account_type === 'lembaga') bg-green-500/20 text-green-400
-                                @else bg-gray-500/20 text-gray-400 @endif
-                            ">{{ ucfirst($user->account_type ?? 'user') }}</span>
+                                    @if($user->account_type === 'admin') bg-blue-500/20 text-blue-400
+                                    @elseif($user->account_type === 'lembaga') bg-green-500/20 text-green-400
+                                    @else bg-gray-500/20 text-gray-400 @endif
+                                ">{{ ucfirst($user->account_type ?? 'user') }}</span>
                     </div>
                 @empty
                     <p class="text-white/50 text-sm text-center py-4">Belum ada user</p>

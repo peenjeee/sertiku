@@ -56,7 +56,7 @@
             <div class="relative group">
                 <div
                     class="w-24 h-24 lg:w-28 lg:h-28 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                    @if($user->avatar && str_starts_with($user->avatar, '/storage/'))
+                    @if($user->avatar && (str_starts_with($user->avatar, '/storage/') || str_starts_with($user->avatar, 'http')))
                         <img src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                     @else
                         <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&email={{ urlencode($user->email) }}&background=3B82F6&color=fff&bold=true&size=128"

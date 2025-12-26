@@ -28,8 +28,12 @@
             <div class="flex items-center gap-4 mb-6">
                 <div
                     class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center overflow-hidden">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&email={{ urlencode($user->email) }}&background=3B82F6&color=fff&bold=true&size=64"
-                        alt="Avatar" class="w-full h-full object-cover">
+                    @if($user->avatar && (str_starts_with($user->avatar, '/storage/') || str_starts_with($user->avatar, 'http')))
+                        <img src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
+                    @else
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&email={{ urlencode($user->email) }}&background=3B82F6&color=fff&bold=true&size=64"
+                            alt="Avatar" class="w-full h-full object-cover">
+                    @endif
                 </div>
                 <div>
                     <h2 class="text-gray-800 font-bold text-lg">{{ $user->name }}</h2>

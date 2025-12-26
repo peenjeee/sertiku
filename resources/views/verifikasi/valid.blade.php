@@ -176,7 +176,7 @@
                                                 <a href="{{ config('blockchain.explorer_url', 'https://amoy.polygonscan.com') }}/tx/{{ $certificate['blockchain_tx_hash'] }}"
                                                     target="_blank"
                                                     class="ml-1 text-purple-300 hover:text-purple-200 underline transition">
-                                                    Lihat di PolygonScan â†’
+                                                    Lihat di PolygonScan
                                                 </a>
                                                 <p class="text-xs text-purple-400/60 mt-1 font-mono break-all">
                                                     TX: {{ Str::limit($certificate['blockchain_tx_hash'], 30) }}

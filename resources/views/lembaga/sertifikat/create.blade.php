@@ -455,8 +455,32 @@
             const form = document.getElementById('certificate-form');
             if (!form) return;
 
+            // Prevent native validation tooltips
+            form.setAttribute('novalidate', true);
+
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
+
+                // Validate form first
+                if (!this.checkValidity()) {
+                    const firstInvalid = this.querySelector(':invalid');
+                    if (firstInvalid) {
+                        const label = firstInvalid.closest('.space-y-2')?.querySelector('label')?.textContent?.replace('*', '').trim()
+                            || firstInvalid.name || 'Field';
+
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Mohon Lengkapi Data',
+                            text: `${label} wajib diisi`,
+                            confirmButtonColor: '#3B82F6',
+                            background: '#0f172a',
+                            color: '#fff'
+                        }).then(() => {
+                            setTimeout(() => firstInvalid.focus(), 300);
+                        });
+                        return;
+                    }
+                }
 
                 // Check if blockchain enabled
                 const blockchainEnabled = form.querySelector('input[name="blockchain_enabled"]')?.checked;
