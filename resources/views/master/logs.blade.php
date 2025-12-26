@@ -69,7 +69,7 @@
                                         <div class="flex items-center gap-2">
                                             <div
                                                 class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center overflow-hidden">
-                                                @if($log->user->avatar && str_starts_with($log->user->avatar, '/storage/'))
+                                                @if($log->user->avatar && (str_starts_with($log->user->avatar, '/storage/') || str_starts_with($log->user->avatar, 'http')))
                                                     <img src="{{ $log->user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                                                 @else
                                                     <img src="https://ui-avatars.com/api/?name={{ urlencode($log->user->name) }}&email={{ urlencode($log->user->email) }}&background=8B5CF6&color=fff&bold=true&size=32"

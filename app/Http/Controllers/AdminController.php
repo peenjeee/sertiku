@@ -38,26 +38,28 @@ class AdminController extends Controller
     public function analytics(Request $request)
     {
         $period = $request->get('period', '30'); // days
+        $year = $request->get('year', now()->year); // year filter
 
         // Stats with percentage change
         $stats = $this->getAnalyticsStats($period);
 
-        // Chart data - Certificates per month
-        $certificatesTrend = Certificate::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')
-            ->where('created_at', '>=', now()->subMonths(12))
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
+        // Get available years for filter (from earliest certificate to current year)
+        $earliestYear = Certificate::min('created_at');
+        $earliestYear = $earliestYear ? \Carbon\Carbon::parse($earliestYear)->year : now()->year;
+        $availableYears = range(now()->year, $earliestYear);
 
-        // Verification activity (simulated if no log table)
-        $verificationActivity = $this->getVerificationActivity();
+        // Chart data - Certificates per month (all 12 months for selected year)
+        $certificatesTrend = $this->getCertificatesTrend($year);
+
+        // Verification activity (all 12 months for selected year)
+        $verificationActivity = $this->getVerificationActivity($year);
 
         // Real-time verifications (last 10)
         $recentVerifications = Certificate::latest('updated_at')
             ->take(10)
             ->get(['certificate_number', 'updated_at']);
 
-        return view('admin.analytics', compact('stats', 'certificatesTrend', 'verificationActivity', 'recentVerifications'));
+        return view('admin.analytics', compact('stats', 'certificatesTrend', 'verificationActivity', 'recentVerifications', 'availableYears', 'year'));
     }
 
     /**
@@ -385,20 +387,41 @@ class AdminController extends Controller
         return round((($new - $old) / $old) * 100, 1);
     }
 
-    private function getVerificationActivity()
+    private function getVerificationActivity($year = null)
     {
-        // Generate sample data for last 12 months
+        $year = $year ?? now()->year;
+        $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
         $data = [];
-        for ($i = 11; $i >= 0; $i--) {
-            $month = now()->subMonths($i);
+        for ($i = 1; $i <= 12; $i++) {
             $data[] = [
-                'month' => $month->format('M'),
-                'count' => Certificate::whereMonth('updated_at', $month->month)
-                    ->whereYear('updated_at', $month->year)
+                'month' => $months[$i - 1],
+                'count' => Certificate::whereMonth('updated_at', $i)
+                    ->whereYear('updated_at', $year)
                     ->count(),
             ];
         }
         return $data;
+    }
+
+    /**
+     * Get certificates trend for all 12 months of a year
+     */
+    private function getCertificatesTrend($year = null)
+    {
+        $year = $year ?? now()->year;
+        $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        $data = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $data[] = [
+                'month' => $months[$i - 1],
+                'count' => Certificate::whereMonth('created_at', $i)
+                    ->whereYear('created_at', $year)
+                    ->count(),
+            ];
+        }
+        return collect($data);
     }
 
     private function formatBytes($bytes)

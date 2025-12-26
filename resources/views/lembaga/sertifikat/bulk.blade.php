@@ -361,7 +361,7 @@
         function countCSVRows(file) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     const text = e.target.result;
                     const lines = text.split('\n').filter(line => line.trim() !== '');
                     // Subtract 1 for header row
@@ -407,7 +407,7 @@
             const fileName = file.name.toLowerCase();
             const isCSV = fileName.endsWith('.csv');
             const isExcel = fileName.endsWith('.xlsx') || fileName.endsWith('.xls');
-            
+
             if (!isCSV && !isExcel) {
                 Swal.fire({
                     icon: 'error',
@@ -438,7 +438,7 @@
             // Check blockchain/IPFS enabled
             const blockchainEnabled = form.querySelector('input[name="blockchain_enabled"]')?.checked;
             const ipfsEnabled = form.querySelector('input[name="ipfs_enabled"]')?.checked;
-            
+
             // Calculate estimated time: 3 sec per cert, +5 sec if blockchain, +3 sec if IPFS
             const timePerCert = 3 + (blockchainEnabled ? 5 : 0) + (ipfsEnabled ? 3 : 0);
             const estimatedTime = Math.max(10, rowCount * timePerCert);
@@ -480,17 +480,17 @@
                     const statusText = document.getElementById('swal-status');
                     const currentText = document.getElementById('swal-current');
                     const countdownText = document.getElementById('swal-countdown');
-                    const totalCerts = ${rowCount};
+                    const totalCerts = rowCount;
 
                     const interval = setInterval(() => {
                         // Update current certificate count
                         if (currentCert < totalCerts) {
                             currentCert++;
                         }
-                        
+
                         // Calculate progress
                         const progress = Math.min(95, (currentCert / totalCerts) * 100);
-                        
+
                         // Update UI
                         if (progressBar) progressBar.style.width = progress + '%';
                         if (progressText) progressText.textContent = Math.round(progress) + '%';
