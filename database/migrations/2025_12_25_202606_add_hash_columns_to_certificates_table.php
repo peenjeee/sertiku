@@ -10,12 +10,14 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('certificates', function (Blueprint $table) {
-            $table->string('certificate_sha256')->nullable()->after('ipfs_uploaded_at');
-            $table->string('certificate_md5')->nullable()->after('certificate_sha256');
-            $table->string('qr_sha256')->nullable()->after('certificate_md5');
-            $table->string('qr_md5')->nullable()->after('qr_sha256');
-        });
+        // This migration is skipped because the columns were already added 
+        // in 2025_12_24_112100_add_hash_columns_to_certificates_table.php
+        // Schema::table('certificates', function (Blueprint $table) {
+        //     $table->string('certificate_sha256')->nullable()->after('ipfs_uploaded_at');
+        //     $table->string('certificate_md5')->nullable()->after('certificate_sha256');
+        //     $table->string('qr_sha256')->nullable()->after('certificate_md5');
+        //     $table->string('qr_md5')->nullable()->after('qr_sha256');
+        // });
     }
 
     /**
