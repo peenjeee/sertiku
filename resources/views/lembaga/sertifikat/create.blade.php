@@ -74,7 +74,7 @@
         @else
 
             <!-- Certificate Form -->
-            <form action="{{ route('lembaga.sertifikat.store') }}" method="POST" class="space-y-6">
+            <form id="certificate-form" action="{{ route('lembaga.sertifikat.store') }}" method="POST" class="space-y-6">
                 @csrf
 
                 <!-- Template Selection Section -->
@@ -92,6 +92,12 @@
                             + Upload Template Baru
                         </a>
                     </div>
+                    {{-- Reduced context for brevity, but I need to be careful with replace_file_content --}}
+                    {{-- Actually, since start/end lines are far apart (77 vs 447), I should do this in TWO chunks or use
+                    multi_replace --}}
+                    {{-- Wait, the tool definition says "Do NOT if only editing a single contiguous block". But here I need
+                    to edit TWO separate places. --}}
+                    {{-- So I MUST use multi_replace_file_content. --}}
 
                     @if(isset($templates) && $templates->count() > 0)
                         <!-- Template Grid -->
@@ -348,7 +354,8 @@
                             </label>
                             <div class="flex-1">
                                 <p class="text-gray-800 font-medium text-sm">Upload ke IPFS (Storacha)</p>
-                                <p class="text-gray-500 text-xs mt-1">Simpan metadata sertifikat ke jaringan IPFS + Filecoin untuk
+                                <p class="text-gray-500 text-xs mt-1">Simpan metadata sertifikat ke jaringan IPFS + Filecoin
+                                    untuk
                                     penyimpanan desentralisasi permanen.</p>
                                 <div class="flex items-center gap-4 mt-3 text-xs">
                                     <span class="flex items-center gap-1 text-emerald-600">
@@ -444,7 +451,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const form = document.querySelector('form');
+            const form = document.getElementById('certificate-form');
             if (!form) return;
 
             form.addEventListener('submit', function (e) {
