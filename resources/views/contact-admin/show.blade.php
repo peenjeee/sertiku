@@ -58,17 +58,21 @@
 
             <div class="p-4 space-y-4 max-h-96 overflow-y-auto" id="chatContainer">
                 @foreach($ticket->messages as $message)
-                    <div class="flex items-start gap-3 {{ $message->is_from_admin ? 'flex-row-reverse' : '' }}">
+                    {{-- Logic: User messages (not from admin) on Right (flex-row-reverse), Admin on Left --}}
+                    @php
+                        $isUserMessage = !$message->is_from_admin;
+                        $senderName = $message->sender->name ?? ($message->is_from_admin ? 'Admin' : 'User');
+                        $senderEmail = $message->sender->email ?? 'admin@sertiku.com';
+                        $senderAvatar = $message->sender->avatar ?? null;
+                        // Admin: Green, User: Blue
+                        $avatarBg = $message->is_from_admin ? 'bg-gradient-to-br from-green-500 to-emerald-600' : 'bg-gradient-to-br from-blue-500 to-indigo-600';
+                        $bgColor = $message->is_from_admin ? '10B981' : '3B82F6';
+                    @endphp
+
+                    <div class="flex items-start gap-3 {{ $isUserMessage ? 'flex-row-reverse' : '' }}">
                         {{-- Avatar --}}
-                        @php
-                            $senderName = $message->sender->name ?? ($message->is_from_admin ? 'Admin' : 'User');
-                            $senderEmail = $message->sender->email ?? 'admin@sertiku.com';
-                            $senderAvatar = $message->sender->avatar ?? null;
-                            $bgColor = $message->is_from_admin ? '10B981' : '3B82F6';
-                        @endphp
-                        <div
-                            class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0
-                        {{ $message->is_from_admin ? 'bg-gradient-to-br from-green-500 to-emerald-600' : 'bg-gradient-to-br from-blue-500 to-indigo-600' }} overflow-hidden">
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0
+                            {{ $avatarBg }} overflow-hidden">
                             @if($senderAvatar && (str_starts_with($senderAvatar, '/storage/') || str_starts_with($senderAvatar, 'http')))
                                 <img src="{{ $senderAvatar }}" alt="Avatar" class="w-full h-full object-cover">
                             @else
@@ -78,12 +82,12 @@
                         </div>
 
                         {{-- Message Bubble --}}
-                        <div class="max-w-[75%] {{ $message->is_from_admin ? 'text-right' : '' }}">
+                        <div class="max-w-[75%] {{ $isUserMessage ? 'text-right' : '' }}">
                             <div
-                                class="px-4 py-3 rounded-2xl {{ $message->is_from_admin ? 'bg-green-500/20 rounded-tr-none' : 'bg-white/10 rounded-tl-none' }}">
+                                class="px-4 py-3 rounded-2xl {{ $isUserMessage ? 'bg-blue-500/20 rounded-tr-none' : 'bg-white/10 rounded-tl-none' }}">
                                 <p class="text-white text-sm whitespace-pre-wrap">{{ $message->message }}</p>
                             </div>
-                            <div class="flex items-center gap-2 mt-1 {{ $message->is_from_admin ? 'justify-end' : '' }}">
+                            <div class="flex items-center gap-2 mt-1 {{ $isUserMessage ? 'justify-end' : '' }}">
                                 <span class="text-white/40 text-xs">
                                     {{ $message->sender->name ?? 'Admin' }}
                                 </span>

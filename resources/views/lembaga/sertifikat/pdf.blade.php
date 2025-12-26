@@ -87,7 +87,7 @@
     <div class="container">
         @if($certificate->template && $certificate->template->file_path)
             {{-- Use absolute path for dompdf --}}
-            <img src="{{ public_path('storage/' . $certificate->template->file_path) }}" class="background">
+            <img src="{{ storage_path('app/public/' . $certificate->template->file_path) }}" class="background">
         @endif
 
         {{-- Header info at top: Nama • Kursus • Tanggal --}}
@@ -101,7 +101,7 @@
         <div class="qr-code">
             {{-- Generate QR Code on the fly or use stored path --}}
             @if($certificate->qr_code_path)
-                <img src="{{ public_path('storage/' . $certificate->qr_code_path) }}">
+                <img src="{{ storage_path('app/public/' . $certificate->qr_code_path) }}">
             @endif
         </div>
 
