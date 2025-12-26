@@ -24,6 +24,14 @@ class Template extends Model
         'usage_count',
         'sha256',
         'md5',
+        // Position fields
+        'name_position_x',
+        'name_position_y',
+        'name_font_size',
+        'name_font_color',
+        'qr_position_x',
+        'qr_position_y',
+        'qr_size',
     ];
 
     protected $casts = [

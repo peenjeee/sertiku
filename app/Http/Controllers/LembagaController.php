@@ -292,8 +292,16 @@ class LembagaController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
-            'template_file' => 'required|file|mimes:png,jpg,jpeg,pdf|max:10240', // Max 10MB
+            'template_file' => 'required|file|mimes:png,jpg,jpeg|max:10240', // Max 10MB
             'orientation' => 'required|in:landscape,portrait',
+            // Position fields
+            'name_position_x' => 'nullable|integer|min:0|max:100',
+            'name_position_y' => 'nullable|integer|min:0|max:100',
+            'name_font_size' => 'nullable|integer|min:20|max:100',
+            'name_font_color' => 'nullable|string|max:10',
+            'qr_position_x' => 'nullable|integer|min:0|max:100',
+            'qr_position_y' => 'nullable|integer|min:0|max:100',
+            'qr_size' => 'nullable|integer|min:50|max:150',
         ]);
 
         $user = Auth::user();
@@ -330,10 +338,57 @@ class LembagaController extends Controller
             'height' => $height,
             'sha256' => $sha256,
             'md5' => $md5,
+            // Position fields
+            'name_position_x' => $validated['name_position_x'] ?? 50,
+            'name_position_y' => $validated['name_position_y'] ?? 45,
+            'name_font_size' => $validated['name_font_size'] ?? 52,
+            'name_font_color' => $validated['name_font_color'] ?? '#1a1a1a',
+            'qr_position_x' => $validated['qr_position_x'] ?? 90,
+            'qr_position_y' => $validated['qr_position_y'] ?? 85,
+            'qr_size' => $validated['qr_size'] ?? 80,
         ]);
 
         return redirect()->route('lembaga.template.index')
             ->with('success', 'Template berhasil diupload!');
+    }
+
+    /**
+     * Show form to edit template position settings.
+     */
+    public function editTemplatePosition(Template $template)
+    {
+        // Check ownership
+        if ($template->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        return view('lembaga.template.edit-position', compact('template'));
+    }
+
+    /**
+     * Update template position settings.
+     */
+    public function updateTemplatePosition(Request $request, Template $template)
+    {
+        // Check ownership
+        if ($template->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        $validated = $request->validate([
+            'name_position_x' => 'required|integer|min:0|max:100',
+            'name_position_y' => 'required|integer|min:0|max:100',
+            'name_font_size' => 'required|integer|min:20|max:100',
+            'name_font_color' => 'required|string|max:10',
+            'qr_position_x' => 'required|integer|min:0|max:100',
+            'qr_position_y' => 'required|integer|min:0|max:100',
+            'qr_size' => 'required|integer|min:50|max:150',
+        ]);
+
+        $template->update($validated);
+
+        return redirect()->route('lembaga.template.index')
+            ->with('success', 'Posisi template berhasil diperbarui!');
     }
 
     /**

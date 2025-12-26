@@ -434,6 +434,8 @@ Route::middleware(['auth'])->prefix('lembaga')->name('lembaga.')->group(function
     Route::get('/template', [\App\Http\Controllers\LembagaController::class, 'indexTemplate'])->name('template.index');
     Route::get('/template/upload', [\App\Http\Controllers\LembagaController::class, 'uploadTemplate'])->name('template.upload'); // User Upload
     Route::post('/template', [\App\Http\Controllers\LembagaController::class, 'storeTemplate'])->name('template.store');
+    Route::get('/template/{template}/edit-position', [\App\Http\Controllers\LembagaController::class, 'editTemplatePosition'])->name('template.editPosition');
+    Route::put('/template/{template}/position', [\App\Http\Controllers\LembagaController::class, 'updateTemplatePosition'])->name('template.updatePosition');
 
     // API Tokens (Professional & Enterprise only)
     Route::get('/api-tokens', [\App\Http\Controllers\ApiTokenController::class, 'index'])->name('api-tokens.index');
