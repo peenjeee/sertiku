@@ -14,7 +14,9 @@
 
         @font-face {
             font-family: 'Great Vibes';
-            src: url('https://fonts.gstatic.com/s/greatvibes/v14/RWm84FVPuyJEnN9h_lWzDbO5.ttf') format('truetype');
+            src: url('{{ storage_path("app/public/fonts/GreatVibes-Regular.ttf") }}') format('truetype');
+            font-weight: normal;
+            font-style: normal;
         }
 
         body {
@@ -100,13 +102,13 @@
         {{-- Use negative margins to center using fixed pixel size --}}
         @if($certificate->qr_code_path)
             <div class="qr-code" style="
-                            left: {{ $qrX }}%;
-                            top: {{ $qrY }}%;
-                            width: {{ $qrSize }}px;
-                            height: {{ $qrSize }}px;
-                            margin-left: -{{ $qrSize / 2 }}px;
-                            margin-top: -{{ $qrSize / 2 }}px;
-                        ">
+                                left: {{ $qrX }}%;
+                                top: {{ $qrY }}%;
+                                width: {{ $qrSize }}px;
+                                height: {{ $qrSize }}px;
+                                margin-left: -{{ $qrSize / 2 }}px;
+                                margin-top: -{{ $qrSize / 2 }}px;
+                            ">
                 <img src="{{ storage_path('app/public/' . $certificate->qr_code_path) }}">
             </div>
         @endif
