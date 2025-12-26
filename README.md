@@ -17,12 +17,14 @@ Platform terdepan untuk menerbitkan, mengelola, dan memverifikasi sertifikat dig
 
 [![Ethereum](https://img.shields.io/badge/Ethereum-Web3-3C3C3D?style=flat-square&logo=ethereum&logoColor=white)](https://ethereum.org/)
 [![Polygon](https://img.shields.io/badge/Polygon-Blockchain-8247E5?style=flat-square&logo=polygon&logoColor=white)](https://polygon.technology/)
+[![IPFS](https://img.shields.io/badge/IPFS-Pinata-65C2CB?style=flat-square&logo=ipfs&logoColor=white)](https://pinata.cloud/)
 [![Ethers.js](https://img.shields.io/badge/Ethers.js-6.0-3C3C3D?style=flat-square&logo=ethereum&logoColor=white)](https://docs.ethers.org/)
 [![WalletConnect](https://img.shields.io/badge/WalletConnect-Web3Modal-3B99FC?style=flat-square&logo=walletconnect&logoColor=white)](https://walletconnect.com/)
 
 [![Midtrans](https://img.shields.io/badge/Midtrans-Payment-00A9E0?style=flat-square&logo=money&logoColor=white)](https://midtrans.com/)
 [![QR Code](https://img.shields.io/badge/QR_Code-Generator-000000?style=flat-square&logo=qrcode&logoColor=white)](https://github.com/SimpleSoftwareIO/simple-qrcode)
 [![PWA](https://img.shields.io/badge/PWA-Ready-5A0FC8?style=flat-square&logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
+[![n8n](https://img.shields.io/badge/n8n-Automation-EA4B71?style=flat-square&logo=n8n&logoColor=white)](https://n8n.io/)
 
 ## ✨ Fitur
 
@@ -36,20 +38,24 @@ Platform terdepan untuk menerbitkan, mengelola, dan memverifikasi sertifikat dig
 
 ### Sertifikat Digital
 - 📄 Upload dan kelola sertifikat digital
+- 🎨 **Interactive Template Editor** - Drag & drop positioning, Google Fonts, color picker
+- 📦 **Bulk Upload** - Import data dari CSV/Excel untuk penerbitan massal
 - 🔍 Verifikasi sertifikat dengan QR Code
-- 🔗 Integrasi blockchain untuk keamanan dan keaslian
+- 🔗 **Blockchain Integration** - Simpan hash sertifikat ke Polygon Network
+- 🌐 **IPFS Storage** - Penyimpanan desentralisasi via Pinata Network
+- 🔐 **File Integrity Verification** - Verifikasi keaslian file dengan SHA-256 hash dan MD5
 - 📈 Tracking status sertifikat
 
 ### Dashboard & Manajemen
-- 📊 Dashboard analytics dan laporan
+- 📊 Dashboard analytics dengan chart interaktif dan filter tahun
 - 👥 Multi-role: User, Lembaga, Admin, Master
 - 🔔 Notifikasi real-time
 - 📱 Responsive design untuk mobile
+- 💬 Support Ticket System
 
 ### PWA & SEO
 - 📲 Progressive Web App - Install ke home screen dengan banner prompt
 - 🔔 Push Notifications - Notifikasi browser
-- 🍪 Cookie Consent Banner - Kepatuhan regulasi privasi
 - 🔍 SEO Optimized - Meta tags, Open Graph, JSON-LD structured data
 - 🗺️ Sitemap & robots.txt - Auto-generated untuk search engines
 - 📊 Google Search Console & Bing Webmaster Tools verified
@@ -167,6 +173,20 @@ MIDTRANS_SERVER_KEY=your-server-key
 MIDTRANS_CLIENT_KEY=your-client-key
 MIDTRANS_IS_PRODUCTION=false
 MIDTRANS_IS_3DS=true
+```
+
+### IPFS Storage via Pinata (Opsional)
+
+Untuk penyimpanan desentralisasi sertifikat:
+
+1. Daftar di [Pinata Cloud](https://pinata.cloud/)
+2. Buat API Key di Dashboard
+3. Copy JWT Token dan Gateway URL
+
+```env
+IPFS_ENABLED=true
+PINATA_JWT=your-pinata-jwt-token
+PINATA_GATEWAY_URL=your-gateway.mypinata.cloud
 ```
 
 ## 🔄 Deployment
