@@ -222,8 +222,9 @@ class LembagaController extends Controller
     public function revokeSertifikat(Request $request, Certificate $certificate)
     {
         // Ensure user owns this certificate
-        if ($certificate->user_id !== Auth::id()) {
-            abort(403);
+        // Ensure user owns this certificate
+        if ((int) $certificate->user_id !== (int) Auth::id()) {
+            abort(403, 'Unauthorized access to this certificate.');
         }
 
         $validated = $request->validate([
@@ -241,7 +242,7 @@ class LembagaController extends Controller
     public function reactivateSertifikat(Request $request, Certificate $certificate)
     {
         // Ensure user owns this certificate
-        if ($certificate->user_id !== Auth::id()) {
+        if ((int) $certificate->user_id !== (int) Auth::id()) {
             abort(403);
         }
 
