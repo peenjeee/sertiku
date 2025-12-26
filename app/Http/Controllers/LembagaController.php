@@ -370,16 +370,9 @@ class LembagaController extends Controller
      */
     public function editTemplatePosition(Template $template)
     {
-        // TEMP DEBUG - remove after fixing
+        // Check ownership (use loose comparison for type flexibility)
         if ($template->user_id != Auth::id()) {
-            dd([
-                'template_user_id' => $template->user_id,
-                'template_user_id_type' => gettype($template->user_id),
-                'auth_id' => Auth::id(),
-                'auth_id_type' => gettype(Auth::id()),
-                'auth_check' => Auth::check(),
-                'comparison' => $template->user_id != Auth::id(),
-            ]);
+            abort(403, 'Unauthorized');
         }
 
         return view('lembaga.template.edit-position', compact('template'));
@@ -522,7 +515,7 @@ class LembagaController extends Controller
     public function destroyTemplate(Template $template)
     {
         // Ensure user owns this template
-        if ($template->user_id !== Auth::id()) {
+        if ($template->user_id != Auth::id()) {
             abort(403);
         }
 
@@ -545,7 +538,7 @@ class LembagaController extends Controller
     public function toggleTemplate(Template $template)
     {
         // Ensure user owns this template
-        if ($template->user_id !== Auth::id()) {
+        if ($template->user_id != Auth::id()) {
             abort(403);
         }
 
