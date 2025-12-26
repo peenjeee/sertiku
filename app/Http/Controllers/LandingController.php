@@ -23,10 +23,8 @@ class LandingController extends Controller
             ->take(6)
             ->get();
 
-        // Fetch Random Testimonials
-        // Fetch Random Featured Testimonials
-        // Fetch Random Featured Testimonials
-        $testimonials = Testimonial::where('is_featured', true)->inRandomOrder()->take(3)->get();
+        // Fetch Static Featured Testimonials (Panji, Rama, Nakada Alpha)
+        $testimonials = Testimonial::where('is_featured', true)->orderBy('id')->take(3)->get();
 
         // Total rating/feedback count
         $totalRatings = Testimonial::count();
