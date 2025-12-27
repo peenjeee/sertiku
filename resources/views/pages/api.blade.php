@@ -410,7 +410,7 @@ const data = await response.json();</pre>
     "status": "active",
     "blockchain_enabled": true,
     "blockchain_status": "pending",
-    "verification_url": "https://sertiku.web.id/v/SERT-202512-ABCDEF",
+    "verification_url": "https://sertiku.web.id/verifikasi/SERT-202512-ABCDEF",
     "pdf_url": "https://sertiku.web.id/storage/certificates/...",
     "created_at": "2024-12-27T10:00:00.000000Z"
   }

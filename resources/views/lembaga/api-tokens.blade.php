@@ -166,6 +166,8 @@
                             <option value="create">POST /api/v1/certificates - Buat Sertifikat (Auth)</option>
                             <option value="revoke">PUT /api/v1/certificates/{id}/revoke - Cabut Sertifikat (Auth)
                             </option>
+                            <option value="reactivate">PUT /api/v1/certificates/{id}/reactivate - Aktifkan Kembali
+                                (Auth)</option>
                         </select>
                     </div>
 
@@ -284,6 +286,11 @@
                                     class="w-4 h-4 rounded border-[#1E3A5F] bg-[#050C1F] text-[#3B82F6] focus:ring-[#3B82F6]">
                                 <span class="text-[#8EC5FF] text-sm">Upload ke Blockchain</span>
                             </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="testIpfs"
+                                    class="w-4 h-4 rounded border-[#1E3A5F] bg-[#050C1F] text-[#3B82F6] focus:ring-[#3B82F6]">
+                                <span class="text-[#8EC5FF] text-sm">Upload ke IPFS</span>
+                            </label>
                         </div>
                     </div>
 
@@ -339,11 +346,13 @@
                 hashContainer.classList.add('hidden');
                 createContainer.classList.add('hidden');
 
-                if (endpoint === 'verify' || endpoint === 'revoke') {
+                if (endpoint === 'verify' || endpoint === 'revoke' || endpoint === 'reactivate') {
                     hashContainer.classList.remove('hidden');
-                    hashInput.placeholder = endpoint === 'verify'
-                        ? 'Masukkan hash atau nomor sertifikat...'
-                        : 'Masukkan ID atau nomor sertifikat...';
+                    if (endpoint === 'verify') {
+                        hashInput.placeholder = 'Masukkan hash atau nomor sertifikat...';
+                    } else {
+                        hashInput.placeholder = 'Masukkan ID atau nomor sertifikat...';
+                    }
                     testButton.textContent = 'Test API';
                 } else if (endpoint === 'create') {
                     createContainer.classList.remove('hidden');
@@ -399,6 +408,7 @@
                         const recipientEmail = document.getElementById('testRecipientEmail').value;
                         const sendEmail = document.getElementById('testSendEmail').checked;
                         const blockchain = document.getElementById('testBlockchain').checked;
+                        const ipfs = document.getElementById('testIpfs').checked;
 
                         // Validate required fields
                         if (!courseName || !templateId || !issueDate || !recipientName || !recipientEmail) {
@@ -408,7 +418,6 @@
                             return;
                         }
 
-                        // Simulate API Test (tidak kirim ke server)
                         const requestBody = {
                             course_name: courseName,
                             template_id: templateId,
@@ -419,7 +428,8 @@
                             recipient_name: recipientName,
                             recipient_email: recipientEmail,
                             send_email: sendEmail,
-                            blockchain_enabled: blockchain
+                            blockchain_enabled: blockchain,
+                            ipfs_enabled: ipfs
                         };
 
                         // Show simulated response
@@ -439,6 +449,7 @@
                                 expire_date: expireDate,
                                 status: 'active',
                                 blockchain_enabled: blockchain,
+                                ipfs_enabled: ipfs,
                                 email_sent: sendEmail,
                                 created_at: new Date().toISOString()
                             }
@@ -478,6 +489,35 @@
                         statusEl.textContent = '✓ 200 OK (Simulasi)';
                         statusEl.classList.add('bg-yellow-500/20', 'text-yellow-400');
                         resultEl.textContent = JSON.stringify(revokeResponse, null, 2);
+                        return;
+
+                    case 'reactivate':
+                        if (!hashValue) {
+                            resultEl.textContent = 'Error: Masukkan ID atau nomor sertifikat';
+                            statusEl.textContent = '✗ Error';
+                            statusEl.classList.add('bg-red-500/20', 'text-red-400');
+                            return;
+                        }
+
+                        // Simulate reactivate
+                        const reactivateResponse = {
+                            success: true,
+                            message: '[SIMULASI] Sertifikat TIDAK diaktifkan kembali di database',
+                            test_mode: true,
+                            request: {
+                                certificate_id: hashValue
+                            },
+                            simulated_result: {
+                                id: hashValue,
+                                certificate_number: hashValue.includes('SERT') ? hashValue : `SERT-XXXXXX-${hashValue}`,
+                                status: 'active',
+                                reactivated_at: new Date().toISOString()
+                            }
+                        };
+
+                        statusEl.textContent = '✓ 200 OK (Simulasi)';
+                        statusEl.classList.add('bg-yellow-500/20', 'text-yellow-400');
+                        resultEl.textContent = JSON.stringify(reactivateResponse, null, 2);
                         return;
                 }
 
