@@ -146,7 +146,7 @@
         "tx_hash": "0x123...",
         "explorer_url": "https://polygonscan.com/tx/0x123..."
       },
-      "verification_url": "https://sertiku.web.id/v/SERT-202512-ABCDEF"
+      "verification_url": "https://sertiku.web.id/verifikasi/SERT-202512-ABCDEF"
     }
   }
 }</pre>
