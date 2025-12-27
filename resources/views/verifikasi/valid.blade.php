@@ -78,19 +78,91 @@
 
                     {{-- GAMBAR SERTIFIKAT (jika ada template) --}}
                     @if($certificate['template_image'] ?? null)
-                        {{-- PDF Preview (Iframe) --}}
+                        {{-- PDF Preview --}}
                         @php
                             $isPortrait = ($certificate['template_orientation'] ?? 'landscape') === 'portrait';
                             $aspectRatio = $isPortrait ? 'aspect-[794/1123]' : 'aspect-[1123/794]';
                         @endphp
 
+                        {{-- Desktop: PDF Iframe --}}
                         <div
-                            class="relative w-full rounded-xl overflow-hidden border border-[rgba(255,255,255,0.2)] bg-gray-100 shadow-2xl {{ $aspectRatio }}">
+                            class="hidden md:block relative w-full rounded-xl overflow-hidden border border-[rgba(255,255,255,0.2)] bg-gray-100 shadow-2xl {{ $aspectRatio }}">
                             <iframe
                                 src="{{ route('verifikasi.pdf', ['hash' => $hash, 'stream' => 1]) }}#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
                                 class="w-full h-full border-0" title="Preview Sertifikat" scrolling="no">
                             </iframe>
                         </div>
+
+                        {{-- Mobile: PDF.js Canvas Renderer (karena browser mobile tidak bisa render PDF dalam iframe) --}}
+                        <div
+                            class="md:hidden relative w-full rounded-xl overflow-hidden border border-[rgba(255,255,255,0.2)] bg-gray-800 shadow-2xl">
+                            {{-- Canvas container --}}
+                            <div id="pdf-container" class="relative {{ $aspectRatio }} flex items-center justify-center">
+                                {{-- Loading indicator --}}
+                                <div id="pdf-loading" class="absolute inset-0 flex items-center justify-center bg-gray-800">
+                                    <div class="text-center">
+                                        <div class="animate-spin rounded-full h-12 w-12 border-4 border-white/20 border-t-green-500 mx-auto mb-3"></div>
+                                        <p class="text-white/70 text-sm">Memuat sertifikat...</p>
+                                    </div>
+                                </div>
+                                {{-- Canvas will be inserted here by PDF.js --}}
+                                <canvas id="pdf-canvas" class="w-full h-full object-contain hidden"></canvas>
+                            </div>
+
+                            {{-- Tombol untuk buka PDF lengkap --}}
+                            <a href="{{ route('verifikasi.pdf', $hash) }}"
+                                class="block w-full py-3 bg-gradient-to-r from-[#22C55E] to-[#16A34A] text-white text-center font-semibold hover:brightness-110 transition">
+                                <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                Unduh Sertifikat PDF
+                            </a>
+                        </div>
+
+                        {{-- PDF.js Script for Mobile --}}
+                        @push('scripts')
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+                        <script>
+                            // Only run on mobile
+                            if (window.innerWidth < 768) {
+                                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+                                const pdfUrl = "{{ route('verifikasi.pdf', ['hash' => $hash, 'stream' => 1]) }}";
+                                const canvas = document.getElementById('pdf-canvas');
+                                const container = document.getElementById('pdf-container');
+                                const loading = document.getElementById('pdf-loading');
+                                const ctx = canvas.getContext('2d');
+
+                                pdfjsLib.getDocument(pdfUrl).promise.then(function(pdf) {
+                                    pdf.getPage(1).then(function(page) {
+                                        // Calculate scale to fit container
+                                        const containerWidth = container.clientWidth;
+                                        const viewport = page.getViewport({ scale: 1 });
+                                        const scale = containerWidth / viewport.width;
+                                        const scaledViewport = page.getViewport({ scale: scale * 2 }); // 2x for retina
+
+                                        canvas.height = scaledViewport.height;
+                                        canvas.width = scaledViewport.width;
+                                        canvas.style.width = '100%';
+                                        canvas.style.height = 'auto';
+
+                                        page.render({
+                                            canvasContext: ctx,
+                                            viewport: scaledViewport
+                                        }).promise.then(function() {
+                                            loading.classList.add('hidden');
+                                            canvas.classList.remove('hidden');
+                                        });
+                                    });
+                                }).catch(function(error) {
+                                    console.error('PDF loading error:', error);
+                                    loading.innerHTML = '<p class="text-white/70 text-sm text-center px-4">Gagal memuat preview. Klik tombol di bawah untuk download PDF.</p>';
+                                });
+                            }
+                        </script>
+                        @endpush
                     @endif
 
 
