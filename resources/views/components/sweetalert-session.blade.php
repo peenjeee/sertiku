@@ -14,11 +14,11 @@
     });
 </script>
 
-@if(session('success'))
+@if(session('success') || request('success'))
     <script>
         Toast.fire({
             icon: 'success',
-            title: '{{ session('success') }}'
+            title: '{{ session('success') ?? "Berhasil! Data telah disimpan." }}'
         });
     </script>
 @endif
