@@ -1,4 +1,4 @@
-<x-layouts.app title="Hasil Verifikasi â€“ SertiKu">
+<x-layouts.app title="Hasil Verifikasi - SertiKu">
 
     @php
         $isRevoked = ($certificate['status'] ?? '') === 'revoked';
@@ -111,7 +111,7 @@
                                     <canvas id="pdf-canvas" class="w-full h-full object-contain hidden"></canvas>
                                 </div>
                             </div>
-                        </div>
+                       
 
                         {{-- PDF.js Script for Mobile --}}
                         @push('scripts')
