@@ -378,7 +378,7 @@ class BlockchainService
         $txCount = $this->getTransactionCount();
 
         // Estimate remaining certificates based on average gas cost
-        $avgGasCostMatic = 0.003; // ~0.003 MATIC per transaction
+        $avgGasCostMatic = 0.007; // ~0.007 MATIC per transaction (based on actual data)
         $remainingCerts = $balance ? floor($balance['matic'] / $avgGasCostMatic) : 0;
 
         return [
@@ -444,53 +444,16 @@ class BlockchainService
             }
 
             // Prepare certificate data for smart contract
-            $hash = escapeshellarg($certHash);
-            $certNumber = escapeshellarg($certificate->certificate_number ?? '');
-            $recipientName = escapeshellarg($certificate->recipient_name ?? '');
-            $courseName = escapeshellarg($certificate->course_name ?? '');
-            $issueDate = escapeshellarg($certificate->issue_date?->format('Y-m-d') ?? '');
-
-            // Include PDF file hashes (SHA256 and MD5) in issuerName for visibility on blockchain explorer
-            $issuer = $certificate->user->institution_name ?? $certificate->user->name ?? '';
-
-            // Build hash info string with all file hashes (like IPFS metadata)
-            $hashParts = [];
-
-            // PDF file hashes (from dompdf)
-            if ($certificate->certificate_sha256) {
-                $hashParts[] = 'PDF_SHA256:' . $certificate->certificate_sha256;
-            }
-            if ($certificate->certificate_md5) {
-                $hashParts[] = 'PDF_MD5:' . $certificate->certificate_md5;
-            }
-
-            // QR code file hashes
-            if ($certificate->qr_sha256) {
-                $hashParts[] = 'QR_SHA256:' . $certificate->qr_sha256;
-            }
-            if ($certificate->qr_md5) {
-                $hashParts[] = 'QR_MD5:' . $certificate->qr_md5;
-            }
-
-            // Template file hashes (if template is used)
-            if ($certificate->template) {
-                if ($certificate->template->sha256) {
-                    $hashParts[] = 'TPL_SHA256:' . $certificate->template->sha256;
-                }
-                if ($certificate->template->md5) {
-                    $hashParts[] = 'TPL_MD5:' . $certificate->template->md5;
-                }
-            }
-
-            $hashInfo = !empty($hashParts) ? ' | ' . implode(' | ', $hashParts) : '';
-            $issuerWithHash = $issuer . $hashInfo;
-            $issuerName = escapeshellarg($issuerWithHash);
+            // ULTRA MINIMAL: Only store SHA256 hash from dompdf
+            $pdfHash = $certificate->certificate_sha256 ?? $certHash;
+            $hash = escapeshellarg($pdfHash);
 
             // Use full path for hosting, fallback to 'node' for local
             $nodePath = env('NODE_PATH', 'node');
-            $command = "{$nodePath} {$scriptPath} store {$hash} {$certNumber} {$recipientName} {$courseName} {$issueDate} {$issuerName} 2>&1";
+            // ONLY HASH - no other parameters!
+            $command = "{$nodePath} {$scriptPath} store {$hash} 2>&1";
 
-            Log::info('BlockchainService: Storing certificate via smart contract with full data');
+            Log::info('BlockchainService: Storing certificate hash only (ultra minimal)');
 
             $output = shell_exec($command);
             $output = trim($output ?? '');

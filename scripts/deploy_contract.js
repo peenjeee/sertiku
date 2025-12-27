@@ -15,10 +15,14 @@ function loadEnv() {
     const envPath = path.join(__dirname, '..', '.env');
     const envContent = fs.readFileSync(envPath, 'utf8');
     const env = {};
-    envContent.split('\n').forEach(line => {
+    // Handle both Unix (\n) and Windows (\r\n) line endings
+    envContent.split(/\r?\n/).forEach(line => {
+        // Skip empty lines and comments
+        if (!line || line.startsWith('#')) return;
         const match = line.match(/^([^=]+)=(.*)$/);
         if (match) {
-            env[match[1].trim()] = match[2].trim().replace(/^["']|["']$/g, '');
+            // Trim and remove surrounding quotes, also remove any trailing \r
+            env[match[1].trim()] = match[2].trim().replace(/^["']|["']$/g, '').replace(/\r$/, '');
         }
     });
     return env;
@@ -27,7 +31,7 @@ function loadEnv() {
 // Compile the Solidity contract
 function compileContract() {
     console.log('Compiling CertificateRegistry.sol...');
-    
+
     const contractPath = path.join(__dirname, '..', 'contracts', 'CertificateRegistry.sol');
     const source = fs.readFileSync(contractPath, 'utf8');
 

@@ -38,15 +38,14 @@ function getContractABI() {
         return JSON.parse(fs.readFileSync(abiPath, 'utf8'));
     }
 
-    // Fallback inline ABI
+    // Fallback inline ABI - ULTRA MINIMAL (only hash)
     return [
-        "function storeCertificate(bytes32 _dataHash, string _certificateNumber, string _recipientName, string _courseName, string _issueDate, string _issuerName) external returns (bool)",
-        "function verifyCertificate(bytes32 _dataHash) external view returns (bool exists, bool revoked, string certificateNumber, string recipientName, string courseName, string issueDate, string issuerName, address issuerAddress, uint256 timestamp)",
-        "function verifyCertificateByNumber(string _certNumber) external view returns (bool exists, bool revoked, string recipientName, string courseName, string issueDate, bytes32 dataHash, uint256 timestamp)",
+        "function storeCertificate(bytes32 _dataHash) external returns (bool)",
+        "function verifyCertificate(bytes32 _dataHash) external view returns (bool exists, bool revoked, address issuer, uint256 timestamp)",
         "function certificateExists(bytes32 _dataHash) external view returns (bool)",
         "function getTotalCertificates() external view returns (uint256)",
-        "function getCertificateInfo(bytes32 _dataHash) external view returns (string certificateNumber, string recipientName, string courseName, uint256 timestamp)",
-        "event CertificateStored(bytes32 indexed dataHash, string certificateNumber, string recipientName, string courseName, address indexed issuer, uint256 timestamp)"
+        "function revokeCertificate(bytes32 _dataHash) external returns (bool)",
+        "event CertificateStored(bytes32 indexed dataHash, address indexed issuer, uint256 timestamp)"
     ];
 }
 
@@ -82,13 +81,8 @@ async function main() {
     const abi = getContractABI();
 
     if (action === 'store') {
-        // Store certificate with full data
+        // Store certificate - ONLY HASH (ultra minimal)
         const hash = args[1];
-        const certNumber = args[2] || '';
-        const recipientName = args[3] || '';
-        const courseName = args[4] || '';
-        const issueDate = args[5] || '';
-        const issuerName = args[6] || '';
 
         if (!hash) {
             console.log(JSON.stringify({ success: false, error: 'Hash required' }));
@@ -125,15 +119,8 @@ async function main() {
                 return;
             }
 
-            // Store certificate with full data
-            const tx = await contract.storeCertificate(
-                certHash,
-                certNumber,
-                recipientName,
-                courseName,
-                issueDate,
-                issuerName
-            );
+            // Store certificate - ONLY HASH!
+            const tx = await contract.storeCertificate(certHash);
 
             console.log(JSON.stringify({
                 success: true,
