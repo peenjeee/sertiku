@@ -565,22 +565,24 @@
                                 if (statusEl) statusEl.textContent = 'Selesai!';
 
                                 if (response.ok || response.redirected) {
-                                    // Success
-                                    setTimeout(() => {
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Sertifikat Berhasil Diterbitkan!',
-                                            html: blockchainEnabled
+                                    // Success - show immediately
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Sertifikat Berhasil Diterbitkan!',
+                                        html: blockchainEnabled && ipfsEnabled
+                                            ? '<p class="text-gray-600">Sertifikat telah tersimpan di database, blockchain, dan IPFS.</p>'
+                                            : blockchainEnabled
                                                 ? '<p class="text-gray-600">Sertifikat telah tersimpan di database dan blockchain.</p>'
-                                                : '<p class="text-gray-600">Sertifikat telah tersimpan di database.</p>',
-                                            confirmButtonText: 'Lihat Daftar Sertifikat',
-                                            confirmButtonColor: '#4F46E5',
-                                            timer: 3000,
-                                            timerProgressBar: true
-                                        }).then(() => {
-                                            window.location.href = '{{ route("lembaga.sertifikat.index") }}?success=1';
-                                        });
-                                    }, 500);
+                                                : ipfsEnabled
+                                                    ? '<p class="text-gray-600">Sertifikat telah tersimpan di database dan IPFS.</p>'
+                                                    : '<p class="text-gray-600">Sertifikat telah tersimpan di database.</p>',
+                                        confirmButtonText: 'Lihat Daftar Sertifikat',
+                                        confirmButtonColor: '#4F46E5',
+                                        timer: 3000,
+                                        timerProgressBar: true
+                                    }).then(() => {
+                                        window.location.href = '{{ route("lembaga.sertifikat.index") }}?success=1';
+                                    });
                                 } else {
                                     // Error
                                     response.json().then(data => {
