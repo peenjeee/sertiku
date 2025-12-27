@@ -706,27 +706,27 @@
                     <div class="flex flex-wrap gap-2">
                         <button onclick="askQuestion('cara_verifikasi')"
                             class="chat-template-btn px-3 py-1.5 bg-blue-500/20 border border-blue-500/30 rounded-lg text-blue-300 text-xs hover:bg-blue-500/30 transition">
-                            🔍 Cara Verifikasi
+                            Cara Verifikasi
                         </button>
                         <button onclick="askQuestion('upload_sertifikat')"
                             class="chat-template-btn px-3 py-1.5 bg-green-500/20 border border-green-500/30 rounded-lg text-green-300 text-xs hover:bg-green-500/30 transition">
-                            📤 Upload Sertifikat
+                            Upload Sertifikat
                         </button>
                         <button onclick="askQuestion('upgrade_paket')"
                             class="chat-template-btn px-3 py-1.5 bg-purple-500/20 border border-purple-500/30 rounded-lg text-purple-300 text-xs hover:bg-purple-500/30 transition">
-                            ⭐ Upgrade Paket
+                            Upgrade Paket
                         </button>
                         <button onclick="askQuestion('qr_code')"
                             class="chat-template-btn px-3 py-1.5 bg-cyan-500/20 border border-cyan-500/30 rounded-lg text-cyan-300 text-xs hover:bg-cyan-500/30 transition">
-                            📱 QR Code
+                            QR Code
                         </button>
                         <button onclick="askQuestion('tips_keamanan')"
                             class="chat-template-btn px-3 py-1.5 bg-yellow-500/20 border border-yellow-500/30 rounded-lg text-yellow-300 text-xs hover:bg-yellow-500/30 transition">
-                            🔒 Tips Keamanan
+                            Tips Keamanan
                         </button>
                         <button onclick="askQuestion('hubungi_admin')"
                             class="chat-template-btn px-3 py-1.5 bg-red-500/20 border border-red-500/30 rounded-lg text-red-300 text-xs hover:bg-red-500/30 transition">
-                            📞 Hubungi Admin
+                            Hubungi Admin
                         </button>
                     </div>
                 </div>
@@ -760,7 +760,7 @@
                 </svg>
                 <span
                     class="absolute bottom-full right-0 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none">
-                    Butuh bantuan? Chat dengan kami! 💬
+                    Butuh bantuan? Chat dengan kami!
                 </span>
                 <!-- Notification dot -->
                 <span class="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-[#0F172A]"></span>
@@ -825,27 +825,27 @@
         const chatResponses = {
             'cara_verifikasi': {
                 question: 'Bagaimana cara verifikasi sertifikat?',
-                answer: '🔍 <strong>Cara Verifikasi Sertifikat:</strong><br><br>1️⃣ Buka halaman <a href="/verifikasi" class="text-blue-400 underline">Verifikasi</a><br>2️⃣ Masukkan kode hash atau nomor sertifikat (SERT-XXXXXX)<br>3️⃣ Klik tombol "Verifikasi"<br>4️⃣ Sistem akan menampilkan informasi sertifikat jika valid<br><br>💡 <em>Tip: Anda juga bisa scan QR Code pada sertifikat!</em>'
+                answer: '<strong>Cara Verifikasi Sertifikat:</strong><br><br>1. Buka halaman <a href="/verifikasi" class="text-blue-400 underline">Verifikasi</a><br>2. Masukkan kode hash atau nomor sertifikat (SERT-XXXXXX)<br>3. Klik tombol "Verifikasi"<br>4. Sistem akan menampilkan informasi sertifikat jika valid<br><br><em>Tip: Anda juga bisa scan QR Code pada sertifikat!</em>'
             },
             'upload_sertifikat': {
                 question: 'Cara upload sertifikat baru?',
-                answer: '📤 <strong>Cara Upload Sertifikat:</strong><br><br>1️⃣ Pergi ke menu "Upload Sertifikat"<br>2️⃣ Upload gambar template sertifikat (JPG/PNG)<br>3️⃣ Isi data penerima (nama, email, dll)<br>4️⃣ Pilih tanggal terbit<br>5️⃣ Klik "Terbitkan Sertifikat"<br><br>✅ Sertifikat akan otomatis diberi nomor unik dan QR Code!'
+                answer: '<strong>Cara Upload Sertifikat:</strong><br><br>1. Pergi ke menu "Upload Sertifikat"<br>2. Upload gambar template sertifikat (JPG/PNG)<br>3. Isi data penerima (nama, email, dll)<br>4. Pilih tanggal terbit<br>5. Klik "Terbitkan Sertifikat"<br><br>Sertifikat akan otomatis diberi nomor unik dan QR Code!'
             },
             'upgrade_paket': {
                 question: 'Bagaimana cara upgrade paket?',
-                answer: '⭐ <strong>Upgrade ke Professional:</strong><br><br>Keuntungan Paket Professional:<br>• ♾️ Unlimited sertifikat/bulan<br>• 🎨 Template kustom<br>• 📊 Analytics lengkap<br>• 🎯 Priority support<br><br>💰 Harga: Rp 399.000/bulan<br><br>Klik tombol "Upgrade" di dashboard atau hubungi admin untuk promo khusus!'
+                answer: '<strong>Upgrade ke Professional:</strong><br><br>Keuntungan Paket Professional:<br>• Unlimited sertifikat/bulan<br>• Template kustom<br>• Analytics lengkap<br>• Priority support<br><br>Harga: Rp 399.000/bulan<br><br>Klik tombol "Upgrade" di dashboard atau hubungi admin untuk promo khusus!'
             },
             'qr_code': {
                 question: 'Tentang QR Code sertifikat',
-                answer: '📱 <strong>QR Code Sertifikat:</strong><br><br>Setiap sertifikat yang diterbitkan akan otomatis mendapat QR Code yang berisi:<br>• Link verifikasi langsung<br>• Nomor sertifikat unik<br><br>🔒 QR Code dapat discan menggunakan HP untuk memverifikasi keaslian sertifikat secara instan!<br><br>💡 QR Code akan muncul di halaman verifikasi dan PDF download.'
+                answer: '<strong>QR Code Sertifikat:</strong><br><br>Setiap sertifikat yang diterbitkan akan otomatis mendapat QR Code yang berisi:<br>• Link verifikasi langsung<br>• Nomor sertifikat unik<br><br>QR Code dapat discan menggunakan HP untuk memverifikasi keaslian sertifikat secara instan!<br><br>QR Code akan muncul di halaman verifikasi dan PDF download.'
             },
             'tips_keamanan': {
                 question: 'Tips keamanan sertifikat',
-                answer: '🔒 <strong>Tips Keamanan:</strong><br><br>1️⃣ <strong>Jaga kerahasiaan akun</strong> - Jangan bagikan password<br>2️⃣ <strong>Verifikasi rutin</strong> - Cek sertifikat Anda secara berkala<br>3️⃣ <strong>Backup data</strong> - Download PDF sertifikat penting<br>4️⃣ <strong>Laporkan pemalsuan</strong> - Hubungi admin jika menemukan sertifikat palsu<br><br>🛡️ SertiKu menggunakan enkripsi untuk melindungi data Anda!'
+                answer: '<strong>Tips Keamanan:</strong><br><br>1. <strong>Jaga kerahasiaan akun</strong> - Jangan bagikan password<br>2. <strong>Verifikasi rutin</strong> - Cek sertifikat Anda secara berkala<br>3. <strong>Backup data</strong> - Download PDF sertifikat penting<br>4. <strong>Laporkan pemalsuan</strong> - Hubungi admin jika menemukan sertifikat palsu<br><br>SertiKu menggunakan enkripsi untuk melindungi data Anda!'
             },
             'hubungi_admin': {
                 question: 'Hubungi Admin',
-                answer: '📞 <strong>Hubungi Kami:</strong><br><br>📧 Email: <a href="mailto:support@sertiku.web.id" class="text-blue-400 underline">support@sertiku.web.id</a><br>📱 WhatsApp: <a href="https://wa.me/6285777419874" class="text-blue-400 underline">+62 857-7741-9874</a><br>🕐 Jam Operasional: Senin-Jumat, 09:00-17:00 WIB<br><br>💬 Atau kirim pesan langsung di chat ini dan kami akan segera merespons!'
+                answer: '<strong>Hubungi Kami:</strong><br><br>Email: <a href="mailto:support@sertiku.web.id" class="text-blue-400 underline">support@sertiku.web.id</a><br>WhatsApp: <a href="https://wa.me/6285777419874" class="text-blue-400 underline">+62 857-7741-9874</a><br>Jam Operasional: Senin-Jumat, 09:00-17:00 WIB<br><br>Atau kirim pesan langsung di chat ini dan kami akan segera merespons!'
             }
         };
 

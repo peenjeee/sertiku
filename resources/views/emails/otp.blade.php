@@ -19,7 +19,7 @@
                         <td
                             style="padding: 40px 40px 30px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1);">
                             <h1 style="margin: 0; color: #FFFFFF; font-size: 28px; font-weight: 700;">
-                                🔐 SertiKu
+                                SertiKu
                             </h1>
                             <p style="margin: 10px 0 0; color: #94A3B8; font-size: 14px;">
                                 Platform Verifikasi Sertifikat Digital

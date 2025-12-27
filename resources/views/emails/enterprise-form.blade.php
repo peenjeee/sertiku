@@ -75,14 +75,14 @@
             </a>
             <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $data['phone']) }}"
                 style="display: inline-block; background: #25D366; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500;">
-                📱 WhatsApp
+                WhatsApp
             </a>
         </div>
 
         <div
             style="margin-top: 24px; padding: 16px; background-color: #f0f9ff; border-radius: 8px; text-align: center;">
             <p style="margin: 0; color: #0369a1; font-size: 13px;">
-                💡 Lead ini dikirim dari halaman <strong>Paket Enterprise</strong>
+                Lead ini dikirim dari halaman <strong>Paket Enterprise</strong>
             </p>
             <p style="margin: 8px 0 0 0; color: #6b7280; font-size: 12px;">
                 {{ now()->format('d M Y, H:i:s') }} WIB

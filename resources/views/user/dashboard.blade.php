@@ -4,7 +4,7 @@
     {{-- Welcome Banner --}}
     <div class="welcome-banner rounded-2xl lg:rounded-3xl p-5 lg:p-8 mb-6 animate-fade-in-up">
         <h1 class="text-xl lg:text-2xl font-bold text-white mb-4">
-            Selamat Datang Kembali, {{ auth()->user()->name ?? 'User' }}! ✨
+            Selamat Datang Kembali, {{ auth()->user()->name ?? 'User' }}!
         </h1>
         <div class="flex flex-wrap gap-3">
             <a href="{{ route('user.sertifikat') }}"
@@ -129,10 +129,10 @@
                 @forelse($recentActivity as $activity)
                     <div class="flex items-start gap-3">
                         <div class="w-2 h-2 rounded-full mt-2
-                                @if($activity['type'] === 'new') bg-blue-400
-                                @elseif($activity['type'] === 'view') bg-yellow-400
-                                @else bg-purple-400 @endif
-                            "></div>
+                                    @if($activity['type'] === 'new') bg-blue-400
+                                    @elseif($activity['type'] === 'view') bg-yellow-400
+                                    @else bg-purple-400 @endif
+                                "></div>
                         <div class="flex-1 min-w-0">
                             <p class="text-white text-sm font-medium">{{ $activity['title'] }}</p>
                             <p class="text-white/50 text-xs truncate">{{ $activity['subtitle'] }}</p>
@@ -175,10 +175,10 @@
                             <p class="text-white/50 text-sm">{{ $cert->issuer->name ?? 'Lembaga' }}</p>
                         </div>
                         <span class="px-3 py-1 rounded-full text-xs
-                                    @if($cert->status === 'active') bg-green-500/20 text-green-400
-                                    @elseif($cert->status === 'pending') bg-yellow-500/20 text-yellow-400
-                                    @else bg-red-500/20 text-red-400 @endif
-                                ">
+                                            @if($cert->status === 'active') bg-green-500/20 text-green-400
+                                            @elseif($cert->status === 'pending') bg-yellow-500/20 text-yellow-400
+                                            @else bg-red-500/20 text-red-400 @endif
+                                        ">
                             @if($cert->pdf_url)
                                 <a href="{{ $cert->pdf_url }}" target="_blank" class="text-white/40 hover:text-white transition"
                                     title="Download PDF">

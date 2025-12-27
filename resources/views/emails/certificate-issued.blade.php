@@ -32,7 +32,7 @@
                         <td style="padding: 30px 40px 20px; text-align: center;">
                             <div
                                 style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%); border-radius: 12px; padding: 20px;">
-                                <p style="margin: 0; font-size: 48px;">🎉</p>
+                                <p style="margin: 0; font-size: 48px;"></p>
                                 <h2 style="margin: 10px 0 0; color: #10B981; font-size: 24px; font-weight: 700;">
                                     Selamat!
                                 </h2>
@@ -131,7 +131,7 @@
                                     <td align="center" style="padding: 5px;">
                                         <a href="{{ $verificationUrl }}"
                                             style="display: inline-block; padding: 14px 28px; background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%); color: #FFFFFF; text-decoration: none; font-size: 15px; font-weight: 600; border-radius: 8px;">
-                                            🔍 Verifikasi Sertifikat
+                                            Verifikasi Sertifikat
                                         </a>
                                     </td>
                                 </tr>
@@ -151,7 +151,7 @@
                             <div
                                 style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 15px; margin: 20px 0;">
                                 <p style="margin: 0; color: #6EE7B7; font-size: 13px; line-height: 1.6;">
-                                    ✅ <strong>Sertifikat ini dapat diverifikasi</strong> oleh siapa saja melalui
+                                    <strong>Sertifikat ini dapat diverifikasi</strong> oleh siapa saja melalui
                                     link verifikasi atau dengan memindai QR code pada sertifikat.
                                 </p>
                             </div>

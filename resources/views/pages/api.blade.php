@@ -28,7 +28,7 @@
             {{-- Quick Stats Widget --}}
             <div
                 class="bg-gradient-to-r from-[#3B82F6]/20 to-[#8B5CF6]/20 border border-[#3B82F6]/30 rounded-xl p-6 mb-8 scroll-animate">
-                <h3 class="text-lg font-semibold text-white mb-4">📊 Platform Statistics (Live)</h3>
+                <h3 class="text-lg font-semibold text-white mb-4">Platform Statistics (Live)</h3>
                 <div id="statsContainer" class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div class="text-center">
                         <div class="text-2xl font-bold text-[#3B82F6]" id="statTotal">-</div>
@@ -94,7 +94,7 @@
 
                         {{-- Try it out --}}
                         <div class="bg-[#050C1F] rounded-lg p-3 md:p-4">
-                            <h4 class="text-white font-medium mb-3">🧪 Try it out</h4>
+                            <h4 class="text-white font-medium mb-3">Try it out</h4>
                             <div class="flex flex-col sm:flex-row gap-2">
                                 <input type="text" id="verifyInput" placeholder="Masukkan hash atau nomor sertifikat"
                                     class="flex-1 bg-[#0A1929] border border-[#1E3A5F] rounded-lg px-3 md:px-4 py-2 text-sm md:text-base text-white placeholder-[#8EC5FF]/50 focus:border-[#3B82F6] focus:outline-none">

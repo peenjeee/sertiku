@@ -76,7 +76,7 @@
 
                     // Show success notification
                     new Notification('SertiKu', {
-                        body: 'Notifikasi berhasil diaktifkan! 🎉',
+                        body: 'Notifikasi berhasil diaktifkan!',
                         icon: '/favicon.svg',
                         badge: '/favicon.svg'
                     });

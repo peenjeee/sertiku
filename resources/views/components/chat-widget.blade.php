@@ -273,7 +273,7 @@
             if (!response.ok) {
                 const errorText = await response.text();
                 console.error('Response error:', errorText);
-                addBotMessage(`❌ Gagal membuat tiket (${response.status}). Pastikan Anda sudah login.`);
+                addBotMessage(`Gagal membuat tiket (${response.status}). Pastikan Anda sudah login.`);
                 return;
             }
 
@@ -285,7 +285,7 @@
                 isSupportMode = true;
 
                 // Show ticket number
-                addBotMessage(`✅ **Tiket #${supportTicketId}** berhasil dibuat!\n\nSilakan ketik pesan Anda. Admin akan membalas secepatnya.\n\n_Simpan nomor tiket ini untuk referensi._`);
+                addBotMessage(`**Tiket #${supportTicketId}** berhasil dibuat!\n\nSilakan ketik pesan Anda. Admin akan membalas secepatnya.\n\n_Simpan nomor tiket ini untuk referensi._`);
 
                 // Change input placeholder
                 document.getElementById('chatInput').placeholder = 'Ketik pesan ke admin...';
@@ -294,11 +294,11 @@
                 startSupportPolling();
                 saveChatToStorage();
             } else {
-                addBotMessage('❌ Gagal membuat tiket: ' + (data.message || 'Unknown error'));
+                addBotMessage('Gagal membuat tiket: ' + (data.message || 'Unknown error'));
             }
         } catch (error) {
             console.error('Ticket error:', error);
-            addBotMessage('❌ Terjadi kesalahan jaringan. Pastikan Anda sudah login.');
+            addBotMessage('Terjadi kesalahan jaringan. Pastikan Anda sudah login.');
         }
     }
 
@@ -338,7 +338,7 @@
             }
         } catch (e) {
             console.error('Send message error:', e);
-            addBotMessage('❌ Gagal mengirim pesan. Coba lagi.');
+            addBotMessage('Gagal mengirim pesan. Coba lagi.');
         }
     }
 

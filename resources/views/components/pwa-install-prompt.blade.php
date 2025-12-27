@@ -181,7 +181,7 @@
         if (typeof Swal !== 'undefined') {
             Swal.fire({
                 icon: 'success',
-                title: '🎉 SertiKu Terinstall!',
+                title: 'SertiKu Terinstall!',
                 text: 'Aplikasi berhasil ditambahkan ke home screen.',
                 showConfirmButton: false,
                 timer: 3000,
