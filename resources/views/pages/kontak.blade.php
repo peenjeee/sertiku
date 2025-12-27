@@ -23,9 +23,8 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
                 {{-- Contact Form - First on mobile --}}
                 <div
-                    class="rounded-xl lg:rounded-2xl bg-white/5 border border-white/10 p-4 sm:p-6 lg:p-8 order-1 lg:order-2 animate-fade-in-up hover-lift">
+                    class="w-full rounded-xl lg:rounded-2xl bg-white/5 border border-white/10 p-4 sm:p-6 lg:p-8 order-1 lg:order-2 md:animate-fade-in-up hover-lift">
                     <h2 class="text-lg sm:text-xl font-bold text-white mb-5 lg:mb-6">Kirim Pesan</h2>
-
 
 
                     <form action="{{ route('kontak.send') }}" method="POST" class="space-y-4 lg:space-y-5">
@@ -34,7 +33,7 @@
                         <div class="space-y-1.5 lg:space-y-2">
                             <label class="text-xs lg:text-sm text-white">Nama Lengkap</label>
                             <input type="text" name="name" value="{{ old('name') }}" required
-                                class="w-full rounded-lg bg-white/5 border border-white/20 px-3 lg:px-4 py-2.5 lg:py-3 text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]"
+                                class="w-full max-w-full rounded-lg bg-white/5 border border-white/20 px-3 lg:px-4 py-2.5 lg:py-3 text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]"
                                 placeholder="Nama Anda">
                             @error('name')<p class="text-xs text-red-400 mt-1">{{ $message }}</p>@enderror
                         </div>
@@ -42,7 +41,7 @@
                         <div class="space-y-1.5 lg:space-y-2">
                             <label class="text-xs lg:text-sm text-white">Email</label>
                             <input type="email" name="email" value="{{ old('email') }}" required
-                                class="w-full rounded-lg bg-white/5 border border-white/20 px-3 lg:px-4 py-2.5 lg:py-3 text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]"
+                                class="w-full max-w-full rounded-lg bg-white/5 border border-white/20 px-3 lg:px-4 py-2.5 lg:py-3 text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]"
                                 placeholder="email@contoh.com">
                             @error('email')<p class="text-xs text-red-400 mt-1">{{ $message }}</p>@enderror
                         </div>
@@ -50,7 +49,7 @@
                         <div class="space-y-1.5 lg:space-y-2">
                             <label class="text-xs lg:text-sm text-white">Subjek</label>
                             <input type="text" name="subject" value="{{ old('subject') }}" required
-                                class="w-full rounded-lg bg-white/5 border border-white/20 px-3 lg:px-4 py-2.5 lg:py-3 text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]"
+                                class="w-full max-w-full rounded-lg bg-white/5 border border-white/20 px-3 lg:px-4 py-2.5 lg:py-3 text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]"
                                 placeholder="Subjek pesan">
                             @error('subject')<p class="text-xs text-red-400 mt-1">{{ $message }}</p>@enderror
                         </div>
@@ -58,7 +57,7 @@
                         <div class="space-y-1.5 lg:space-y-2">
                             <label class="text-xs lg:text-sm text-white">Pesan</label>
                             <textarea name="message" rows="4" required
-                                class="w-full rounded-lg bg-white/5 border border-white/20 px-3 lg:px-4 py-2.5 lg:py-3 text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#3B82F6] resize-none"
+                                class="w-full max-w-full rounded-lg bg-white/5 border border-white/20 px-3 lg:px-4 py-2.5 lg:py-3 text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#3B82F6] resize-none"
                                 placeholder="Tulis pesan Anda...">{{ old('message') }}</textarea>
                             @error('message')<p class="text-xs text-red-400 mt-1">{{ $message }}</p>@enderror
                         </div>

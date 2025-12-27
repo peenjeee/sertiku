@@ -264,7 +264,7 @@
     </style>
 </head>
 
-<body class="bg-[#050C1F] text-[#DBEAFE] antialiased font-['Poppins',sans-serif]">
+<body class="bg-[#050C1F] text-[#DBEAFE] antialiased font-['Poppins',sans-serif] overflow-x-hidden w-screen">
 
     {{-- Background glow sesuai Figma --}}
     <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
