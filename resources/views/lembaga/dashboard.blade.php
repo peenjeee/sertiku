@@ -87,23 +87,49 @@
         <!-- Quick Action Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <!-- Terbitkan Sertifikat -->
-            <a href="{{ route('lembaga.sertifikat.create') }}"
-                class="gradient-card-blue rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-1">
-                <div class="flex items-center gap-3 lg:gap-4">
-                    <div
-                        class="icon-circle-blue w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
+            @if($user->canIssueCertificate())
+                <a href="{{ route('lembaga.sertifikat.create') }}"
+                    class="gradient-card-blue rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-1">
+                    <div class="flex items-center gap-3 lg:gap-4">
+                        <div
+                            class="icon-circle-blue w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-[#1E3A8A] font-bold text-sm lg:text-lg">Terbitkan Sertifikat</h3>
+                            <p class="text-[#3B82F6] text-xs lg:text-sm">Sisa kuota:
+                                {{ $remainingCerts }}/{{ $certificateLimit }}</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="text-[#1E3A8A] font-bold text-sm lg:text-lg">Terbitkan Sertifikat</h3>
-                        <p class="text-[#3B82F6] text-xs lg:text-sm">Buat sertifikat baru</p>
+                </a>
+            @else
+                <div
+                    class="relative rounded-xl lg:rounded-2xl p-4 lg:p-6 bg-gradient-to-br from-red-50 to-red-100 border-2 border-red-200 opacity-80 cursor-not-allowed animate-fade-in-up stagger-1">
+                    <div class="flex items-center gap-3 lg:gap-4">
+                        <div
+                            class="bg-red-400 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-red-700 font-bold text-sm lg:text-lg">Kuota Habis</h3>
+                            <p class="text-red-500 text-xs lg:text-sm">{{ $certificatesUsed }}/{{ $certificateLimit }}
+                                terpakai</p>
+                        </div>
                     </div>
+                    <a href="{{ url('/#harga') }}"
+                        class="absolute inset-0 flex items-center justify-center bg-red-900/80 rounded-xl lg:rounded-2xl opacity-0 hover:opacity-100 transition-opacity">
+                        <span class="text-white font-bold text-sm">Upgrade Paket →</span>
+                    </a>
                 </div>
-            </a>
+            @endif
 
             <!-- Galeri Template -->
             <a href="{{ route('lembaga.template.index') }}"

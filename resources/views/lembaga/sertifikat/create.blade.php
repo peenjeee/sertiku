@@ -7,6 +7,17 @@
         $remainingCerts = $user->getRemainingCertificates();
         $canIssue = $user->canIssueCertificate();
         $usagePercentage = $user->getUsagePercentage();
+
+        // Blockchain & IPFS limits
+        $blockchainLimit = $user->getBlockchainLimit();
+        $blockchainUsed = $user->getBlockchainUsedThisMonth();
+        $canUseBlockchain = $user->canUseBlockchain();
+        $remainingBlockchain = $user->getRemainingBlockchain();
+
+        $ipfsLimit = $user->getIpfsLimit();
+        $ipfsUsed = $user->getIpfsUsedThisMonth();
+        $canUseIpfs = $user->canUseIpfs();
+        $remainingIpfs = $user->getRemainingIpfs();
     @endphp
 
     <div class="space-y-6">
@@ -283,7 +294,7 @@
 
                 <!-- Blockchain Option -->
                 @if(config('blockchain.enabled'))
-                    <div class="glass-card rounded-2xl p-6">
+                    <div class="glass-card rounded-2xl p-6 {{ !$canUseBlockchain ? 'opacity-60' : '' }}">
                         <div class="flex items-center pb-3 border-b border-gray-200 mb-4">
                             <svg class="w-5 h-5 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -291,14 +302,31 @@
                             </svg>
                             <span class="text-gray-800 text-base font-bold">Blockchain Verification</span>
                             <span
-                                class="ml-2 px-2 py-0.5 bg-purple-100 text-purple-600 text-xs font-medium rounded-full">GRATIS</span>
+                                class="ml-2 px-2 py-0.5 {{ $canUseBlockchain ? 'bg-purple-100 text-purple-600' : 'bg-red-100 text-red-600' }} text-xs font-medium rounded-full">
+                                {{ $remainingBlockchain }}/{{ $blockchainLimit }}
+                            </span>
                         </div>
 
+                        @if(!$canUseBlockchain)
+                            <div class="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                    <p class="text-red-700 text-sm font-medium">Kuota Blockchain habis
+                                        ({{ $blockchainUsed }}/{{ $blockchainLimit }}). <a href="{{ url('/#harga') }}"
+                                            class="underline">Upgrade paket</a></p>
+                                </div>
+                            </div>
+                        @endif
+
                         <div class="flex items-start gap-4">
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" name="blockchain_enabled" value="1" class="sr-only peer" {{ old('blockchain_enabled') ? 'checked' : '' }}>
+                            <label
+                                class="relative inline-flex items-center {{ $canUseBlockchain ? 'cursor-pointer' : 'cursor-not-allowed' }}">
+                                <input type="checkbox" name="blockchain_enabled" value="1" class="sr-only peer" {{ old('blockchain_enabled') ? 'checked' : '' }} {{ !$canUseBlockchain ? 'disabled' : '' }}>
                                 <div
-                                    class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600">
+                                    class="w-11 h-6 {{ $canUseBlockchain ? 'bg-gray-300 peer-checked:bg-purple-600' : 'bg-gray-200' }} peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all">
                                 </div>
                             </label>
                             <div class="flex-1">
@@ -335,7 +363,7 @@
 
                 <!-- IPFS Option -->
                 @if(config('ipfs.enabled'))
-                    <div class="glass-card rounded-2xl p-6">
+                    <div class="glass-card rounded-2xl p-6 {{ !$canUseIpfs ? 'opacity-60' : '' }}">
                         <div class="flex items-center pb-3 border-b border-gray-200 mb-4">
                             <svg class="w-5 h-5 text-cyan-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -343,14 +371,30 @@
                             </svg>
                             <span class="text-gray-800 text-base font-bold">IPFS Storage</span>
                             <span
-                                class="ml-2 px-2 py-0.5 bg-cyan-100 text-cyan-600 text-xs font-medium rounded-full">Web3</span>
+                                class="ml-2 px-2 py-0.5 {{ $canUseIpfs ? 'bg-cyan-100 text-cyan-600' : 'bg-red-100 text-red-600' }} text-xs font-medium rounded-full">
+                                {{ $remainingIpfs }}/{{ $ipfsLimit }}
+                            </span>
                         </div>
 
+                        @if(!$canUseIpfs)
+                            <div class="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                    <p class="text-red-700 text-sm font-medium">Kuota IPFS habis ({{ $ipfsUsed }}/{{ $ipfsLimit }}).
+                                        <a href="{{ url('/#harga') }}" class="underline">Upgrade paket</a></p>
+                                </div>
+                            </div>
+                        @endif
+
                         <div class="flex items-start gap-4">
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" name="ipfs_enabled" value="1" class="sr-only peer" {{ old('ipfs_enabled') ? 'checked' : '' }}>
+                            <label
+                                class="relative inline-flex items-center {{ $canUseIpfs ? 'cursor-pointer' : 'cursor-not-allowed' }}">
+                                <input type="checkbox" name="ipfs_enabled" value="1" class="sr-only peer" {{ old('ipfs_enabled') ? 'checked' : '' }} {{ !$canUseIpfs ? 'disabled' : '' }}>
                                 <div
-                                    class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-cyan-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-600">
+                                    class="w-11 h-6 {{ $canUseIpfs ? 'bg-gray-300 peer-checked:bg-cyan-600' : 'bg-gray-200' }} peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-cyan-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all">
                                 </div>
                             </label>
                             <div class="flex-1">
