@@ -477,17 +477,37 @@
                 </a>
 
                 <!-- Terbitkan Sertifikat -->
-                <a href="{{ route('lembaga.sertifikat.create') }}"
-                    class="nav-item flex items-center gap-3 px-4 py-4 rounded-xl {{ request()->routeIs('lembaga.sertifikat.create') ? 'active' : '' }}"
-                    title="Terbitkan Sertifikat">
-                    <div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67"
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
+                @if(Auth::user()->canIssueCertificate())
+                    <a href="{{ route('lembaga.sertifikat.create') }}"
+                        class="nav-item flex items-center gap-3 px-4 py-4 rounded-xl {{ request()->routeIs('lembaga.sertifikat.create') ? 'active' : '' }}"
+                        title="Terbitkan Sertifikat">
+                        <div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <span class="text-white/70 text-base nav-text">Terbitkan Sertifikat</span>
+                    </a>
+                @else
+                    <div class="nav-item flex items-center gap-3 px-4 py-4 rounded-xl opacity-50 cursor-not-allowed group relative"
+                        title="Kuota sertifikat habis">
+                        <div class="w-9 h-9 rounded-lg bg-red-500/20 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67"
+                                    d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                            </svg>
+                        </div>
+                        <span class="text-red-400/70 text-base nav-text">Kuota Habis</span>
+                        <!-- Tooltip -->
+                        <div class="absolute left-full ml-2 hidden group-hover:block z-50">
+                            <div class="bg-gray-900 text-white text-xs rounded-lg px-3 py-2 whitespace-nowrap shadow-lg">
+                                Kuota sertifikat bulan ini habis
+                                <a href="{{ url('/#harga') }}" class="text-blue-400 underline ml-1">Upgrade</a>
+                            </div>
+                        </div>
                     </div>
-                    <span class="text-white/70 text-base nav-text">Terbitkan Sertifikat</span>
-                </a>
+                @endif
 
                 <!-- Daftar Sertifikat -->
                 <a href="{{ route('lembaga.sertifikat.index') }}"
