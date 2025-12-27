@@ -159,15 +159,13 @@
                     <div>
                         <label class="text-[#8EC5FF] text-sm mb-2 block">Endpoint</label>
                         <select id="testEndpoint" onchange="updateTestUI()"
-                            class="w-full bg-[#050C1F] border border-[#1E3A5F] rounded-lg px-4 py-2.5 text-white focus:border-[#3B82F6] focus:outline-none">
-                            <option value="verify">GET /api/v1/verify/{hash} - Verifikasi Sertifikat (Public)</option>
-                            <option value="stats">GET /api/v1/stats - Statistik Platform (Public)</option>
-                            <option value="certificates">GET /api/v1/certificates - List Sertifikat (Auth)</option>
-                            <option value="create">POST /api/v1/certificates - Buat Sertifikat (Auth)</option>
-                            <option value="revoke">PUT /api/v1/certificates/{id}/revoke - Cabut Sertifikat (Auth)
-                            </option>
-                            <option value="reactivate">PUT /api/v1/certificates/{id}/reactivate - Aktifkan Kembali
-                                (Auth)</option>
+                            class="w-full bg-[#050C1F] border border-[#1E3A5F] rounded-lg px-4 py-2.5 text-white focus:border-[#3B82F6] focus:outline-none text-sm">
+                            <option value="verify">GET /verify/{hash} - Verifikasi (Public)</option>
+                            <option value="stats">GET /stats - Statistik (Public)</option>
+                            <option value="certificates">GET /certificates - List (Auth)</option>
+                            <option value="create">POST /certificates - Buat Baru (Auth)</option>
+                            <option value="revoke">PUT /certificates/{id}/revoke (Auth)</option>
+                            <option value="reactivate">PUT /certificates/{id}/reactivate (Auth)</option>
                         </select>
                     </div>
 
