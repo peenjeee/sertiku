@@ -378,6 +378,15 @@
                 statusEl.textContent = '';
                 statusEl.className = 'absolute top-2 right-2 px-2 py-0.5 rounded text-xs font-medium';
 
+                // Check if token is required for authenticated endpoints
+                const authRequiredEndpoints = ['certificates', 'create', 'revoke', 'reactivate'];
+                if (authRequiredEndpoints.includes(endpoint) && !token.trim()) {
+                    resultEl.textContent = 'Error: API Token wajib diisi untuk endpoint yang memerlukan autentikasi.\n\nBuat token baru di form di atas, lalu paste token-nya di sini.';
+                    statusEl.textContent = '✗ 401 Unauthorized';
+                    statusEl.classList.add('bg-red-500/20', 'text-red-400');
+                    return;
+                }
+
                 let url, method = 'GET', body = null;
 
                 switch (endpoint) {
