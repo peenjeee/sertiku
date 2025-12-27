@@ -31,5 +31,6 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         Route::get('/certificates/{id}', [CertificateApiController::class, 'show'])->name('certificates.show');
         Route::post('/certificates', [CertificateApiController::class, 'store'])->name('certificates.store');
         Route::put('/certificates/{id}/revoke', [CertificateApiController::class, 'revoke'])->name('certificates.revoke');
+        Route::put('/certificates/{id}/reactivate', [CertificateApiController::class, 'reactivate'])->name('certificates.reactivate');
     });
 });

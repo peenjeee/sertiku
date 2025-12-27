@@ -31,19 +31,35 @@
                 <h3 class="text-lg font-semibold text-white mb-4">Platform Statistics (Live)</h3>
                 <div id="statsContainer" class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-[#3B82F6]" id="statTotal">-</div>
+                        <div class="text-2xl font-bold text-[#3B82F6]" id="statTotal">
+                            <div
+                                class="w-8 h-8 mx-auto border-2 border-[#3B82F6] border-t-transparent rounded-full animate-spin">
+                            </div>
+                        </div>
                         <div class="text-xs text-[#8EC5FF]/70">Total Sertifikat</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-[#10B981]" id="statActive">-</div>
+                        <div class="text-2xl font-bold text-[#10B981]" id="statActive">
+                            <div
+                                class="w-8 h-8 mx-auto border-2 border-[#10B981] border-t-transparent rounded-full animate-spin">
+                            </div>
+                        </div>
                         <div class="text-xs text-[#8EC5FF]/70">Aktif</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-[#8B5CF6]" id="statIssuers">-</div>
+                        <div class="text-2xl font-bold text-[#8B5CF6]" id="statIssuers">
+                            <div
+                                class="w-8 h-8 mx-auto border-2 border-[#8B5CF6] border-t-transparent rounded-full animate-spin">
+                            </div>
+                        </div>
                         <div class="text-xs text-[#8EC5FF]/70">Penerbit</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-[#F59E0B]" id="statBlockchain">-</div>
+                        <div class="text-2xl font-bold text-[#F59E0B]" id="statBlockchain">
+                            <div
+                                class="w-8 h-8 mx-auto border-2 border-[#F59E0B] border-t-transparent rounded-full animate-spin">
+                            </div>
+                        </div>
                         <div class="text-xs text-[#8EC5FF]/70">On-Chain</div>
                     </div>
                 </div>
@@ -86,7 +102,7 @@
                                     <tr>
                                         <td class="py-2"><code>hash</code></td>
                                         <td>string</td>
-                                        <td>UUID hash atau nomor sertifikat</td>
+                                        <td>UUID hash atau nomor sertifikat (e.g. SERT-202512-XXXXXX)</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -106,6 +122,36 @@
                             <pre id="verifyResult" class="mt-4 text-xs text-[#8EC5FF] overflow-x-auto hidden"></pre>
                         </div>
 
+                        {{-- Response Example --}}
+                        <div>
+                            <h4 class="text-white font-medium mb-2">Response Example</h4>
+                            <pre class="bg-[#050C1F] rounded-lg p-4 text-xs text-[#10B981] overflow-x-auto">{
+  "success": true,
+  "message": "Sertifikat valid",
+  "data": {
+    "valid": true,
+    "certificate": {
+      "certificate_number": "SERT-202512-ABCDEF",
+      "recipient_name": "John Doe",
+      "course_name": "Web Development Bootcamp",
+      "issue_date": "2024-12-27",
+      "status": "active",
+      "issuer": {
+        "name": "Tech Academy",
+        "type": "Lembaga Pelatihan"
+      },
+      "blockchain": {
+        "enabled": true,
+        "verified": true,
+        "tx_hash": "0x123...",
+        "explorer_url": "https://polygonscan.com/tx/0x123..."
+      },
+      "verification_url": "https://sertiku.web.id/v/SERT-202512-ABCDEF"
+    }
+  }
+}</pre>
+                        </div>
+
                         {{-- Code Examples --}}
                         <div x-data="{ tab: 'curl' }">
                             <h4 class="text-white font-medium mb-3">Code Examples</h4>
@@ -121,11 +167,11 @@
                                     class="px-3 py-1 rounded text-sm transition">JavaScript</button>
                             </div>
                             <div class="bg-[#050C1F] rounded-lg p-4 font-mono text-sm overflow-x-auto">
-                                <pre x-show="tab === 'curl'" class="text-[#10B981]">curl -X GET "{{ url('/api/v1/verify') }}/YOUR_HASH" \
+                                <pre x-show="tab === 'curl'" class="text-[#10B981]">curl -X GET "{{ url('/api/v1/verify') }}/SERT-202512-ABCDEF" \
   -H "Accept: application/json"</pre>
-                                <pre x-show="tab === 'php'" class="text-[#10B981]">$response = Http::get('{{ url('/api/v1/verify') }}/YOUR_HASH');
+                                <pre x-show="tab === 'php'" class="text-[#10B981]">$response = Http::get('{{ url('/api/v1/verify') }}/SERT-202512-ABCDEF');
 $data = $response->json();</pre>
-                                <pre x-show="tab === 'js'" class="text-[#10B981]">const response = await fetch('{{ url('/api/v1/verify') }}/YOUR_HASH');
+                                <pre x-show="tab === 'js'" class="text-[#10B981]">const response = await fetch('{{ url('/api/v1/verify') }}/SERT-202512-ABCDEF');
 const data = await response.json();</pre>
                             </div>
                         </div>
@@ -157,10 +203,15 @@ const data = await response.json();</pre>
                             <pre class="bg-[#050C1F] rounded-lg p-4 text-xs text-[#10B981] overflow-x-auto">{
   "success": true,
   "data": {
-    "total_certificates": 67000,
-    "active_certificates": 65000,
-    "total_issuers": 67,
-    "blockchain_verified": 1200
+    "total_certificates": 1250,
+    "active_certificates": 1200,
+    "total_issuers": 45,
+    "blockchain_verified": 350,
+    "platform": {
+      "name": "SertiKu",
+      "version": "1.0.0",
+      "website": "https://sertiku.web.id"
+    }
   }
 }</pre>
                         </div>
@@ -186,49 +237,24 @@ const data = await response.json();</pre>
                     <div x-show="open" x-collapse class="border-t border-[#1E3A5F] p-6 space-y-4">
                         <p class="text-[#BEDBFF]">Dapatkan daftar semua sertifikat milik Anda.</p>
 
-                        {{-- Parameters --}}
-                        <div>
-                            <h4 class="text-white font-medium mb-2">Query Parameters</h4>
-                            <table class="w-full text-sm">
-                                <thead class="text-[#8EC5FF]/70">
-                                    <tr>
-                                        <th class="text-left py-2">Name</th>
-                                        <th class="text-left">Type</th>
-                                        <th class="text-left">Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-[#BEDBFF]">
-                                    <tr>
-                                        <td class="py-2"><code>page</code></td>
-                                        <td>integer (optional)</td>
-                                        <td>Nomor halaman untuk pagination</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-2"><code>per_page</code></td>
-                                        <td>integer (optional)</td>
-                                        <td>Jumlah item per halaman (default: 15)</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
                         {{-- Response Example --}}
                         <div>
                             <h4 class="text-white font-medium mb-2">Response Example</h4>
                             <pre class="bg-[#050C1F] rounded-lg p-4 text-xs text-[#10B981] overflow-x-auto">{
   "success": true,
-  "data": [
-    {
-      "id": 1,
-      "certificate_number": "CERT-2024-001",
-      "recipient_name": "John Doe",
-      "program_name": "Web Development",
-      "status": "active",
-      "issued_at": "2024-01-15"
-    }
-  ],
-  "meta": {
+  "data": {
     "current_page": 1,
+    "data": [
+      {
+        "id": 1,
+        "certificate_number": "SERT-202512-ABCDEF",
+        "recipient_name": "John Doe",
+        "course_name": "Web Development",
+        "status": "active",
+        "created_at": "2024-12-27T10:00:00.000000Z"
+      }
+    ],
+    "per_page": 20,
     "total": 50
   }
 }</pre>
@@ -261,47 +287,92 @@ const data = await response.json();</pre>
                         </svg>
                     </button>
                     <div x-show="open" x-collapse class="border-t border-[#1E3A5F] p-6 space-y-4">
-                        <p class="text-[#BEDBFF]">Buat sertifikat baru. Pastikan kuota bulanan Anda mencukupi.</p>
+                        <p class="text-[#BEDBFF]">Buat sertifikat baru (sama seperti menu Terbitkan Sertifikat).
+                            Pastikan kuota bulanan mencukupi.</p>
 
                         {{-- Request Body --}}
                         <div>
                             <h4 class="text-white font-medium mb-2">Request Body</h4>
-                            <table class="w-full text-sm">
-                                <thead class="text-[#8EC5FF]/70">
-                                    <tr>
-                                        <th class="text-left py-2">Field</th>
-                                        <th class="text-left">Type</th>
-                                        <th class="text-left">Required</th>
-                                        <th class="text-left">Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-[#BEDBFF]">
-                                    <tr>
-                                        <td class="py-2"><code>recipient_name</code></td>
-                                        <td>string</td>
-                                        <td>✓</td>
-                                        <td>Nama penerima sertifikat</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-2"><code>program_name</code></td>
-                                        <td>string</td>
-                                        <td>✓</td>
-                                        <td>Nama program/pelatihan</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-2"><code>issue_date</code></td>
-                                        <td>date</td>
-                                        <td>✓</td>
-                                        <td>Tanggal terbit (YYYY-MM-DD)</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-2"><code>expiry_date</code></td>
-                                        <td>date</td>
-                                        <td></td>
-                                        <td>Tanggal kadaluarsa (opsional)</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm">
+                                    <thead class="text-[#8EC5FF]/70">
+                                        <tr>
+                                            <th class="text-left py-2">Field</th>
+                                            <th class="text-left">Type</th>
+                                            <th class="text-left">Required</th>
+                                            <th class="text-left">Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-[#BEDBFF]">
+                                        <tr>
+                                            <td class="py-2"><code>recipient_name</code></td>
+                                            <td>string</td>
+                                            <td class="text-[#10B981]">✓</td>
+                                            <td>Nama penerima sertifikat</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2"><code>recipient_email</code></td>
+                                            <td>string</td>
+                                            <td></td>
+                                            <td>Email penerima</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2"><code>course_name</code></td>
+                                            <td>string</td>
+                                            <td class="text-[#10B981]">✓</td>
+                                            <td>Nama program/pelatihan/kursus</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2"><code>category</code></td>
+                                            <td>string</td>
+                                            <td></td>
+                                            <td>Kategori (misal: "Webinar", "Bootcamp")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2"><code>description</code></td>
+                                            <td>string</td>
+                                            <td></td>
+                                            <td>Deskripsi sertifikat</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2"><code>issue_date</code></td>
+                                            <td>date</td>
+                                            <td class="text-[#10B981]">✓</td>
+                                            <td>Tanggal terbit (YYYY-MM-DD)</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2"><code>expire_date</code></td>
+                                            <td>date</td>
+                                            <td></td>
+                                            <td>Tanggal kadaluarsa (opsional)</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2"><code>template_id</code></td>
+                                            <td>integer</td>
+                                            <td></td>
+                                            <td>ID template sertifikat</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2"><code>blockchain_enabled</code></td>
+                                            <td>boolean</td>
+                                            <td></td>
+                                            <td>Upload ke Polygon Blockchain</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2"><code>ipfs_enabled</code></td>
+                                            <td>boolean</td>
+                                            <td></td>
+                                            <td>Upload ke IPFS</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2"><code>send_email</code></td>
+                                            <td>boolean</td>
+                                            <td></td>
+                                            <td>Kirim notifikasi email ke penerima</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
                         {{-- Request Example --}}
@@ -309,9 +380,40 @@ const data = await response.json();</pre>
                             <h4 class="text-white font-medium mb-2">Request Example</h4>
                             <pre class="bg-[#050C1F] rounded-lg p-4 text-xs text-[#10B981] overflow-x-auto">{
   "recipient_name": "John Doe",
-  "program_name": "Web Development Bootcamp",
-  "issue_date": "2024-01-15",
-  "expiry_date": "2025-01-15"
+  "recipient_email": "john@example.com",
+  "course_name": "Web Development Bootcamp",
+  "category": "Bootcamp",
+  "description": "Telah menyelesaikan pelatihan Web Development",
+  "issue_date": "2024-12-27",
+  "expire_date": "2025-12-27",
+  "blockchain_enabled": true,
+  "ipfs_enabled": true,
+  "send_email": true
+}</pre>
+                        </div>
+
+                        {{-- Response Example --}}
+                        <div>
+                            <h4 class="text-white font-medium mb-2">Response Example (201 Created)</h4>
+                            <pre class="bg-[#050C1F] rounded-lg p-4 text-xs text-[#10B981] overflow-x-auto">{
+  "success": true,
+  "message": "Sertifikat berhasil dibuat",
+  "data": {
+    "id": 123,
+    "certificate_number": "SERT-202512-ABCDEF",
+    "recipient_name": "John Doe",
+    "recipient_email": "john@example.com",
+    "course_name": "Web Development Bootcamp",
+    "category": "Bootcamp",
+    "issue_date": "2024-12-27",
+    "expire_date": "2025-12-27",
+    "status": "active",
+    "blockchain_enabled": true,
+    "blockchain_status": "pending",
+    "verification_url": "https://sertiku.web.id/v/SERT-202512-ABCDEF",
+    "pdf_url": "https://sertiku.web.id/storage/certificates/...",
+    "created_at": "2024-12-27T10:00:00.000000Z"
+  }
 }</pre>
                         </div>
 
@@ -320,7 +422,14 @@ const data = await response.json();</pre>
                             <pre class="text-[#10B981]">curl -X POST "{{ url('/api/v1/certificates') }}" \
   -H "Authorization: Bearer YOUR_API_TOKEN" \
   -H "Content-Type: application/json" \
-  -d '{"recipient_name":"John Doe","program_name":"Web Dev"}'</pre>
+  -d '{
+    "recipient_name": "John Doe",
+    "recipient_email": "john@example.com",
+    "course_name": "Web Development Bootcamp",
+    "issue_date": "2024-12-27",
+    "blockchain_enabled": true,
+    "send_email": true
+  }'</pre>
                         </div>
                     </div>
                 </div>
@@ -331,7 +440,7 @@ const data = await response.json();</pre>
                     <button @click="open = !open" class="w-full flex items-center justify-between p-4 md:p-6 text-left">
                         <div class="flex flex-wrap items-center gap-2 md:gap-4">
                             <span
-                                class="px-2 md:px-3 py-1 bg-[#F59E0B]/20 text-[#F59E0B] text-xs md:text-sm font-mono rounded">PUT</span>
+                                class="px-2 md:px-3 py-1 bg-[#EF4444]/20 text-[#EF4444] text-xs md:text-sm font-mono rounded">PUT</span>
                             <code
                                 class="text-white font-mono text-xs md:text-base break-all">/certificates/{id}/revoke</code>
                             <span class="text-[#8EC5FF]/60 text-xs md:text-sm hidden sm:inline">Cabut Sertifikat</span>
@@ -344,28 +453,7 @@ const data = await response.json();</pre>
                     </button>
                     <div x-show="open" x-collapse class="border-t border-[#1E3A5F] p-6 space-y-4">
                         <p class="text-[#BEDBFF]">Cabut sertifikat yang sudah diterbitkan. Sertifikat yang dicabut tidak
-                            dapat digunakan lagi.</p>
-
-                        {{-- Parameters --}}
-                        <div>
-                            <h4 class="text-white font-medium mb-2">Path Parameters</h4>
-                            <table class="w-full text-sm">
-                                <thead class="text-[#8EC5FF]/70">
-                                    <tr>
-                                        <th class="text-left py-2">Name</th>
-                                        <th class="text-left">Type</th>
-                                        <th class="text-left">Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-[#BEDBFF]">
-                                    <tr>
-                                        <td class="py-2"><code>id</code></td>
-                                        <td>integer</td>
-                                        <td>ID sertifikat yang akan dicabut</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                            dapat digunakan lagi namun bisa diaktifkan kembali.</p>
 
                         {{-- Request Body --}}
                         <div>
@@ -388,12 +476,73 @@ const data = await response.json();</pre>
                             </table>
                         </div>
 
+                        {{-- Response Example --}}
+                        <div>
+                            <h4 class="text-white font-medium mb-2">Response Example</h4>
+                            <pre class="bg-[#050C1F] rounded-lg p-4 text-xs text-[#10B981] overflow-x-auto">{
+  "success": true,
+  "message": "Sertifikat berhasil dicabut",
+  "data": {
+    "id": 123,
+    "certificate_number": "SERT-202512-ABCDEF",
+    "status": "revoked",
+    "revoked_at": "2024-12-27T15:00:00.000000Z",
+    "revoke_reason": "Data penerima salah"
+  }
+}</pre>
+                        </div>
+
                         {{-- Code Example --}}
                         <div class="bg-[#050C1F] rounded-lg p-4 font-mono text-sm overflow-x-auto">
                             <pre class="text-[#10B981]">curl -X PUT "{{ url('/api/v1/certificates') }}/123/revoke" \
   -H "Authorization: Bearer YOUR_API_TOKEN" \
   -H "Content-Type: application/json" \
-  -d '{"reason":"Data penerima salah"}'</pre>
+  -d '{"reason": "Data penerima salah"}'</pre>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- PUT Reactivate Endpoint --}}
+                <div class="bg-[#0A1929]/80 border border-[#1E3A5F] rounded-xl overflow-hidden scroll-animate"
+                    x-data="{ open: false }">
+                    <button @click="open = !open" class="w-full flex items-center justify-between p-4 md:p-6 text-left">
+                        <div class="flex flex-wrap items-center gap-2 md:gap-4">
+                            <span
+                                class="px-2 md:px-3 py-1 bg-[#10B981]/20 text-[#10B981] text-xs md:text-sm font-mono rounded">PUT</span>
+                            <code
+                                class="text-white font-mono text-xs md:text-base break-all">/certificates/{id}/reactivate</code>
+                            <span class="text-[#8EC5FF]/60 text-xs md:text-sm hidden sm:inline">Aktifkan Kembali</span>
+                            <span class="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] text-xs rounded">Auth</span>
+                        </div>
+                        <svg class="w-5 h-5 text-[#8EC5FF] transition-transform flex-shrink-0"
+                            :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div x-show="open" x-collapse class="border-t border-[#1E3A5F] p-6 space-y-4">
+                        <p class="text-[#BEDBFF]">Aktifkan kembali sertifikat yang sebelumnya dicabut (revoked).</p>
+
+                        {{-- Response Example --}}
+                        <div>
+                            <h4 class="text-white font-medium mb-2">Response Example</h4>
+                            <pre class="bg-[#050C1F] rounded-lg p-4 text-xs text-[#10B981] overflow-x-auto">{
+  "success": true,
+  "message": "Sertifikat berhasil diaktifkan kembali",
+  "data": {
+    "id": 123,
+    "certificate_number": "SERT-202512-ABCDEF",
+    "recipient_name": "John Doe",
+    "status": "active",
+    "reactivated_at": "2024-12-27T16:00:00.000000Z"
+  }
+}</pre>
+                        </div>
+
+                        {{-- Code Example --}}
+                        <div class="bg-[#050C1F] rounded-lg p-4 font-mono text-sm overflow-x-auto">
+                            <pre class="text-[#10B981]">curl -X PUT "{{ url('/api/v1/certificates') }}/123/reactivate" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Accept: application/json"</pre>
                         </div>
                     </div>
                 </div>
@@ -423,8 +572,18 @@ const data = await response.json();</pre>
                             </tr>
                             <tr class="border-t border-[#1E3A5F]">
                                 <td class="py-3 px-4"><span
+                                        class="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] rounded">400</span></td>
+                                <td>Bad Request - Request tidak valid</td>
+                            </tr>
+                            <tr class="border-t border-[#1E3A5F]">
+                                <td class="py-3 px-4"><span
                                         class="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] rounded">401</span></td>
                                 <td>Unauthorized - Token tidak valid</td>
+                            </tr>
+                            <tr class="border-t border-[#1E3A5F]">
+                                <td class="py-3 px-4"><span
+                                        class="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] rounded">403</span></td>
+                                <td>Forbidden - Kuota sertifikat/blockchain/IPFS habis</td>
                             </tr>
                             <tr class="border-t border-[#1E3A5F]">
                                 <td class="py-3 px-4"><span
@@ -448,7 +607,16 @@ const data = await response.json();</pre>
             // Load stats on page load
             document.addEventListener('DOMContentLoaded', async () => {
                 try {
-                    const response = await fetch('{{ url('/api/v1/stats') }}');
+                    const response = await fetch('{{ url('/api/v1/stats') }}', {
+                        headers: {
+                            'Accept': 'application/json',
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
                     const data = await response.json();
                     if (data.success) {
                         document.getElementById('statTotal').textContent = data.data.total_certificates.toLocaleString();
@@ -458,6 +626,10 @@ const data = await response.json();</pre>
                     }
                 } catch (e) {
                     console.error('Failed to load stats:', e);
+                    document.getElementById('statTotal').textContent = '-';
+                    document.getElementById('statActive').textContent = '-';
+                    document.getElementById('statIssuers').textContent = '-';
+                    document.getElementById('statBlockchain').textContent = '-';
                 }
             });
 
@@ -475,11 +647,19 @@ const data = await response.json();</pre>
                 resultEl.textContent = 'Loading...';
 
                 try {
-                    const response = await fetch(`{{ url('/api/v1/verify') }}/${hash}`);
+                    const response = await fetch(`{{ url('/api/v1/verify') }}/${encodeURIComponent(hash)}`, {
+                        headers: {
+                            'Accept': 'application/json',
+                        }
+                    });
                     const data = await response.json();
                     resultEl.textContent = JSON.stringify(data, null, 2);
+                    resultEl.classList.remove('text-red-400');
+                    resultEl.classList.add('text-[#8EC5FF]');
                 } catch (e) {
                     resultEl.textContent = 'Error: ' + e.message;
+                    resultEl.classList.remove('text-[#8EC5FF]');
+                    resultEl.classList.add('text-red-400');
                 }
             }
 

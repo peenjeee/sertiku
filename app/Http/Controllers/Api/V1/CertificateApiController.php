@@ -170,19 +170,26 @@ class CertificateApiController extends Controller
         if (!$user->canIssueCertificate()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Batas sertifikat bulanan telah tercapai'
+                'message' => 'Batas sertifikat bulanan telah tercapai',
+                'data' => [
+                    'used' => $user->getCertificatesUsedThisMonth(),
+                    'limit' => $user->getCertificateLimit(),
+                ]
             ], 403);
         }
 
         $validator = Validator::make($request->all(), [
             'recipient_name' => 'required|string|max:255',
-            'recipient_email' => 'required|email|max:255',
+            'recipient_email' => 'nullable|email|max:255',
             'course_name' => 'required|string|max:255',
             'category' => 'nullable|string|max:100',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:1000',
             'issue_date' => 'required|date',
             'expire_date' => 'nullable|date|after:issue_date',
-            'blockchain_enabled' => 'boolean',
+            'template_id' => 'nullable|exists:templates,id',
+            'blockchain_enabled' => 'nullable|boolean',
+            'ipfs_enabled' => 'nullable|boolean',
+            'send_email' => 'nullable|boolean',
         ]);
 
         if ($validator->fails()) {
@@ -193,6 +200,35 @@ class CertificateApiController extends Controller
             ], 422);
         }
 
+        $blockchainEnabled = $request->boolean('blockchain_enabled', false);
+        $ipfsEnabled = $request->boolean('ipfs_enabled', false);
+        $sendEmail = $request->boolean('send_email', false);
+
+        // Check blockchain limit
+        if ($blockchainEnabled && !$user->canUseBlockchain()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kuota Blockchain bulan ini sudah habis',
+                'data' => [
+                    'used' => $user->getBlockchainUsedThisMonth(),
+                    'limit' => $user->getBlockchainLimit(),
+                ]
+            ], 403);
+        }
+
+        // Check IPFS limit
+        if ($ipfsEnabled && !$user->canUseIpfs()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kuota IPFS bulan ini sudah habis',
+                'data' => [
+                    'used' => $user->getIpfsUsedThisMonth(),
+                    'limit' => $user->getIpfsLimit(),
+                ]
+            ], 403);
+        }
+
+        // Create certificate
         $certificate = $user->certificates()->create([
             'recipient_name' => $request->recipient_name,
             'recipient_email' => $request->recipient_email,
@@ -201,17 +237,64 @@ class CertificateApiController extends Controller
             'description' => $request->description,
             'issue_date' => $request->issue_date,
             'expire_date' => $request->expire_date,
-            'blockchain_enabled' => $request->blockchain_enabled ?? false,
+            'template_id' => $request->template_id,
+            'blockchain_enabled' => $blockchainEnabled,
             'status' => 'active',
         ]);
 
         // Generate QR Code
         $certificate->generateQrCode();
 
+        // Generate PDF
+        try {
+            $certificate->generatePdf();
+        } catch (\Throwable $e) {
+            \Log::error("API: Failed to generate PDF: " . $e->getMessage());
+        }
+
+        // Generate file hashes
+        $certificate->generateFileHashes();
+
+        // Process blockchain if enabled
+        if ($blockchainEnabled) {
+            $blockchainService = new \App\Services\BlockchainService();
+            if ($blockchainService->isEnabled()) {
+                $certificate->update(['blockchain_status' => 'pending']);
+                \App\Jobs\ProcessBlockchainCertificate::dispatch($certificate, $ipfsEnabled);
+            }
+        } elseif ($ipfsEnabled) {
+            // IPFS only
+            $ipfsService = new \App\Services\IpfsService();
+            if ($ipfsService->isEnabled()) {
+                \App\Jobs\ProcessIpfsCertificate::dispatch($certificate);
+            }
+        }
+
+        // Send email if requested
+        if ($sendEmail && !empty($request->recipient_email)) {
+            \Mail::to($request->recipient_email)
+                ->queue(new \App\Mail\CertificateIssuedMail($certificate));
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Sertifikat berhasil dibuat',
-            'data' => $certificate->fresh()
+            'data' => [
+                'id' => $certificate->id,
+                'certificate_number' => $certificate->certificate_number,
+                'recipient_name' => $certificate->recipient_name,
+                'recipient_email' => $certificate->recipient_email,
+                'course_name' => $certificate->course_name,
+                'category' => $certificate->category,
+                'issue_date' => $certificate->issue_date?->format('Y-m-d'),
+                'expire_date' => $certificate->expire_date?->format('Y-m-d'),
+                'status' => $certificate->status,
+                'blockchain_enabled' => $certificate->blockchain_enabled,
+                'blockchain_status' => $certificate->blockchain_status,
+                'verification_url' => $certificate->verification_url,
+                'pdf_url' => $certificate->pdf_url,
+                'created_at' => $certificate->created_at->toISOString(),
+            ]
         ], 201);
     }
 
@@ -260,7 +343,69 @@ class CertificateApiController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Sertifikat berhasil dicabut',
-            'data' => $certificate->fresh()
+            'data' => [
+                'id' => $certificate->id,
+                'certificate_number' => $certificate->certificate_number,
+                'status' => $certificate->fresh()->status,
+                'revoked_at' => $certificate->revoked_at?->toISOString(),
+                'revoke_reason' => $certificate->revoke_reason,
+            ]
+        ]);
+    }
+
+    /**
+     * Reactivate a revoked certificate
+     * PUT /api/v1/certificates/{id}/reactivate
+     */
+    public function reactivate(Request $request, $id): JsonResponse
+    {
+        $user = $request->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+
+        // Try to find by ID or certificate_number
+        $certificate = $user->certificates()->find($id);
+
+        if (!$certificate) {
+            $certificate = $user->certificates()->where('certificate_number', $id)->first();
+        }
+
+        if (!$certificate) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sertifikat tidak ditemukan'
+            ], 404);
+        }
+
+        if ($certificate->status !== 'revoked') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sertifikat tidak dalam status dicabut'
+            ], 400);
+        }
+
+        // Reactivate the certificate
+        $certificate->update([
+            'status' => 'active',
+            'revoked_at' => null,
+            'revoke_reason' => null,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Sertifikat berhasil diaktifkan kembali',
+            'data' => [
+                'id' => $certificate->id,
+                'certificate_number' => $certificate->certificate_number,
+                'recipient_name' => $certificate->recipient_name,
+                'status' => $certificate->fresh()->status,
+                'reactivated_at' => now()->toISOString(),
+            ]
         ]);
     }
 }
