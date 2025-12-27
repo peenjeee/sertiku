@@ -70,7 +70,7 @@
                 </div>
 
                 {{-- Contact Info - Second on mobile --}}
-                <div class="space-y-6 lg:space-y-8 order-2 lg:order-1 animate-slide-in-left">
+                <div class="space-y-6 lg:space-y-8 order-2 lg:order-1 md:animate-slide-in-left">
                     <div>
                         <h2 class="text-xl lg:text-2xl font-bold text-white mb-4 lg:mb-6">Informasi Kontak</h2>
                         <div class="space-y-4 lg:space-y-6">
