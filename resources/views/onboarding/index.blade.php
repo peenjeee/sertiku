@@ -84,7 +84,7 @@
 
                 {{-- Main card --}}
                 <div
-                    class="rounded-3xl border border-white/20 bg-white/10 backdrop-blur-xl px-6 py-8 md:px-10 md:py-10">
+                    class="rounded-3xl border border-white/20 bg-white/10 backdrop-blur-xl px-4 py-6 md:px-10 md:py-10">
                     <form action="{{ route('onboarding.store') }}" method="POST" id="onboardingForm">
                         @csrf
                         <input type="hidden" name="account_type" id="accountTypeInput" value="personal">

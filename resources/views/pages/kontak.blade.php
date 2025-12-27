@@ -18,12 +18,12 @@
     </section>
 
     {{-- Content --}}
-    <section class="py-8 md:py-12 px-4">
+    <section class="py-8 md:py-12 px-4 overflow-hidden">
         <div class="mx-auto max-w-5xl">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
                 {{-- Contact Form - First on mobile --}}
                 <div
-                    class="rounded-xl lg:rounded-2xl bg-white/5 border border-white/10 p-5 sm:p-6 lg:p-8 order-1 lg:order-2 animate-fade-in-up hover-lift">
+                    class="rounded-xl lg:rounded-2xl bg-white/5 border border-white/10 p-4 sm:p-6 lg:p-8 order-1 lg:order-2 animate-fade-in-up hover-lift">
                     <h2 class="text-lg sm:text-xl font-bold text-white mb-5 lg:mb-6">Kirim Pesan</h2>
 
 
