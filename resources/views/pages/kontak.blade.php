@@ -3,7 +3,7 @@
 
 
     {{-- Hero --}}
-    <section class="overflow-hidden py-10 md:py-16 lg:py-20">
+    <section class="relative overflow-hidden py-10 md:py-16 lg:py-20">
         <div
             class="pointer-events-none absolute -right-32 top-0 h-96 w-96 rounded-full bg-gradient-to-r from-[#2B7FFF4D] to-[#00B8DB4D] blur-3xl opacity-60">
         </div>
@@ -18,7 +18,7 @@
     </section>
 
     {{-- Content --}}
-    <section class="py-8 md:py-12 px-4 overflow-hidden">
+    <section class="relative py-8 md:py-12 px-4 overflow-hidden">
         <div class="mx-auto max-w-5xl">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
                 {{-- Contact Form - First on mobile --}}
