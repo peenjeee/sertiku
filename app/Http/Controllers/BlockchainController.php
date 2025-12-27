@@ -30,12 +30,16 @@ class BlockchainController extends Controller
             $certificate = Certificate::where('certificate_number', $query)
                 ->orWhere('blockchain_hash', $query)
                 ->orWhere('blockchain_tx_hash', $query)
+                ->orWhere('certificate_sha256', $query)
                 ->orWhere('ipfs_cid', $query)
                 ->first();
 
-            if ($certificate && $certificate->blockchain_hash) {
+            // Get the hash to verify (prefer certificate_sha256 as it's what we store on-chain now)
+            $hashToVerify = $certificate->certificate_sha256 ?? $certificate->blockchain_hash;
+
+            if ($certificate && $hashToVerify) {
                 // Get on-chain data
-                $onChainData = $this->blockchain->verifyCertificateOnChain($certificate->blockchain_hash);
+                $onChainData = $this->blockchain->verifyCertificateOnChain($hashToVerify);
 
                 if ($onChainData && isset($onChainData['exists']) && $onChainData['exists']) {
                     $result = 'found';
