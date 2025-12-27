@@ -78,6 +78,20 @@ class LembagaController extends Controller
         // Get IPFS enabled flag (not stored in database, triggers job)
         $ipfsEnabled = $request->has('ipfs_enabled') && $request->ipfs_enabled == '1';
 
+        // Check blockchain limit if user wants to use blockchain
+        if ($validated['blockchain_enabled'] && !$user->canUseBlockchain()) {
+            $blockchainUsed = $user->getBlockchainUsedThisMonth();
+            $blockchainLimit = $user->getBlockchainLimit();
+            return back()->with('error', "Kuota Blockchain bulan ini sudah habis ({$blockchainUsed}/{$blockchainLimit}). Silakan upgrade paket atau tunggu bulan depan.");
+        }
+
+        // Check IPFS limit if user wants to use IPFS
+        if ($ipfsEnabled && !$user->canUseIpfs()) {
+            $ipfsUsed = $user->getIpfsUsedThisMonth();
+            $ipfsLimit = $user->getIpfsLimit();
+            return back()->with('error', "Kuota IPFS bulan ini sudah habis ({$ipfsUsed}/{$ipfsLimit}). Silakan upgrade paket atau tunggu bulan depan.");
+        }
+
         // Get send_email flag (not stored in database)
         $sendEmail = $request->has('send_email') && $request->send_email == '1';
 

@@ -195,6 +195,85 @@ class User extends Authenticatable
     }
 
     /**
+     * Get blockchain limit for current package
+     */
+    public function getBlockchainLimit(): int
+    {
+        $package = $this->getActivePackage();
+        return $package ? ($package->blockchain_limit ?? 0) : 50;
+    }
+
+    /**
+     * Get IPFS limit for current package
+     */
+    public function getIpfsLimit(): int
+    {
+        $package = $this->getActivePackage();
+        return $package ? ($package->ipfs_limit ?? 0) : 50;
+    }
+
+    /**
+     * Get blockchain usage this month
+     */
+    public function getBlockchainUsedThisMonth(): int
+    {
+        return $this->certificates()
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->whereNotNull('blockchain_tx_hash')
+            ->where('blockchain_status', 'confirmed')
+            ->count();
+    }
+
+    /**
+     * Get IPFS usage this month
+     */
+    public function getIpfsUsedThisMonth(): int
+    {
+        return $this->certificates()
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->whereNotNull('ipfs_cid')
+            ->count();
+    }
+
+    /**
+     * Get remaining blockchain transactions this month
+     */
+    public function getRemainingBlockchain(): int
+    {
+        $limit = $this->getBlockchainLimit();
+        return max(0, $limit - $this->getBlockchainUsedThisMonth());
+    }
+
+    /**
+     * Get remaining IPFS uploads this month
+     */
+    public function getRemainingIpfs(): int
+    {
+        $limit = $this->getIpfsLimit();
+        return max(0, $limit - $this->getIpfsUsedThisMonth());
+    }
+
+    /**
+     * Check if user can use blockchain feature
+     */
+    public function canUseBlockchain(): bool
+    {
+        $limit = $this->getBlockchainLimit();
+        return $this->getBlockchainUsedThisMonth() < $limit;
+    }
+
+    /**
+     * Check if user can use IPFS feature
+     */
+    public function canUseIpfs(): bool
+    {
+        $limit = $this->getIpfsLimit();
+        return $this->getIpfsUsedThisMonth() < $limit;
+    }
+
+    /**
      * Check if user profile is completed
      */
     public function isProfileCompleted(): bool

@@ -46,7 +46,7 @@
                         <div class="flex-1 min-w-0">
                             <h3 class="text-[#92400E] font-bold text-sm lg:text-lg">Paket Starter</h3>
                             <p class="text-[#B45309] text-xs lg:text-sm">
-                                Upgrade ke <strong>Professional</strong> untuk mendapatkan hingga 6.700 sertifikat/bulan
+                                Upgrade ke <strong>Professional</strong> untuk mendapatkan hingga 5.000 sertifikat/bulan
                             </p>
                         </div>
                     </div>

@@ -17,6 +17,8 @@ class Package extends Model
         'description',
         'features',
         'certificates_limit',
+        'blockchain_limit',
+        'ipfs_limit',
         'is_popular',
         'is_active',
     ];
@@ -38,11 +40,11 @@ class Package extends Model
         if ($this->price_label) {
             return $this->price_label;
         }
-        
+
         if ($this->price == 0) {
             return 'Gratis';
         }
-        
+
         return 'Rp ' . number_format($this->price, 0, ',', '.');
     }
 
