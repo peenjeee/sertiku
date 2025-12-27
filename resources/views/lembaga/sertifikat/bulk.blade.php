@@ -259,7 +259,7 @@
                                         </label>
                                     </div>
                                     <p class="text-gray-300 text-sm mb-3">
-                                        Upload ke IPFS (Storacha)
+                                        Upload ke IPFS (Pinata)
                                     </p>
                                     <p class="text-gray-500 text-xs leading-relaxed">
                                         Simpan metadata sertifikat ke jaringan IPFS + Filecoin untuk penyimpanan
@@ -356,6 +356,8 @@
 
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- SheetJS for Excel parsing -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
     <script>
         // Function to count rows in CSV file
         function countCSVRows(file) {
@@ -369,6 +371,29 @@
                 };
                 reader.onerror = () => resolve(0);
                 reader.readAsText(file);
+            });
+        }
+
+        // Function to count rows in Excel file using SheetJS
+        function countExcelRows(file) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                        const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+                        // Subtract 1 for header row, filter empty rows
+                        const dataRows = jsonData.filter((row, index) => index > 0 && row.length > 0 && row.some(cell => cell != null && cell !== ''));
+                        resolve(dataRows.length);
+                    } catch (error) {
+                        console.error('Error parsing Excel:', error);
+                        resolve(0);
+                    }
+                };
+                reader.onerror = () => resolve(0);
+                reader.readAsArrayBuffer(file);
             });
         }
 
@@ -426,13 +451,13 @@
                 didOpen: () => Swal.showLoading()
             });
 
-            // Count rows (only works for CSV, estimate for Excel)
+            // Count rows accurately for both CSV and Excel
             let rowCount = 0;
             if (isCSV) {
                 rowCount = await countCSVRows(file);
             } else {
-                // Estimate for Excel based on file size (rough estimate: ~100 bytes per row)
-                rowCount = Math.max(1, Math.floor(file.size / 100));
+                // Use SheetJS to count actual rows in Excel file
+                rowCount = await countExcelRows(file);
             }
 
             // Check blockchain/IPFS enabled
@@ -453,7 +478,7 @@
                             <span class="text-blue-600 font-bold text-lg">${rowCount} Sertifikat</span>
                         </div>
                         ${blockchainEnabled ? '<p class="text-purple-600 text-sm mb-1 flex items-center gap-2"><span class="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></span><strong>Blockchain:</strong> Menyimpan ke Polygon Network</p>' : ''}
-                        ${ipfsEnabled ? '<p class="text-cyan-600 text-sm mb-1 flex items-center gap-2"><span class="w-2 h-2 bg-cyan-500 rounded-full animate-pulse"></span><strong>IPFS:</strong> Menyimpan ke Storacha Network</p>' : ''}
+                        ${ipfsEnabled ? '<p class="text-cyan-600 text-sm mb-1 flex items-center gap-2"><span class="w-2 h-2 bg-cyan-500 rounded-full animate-pulse"></span><strong>IPFS:</strong> Menyimpan ke Pinata Network</p>' : ''}
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-4 mb-2 overflow-hidden">
                         <div id="swal-progress" class="bg-gradient-to-r from-blue-500 to-indigo-600 h-4 rounded-full transition-all duration-500 relative" style="width: 0%">

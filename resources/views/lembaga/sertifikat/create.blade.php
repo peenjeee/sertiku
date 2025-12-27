@@ -354,7 +354,7 @@
                                 </div>
                             </label>
                             <div class="flex-1">
-                                <p class="text-gray-800 font-medium text-sm">Upload ke IPFS (Storacha)</p>
+                                <p class="text-gray-800 font-medium text-sm">Upload ke IPFS (Pinata)</p>
                                 <p class="text-gray-500 text-xs mt-1">Simpan metadata sertifikat ke jaringan IPFS + Filecoin
                                     untuk
                                     penyimpanan desentralisasi permanen.</p>
@@ -482,9 +482,10 @@
                     }
                 }
 
-                // Check if blockchain enabled
+                // Check if blockchain/IPFS enabled
                 const blockchainEnabled = form.querySelector('input[name="blockchain_enabled"]')?.checked;
-                const estimatedTime = blockchainEnabled ? 30 : 5;
+                const ipfsEnabled = form.querySelector('input[name="ipfs_enabled"]')?.checked;
+                const estimatedTime = 5 + (blockchainEnabled ? 25 : 0) + (ipfsEnabled ? 15 : 0);
 
                 // Show SweetAlert with loading
                 Swal.fire({
@@ -492,7 +493,8 @@
                     html: `
                         <div class="text-left mb-4">
                             <p class="text-gray-600 mb-2">Mohon tunggu, proses sedang berjalan.</p>
-                            ${blockchainEnabled ? '<p class="text-purple-600 text-sm"><strong>Blockchain:</strong> Menyimpan ke Polygon Network</p>' : ''}
+                            ${blockchainEnabled ? '<p class="text-purple-600 text-sm mb-1"><strong>Blockchain:</strong> Menyimpan ke Polygon Network</p>' : ''}
+                            ${ipfsEnabled ? '<p class="text-cyan-600 text-sm mb-1"><strong>IPFS:</strong> Menyimpan ke Pinata Network</p>' : ''}
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
                             <div id="swal-progress" class="bg-gradient-to-r from-blue-500 to-indigo-600 h-3 rounded-full transition-all duration-300" style="width: 0%"></div>
@@ -517,8 +519,8 @@
                             { at: 10, text: 'Membuat sertifikat...' },
                             { at: 25, text: 'Generating QR Code...' },
                             { at: 40, text: 'Menyimpan ke database...' },
-                            { at: 55, text: blockchainEnabled ? 'Menghubungi jaringan Polygon...' : 'Memproses...' },
-                            { at: 70, text: blockchainEnabled ? 'Menyimpan hash ke blockchain...' : 'Hampir selesai...' },
+                            { at: 55, text: blockchainEnabled ? 'Menghubungi jaringan Polygon...' : (ipfsEnabled ? 'Mengupload ke IPFS...' : 'Memproses...') },
+                            { at: 70, text: blockchainEnabled ? 'Menyimpan hash ke blockchain...' : (ipfsEnabled ? 'Menyimpan ke Pinata...' : 'Hampir selesai...') },
                             { at: 85, text: blockchainEnabled ? 'Menunggu konfirmasi blockchain...' : 'Menyelesaikan...' },
                             { at: 95, text: 'Selesai!' }
                         ];
