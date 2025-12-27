@@ -12,8 +12,10 @@
         <div class="glass-card rounded-2xl p-6 animate-fade-in-up stagger-1">
             <h3 class="text-gray-800 font-bold text-lg mb-6 flex items-center gap-2">
                 <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
                 Pengaturan Umum
             </h3>
@@ -35,7 +37,8 @@
                     <input type="email" name="admin_email" value="{{ $settings['admin_email'] }}" readonly
                         class="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm bg-gray-50 text-gray-500">
                 </div>
-                <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition">
+                <button type="submit"
+                    class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition">
                     Simpan Pengaturan
                 </button>
             </form>
@@ -45,7 +48,8 @@
         <div class="glass-card rounded-2xl p-6 animate-fade-in-up stagger-2">
             <h3 class="text-gray-800 font-bold text-lg mb-6 flex items-center gap-2">
                 <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 Informasi Sistem
             </h3>
@@ -61,13 +65,15 @@
                 </div>
                 <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                     <span class="text-gray-600 text-sm">Environment</span>
-                    <span class="px-2 py-1 {{ app()->environment('production') ? 'bg-emerald-100 text-emerald-700' : 'bg-yellow-100 text-yellow-700' }} text-xs font-medium rounded-full">
+                    <span
+                        class="px-2 py-1 {{ app()->environment('production') ? 'bg-emerald-100 text-emerald-700' : 'bg-yellow-100 text-yellow-700' }} text-xs font-medium rounded-full">
                         {{ app()->environment() }}
                     </span>
                 </div>
                 <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                     <span class="text-gray-600 text-sm">Debug Mode</span>
-                    <span class="px-2 py-1 {{ config('app.debug') ? 'bg-yellow-100 text-yellow-700' : 'bg-emerald-100 text-emerald-700' }} text-xs font-medium rounded-full">
+                    <span
+                        class="px-2 py-1 {{ config('app.debug') ? 'bg-yellow-100 text-yellow-700' : 'bg-emerald-100 text-emerald-700' }} text-xs font-medium rounded-full">
                         {{ config('app.debug') ? 'Aktif' : 'Nonaktif' }}
                     </span>
                 </div>
@@ -82,25 +88,24 @@
         <div class="lg:col-span-2 glass-card rounded-2xl p-6 border-2 border-red-200 animate-fade-in-up stagger-3">
             <h3 class="text-red-600 font-bold text-lg mb-4 flex items-center gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
                 Zona Berbahaya
             </h3>
             <p class="text-gray-600 text-sm mb-4">Tindakan ini tidak dapat dibatalkan. Harap berhati-hati.</p>
             <div class="flex flex-col sm:flex-row gap-4">
-                <button onclick="alert('Fitur ini dalam pengembangan')" class="px-6 py-3 bg-red-100 hover:bg-red-200 text-red-700 font-medium rounded-lg transition">
+                <button onclick="alert('Fitur ini dalam pengembangan')"
+                    class="px-6 py-3 bg-red-100 hover:bg-red-200 text-red-700 font-medium rounded-lg transition">
                     Clear Cache
                 </button>
-                <button onclick="alert('Fitur ini dalam pengembangan')" class="px-6 py-3 bg-red-100 hover:bg-red-200 text-red-700 font-medium rounded-lg transition">
+                <button onclick="alert('Fitur ini dalam pengembangan')"
+                    class="px-6 py-3 bg-red-100 hover:bg-red-200 text-red-700 font-medium rounded-lg transition">
                     Reset Statistics
                 </button>
             </div>
         </div>
     </div>
 
-    @if(session('success'))
-    <div class="fixed bottom-6 right-6 bg-emerald-500 text-white px-6 py-3 rounded-lg shadow-lg animate-fade-in-up z-50">
-        {{ session('success') }}
-    </div>
-    @endif
+
 </x-layouts.admin>

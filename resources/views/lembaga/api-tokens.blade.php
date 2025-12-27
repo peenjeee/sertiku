@@ -47,17 +47,7 @@
             @endif
 
             {{-- Alerts --}}
-            @if(session('success') && !session('newToken'))
-                <div class="bg-[#10B981]/20 border border-[#10B981]/50 rounded-xl p-4 mb-6">
-                    <p class="text-[#10B981]">{{ session('success') }}</p>
-                </div>
-            @endif
 
-            @if(session('error'))
-                <div class="bg-red-500/20 border border-red-500/50 rounded-xl p-4 mb-6">
-                    <p class="text-red-400">{{ session('error') }}</p>
-                </div>
-            @endif
 
             {{-- Create Token Form --}}
             <div class="bg-[#0A1929]/80 border border-[#1E3A5F] rounded-xl p-4 md:p-6 mb-6 md:mb-8">

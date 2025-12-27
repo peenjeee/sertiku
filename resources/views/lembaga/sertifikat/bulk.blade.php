@@ -37,321 +37,322 @@
             </div>
         </div>
 
-        @if(session('error'))
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    Swal.fire({ icon: 'error', title: 'Gagal!', text: '{{ session('error') }}' });
-                });
-            </script>
-        @endif
+
 
         @if(session('success'))
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
-                    Swal.fire({ icon: 'success', title: 'Berhasil!', text: '{{ session('success') }}' });
+                    // Direct redirect to index as requested
+                    window.location.href = '{{ route("lembaga.sertifikat.index") }}';
                 });
             </script>
         @endif
 
         <!-- Main Form -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Upload Form -->
-            <div class="lg:col-span-2 space-y-6">
-                <!-- Enforce dark background for glass-card -->
-                <div class="bg-gray-900 p-6 rounded-2xl border border-gray-700 shadow-xl">
-                    <form action="{{ route('lembaga.sertifikat.bulk.store') }}" method="POST"
-                        enctype="multipart/form-data" class="space-y-6" id="bulkForm" novalidate>
-                        @csrf
+            <!-- (Content skipped, starts at line 57) -->
+        </div>
+    </div>
 
-                        <!-- Template Selection -->
-                        <div>
-                            <label class="block text-sm font-bold text-white mb-4">Pilih Desain Sertifikat</label>
-                            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                @foreach($templates as $template)
-                                    <label class="cursor-pointer group relative">
-                                        <input type="radio" name="template_id" value="{{ $template->id }}"
-                                            class="peer sr-only">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- SheetJS for Excel parsing -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 
+
+    <!-- Main Form -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Upload Form -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Enforce dark background for glass-card -->
+            <div class="bg-gray-900 p-6 rounded-2xl border border-gray-700 shadow-xl">
+                <form action="{{ route('lembaga.sertifikat.bulk.store') }}" method="POST" enctype="multipart/form-data"
+                    class="space-y-6" id="bulkForm" novalidate>
+                    @csrf
+
+                    <!-- Template Selection -->
+                    <div>
+                        <label class="block text-sm font-bold text-white mb-4">Pilih Desain Sertifikat</label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            @foreach($templates as $template)
+                                <label class="cursor-pointer group relative">
+                                    <input type="radio" name="template_id" value="{{ $template->id }}" class="peer sr-only">
+
+                                    <div
+                                        class="aspect-video rounded-xl overflow-hidden relative ring-2 ring-transparent peer-checked:ring-blue-500 transition-all duration-300 group-hover:scale-[1.02]">
+                                        <img src="{{ asset('storage/' . $template->file_path) }}"
+                                            class="w-full h-full object-cover">
+
+                                        <!-- Overlay & Checkmark -->
                                         <div
-                                            class="aspect-video rounded-xl overflow-hidden relative ring-2 ring-transparent peer-checked:ring-blue-500 transition-all duration-300 group-hover:scale-[1.02]">
-                                            <img src="{{ asset('storage/' . $template->file_path) }}"
-                                                class="w-full h-full object-cover">
-
-                                            <!-- Overlay & Checkmark -->
+                                            class="absolute inset-0 bg-black/40 hidden peer-checked:flex items-center justify-center backdrop-blur-[1px]">
                                             <div
-                                                class="absolute inset-0 bg-black/40 hidden peer-checked:flex items-center justify-center backdrop-blur-[1px]">
-                                                <div
-                                                    class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center shadow-lg animate-bounce">
-                                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                </div>
+                                                class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center shadow-lg animate-bounce">
+                                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M5 13l4 4L19 7" />
+                                                </svg>
                                             </div>
                                         </div>
-
-                                        <p
-                                            class="mt-2 text-xs text-center text-white/80 font-medium truncate group-hover:text-white transition">
-                                            {{ $template->name }}
-                                        </p>
-                                    </label>
-                                @endforeach
-                            </div>
-                            @error('template_id')
-                                <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- File Upload -->
-                        <div>
-                            <label class="block text-sm font-bold text-white mb-2">Upload File Data</label>
-                            <div class="relative group">
-                                <div
-                                    class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl opacity-20 group-hover:opacity-40 transition duration-200">
-                                </div>
-                                <input type="file" name="file" accept=".csv,.xlsx,.xls" required
-                                    class="relative w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 transition cursor-pointer">
-                            </div>
-                            <p class="mt-2 text-xs text-white/50">
-                                Format: CSV atau Excel (.xlsx). Kolom wajib: <code>recipient_name</code>,
-                                <code>recipient_email</code>, <code>course_name</code>, <code>issue_date</code>.
-                            </p>
-                            @error('file')
-                                <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Global Settings -->
-                        <div class="border-t border-gray-700 pt-6">
-                            <h3 class="text-sm font-bold text-white mb-6">Pengaturan Tambahan</h3>
-
-                            <!-- Default Category & Description -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                                <div>
-                                    <label class="block text-sm font-bold text-white mb-2">Kategori Sertifikat
-                                        (Opsional)</label>
-                                    <select name="default_category"
-                                        class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                        <option value="">Pilih kategori</option>
-                                        <option value="Bootcamp">Bootcamp</option>
-                                        <option value="Workshop">Workshop</option>
-                                        <option value="Seminar">Seminar</option>
-                                        <option value="Sertifikasi">Sertifikasi</option>
-                                        <option value="Pelatihan">Pelatihan</option>
-                                        <option value="Webinar">Webinar</option>
-                                    </select>
-                                    <p class="mt-1 text-xs text-gray-500">Akan digunakan jika kolom
-                                        <code>category</code> di file kosong.
-                                    </p>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-bold text-white mb-2">Deskripsi Sertifikat
-                                        (Opsional)</label>
-                                    <input type="text" name="default_description"
-                                        placeholder="Contoh: Atas partisipasinya sebagai peserta..."
-                                        class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-500">
-                                    <p class="mt-1 text-xs text-gray-500">Akan digunakan jika kolom
-                                        <code>description</code> di file kosong.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <!-- Kirim Email -->
-                            <div class="mb-6">
-                                <label
-                                    class="flex items-center justify-between cursor-pointer p-4 rounded-xl bg-gray-800 border border-gray-700 hover:bg-gray-700 transition group">
-                                    <div class="flex items-center gap-3">
-                                        <div
-                                            class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <span class="block text-white font-medium text-sm">Kirim email ke
-                                                penerima</span>
-                                            <span class="block text-gray-400 text-xs mt-0.5">Penerima akan menerima
-                                                email berisi informasi sertifikat.</span>
-                                        </div>
                                     </div>
-                                    <div class="relative">
-                                        <input type="checkbox" name="send_email" value="1" class="peer sr-only" checked>
-                                        <div
-                                            class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
-                                        </div>
-                                    </div>
+
+                                    <p
+                                        class="mt-2 text-xs text-center text-white/80 font-medium truncate group-hover:text-white transition">
+                                        {{ $template->name }}
+                                    </p>
                                 </label>
-                            </div>
-
-                            <!-- Advanced Verification Options -->
-                            <div class="space-y-4">
-                                <!-- Blockchain -->
-                                <div
-                                    class="p-5 rounded-2xl bg-gray-800 border border-gray-700 hover:border-purple-500/30 transition duration-300">
-                                    <div class="flex items-center justify-between mb-2">
-                                        <div class="flex items-center gap-2">
-                                            <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                                            </svg>
-                                            <span class="text-white font-bold text-base">Blockchain Verification</span>
-                                            <span
-                                                class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-500/20 text-purple-300">GRATIS</span>
-                                        </div>
-                                        <label class="relative inline-flex items-center cursor-pointer">
-                                            <input type="checkbox" name="blockchain_enabled" value="1"
-                                                class="peer sr-only">
-                                            <div
-                                                class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600">
-                                            </div>
-                                        </label>
-                                    </div>
-                                    <p class="text-gray-300 text-sm mb-3">
-                                        Upload ke Blockchain (Polygon)
-                                    </p>
-                                    <p class="text-gray-500 text-xs leading-relaxed">
-                                        Simpan hash sertifikat ke jaringan Polygon untuk verifikasi tambahan yang tidak
-                                        dapat dipalsukan.
-                                        <br>
-                                        <span class="flex items-center gap-4 mt-2 text-emerald-400">
-                                            <span class="flex items-center gap-1">
-                                                <svg class="w-3 h-3" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                Immutable
-                                            </span>
-                                            <span class="flex items-center gap-1">
-                                                <svg class="w-3 h-3" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                Terverifikasi
-                                            </span>
-                                        </span>
-                                    </p>
-                                </div>
-
-                                <!-- IPFS -->
-                                <div
-                                    class="p-5 rounded-2xl bg-gray-800 border border-gray-700 hover:border-cyan-500/30 transition duration-300">
-                                    <div class="flex items-center justify-between mb-2">
-                                        <div class="flex items-center gap-2">
-                                            <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                            </svg>
-                                            <span class="text-white font-bold text-base">IPFS Storage</span>
-                                            <span
-                                                class="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-500/20 text-cyan-300">Web3</span>
-                                        </div>
-                                        <label class="relative inline-flex items-center cursor-pointer">
-                                            <input type="checkbox" name="ipfs_enabled" value="1" class="peer sr-only">
-                                            <div
-                                                class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-600">
-                                            </div>
-                                        </label>
-                                    </div>
-                                    <p class="text-gray-300 text-sm mb-3">
-                                        Upload ke IPFS (Pinata)
-                                    </p>
-                                    <p class="text-gray-500 text-xs leading-relaxed">
-                                        Simpan metadata sertifikat ke jaringan IPFS + Filecoin untuk penyimpanan
-                                        desentralisasi permanen.
-                                        <br>
-                                        <span class="flex items-center gap-4 mt-2 text-emerald-400">
-                                            <span class="flex items-center gap-1">
-                                                <svg class="w-3 h-3" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                Desentralisasi
-                                            </span>
-                                            <span class="flex items-center gap-1">
-                                                <svg class="w-3 h-3" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                Permanen
-                                            </span>
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
-
-                        <div class="flex justify-end pt-4">
-                            <button type="submit"
-                                class="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl text-white font-bold hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
-                                Proses Bulk Upload
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Instructions -->
-            <div class="space-y-6">
-                <!-- Guide Card -->
-                <div class="bg-gray-900 p-6 rounded-2xl border border-gray-700 shadow-xl">
-                    <h3 class="font-bold text-blue-200 mb-4 flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Panduan Format File
-                    </h3>
-                    <ul class="space-y-3 text-sm text-gray-300">
-                        <li class="flex gap-2">
-                            <span class="font-bold text-blue-400">•</span>
-                            <span>Gunakan format <strong>CSV</strong> atau <strong>Excel (.xlsx)</strong>.</span>
-                        </li>
-                        <li class="flex gap-2">
-                            <span class="font-bold text-blue-400">•</span>
-                            <span>Baris pertama wajib berisi header kolom.</span>
-                        </li>
-                        <li class="flex gap-2">
-                            <span class="font-bold text-blue-400">•</span>
-                            <span>Kolom Wajib: <br><code
-                                    class="text-blue-300">recipient_name, recipient_email, course_name, issue_date</code>.</span>
-                        </li>
-                    </ul>
-
-                    <div class="mt-4 bg-black/40 rounded-lg border border-gray-700 p-3 overflow-x-auto">
-                        <table class="text-xs text-left w-full">
-                            <thead>
-                                <tr class="text-blue-300 border-b border-gray-700">
-                                    <th class="p-2">recipient_name</th>
-                                    <th class="p-2">recipient_email</th>
-                                    <th class="p-2">course_name</th>
-                                    <th class="p-2">category</th>
-                                    <th class="p-2">description</th>
-                                    <th class="p-2">issue_date</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-gray-400">
-                                <tr>
-                                    <td class="p-2">John Doe</td>
-                                    <td class="p-2">john@mail.com</td>
-                                    <td class="p-2">Web Dev</td>
-                                    <td class="p-2">Seminar</td>
-                                    <td class="p-2">Atas partisipasinya...</td>
-                                    <td class="p-2">2024-12-01</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        @error('template_id')
+                            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
+
+                    <!-- File Upload -->
+                    <div>
+                        <label class="block text-sm font-bold text-white mb-2">Upload File Data</label>
+                        <div class="relative group">
+                            <div
+                                class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl opacity-20 group-hover:opacity-40 transition duration-200">
+                            </div>
+                            <input type="file" name="file" accept=".csv,.xlsx,.xls" required
+                                class="relative w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 transition cursor-pointer">
+                        </div>
+                        <p class="mt-2 text-xs text-white/50">
+                            Format: CSV atau Excel (.xlsx). Kolom wajib: <code>recipient_name</code>,
+                            <code>recipient_email</code>, <code>course_name</code>, <code>issue_date</code>.
+                        </p>
+                        @error('file')
+                            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Global Settings -->
+                    <div class="border-t border-gray-700 pt-6">
+                        <h3 class="text-sm font-bold text-white mb-6">Pengaturan Tambahan</h3>
+
+                        <!-- Default Category & Description -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <div>
+                                <label class="block text-sm font-bold text-white mb-2">Kategori Sertifikat
+                                    (Opsional)</label>
+                                <select name="default_category"
+                                    class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="">Pilih kategori</option>
+                                    <option value="Bootcamp">Bootcamp</option>
+                                    <option value="Workshop">Workshop</option>
+                                    <option value="Seminar">Seminar</option>
+                                    <option value="Sertifikasi">Sertifikasi</option>
+                                    <option value="Pelatihan">Pelatihan</option>
+                                    <option value="Webinar">Webinar</option>
+                                </select>
+                                <p class="mt-1 text-xs text-gray-500">Akan digunakan jika kolom
+                                    <code>category</code> di file kosong.
+                                </p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-white mb-2">Deskripsi Sertifikat
+                                    (Opsional)</label>
+                                <input type="text" name="default_description"
+                                    placeholder="Contoh: Atas partisipasinya sebagai peserta..."
+                                    class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-500">
+                                <p class="mt-1 text-xs text-gray-500">Akan digunakan jika kolom
+                                    <code>description</code> di file kosong.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Kirim Email -->
+                        <div class="mb-6">
+                            <label
+                                class="flex items-center justify-between cursor-pointer p-4 rounded-xl bg-gray-800 border border-gray-700 hover:bg-gray-700 transition group">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <span class="block text-white font-medium text-sm">Kirim email ke
+                                            penerima</span>
+                                        <span class="block text-gray-400 text-xs mt-0.5">Penerima akan menerima
+                                            email berisi informasi sertifikat.</span>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <input type="checkbox" name="send_email" value="1" class="peer sr-only" checked>
+                                    <div
+                                        class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Advanced Verification Options -->
+                        <div class="space-y-4">
+                            <!-- Blockchain -->
+                            <div
+                                class="p-5 rounded-2xl bg-gray-800 border border-gray-700 hover:border-purple-500/30 transition duration-300">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                        </svg>
+                                        <span class="text-white font-bold text-base">Blockchain Verification</span>
+                                        <span
+                                            class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-500/20 text-purple-300">GRATIS</span>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="blockchain_enabled" value="1" class="peer sr-only">
+                                        <div
+                                            class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600">
+                                        </div>
+                                    </label>
+                                </div>
+                                <p class="text-gray-300 text-sm mb-3">
+                                    Upload ke Blockchain (Polygon)
+                                </p>
+                                <p class="text-gray-500 text-xs leading-relaxed">
+                                    Simpan hash sertifikat ke jaringan Polygon untuk verifikasi tambahan yang tidak
+                                    dapat dipalsukan.
+                                    <br>
+                                    <span class="flex items-center gap-4 mt-2 text-emerald-400">
+                                        <span class="flex items-center gap-1">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            Immutable
+                                        </span>
+                                        <span class="flex items-center gap-1">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            Terverifikasi
+                                        </span>
+                                    </span>
+                                </p>
+                            </div>
+
+                            <!-- IPFS -->
+                            <div
+                                class="p-5 rounded-2xl bg-gray-800 border border-gray-700 hover:border-cyan-500/30 transition duration-300">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                        </svg>
+                                        <span class="text-white font-bold text-base">IPFS Storage</span>
+                                        <span
+                                            class="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-500/20 text-cyan-300">Web3</span>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="ipfs_enabled" value="1" class="peer sr-only">
+                                        <div
+                                            class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-600">
+                                        </div>
+                                    </label>
+                                </div>
+                                <p class="text-gray-300 text-sm mb-3">
+                                    Upload ke IPFS (Pinata)
+                                </p>
+                                <p class="text-gray-500 text-xs leading-relaxed">
+                                    Simpan metadata sertifikat ke jaringan IPFS + Filecoin untuk penyimpanan
+                                    desentralisasi permanen.
+                                    <br>
+                                    <span class="flex items-center gap-4 mt-2 text-emerald-400">
+                                        <span class="flex items-center gap-1">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            Desentralisasi
+                                        </span>
+                                        <span class="flex items-center gap-1">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            Permanen
+                                        </span>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end pt-4">
+                        <button type="submit"
+                            class="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl text-white font-bold hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
+                            Proses Bulk Upload
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="space-y-6">
+            <!-- Guide Card -->
+            <div class="bg-gray-900 p-6 rounded-2xl border border-gray-700 shadow-xl">
+                <h3 class="font-bold text-blue-200 mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Panduan Format File
+                </h3>
+                <ul class="space-y-3 text-sm text-gray-300">
+                    <li class="flex gap-2">
+                        <span class="font-bold text-blue-400">•</span>
+                        <span>Gunakan format <strong>CSV</strong> atau <strong>Excel (.xlsx)</strong>.</span>
+                    </li>
+                    <li class="flex gap-2">
+                        <span class="font-bold text-blue-400">•</span>
+                        <span>Baris pertama wajib berisi header kolom.</span>
+                    </li>
+                    <li class="flex gap-2">
+                        <span class="font-bold text-blue-400">•</span>
+                        <span>Kolom Wajib: <br><code
+                                class="text-blue-300">recipient_name, recipient_email, course_name, issue_date</code>.</span>
+                    </li>
+                </ul>
+
+                <div class="mt-4 bg-black/40 rounded-lg border border-gray-700 p-3 overflow-x-auto">
+                    <table class="text-xs text-left w-full">
+                        <thead>
+                            <tr class="text-blue-300 border-b border-gray-700">
+                                <th class="p-2">recipient_name</th>
+                                <th class="p-2">recipient_email</th>
+                                <th class="p-2">course_name</th>
+                                <th class="p-2">category</th>
+                                <th class="p-2">description</th>
+                                <th class="p-2">issue_date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-400">
+                            <tr>
+                                <td class="p-2">John Doe</td>
+                                <td class="p-2">john@mail.com</td>
+                                <td class="p-2">Web Dev</td>
+                                <td class="p-2">Seminar</td>
+                                <td class="p-2">Atas partisipasinya...</td>
+                                <td class="p-2">2024-12-01</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <!-- SweetAlert2 -->
@@ -485,11 +486,7 @@
                             <span id="swal-progress-text" class="absolute inset-0 flex items-center justify-center text-white text-xs font-bold">0%</span>
                         </div>
                     </div>
-                    <div class="flex justify-between text-xs text-gray-500 mb-2">
-                        <span id="swal-current">0 / ${rowCount}</span>
-                        <span id="swal-status">Membaca file...</span>
                     </div>
-                    <p class="text-xs text-gray-400">Estimasi: <span id="swal-countdown">${estimatedTime}</span> detik</p>
                 `,
                 showConfirmButton: false,
                 allowOutsideClick: false,
@@ -520,10 +517,6 @@
                         if (progressBar) progressBar.style.width = progress + '%';
                         if (progressText) progressText.textContent = Math.round(progress) + '%';
                         if (currentText) currentText.textContent = currentCert + ' / ' + totalCerts;
-
-                        // Update countdown
-                        countdown--;
-                        if (countdownText && countdown >= 0) countdownText.textContent = countdown;
 
                         // Update status based on progress
                         if (statusText) {

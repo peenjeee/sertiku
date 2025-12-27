@@ -36,12 +36,7 @@
             @endif
         </div>
 
-        @if(session('success'))
-            <div
-                class="mb-6 p-4 rounded-xl bg-green-500/20 border border-green-500/30 text-green-400 text-sm animate-fade-in-up">
-                {{ session('success') }}
-            </div>
-        @endif
+
 
         {{-- Chat Messages --}}
         <div class="rounded-2xl overflow-hidden animate-fade-in-up mb-6"
@@ -72,7 +67,7 @@
                     <div class="flex items-start gap-3 {{ $isUserMessage ? 'flex-row-reverse' : '' }}">
                         {{-- Avatar --}}
                         <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0
-                            {{ $avatarBg }} overflow-hidden">
+                                {{ $avatarBg }} overflow-hidden">
                             @if($senderAvatar && (str_starts_with($senderAvatar, '/storage/') || str_starts_with($senderAvatar, 'http')))
                                 <img src="{{ $senderAvatar }}" alt="Avatar" class="w-full h-full object-cover">
                             @else

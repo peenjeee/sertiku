@@ -7,34 +7,7 @@
                 Anda</p>
         </div>
 
-        <!-- Success/Error Messages -->
-        @if(session('success'))
-            <div class="bg-emerald-500/20 border border-emerald-500/30 rounded-lg p-4 text-emerald-400">
-                {{ session('success') }}
-            </div>
-        @endif
 
-        @if(session('error'))
-            <div class="bg-red-500/20 border border-red-500/30 rounded-lg p-4 text-red-400">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        @if(session('warning'))
-            <div class="bg-amber-500/20 border border-amber-500/30 rounded-lg p-4 text-amber-400">
-                {{ session('warning') }}
-            </div>
-        @endif
-
-        @if($errors->any())
-            <div class="bg-red-500/20 border border-red-500/30 rounded-lg p-4 text-red-400">
-                <ul class="list-disc list-inside text-sm">
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
 
         <!-- Stats Cards -->
         <div class="grid grid-cols-3 gap-4">

@@ -19,17 +19,7 @@
         </div>
 
         <!-- Success/Error Messages -->
-        @if(session('success'))
-            <div class="bg-emerald-500/20 border border-emerald-500/30 rounded-lg p-4 text-emerald-400">
-                {{ session('success') }}
-            </div>
-        @endif
 
-        @if(session('error'))
-            <div class="bg-red-500/20 border border-red-500/30 rounded-lg p-4 text-red-400">
-                {{ session('error') }}
-            </div>
-        @endif
 
         <!-- Stats -->
         <div class="grid grid-cols-2 gap-4">
@@ -77,7 +67,8 @@
                                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                     </svg>
                                     <p class="text-white/50 text-sm">
-                                        {{ strtoupper(pathinfo($template->file_path, PATHINFO_EXTENSION)) }}</p>
+                                        {{ strtoupper(pathinfo($template->file_path, PATHINFO_EXTENSION)) }}
+                                    </p>
                                 </div>
                             @endif
 
@@ -144,7 +135,8 @@
                         <div class="p-4">
                             <h3 class="text-gray-800 font-bold truncate">{{ $template->name }}</h3>
                             <p class="text-gray-500 text-sm mt-1">
-                                {{ $template->orientation == 'landscape' ? 'Landscape' : 'Portrait' }}</p>
+                                {{ $template->orientation == 'landscape' ? 'Landscape' : 'Portrait' }}
+                            </p>
                             <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-200">
                                 <span class="text-gray-400 text-xs">Digunakan {{ $template->usage_count }}x</span>
                                 <span class="text-gray-400 text-xs">{{ $template->created_at->diffForHumans() }}</span>

@@ -130,10 +130,5 @@
         </div>
     </div>
 
-    @if(session('success'))
-        <div
-            class="fixed bottom-6 right-6 bg-emerald-500 text-white px-6 py-3 rounded-lg shadow-lg animate-fade-in-up z-50">
-            {{ session('success') }}
-        </div>
-    @endif
+
 </x-layouts.admin>

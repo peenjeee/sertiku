@@ -18,35 +18,7 @@
     </div>
 
     {{-- Session Messages --}}
-    @if(session('success'))
-        <div
-            class="mb-6 p-4 rounded-xl bg-green-500/20 border border-green-500/30 text-green-400 text-sm flex items-center gap-2 animate-fade-in-up">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
-            {{ session('success') }}
-        </div>
-    @endif
 
-    @if(session('avatar_success'))
-        <div
-            class="mb-6 p-4 rounded-xl bg-green-500/20 border border-green-500/30 text-green-400 text-sm flex items-center gap-2 animate-fade-in-up">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
-            {{ session('avatar_success') }}
-        </div>
-    @endif
-
-    @if(session('password_success'))
-        <div
-            class="mb-6 p-4 rounded-xl bg-green-500/20 border border-green-500/30 text-green-400 text-sm flex items-center gap-2 animate-fade-in-up">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
-            {{ session('password_success') }}
-        </div>
-    @endif
 
     {{-- ============================================= --}}
     {{-- SECTION 1: Foto Profil --}}

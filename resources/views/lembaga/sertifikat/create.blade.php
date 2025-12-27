@@ -33,27 +33,7 @@
         </div>
 
         <!-- Messages -->
-        @if(session('success'))
-            <div class="bg-emerald-500/20 border border-emerald-500/30 rounded-lg p-4 text-emerald-400">
-                {{ session('success') }}
-            </div>
-        @endif
 
-        @if(session('error'))
-            <div class="bg-red-500/20 border border-red-500/30 rounded-lg p-4 text-red-400">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        @if($errors->any())
-            <div class="bg-red-500/20 border border-red-500/30 rounded-lg p-4">
-                <ul class="text-red-400 text-sm list-disc list-inside">
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
 
         <!-- Limit Reached Block -->
         @if(!$canIssue)
@@ -485,7 +465,6 @@
                 // Check if blockchain/IPFS enabled
                 const blockchainEnabled = form.querySelector('input[name="blockchain_enabled"]')?.checked;
                 const ipfsEnabled = form.querySelector('input[name="ipfs_enabled"]')?.checked;
-                const estimatedTime = 5 + (blockchainEnabled ? 25 : 0) + (ipfsEnabled ? 15 : 0);
 
                 // Show SweetAlert with loading
                 Swal.fire({
@@ -500,7 +479,6 @@
                             <div id="swal-progress" class="bg-gradient-to-r from-blue-500 to-indigo-600 h-3 rounded-full transition-all duration-300" style="width: 0%"></div>
                         </div>
                         <p id="swal-status" class="text-sm text-gray-500">Memvalidasi data...</p>
-                        <p class="text-xs text-gray-400 mt-2">Estimasi: <span id="swal-countdown">${estimatedTime}</span> detik</p>
                     `,
                     allowOutsideClick: false,
                     allowEscapeKey: false,
@@ -508,12 +486,10 @@
                     didOpen: () => {
                         Swal.showLoading();
 
-                        // Animate progress and countdown
+                        // Animate progress
                         let progress = 0;
-                        let countdown = estimatedTime;
                         const statusEl = document.getElementById('swal-status');
                         const progressEl = document.getElementById('swal-progress');
-                        const countdownEl = document.getElementById('swal-countdown');
 
                         const statuses = [
                             { at: 10, text: 'Membuat sertifikat...' },
@@ -540,12 +516,6 @@
                             }
                         }, 400);
 
-                        const countdownInterval = setInterval(() => {
-                            countdown--;
-                            if (countdownEl) countdownEl.textContent = Math.max(0, countdown);
-                            if (countdown <= 0) clearInterval(countdownInterval);
-                        }, 1000);
-
                         // Submit form via AJAX
                         const formData = new FormData(form);
 
@@ -559,30 +529,13 @@
                         })
                             .then(response => {
                                 clearInterval(progressInterval);
-                                clearInterval(countdownInterval);
 
                                 if (progressEl) progressEl.style.width = '100%';
                                 if (statusEl) statusEl.textContent = 'Selesai!';
 
                                 if (response.ok || response.redirected) {
-                                    // Success - show immediately
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Sertifikat Berhasil Diterbitkan!',
-                                        html: blockchainEnabled && ipfsEnabled
-                                            ? '<p class="text-gray-600">Sertifikat telah tersimpan di database, blockchain, dan IPFS.</p>'
-                                            : blockchainEnabled
-                                                ? '<p class="text-gray-600">Sertifikat telah tersimpan di database dan blockchain.</p>'
-                                                : ipfsEnabled
-                                                    ? '<p class="text-gray-600">Sertifikat telah tersimpan di database dan IPFS.</p>'
-                                                    : '<p class="text-gray-600">Sertifikat telah tersimpan di database.</p>',
-                                        confirmButtonText: 'Lihat Daftar Sertifikat',
-                                        confirmButtonColor: '#4F46E5',
-                                        timer: 3000,
-                                        timerProgressBar: true
-                                    }).then(() => {
-                                        window.location.href = '{{ route("lembaga.sertifikat.index") }}?success=1';
-                                    });
+                                    // Success - Redirect Immediately (No Alert)
+                                    window.location.href = '{{ route("lembaga.sertifikat.index") }}?success=1';
                                 } else {
                                     // Error
                                     response.json().then(data => {
@@ -601,34 +554,15 @@
                                             confirmButtonColor: '#EF4444'
                                         });
                                     }).catch(() => {
-                                        // If not JSON, might be redirect - consider it success
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Sertifikat Berhasil Diterbitkan!',
-                                            confirmButtonText: 'Lihat Daftar Sertifikat',
-                                            confirmButtonColor: '#4F46E5',
-                                            timer: 3000,
-                                            timerProgressBar: true
-                                        }).then(() => {
-                                            window.location.href = '{{ route("lembaga.sertifikat.index") }}?success=1';
-                                        });
+                                        // If not JSON, might be redirect/success disguised
+                                        window.location.href = '{{ route("lembaga.sertifikat.index") }}?success=1';
                                     });
                                 }
                             })
                             .catch(error => {
                                 clearInterval(progressInterval);
-                                clearInterval(countdownInterval);
-
-                                // Network error - but form might have submitted, redirect anyway
-                                Swal.fire({
-                                    icon: 'warning',
-                                    title: 'Proses Selesai',
-                                    text: 'Silakan cek daftar sertifikat untuk memastikan sertifikat berhasil dibuat.',
-                                    confirmButtonText: 'Lihat Daftar Sertifikat',
-                                    confirmButtonColor: '#4F46E5'
-                                }).then(() => {
-                                    window.location.href = '{{ route("lembaga.sertifikat.index") }}';
-                                });
+                                // Network error - redirect to index checking
+                                window.location.href = '{{ route("lembaga.sertifikat.index") }}';
                             });
                     }
                 });

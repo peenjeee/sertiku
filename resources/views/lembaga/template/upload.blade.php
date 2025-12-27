@@ -36,23 +36,7 @@
             }
         </style>
 
-        <!-- Success/Error Messages -->
-        @if(session('success'))
-            <div class="bg-emerald-500/20 border border-emerald-500/30 rounded-lg p-4 text-emerald-400">
-                {{ session('success') }}
-            </div>
-        @endif
 
-        @if($errors->any())
-            <div class="bg-red-500/20 border border-red-500/30 rounded-lg p-4">
-                <p class="text-red-400 font-bold mb-2">Ada kesalahan:</p>
-                <ul class="text-red-400 text-sm list-disc list-inside">
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
 
         <!-- Upload Form -->
         <form action="{{ route('lembaga.template.store') }}" method="POST" enctype="multipart/form-data"
