@@ -483,80 +483,84 @@
 
             // Calculate estimated time: 3 sec per cert, +5 sec if blockchain, +3 sec if IPFS
             const timePerCert = 3 + (blockchainEnabled ? 5 : 0) + (ipfsEnabled ? 3 : 0);
-            const estimatedTime = Math.max(10, rowCount * timePerCert);
+            const totalEstimated = Math.max(10, rowCount * timePerCert);
 
-            // Show SweetAlert with loading progress
             Swal.fire({
                 title: 'Menerbitkan Sertifikat...',
                 html: `
-                    <div class="text-left mb-4">
-                        <div class="flex items-center justify-between mb-3 p-3 bg-blue-50 rounded-lg">
-                            <span class="text-gray-700 font-medium">Total Data:</span>
-                            <span class="text-blue-600 font-bold text-lg">${rowCount} Sertifikat</span>
+                    <div class="text-left mb-4 px-4">
+                        <div class="flex justify-between items-center bg-blue-50 p-3 rounded-lg border border-blue-100 mb-3">
+                            <span class="text-blue-800 font-bold">Total Data:</span>
+                            <span class="text-blue-600 font-mono text-lg">${rowCount} Sertifikat</span>
                         </div>
-                        ${blockchainEnabled ? '<p class="text-purple-600 text-sm mb-1 flex items-center gap-2"><span class="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></span><strong>Blockchain:</strong> Menyimpan ke Polygon Network</p>' : ''}
-                        ${ipfsEnabled ? '<p class="text-cyan-600 text-sm mb-1 flex items-center gap-2"><span class="w-2 h-2 bg-cyan-500 rounded-full animate-pulse"></span><strong>IPFS:</strong> Menyimpan ke Storacha Network</p>' : ''}
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-4 mb-2 overflow-hidden">
-                        <div id="swal-progress" class="bg-gradient-to-r from-blue-500 to-indigo-600 h-4 rounded-full transition-all duration-500 relative" style="width: 0%">
-                            <span id="swal-progress-text" class="absolute inset-0 flex items-center justify-center text-white text-xs font-bold">0%</span>
+                        <div class="space-y-1 mb-2 text-sm">
+                            ${blockchainEnabled ? '<div class="flex items-center gap-2 text-purple-600 font-medium"><div class="w-2 h-2 rounded-full bg-purple-500"></div> Blockchain: Menyimpan ke Polygon Network</div>' : ''}
+                            ${ipfsEnabled ? '<div class="flex items-center gap-2 text-cyan-600 font-medium"><div class="w-2 h-2 rounded-full bg-cyan-500"></div> IPFS: Menyimpan ke Storacha Network</div>' : ''}
                         </div>
                     </div>
-                    <div class="flex justify-between text-xs text-gray-500 mb-2">
-                        <span id="swal-current">0 / ${rowCount}</span>
-                        <span id="swal-status">Membaca file...</span>
+                    
+                    <div class="w-full bg-gray-200 rounded-full h-4 mb-2 overflow-hidden relative">
+                        <div id="swal-progress" class="bg-gradient-to-r from-blue-500 to-indigo-600 h-4 rounded-full transition-all duration-300 relative" style="width: 0%">
+                            <div class="absolute top-0 left-0 w-full h-full bg-white/30 animate-[shimmer_2s_infinite]"></div>
+                        </div>
                     </div>
-                    <p class="text-xs text-gray-400">Estimasi: <span id="swal-countdown">${estimatedTime}</span> detik</p>
+                    
+                    <div class="flex justify-between text-xs px-1 mb-1">
+                        <span id="swal-counter" class="text-gray-500">0 / ${rowCount}</span>
+                        <span id="swal-status" class="text-blue-600 font-medium animate-pulse">Membaca file...</span>
+                    </div>
+                    
+                    <p class="text-xs text-gray-400 mt-2">Estimasi: <span id="swal-countdown">${totalEstimated}</span> detik</p>
                 `,
-                showConfirmButton: false,
                 allowOutsideClick: false,
                 allowEscapeKey: false,
+                showConfirmButton: false,
                 didOpen: () => {
                     Swal.showLoading();
+                    
+                    // Trigger Form Submit
+                    form.submit();
 
-                    // Progress animation
-                    let currentCert = 0;
-                    let countdown = estimatedTime;
-                    const progressBar = document.getElementById('swal-progress');
-                    const progressText = document.getElementById('swal-progress-text');
-                    const statusText = document.getElementById('swal-status');
-                    const currentText = document.getElementById('swal-current');
-                    const countdownText = document.getElementById('swal-countdown');
-                    const totalCerts = rowCount;
+                    // UI Simulation
+                    const progressEl = document.getElementById('swal-progress');
+                    const statusEl = document.getElementById('swal-status');
+                    const counterEl = document.getElementById('swal-counter');
+                    const countdownEl = document.getElementById('swal-countdown');
+                    
+                    let processed = 0;
+                    let remainingTime = totalEstimated;
+                    
+                    // Countdown
+                    const countdownInterval = setInterval(() => {
+                        remainingTime--;
+                        if (countdownEl) countdownEl.textContent = Math.max(0, remainingTime);
+                        if (remainingTime <= 0) clearInterval(countdownInterval);
+                    }, 1000);
 
-                    const interval = setInterval(() => {
-                        // Update current certificate count
-                        if (currentCert < totalCerts) {
-                            currentCert++;
+                    // Progress Simulation
+                    const simIntervalTime = (timePerCert * 1000) * 0.8; 
+                    
+                    const progressInterval = setInterval(() => {
+                        if (processed < rowCount) {
+                            processed++;
+                            const percent = Math.min(Math.round((processed / rowCount) * 100), 99);
+                            
+                            if (progressEl) progressEl.style.width = `${percent}%`;
+                            if (counterEl) counterEl.textContent = `${processed} / ${rowCount}`;
+                            
+                            // Randomize status text for liveliness
+                            const statuses = ['Memproses...', 'Generate PDF...', 'Hashing...'];
+                            if (blockchainEnabled) statuses.push('Blockchain Sync...');
+                            if (ipfsEnabled) statuses.push('IPFS Upload...');
+                            
+                            if (statusEl) statusEl.textContent = statuses[Math.floor(Math.random() * statuses.length)];
+                            
+                        } else {
+                            if (statusEl) statusEl.textContent = 'Menyelesaikan...';
+                            if (progressEl) progressEl.style.width = '100%';
+                            clearInterval(progressInterval);
                         }
-
-                        // Calculate progress
-                        const progress = Math.min(95, (currentCert / totalCerts) * 100);
-
-                        // Update UI
-                        if (progressBar) progressBar.style.width = progress + '%';
-                        if (progressText) progressText.textContent = Math.round(progress) + '%';
-                        if (currentText) currentText.textContent = currentCert + ' / ' + totalCerts;
-
-                        // Update countdown
-                        countdown--;
-                        if (countdownText && countdown >= 0) countdownText.textContent = countdown;
-
-                        // Update status based on progress
-                        if (statusText) {
-                            if (progress < 20) {
-                                statusText.textContent = 'Membaca file...';
-                            } else if (progress < 40) {
-                                statusText.textContent = 'Validasi data...';
-                            } else if (progress < 60) {
-                                statusText.textContent = 'Membuat sertifikat...';
-                            } else if (progress < 80) {
-                                statusText.textContent = blockchainEnabled ? 'Menyimpan ke blockchain...' : 'Menyimpan ke database...';
-                            } else {
-                                statusText.textContent = ipfsEnabled ? 'Mengupload ke IPFS...' : 'Menyelesaikan proses...';
-                            }
-                        }
-                    }, (estimatedTime / totalCerts) * 1000);
+                    }, 500); 
                 }
             });
 

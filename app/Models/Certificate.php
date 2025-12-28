@@ -41,6 +41,7 @@ class Certificate extends Model
         'ipfs_cid',
         'ipfs_metadata_cid',
         'ipfs_url',
+        'ipfs_status',
         'ipfs_uploaded_at',
         // File hash fields
         'certificate_sha256',

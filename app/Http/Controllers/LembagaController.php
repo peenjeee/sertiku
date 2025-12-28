@@ -168,6 +168,7 @@ class LembagaController extends Controller
             // IPFS only (no blockchain) - upload directly without waiting for blockchain
             $ipfsService = new \App\Services\IpfsService();
             if ($ipfsService->isEnabled()) {
+                $certificate->update(['ipfs_status' => 'pending']);
                 \App\Jobs\ProcessIpfsCertificate::dispatch($certificate);
             }
         }
@@ -427,7 +428,7 @@ class LembagaController extends Controller
             'name_font_family' => 'nullable|string',
             'qr_position_x' => 'required|integer|min:0|max:100',
             'qr_position_y' => 'required|integer|min:0|max:100',
-            'qr_size' => 'required|integer|min:50|max:150',
+            'qr_size' => 'required|integer|min:40|max:200',
         ]);
 
         $template->update($validated);

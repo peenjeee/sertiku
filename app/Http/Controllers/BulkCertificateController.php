@@ -378,6 +378,7 @@ class BulkCertificateController extends Controller
                     ProcessBlockchainCertificate::dispatch($certificate, $ipfsEnabled);
                 } elseif ($ipfsEnabled) {
                     // IPFS only
+                    $certificate->update(['ipfs_status' => 'pending']);
                     ProcessIpfsCertificate::dispatch($certificate);
                 }
 

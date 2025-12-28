@@ -38,6 +38,7 @@ class ProcessIpfsCertificate implements ShouldQueue
     public function handle(IpfsService $ipfsService): void
     {
         Log::info("ProcessIpfsCertificate: Starting IPFS upload for certificate {$this->certificate->certificate_number}");
+        $this->certificate->update(['ipfs_status' => 'processing']);
 
         try {
             // Upload certificate metadata to IPFS
@@ -47,6 +48,7 @@ class ProcessIpfsCertificate implements ShouldQueue
                 $this->certificate->update([
                     'ipfs_cid' => $result['cid'],
                     'ipfs_url' => $result['url'],
+                    'ipfs_status' => 'success',
                     'ipfs_uploaded_at' => now(),
                 ]);
 
@@ -60,10 +62,12 @@ class ProcessIpfsCertificate implements ShouldQueue
 
                 Log::info("ProcessIpfsCertificate: Successfully uploaded to IPFS. CID: {$result['cid']}");
             } else {
+                $this->certificate->update(['ipfs_status' => 'failed']);
                 Log::error("ProcessIpfsCertificate: Failed to upload certificate {$this->certificate->certificate_number} to IPFS");
             }
 
         } catch (\Exception $e) {
+            $this->certificate->update(['ipfs_status' => 'failed']);
             Log::error("ProcessIpfsCertificate: Error - " . $e->getMessage());
             throw $e; // Rethrow to trigger retry
         }
@@ -75,5 +79,6 @@ class ProcessIpfsCertificate implements ShouldQueue
     public function failed(\Throwable $exception): void
     {
         Log::error("ProcessIpfsCertificate: Job failed for certificate {$this->certificate->certificate_number}. Error: " . $exception->getMessage());
+        $this->certificate->update(['ipfs_status' => 'failed']);
     }
 }

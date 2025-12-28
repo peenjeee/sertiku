@@ -235,7 +235,7 @@ class User extends Authenticatable
         return $this->certificates()
             ->whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
-            ->whereNotNull('ipfs_cid')
+            ->whereIn('ipfs_status', ['pending', 'processing', 'success'])
             ->count();
     }
 

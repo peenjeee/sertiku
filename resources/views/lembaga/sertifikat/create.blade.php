@@ -384,7 +384,8 @@
                                             d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                     </svg>
                                     <p class="text-red-700 text-sm font-medium">Kuota IPFS habis ({{ $ipfsUsed }}/{{ $ipfsLimit }}).
-                                        <a href="{{ url('/#harga') }}" class="underline">Upgrade paket</a></p>
+                                        <a href="{{ url('/#harga') }}" class="underline">Upgrade paket</a>
+                                    </p>
                                 </div>
                             </div>
                         @endif
@@ -526,22 +527,57 @@
                     }
                 }
 
-                // Check if blockchain enabled
+                // Check options
                 const blockchainEnabled = form.querySelector('input[name="blockchain_enabled"]')?.checked;
-                const estimatedTime = blockchainEnabled ? 30 : 5;
+                const ipfsEnabled = form.querySelector('input[name="ipfs_enabled"]')?.checked;
+                const sendEmail = form.querySelector('input[name="send_email"]')?.checked;
 
-                // Show SweetAlert with loading
+                // Build steps
+                let steps = [
+                    { percent: 10, text: 'Membuat sertifikat...' },
+                    { percent: 30, text: 'Menyimpan data...' }
+                ];
+
+                if (sendEmail) {
+                    steps.push({ percent: 40, text: 'Mengirim email ke penerima...' });
+                }
+
+                if (blockchainEnabled) {
+                    steps.push({ percent: 60, text: 'Upload ke Blockchain (Polygon)...' });
+                    steps.push({ percent: 80, text: 'Menunggu konfirmasi blockchain...' });
+                }
+
+                if (ipfsEnabled) {
+                    steps.push({ percent: 90, text: 'Upload ke IPFS (Storacha)...' });
+                }
+
+                steps.push({ percent: 100, text: 'Selesai!' });
+
+                // Calculate estimated time
+                let estimatedTime = 5;
+                if (blockchainEnabled) estimatedTime += 20;
+                if (ipfsEnabled) estimatedTime += 10;
+
+                // Show SweetAlert
+                let currentStepIndex = 0;
+
                 Swal.fire({
                     title: 'Menerbitkan Sertifikat...',
                     html: `
-                        <div class="text-left mb-4">
-                            <p class="text-gray-600 mb-2">Mohon tunggu, proses sedang berjalan.</p>
-                            ${blockchainEnabled ? '<p class="text-purple-600 text-sm"><strong>Blockchain:</strong> Menyimpan ke Polygon Network</p>' : ''}
+                        <div class="text-left mb-4 px-4">
+                            <p class="text-gray-600 mb-2 text-sm">Mohon tunggu, proses sedang berjalan:</p>
+                            <div class="space-y-1 mb-4 text-sm" id="process-steps">
+                                ${sendEmail ? '<div class="flex items-center gap-2 text-gray-500"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg> Kirim Email</div>' : ''}
+                                ${blockchainEnabled ? '<div class="flex items-center gap-2 text-purple-600 font-medium"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101"/></svg> Blockchain (Polygon)</div>' : ''}
+                                ${ipfsEnabled ? '<div class="flex items-center gap-2 text-cyan-600 font-medium"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9"/></svg> IPFS (Storacha)</div>' : ''}
+                            </div>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
-                            <div id="swal-progress" class="bg-gradient-to-r from-blue-500 to-indigo-600 h-3 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        <div class="w-full bg-gray-200 rounded-full h-3 mb-2 overflow-hidden relative">
+                            <div id="swal-progress" class="bg-gradient-to-r from-blue-500 to-indigo-600 h-3 rounded-full transition-all duration-300 relative" style="width: 0%">
+                                <div class="absolute top-0 left-0 w-full h-full bg-white/30 animate-[shimmer_2s_infinite]"></div>
+                            </div>
                         </div>
-                        <p id="swal-status" class="text-sm text-gray-500">Memvalidasi data...</p>
+                        <p id="swal-status" class="text-sm font-medium text-blue-600 animate-pulse">Memulai proses...</p>
                         <p class="text-xs text-gray-400 mt-2">Estimasi: <span id="swal-countdown">${estimatedTime}</span> detik</p>
                     `,
                     allowOutsideClick: false,
@@ -550,162 +586,150 @@
                     didOpen: () => {
                         Swal.showLoading();
 
-                        // Animate progress and countdown
-                        let progress = 0;
-                        let countdown = estimatedTime;
-                        const statusEl = document.getElementById('swal-status');
+                        // Submit form immediately
+                        form.submit();
+
+                        // Simulation steps
                         const progressEl = document.getElementById('swal-progress');
+                        const statusEl = document.getElementById('swal-status');
                         const countdownEl = document.getElementById('swal-countdown');
+                        let progress = 0;
 
-                        const statuses = [
-                            { at: 10, text: 'Membuat sertifikat...' },
-                            { at: 25, text: 'Generating QR Code...' },
-                            { at: 40, text: 'Menyimpan ke database...' },
-                            { at: 55, text: blockchainEnabled ? 'Menghubungi jaringan Polygon...' : 'Memproses...' },
-                            { at: 70, text: blockchainEnabled ? 'Menyimpan hash ke blockchain...' : 'Hampir selesai...' },
-                            { at: 85, text: blockchainEnabled ? 'Menunggu konfirmasi blockchain...' : 'Menyelesaikan...' },
-                            { at: 95, text: 'Selesai!' }
-                        ];
-
-                        const progressInterval = setInterval(() => {
-                            if (progress < 95) {
-                                progress += Math.random() * 8 + 2;
-                                progress = Math.min(progress, 95);
-                                if (progressEl) progressEl.style.width = progress + '%';
-
-                                for (let i = statuses.length - 1; i >= 0; i--) {
-                                    if (progress >= statuses[i].at) {
-                                        if (statusEl) statusEl.textContent = statuses[i].text;
-                                        break;
-                                    }
-                                }
-                            }
-                        }, 400);
-
+                        // Countdown timer
                         const countdownInterval = setInterval(() => {
-                            countdown--;
-                            if (countdownEl) countdownEl.textContent = Math.max(0, countdown);
-                            if (countdown <= 0) clearInterval(countdownInterval);
+                            estimatedTime--;
+                            if (countdownEl) countdownEl.textContent = Math.max(0, estimatedTime);
+                            if (estimatedTime <= 0) clearInterval(countdownInterval);
                         }, 1000);
 
-                        // Submit form via AJAX
-                        const formData = new FormData(form);
+                        // Progress simulation (just visual, real process is form submit)
+                        const totalSteps = steps.length;
+                        const intervalTime = (estimatedTime * 1000) / totalSteps;
 
-                        fetch(form.action, {
-                            method: 'POST',
-                            body: formData,
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'Accept': 'application/json'
+                        let stepIdx = 0;
+                        const progressInterval = setInterval(() => {
+                            if (stepIdx < steps.length) {
+                                const step = steps[stepIdx];
+                                progress = step.percent;
+
+                                if (progressEl) progressEl.style.width = `${progress}%`;
+                                if (statusEl) statusEl.textContent = step.text;
+
+                                stepIdx++;
+                            } else {
+                                clearInterval(progressInterval);
                             }
-                        })
-                            .then(response => {
-                                clearInterval(progressInterval);
-                                clearInterval(countdownInterval);
-
-                                if (progressEl) progressEl.style.width = '100%';
-                                if (statusEl) statusEl.textContent = 'Selesai!';
-
-                                if (response.ok || response.redirected) {
-                                    // Success
-                                    setTimeout(() => {
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Sertifikat Berhasil Diterbitkan!',
-                                            html: blockchainEnabled
-                                                ? '<p class="text-gray-600">Sertifikat telah tersimpan di database dan blockchain.</p>'
-                                                : '<p class="text-gray-600">Sertifikat telah tersimpan di database.</p>',
-                                            confirmButtonText: 'Lihat Daftar Sertifikat',
-                                            confirmButtonColor: '#4F46E5',
-                                            timer: 3000,
-                                            timerProgressBar: true
-                                        }).then(() => {
-                                            window.location.href = '{{ route("lembaga.sertifikat.index") }}?success=1';
-                                        });
-                                    }, 500);
-                                } else {
-                                    // Error
-                                    response.json().then(data => {
-                                        let errorMessage = 'Terjadi kesalahan saat menerbitkan sertifikat.';
-                                        if (data.errors) {
-                                            errorMessage = Object.values(data.errors).flat().join('<br>');
-                                        } else if (data.message) {
-                                            errorMessage = data.message;
-                                        }
-
-                                        Swal.fire({
-                                            icon: 'error',
-                                            title: 'Gagal Menerbitkan Sertifikat',
-                                            html: errorMessage,
-                                            confirmButtonText: 'Coba Lagi',
-                                            confirmButtonColor: '#EF4444'
-                                        });
-                                    }).catch(() => {
-                                        // If not JSON, might be redirect - consider it success
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Sertifikat Berhasil Diterbitkan!',
-                                            confirmButtonText: 'Lihat Daftar Sertifikat',
-                                            confirmButtonColor: '#4F46E5',
-                                            timer: 3000,
-                                            timerProgressBar: true
-                                        }).then(() => {
-                                            window.location.href = '{{ route("lembaga.sertifikat.index") }}?success=1';
-                                        });
-                                    });
-                                }
-                            })
-                            .catch(error => {
-                                clearInterval(progressInterval);
-                                clearInterval(countdownInterval);
-
-                                // Network error - but form might have submitted, redirect anyway
-                                Swal.fire({
-                                    icon: 'warning',
-                                    title: 'Proses Selesai',
-                                    text: 'Silakan cek daftar sertifikat untuk memastikan sertifikat berhasil dibuat.',
-                                    confirmButtonText: 'Lihat Daftar Sertifikat',
-                                    confirmButtonColor: '#4F46E5'
-                                }).then(() => {
-                                    window.location.href = '{{ route("lembaga.sertifikat.index") }}';
-                                });
-                            });
+                        }, intervalTime);
                     }
+                });
+            })
+                .then(response => {
+                    clearInterval(progressInterval);
+                    clearInterval(countdownInterval);
+
+                    if (progressEl) progressEl.style.width = '100%';
+                    if (statusEl) statusEl.textContent = 'Selesai!';
+
+                    if (response.ok || response.redirected) {
+                        // Success
+                        setTimeout(() => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Sertifikat Berhasil Diterbitkan!',
+                                html: blockchainEnabled
+                                    ? '<p class="text-gray-600">Sertifikat telah tersimpan di database dan blockchain.</p>'
+                                    : '<p class="text-gray-600">Sertifikat telah tersimpan di database.</p>',
+                                confirmButtonText: 'Lihat Daftar Sertifikat',
+                                confirmButtonColor: '#4F46E5',
+                                timer: 3000,
+                                timerProgressBar: true
+                            }).then(() => {
+                                window.location.href = '{{ route("lembaga.sertifikat.index") }}?success=1';
+                            });
+                        }, 500);
+                    } else {
+                        // Error
+                        response.json().then(data => {
+                            let errorMessage = 'Terjadi kesalahan saat menerbitkan sertifikat.';
+                            if (data.errors) {
+                                errorMessage = Object.values(data.errors).flat().join('<br>');
+                            } else if (data.message) {
+                                errorMessage = data.message;
+                            }
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal Menerbitkan Sertifikat',
+                                html: errorMessage,
+                                confirmButtonText: 'Coba Lagi',
+                                confirmButtonColor: '#EF4444'
+                            });
+                        }).catch(() => {
+                            // If not JSON, might be redirect - consider it success
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Sertifikat Berhasil Diterbitkan!',
+                                confirmButtonText: 'Lihat Daftar Sertifikat',
+                                confirmButtonColor: '#4F46E5',
+                                timer: 3000,
+                                timerProgressBar: true
+                            }).then(() => {
+                                window.location.href = '{{ route("lembaga.sertifikat.index") }}?success=1';
+                            });
+                        });
+                    }
+                })
+                .catch(error => {
+                    clearInterval(progressInterval);
+                    clearInterval(countdownInterval);
+
+                    // Network error - but form might have submitted, redirect anyway
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Proses Selesai',
+                        text: 'Silakan cek daftar sertifikat untuk memastikan sertifikat berhasil dibuat.',
+                        confirmButtonText: 'Lihat Daftar Sertifikat',
+                        confirmButtonColor: '#4F46E5'
+                    }).then(() => {
+                        window.location.href = '{{ route("lembaga.sertifikat.index") }}';
+                    });
+                });
+        }
                 });
             });
 
-            // Toggle send email option based on email input
-            const recipientEmailInput = document.getElementById('recipient_email');
-            const sendEmailOption = document.getElementById('send-email-option');
-            const sendEmailCheckbox = document.getElementById('send_email');
+        // Toggle send email option based on email input
+        const recipientEmailInput = document.getElementById('recipient_email');
+        const sendEmailOption = document.getElementById('send-email-option');
+        const sendEmailCheckbox = document.getElementById('send_email');
 
-            function toggleSendEmailOption() {
-                if (recipientEmailInput && sendEmailOption) {
-                    const hasEmail = recipientEmailInput.value.trim() !== '';
-                    if (hasEmail) {
-                        sendEmailOption.classList.remove('hidden');
-                        // Auto-check the checkbox when email is first entered
-                        if (sendEmailCheckbox && !sendEmailCheckbox.dataset.userChanged) {
-                            sendEmailCheckbox.checked = true;
-                        }
-                    } else {
-                        sendEmailOption.classList.add('hidden');
+        function toggleSendEmailOption() {
+            if (recipientEmailInput && sendEmailOption) {
+                const hasEmail = recipientEmailInput.value.trim() !== '';
+                if (hasEmail) {
+                    sendEmailOption.classList.remove('hidden');
+                    // Auto-check the checkbox when email is first entered
+                    if (sendEmailCheckbox && !sendEmailCheckbox.dataset.userChanged) {
+                        sendEmailCheckbox.checked = true;
                     }
+                } else {
+                    sendEmailOption.classList.add('hidden');
                 }
             }
+        }
 
-            // Track if user manually changed the checkbox
-            if (sendEmailCheckbox) {
-                sendEmailCheckbox.addEventListener('change', function () {
-                    this.dataset.userChanged = 'true';
-                });
-            }
+        // Track if user manually changed the checkbox
+        if (sendEmailCheckbox) {
+            sendEmailCheckbox.addEventListener('change', function () {
+                this.dataset.userChanged = 'true';
+            });
+        }
 
-            if (recipientEmailInput) {
-                recipientEmailInput.addEventListener('input', toggleSendEmailOption);
-                // Check on load in case of old() value
-                toggleSendEmailOption();
-            }
+        if (recipientEmailInput) {
+            recipientEmailInput.addEventListener('input', toggleSendEmailOption);
+            // Check on load in case of old() value
+            toggleSendEmailOption();
+        }
         });
     </script>
 </x-layouts.lembaga>
