@@ -263,10 +263,10 @@ class BulkCertificateController extends Controller
         $failCount = 0;
         $errors = [];
 
-        // Global settings
-        $sendEmail = $request->has('send_email');
-        $blockchainEnabled = $request->has('blockchain_enabled'); // Global toggle
-        $ipfsEnabled = $request->has('ipfs_enabled');
+        // Global settings - Use boolean() for strict checkbox parsing
+        $sendEmail = $request->boolean('send_email');
+        $blockchainEnabled = $request->boolean('blockchain_enabled');
+        $ipfsEnabled = $request->boolean('ipfs_enabled');
         $defaultCategory = $request->default_category;
         $defaultDescription = $request->default_description;
 
@@ -343,6 +343,8 @@ class BulkCertificateController extends Controller
                 $certData = array_merge($validator->validated(), [
                     'template_id' => $template->id,
                     'blockchain_enabled' => $blockchainEnabled,
+                    'blockchain_status' => $blockchainEnabled ? 'pending' : 'disabled',
+                    'ipfs_status' => $ipfsEnabled ? 'pending' : null, // Explicitly null if not enabled
                     'category' => $rowData['category'],
                     'description' => $rowData['description'],
                 ]);
@@ -371,14 +373,12 @@ class BulkCertificateController extends Controller
                 }
 
                 // 6. Blockchain & IPFS Jobs
-                // Logic mirrored from LembagaController
+                // Status already set at creation, just dispatch jobs
                 if ($blockchainEnabled) {
                     // Dispatch Blockchain Job (which handles IPFS internally if enabled)
-                    $certificate->update(['blockchain_status' => 'pending']);
                     ProcessBlockchainCertificate::dispatch($certificate, $ipfsEnabled);
                 } elseif ($ipfsEnabled) {
-                    // IPFS only
-                    $certificate->update(['ipfs_status' => 'pending']);
+                    // IPFS only - status already set to 'pending' at creation
                     ProcessIpfsCertificate::dispatch($certificate);
                 }
 

@@ -93,14 +93,15 @@ class LembagaController extends Controller
         }
 
         // Get send_email flag (not stored in database)
-        $sendEmail = $request->has('send_email') && $request->send_email == '1';
+        $sendEmail = $request->boolean('send_email');
 
         // Remove non-database fields from validated data
         unset($validated['send_email']);
         unset($validated['ipfs_enabled']);
 
-        // Explicitly set ipfs_status to null if not enabled (overrides DB default)
+        // Explicitly set statuses at creation time (overrides DB defaults)
         $validated['ipfs_status'] = $ipfsEnabled ? 'pending' : null;
+        $validated['blockchain_status'] = $validated['blockchain_enabled'] ? 'pending' : 'disabled';
 
         // Create certificate
         $certificate = $user->certificates()->create($validated);
@@ -149,29 +150,24 @@ class LembagaController extends Controller
 
         // If blockchain upload requested, dispatch job to process in background
         // IPFS will be triggered AFTER blockchain confirms (inside the job)
+        // Status already set at creation time
         if ($validated['blockchain_enabled']) {
             $blockchainService = new \App\Services\BlockchainService();
 
             if ($blockchainService->isEnabled()) {
-                // Mark as pending and dispatch background job
-                $certificate->update([
-                    'blockchain_status' => 'pending',
-                ]);
-
                 // Dispatch job to process blockchain in background
                 // Pass ipfsEnabled so IPFS is only dispatched if user requested it
                 \App\Jobs\ProcessBlockchainCertificate::dispatch($certificate, $ipfsEnabled);
             } else {
-                // Blockchain not configured
+                // Blockchain not configured - update status (override the 'pending' set at creation)
                 $certificate->update([
                     'blockchain_status' => 'disabled',
                 ]);
             }
         } elseif ($ipfsEnabled) {
-            // IPFS only (no blockchain) - upload directly without waiting for blockchain
+            // IPFS only (no blockchain) - dispatch job, status already 'pending' at creation
             $ipfsService = new \App\Services\IpfsService();
             if ($ipfsService->isEnabled()) {
-                $certificate->update(['ipfs_status' => 'pending']);
                 \App\Jobs\ProcessIpfsCertificate::dispatch($certificate);
             }
         }
