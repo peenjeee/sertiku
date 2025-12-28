@@ -202,6 +202,36 @@
                 orderExpiredAt = null;
             }
 
+            // Function to check if form is valid and toggle button states
+            function updateButtonStates() {
+                const nameInput = document.querySelector('input[name="name"]');
+                const emailInput = document.querySelector('input[name="email"]');
+                const payButton = document.getElementById('pay-button');
+                const btnContinue = document.getElementById('btn-continue-payment');
+                const btnChange = document.getElementById('btn-change-payment');
+
+                const isValid = nameInput.value.trim() !== '' && emailInput.value.trim() !== '';
+
+                // Disable/enable main button
+                payButton.disabled = !isValid;
+
+                // Disable/enable pending order buttons if they exist
+                if (btnContinue) btnContinue.disabled = !isValid;
+                if (btnChange) btnChange.disabled = !isValid;
+            }
+
+            // Listen for input changes
+            document.addEventListener('DOMContentLoaded', function () {
+                const nameInput = document.querySelector('input[name="name"]');
+                const emailInput = document.querySelector('input[name="email"]');
+
+                nameInput.addEventListener('input', updateButtonStates);
+                emailInput.addEventListener('input', updateButtonStates);
+
+                // Initial check
+                updateButtonStates();
+            });
+
             // Function to open Midtrans popup
             function openMidtransPopup(snapToken, orderNumber) {
                 window.snap.pay(snapToken, {
