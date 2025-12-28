@@ -56,10 +56,36 @@
                                 placeholder="Nama universitas/organisasi">
                         </div>
 
-                        {{-- Error Message --}}
+                        {{-- Error/Info Message --}}
                         <div id="error-message"
                             class="hidden rounded-[12px] bg-red-500/20 border border-red-500/30 p-4 text-sm text-red-300">
                         </div>
+
+                        {{-- Pending Order Info & Actions --}}
+                        @if($pendingOrder)
+                            <div id="pending-order-info"
+                                class="rounded-[12px] bg-yellow-500/20 border border-yellow-500/30 p-4">
+                                <p class="text-sm text-yellow-300 mb-3">
+                                    Anda memiliki pesanan tertunda ({{ $pendingOrder->order_number }}).
+                                    <br><span class="text-xs text-yellow-400/70">Expired:
+                                        {{ $pendingOrder->expired_at->format('d M Y H:i') }}</span>
+                                </p>
+                                <div class="flex gap-2">
+                                    <button type="button" id="btn-continue-payment"
+                                        class="flex-1 px-3 py-2 bg-green-600 hover:bg-green-700 text-white text-xs font-medium rounded-lg transition">
+                                        Lanjut Bayar
+                                    </button>
+                                    <button type="button" id="btn-change-payment"
+                                        class="flex-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition">
+                                        Ganti Metode
+                                    </button>
+                                    <button type="button" id="btn-cancel-order"
+                                        class="flex-1 px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded-lg transition">
+                                        Batalkan
+                                    </button>
+                                </div>
+                            </div>
+                        @endif
 
                         {{-- Submit Button --}}
                         <button type="submit" id="pay-button"
@@ -67,6 +93,8 @@
                             <span id="button-text">
                                 @if($package->price == 0)
                                     Daftar Gratis
+                                @elseif($pendingOrder)
+                                    Buat Pesanan Baru
                                 @else
                                     Bayar {{ $package->formatted_price }}
                                 @endif
@@ -257,17 +285,7 @@
                 const buttonLoading = document.getElementById('button-loading');
                 const errorMessage = document.getElementById('error-message');
 
-                // If we have valid (non-expired) snap token, open popup directly - skip validation
-                if (currentSnapToken && currentOrderNumber && !isOrderExpired()) {
-                    payButton.disabled = true;
-                    buttonText.classList.add('hidden');
-                    buttonLoading.classList.remove('hidden');
-                    errorMessage.classList.add('hidden');
-                    openMidtransPopup(currentSnapToken, currentOrderNumber);
-                    return;
-                }
-
-                // Validate required fields (only when creating new order)
+                // Always validate required fields first
                 const nameInput = form.querySelector('input[name="name"]');
                 const emailInput = form.querySelector('input[name="email"]');
 
@@ -327,14 +345,66 @@
                 }
             });
 
-            // If there's a pending order, show info
+            // If there's a pending order, setup button handlers
             @if($pendingOrder)
                 document.addEventListener('DOMContentLoaded', function () {
-                    const errorMessage = document.getElementById('error-message');
-                    errorMessage.textContent = 'Anda memiliki pesanan tertunda. Klik tombol Bayar untuk melanjutkan pembayaran.';
-                    errorMessage.classList.remove('hidden');
-                    errorMessage.classList.remove('text-red-400');
-                    errorMessage.classList.add('text-yellow-400');
+                    const btnContinue = document.getElementById('btn-continue-payment');
+                    const btnChange = document.getElementById('btn-change-payment');
+                    const btnCancel = document.getElementById('btn-cancel-order');
+                    const pendingOrderInfo = document.getElementById('pending-order-info');
+
+                    // Continue Payment - open existing popup
+                    btnContinue.addEventListener('click', function () {
+                        if (currentSnapToken && !isOrderExpired()) {
+                            openMidtransPopup(currentSnapToken, currentOrderNumber);
+                        } else {
+                            alert('Pesanan sudah expired. Silakan buat pesanan baru.');
+                            pendingOrderInfo.classList.add('hidden');
+                            clearStoredOrder();
+                        }
+                    });
+
+                    // Change Payment Method - open popup to select different method
+                    btnChange.addEventListener('click', function () {
+                        if (currentSnapToken && !isOrderExpired()) {
+                            openMidtransPopup(currentSnapToken, currentOrderNumber);
+                        } else {
+                            alert('Pesanan sudah expired. Silakan buat pesanan baru.');
+                            pendingOrderInfo.classList.add('hidden');
+                            clearStoredOrder();
+                        }
+                    });
+
+                    // Cancel Order
+                    btnCancel.addEventListener('click', async function () {
+                        if (!confirm('Yakin ingin membatalkan pesanan ini?')) return;
+
+                        try {
+                            const response = await fetch('/payment/cancel', {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                },
+                                body: JSON.stringify({ order_number: currentOrderNumber }),
+                            });
+
+                            const data = await response.json();
+
+                            if (data.success) {
+                                alert('Pesanan berhasil dibatalkan.');
+                                pendingOrderInfo.classList.add('hidden');
+                                clearStoredOrder();
+                                // Change button text back to normal
+                                document.getElementById('button-text').textContent = 'Bayar {{ $package->formatted_price }}';
+                            } else {
+                                alert(data.error || 'Gagal membatalkan pesanan.');
+                            }
+                        } catch (error) {
+                            alert('Terjadi kesalahan. Silakan coba lagi.');
+                        }
+                    });
                 });
             @endif
         </script>

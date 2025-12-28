@@ -352,6 +352,32 @@ class PaymentController extends Controller
     }
 
     /**
+     * Cancel pending order
+     */
+    public function cancelOrder(Request $request)
+    {
+        $validated = $request->validate([
+            'order_number' => 'required|string',
+        ]);
+
+        $order = Order::where('order_number', $validated['order_number'])
+            ->where('user_id', auth()->id())
+            ->where('status', 'pending')
+            ->first();
+
+        if (!$order) {
+            return response()->json(['error' => 'Order tidak ditemukan atau sudah diproses'], 404);
+        }
+
+        $order->update(['status' => 'cancelled']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pesanan berhasil dibatalkan',
+        ]);
+    }
+
+    /**
      * Payment success page
      */
     public function success($orderNumber)

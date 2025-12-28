@@ -382,6 +382,7 @@ Route::get('/checkout/{slug}', [PaymentController::class, 'checkout'])->middlewa
 Route::post('/checkout/process', [PaymentController::class, 'process'])->middleware(['auth', 'lembaga.only'])->name('checkout.process');
 Route::post('/payment/quick-upgrade', [PaymentController::class, 'quickUpgrade'])->middleware(['auth', 'lembaga.only'])->name('payment.quick-upgrade');
 Route::post('/payment/confirm', [PaymentController::class, 'confirmPayment'])->middleware(['auth', 'lembaga.only'])->name('payment.confirm');
+Route::post('/payment/cancel', [PaymentController::class, 'cancelOrder'])->middleware(['auth', 'lembaga.only'])->name('payment.cancel');
 Route::get('/payment/success/{orderNumber}', [PaymentController::class, 'success'])->middleware('auth')->name('payment.success');
 Route::post('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
 Route::get('/contact-enterprise', [PaymentController::class, 'contactEnterprise'])->name('contact.enterprise');
