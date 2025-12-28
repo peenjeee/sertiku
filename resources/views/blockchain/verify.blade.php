@@ -63,6 +63,7 @@
             <div class="space-y-6 animate-fade-in-up stagger-3">
                 @php
                     $isRevoked = ($certificate ?? false) && $certificate->status === 'revoked';
+                    $isExpired = ($certificate ?? false) && $certificate->expire_date && \Carbon\Carbon::parse($certificate->expire_date)->isPast();
                 @endphp
 
                 @if($isRevoked)
@@ -90,6 +91,51 @@
                             @if($certificate->revoked_reason)
                                 <p class="text-white/50 text-sm">Alasan: {{ $certificate->revoked_reason }}</p>
                             @endif
+                        </div>
+                    </div>
+
+                @elseif($isExpired && ($result ?? '') === 'found' && ($onChainData ?? false))
+                    {{-- EXPIRED Certificate Warning --}}
+                    <div
+                        class="rounded-[16px] overflow-hidden border-2 border-amber-500/50 bg-[rgba(15,23,42,0.9)] backdrop-blur-xl">
+                        <div class="p-4 bg-amber-500/20 border-b border-amber-500/30 flex items-center gap-3">
+                            <div class="w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="text-amber-400 font-bold text-lg flex items-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                    SERTIFIKAT KADALUARSA
+                                </h2>
+                                <p class="text-amber-300/70 text-sm">Sertifikat ini telah melewati masa berlaku</p>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-white/70 mb-4">Sertifikat <strong>{{ $certificate->certificate_number }}</strong>
+                                telah kadaluarsa pada {{ \Carbon\Carbon::parse($certificate->expire_date)->format('d F Y') }}.
+                            </p>
+                            <p class="text-white/50 text-sm mb-4">Data blockchain tetap valid, namun sertifikat tidak lagi berlaku.</p>
+                            
+                            {{-- Show blockchain data for expired certificate --}}
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                @if(isset($onChainData['certificateNumber']) && $onChainData['certificateNumber'])
+                                    <div class="bg-white/5 rounded-xl p-4">
+                                        <p class="text-white/50 text-xs mb-1">Nomor Sertifikat</p>
+                                        <p class="text-white font-bold">{{ $onChainData['certificateNumber'] }}</p>
+                                    </div>
+                                @endif
+                                @if(isset($onChainData['recipientName']) && $onChainData['recipientName'])
+                                    <div class="bg-white/5 rounded-xl p-4">
+                                        <p class="text-white/50 text-xs mb-1">Nama Penerima</p>
+                                        <p class="text-white font-bold">{{ $onChainData['recipientName'] }}</p>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
 

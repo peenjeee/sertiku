@@ -139,12 +139,19 @@
                         <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 relative">
                             <!-- Status Badge -->
                             <div class="absolute top-3 right-3">
-                                @if($certificate->status === 'active')
-                                    <span class="px-2 py-1 bg-emerald-500 text-white text-xs font-bold rounded">✓ Aktif</span>
-                                @elseif($certificate->status === 'revoked')
+                                @php
+                                    // Check expiration first (takes priority over status)
+                                    $isExpired = $certificate->expire_date && \Carbon\Carbon::parse($certificate->expire_date)->isPast();
+                                @endphp
+                                
+                                @if($certificate->status === 'revoked')
                                     <span class="px-2 py-1 bg-red-500 text-white text-xs font-bold rounded">✕ Dicabut</span>
+                                @elseif($isExpired)
+                                    <span class="px-2 py-1 bg-amber-500 text-white text-xs font-bold rounded"> Kadaluarsa</span>
+                                @elseif($certificate->status === 'active')
+                                    <span class="px-2 py-1 bg-emerald-500 text-white text-xs font-bold rounded">✓ Aktif</span>
                                 @else
-                                    <span class="px-2 py-1 bg-amber-500 text-white text-xs font-bold rounded">Kadaluarsa</span>
+                                    <span class="px-2 py-1 bg-gray-500 text-white text-xs font-bold rounded">{{ $certificate->status }}</span>
                                 @endif
                             </div>
 
