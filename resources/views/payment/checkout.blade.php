@@ -89,7 +89,7 @@
             {{-- Order Summary --}}
             <div class="lg:col-span-2">
                 <div
-                    class="sticky top-8 rounded-[28px] border border-[rgba(255,255,255,0.14)] bg-[rgba(15,23,42,0.9)] p-6">
+                    class="top-8 rounded-[28px] border border-[rgba(255,255,255,0.14)] bg-[rgba(15,23,42,0.9)] p-6">
                     <h2 class="text-lg font-semibold text-white">Ringkasan Pesanan</h2>
 
                     <div class="mt-6 flex items-center gap-4">
@@ -157,6 +157,68 @@
         {{-- Midtrans Snap JS --}}
         <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ $clientKey }}"></script>
         <script>
+            // Store order data from server (if pending order exists)
+            let currentSnapToken = {!! $pendingOrder ? "'" . $pendingOrder->snap_token . "'" : 'null' !!};
+            let currentOrderNumber = {!! $pendingOrder ? "'" . $pendingOrder->order_number . "'" : 'null' !!};
+
+            // Function to open Midtrans popup
+            function openMidtransPopup(snapToken, orderNumber) {
+                window.snap.pay(snapToken, {
+                    onSuccess: async function (result) {
+                        // Confirm payment on server
+                        try {
+                            await fetch('/payment/confirm', {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                },
+                                body: JSON.stringify({ order_number: orderNumber }),
+                            });
+                        } catch (e) {
+                            console.log('Confirm error:', e);
+                        }
+                        window.location.href = '{{ url("/payment/success") }}/' + orderNumber;
+                    },
+                    onPending: function (result) {
+                        // Stay on checkout page - don't redirect
+                        // The user can click the button again to resume payment
+                        currentSnapToken = snapToken;
+                        currentOrderNumber = orderNumber;
+                        
+                        // Show info message
+                        const errorMessage = document.getElementById('error-message');
+                        errorMessage.textContent = 'Pesanan sedang menunggu pembayaran. Klik tombol Bayar untuk melanjutkan.';
+                        errorMessage.classList.remove('hidden');
+                        errorMessage.classList.remove('text-red-400');
+                        errorMessage.classList.add('text-yellow-400');
+                    },
+                    onError: function (result) {
+                        const errorMessage = document.getElementById('error-message');
+                        errorMessage.textContent = 'Pembayaran gagal. Silakan coba lagi.';
+                        errorMessage.classList.remove('hidden');
+                        errorMessage.classList.remove('text-yellow-400');
+                        errorMessage.classList.add('text-red-400');
+                    },
+                    onClose: function () {
+                        // Just re-enable button, stay on page
+                        // User can click again to resume the same order
+                        const payButton = document.getElementById('pay-button');
+                        const buttonText = document.getElementById('button-text');
+                        const buttonLoading = document.getElementById('button-loading');
+                        
+                        payButton.disabled = false;
+                        buttonText.classList.remove('hidden');
+                        buttonLoading.classList.add('hidden');
+                        
+                        // Store tokens for next click
+                        currentSnapToken = snapToken;
+                        currentOrderNumber = orderNumber;
+                    }
+                });
+            }
+
             document.getElementById('checkout-form').addEventListener('submit', async function (e) {
                 e.preventDefault();
 
@@ -173,6 +235,12 @@
                 errorMessage.classList.add('hidden');
 
                 try {
+                    // If we already have a snap token from previous attempt, use it directly
+                    if (currentSnapToken && currentOrderNumber) {
+                        openMidtransPopup(currentSnapToken, currentOrderNumber);
+                        return;
+                    }
+
                     const formData = new FormData(form);
 
                     const response = await fetch('{{ route("checkout.process") }}', {
@@ -190,42 +258,17 @@
                         throw new Error(data.error);
                     }
 
+                    // Store for future use (in case user closes popup and clicks again)
+                    currentSnapToken = data.snap_token;
+                    currentOrderNumber = data.order_number;
+
                     // Open Midtrans Snap popup
-                    window.snap.pay(data.snap_token, {
-                        onSuccess: async function (result) {
-                            // Confirm payment on server (for localhost where callback doesn't work)
-                            try {
-                                await fetch('/payment/confirm', {
-                                    method: 'POST',
-                                    headers: {
-                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                        'Content-Type': 'application/json',
-                                        'Accept': 'application/json',
-                                    },
-                                    body: JSON.stringify({ order_number: data.order_number }),
-                                });
-                            } catch (e) {
-                                console.log('Confirm error:', e);
-                            }
-                            window.location.href = '{{ url("/payment/success") }}/' + data.order_number;
-                        },
-                        onPending: function (result) {
-                            window.location.href = '{{ url("/payment/success") }}/' + data.order_number;
-                        },
-                        onError: function (result) {
-                            errorMessage.textContent = 'Pembayaran gagal. Silakan coba lagi.';
-                            errorMessage.classList.remove('hidden');
-                        },
-                        onClose: function () {
-                            // Re-enable button
-                            payButton.disabled = false;
-                            buttonText.classList.remove('hidden');
-                            buttonLoading.classList.add('hidden');
-                        }
-                    });
+                    openMidtransPopup(data.snap_token, data.order_number);
                 } catch (error) {
                     errorMessage.textContent = error.message || 'Terjadi kesalahan. Silakan coba lagi.';
                     errorMessage.classList.remove('hidden');
+                    errorMessage.classList.remove('text-yellow-400');
+                    errorMessage.classList.add('text-red-400');
 
                     // Re-enable button
                     payButton.disabled = false;
@@ -233,6 +276,17 @@
                     buttonLoading.classList.add('hidden');
                 }
             });
+
+            // If there's a pending order, show info
+            @if($pendingOrder)
+            document.addEventListener('DOMContentLoaded', function() {
+                const errorMessage = document.getElementById('error-message');
+                errorMessage.textContent = 'Anda memiliki pesanan tertunda. Klik tombol Bayar untuk melanjutkan pembayaran.';
+                errorMessage.classList.remove('hidden');
+                errorMessage.classList.remove('text-red-400');
+                errorMessage.classList.add('text-yellow-400');
+            });
+            @endif
         </script>
     @else
         {{-- For free package, submit normally --}}

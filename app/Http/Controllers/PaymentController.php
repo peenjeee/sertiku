@@ -63,9 +63,19 @@ class PaymentController extends Controller
             \Log::info('Checkout: User has no package or logic skipped');
         }
 
+        // Check for existing pending order for this user and package
+        $pendingOrder = Order::where('user_id', auth()->id())
+            ->where('package_id', $package->id)
+            ->where('status', 'pending')
+            ->where('expired_at', '>', now())
+            ->whereNotNull('snap_token')
+            ->latest()
+            ->first();
+
         return view('payment.checkout', [
             'package' => $package,
             'clientKey' => config('midtrans.client_key'),
+            'pendingOrder' => $pendingOrder,
         ]);
     }
 
@@ -186,6 +196,24 @@ class PaymentController extends Controller
             ]);
 
             return redirect()->route('payment.success', $order->order_number);
+        }
+
+        // Check for existing pending order for this user and package
+        $existingOrder = Order::where('user_id', auth()->id())
+            ->where('package_id', $package->id)
+            ->where('status', 'pending')
+            ->where('expired_at', '>', now())
+            ->whereNotNull('snap_token')
+            ->latest()
+            ->first();
+
+        // If existing pending order with valid snap_token, return it
+        if ($existingOrder) {
+            return response()->json([
+                'snap_token' => $existingOrder->snap_token,
+                'order_number' => $existingOrder->order_number,
+                'is_existing' => true,
+            ]);
         }
 
         // Create pending order
