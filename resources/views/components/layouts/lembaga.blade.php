@@ -444,7 +444,7 @@
                 <div class="flex items-center justify-between logo-section">
                     <a href="{{ route('home') }}" class="flex items-center gap-3 hover:opacity-80 transition group">
                         <!-- SertiKu Logo -->
-                        <img src="{{ asset('favicon.svg') }}" alt="SertiKu"
+                        <img src="{{ asset('favicon.ico') }}" alt="SertiKu"
                             class="w-10 h-10 flex-shrink-0 group-hover:scale-105 transition">
                         <div class="logo-text">
                             <h1 class="text-white font-bold text-xl tracking-tight drop-shadow-lg">SertiKu</h1>
