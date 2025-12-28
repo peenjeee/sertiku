@@ -200,6 +200,14 @@
                         currentSnapToken = snapToken;
                         currentOrderNumber = orderNumber;
 
+                        // Reset button state
+                        const payButton = document.getElementById('pay-button');
+                        const buttonText = document.getElementById('button-text');
+                        const buttonLoading = document.getElementById('button-loading');
+                        payButton.disabled = false;
+                        buttonText.classList.remove('hidden');
+                        buttonLoading.classList.add('hidden');
+
                         // Show info message
                         const errorMessage = document.getElementById('error-message');
                         errorMessage.textContent = 'Pesanan sedang menunggu pembayaran. Klik tombol Bayar untuk melanjutkan.';
@@ -208,6 +216,14 @@
                         errorMessage.classList.add('text-yellow-400');
                     },
                     onError: function (result) {
+                        // Reset button state
+                        const payButton = document.getElementById('pay-button');
+                        const buttonText = document.getElementById('button-text');
+                        const buttonLoading = document.getElementById('button-loading');
+                        payButton.disabled = false;
+                        buttonText.classList.remove('hidden');
+                        buttonLoading.classList.add('hidden');
+
                         const errorMessage = document.getElementById('error-message');
                         errorMessage.textContent = 'Pembayaran gagal. Silakan coba lagi.';
                         errorMessage.classList.remove('hidden');
@@ -240,6 +256,23 @@
                 const buttonText = document.getElementById('button-text');
                 const buttonLoading = document.getElementById('button-loading');
                 const errorMessage = document.getElementById('error-message');
+
+                // Validate required fields first (only if no existing order)
+                if (!currentSnapToken || !currentOrderNumber || isOrderExpired()) {
+                    const nameInput = form.querySelector('input[name="name"]');
+                    const emailInput = form.querySelector('input[name="email"]');
+
+                    if (!nameInput.value.trim()) {
+                        nameInput.focus();
+                        nameInput.reportValidity();
+                        return;
+                    }
+                    if (!emailInput.value.trim()) {
+                        emailInput.focus();
+                        emailInput.reportValidity();
+                        return;
+                    }
+                }
 
                 // Disable button and show loading
                 payButton.disabled = true;
