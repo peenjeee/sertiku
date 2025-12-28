@@ -42,6 +42,9 @@ class User extends Authenticatable
         'is_admin',
         'is_master',
         'email_verified_at',
+        'doc_npwp_path',
+        'doc_akta_path',
+        'doc_siup_path',
     ];
 
     /**
