@@ -25,19 +25,19 @@
         <div class="info-box rounded-2xl p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-black text-2xl font-bold mb-2">Terbitkan Sertifikat Baru</h1>
-                    <p class="text-black/70 text-base">Terbitkan sertifikat digital untuk peserta program Anda</p>
+                    <h1 class="text-white text-2xl font-bold mb-2">Terbitkan Sertifikat Baru</h1>
+                    <p class="text-white/70 text-base">Terbitkan sertifikat digital untuk peserta program Anda</p>
                 </div>
                 <!-- Usage Badge -->
                 <div class="flex items-center gap-3">
                     <div class="text-right">
-                        <p class="text-black/60 text-xs">Sisa Kuota Bulan Ini</p>
-                        <p class="text-black font-bold">{{ $remainingCerts }} / {{ $certificateLimit }}</p>
+                        <p class="text-white/60 text-xs">Sisa Kuota Bulan Ini</p>
+                        <p class="text-white font-bold">{{ $remainingCerts }} / {{ $certificateLimit }}</p>
                     </div>
                     <div
-                        class="w-12 h-12 rounded-full flex items-center justify-center {{ $remainingCerts <= 10 ? 'bg-red-500/20' : 'bg-blue-500/20' }}">
+                        class="w-12 h-12 rounded-full flex items-center justify-center {{ $remainingCerts <= 10 ? 'bg-red-500/20' : 'bg-green-500/20' }}">
                         <span
-                            class="text-lg font-bold {{ $remainingCerts <= 10 ? 'text-red-400' : 'text-blue-400' }}">{{ $remainingCerts }}</span>
+                            class="text-lg font-bold {{ $remainingCerts <= 10 ? 'text-red-400' : 'text-green-400' }}">{{ $remainingCerts }}</span>
                     </div>
                 </div>
             </div>
