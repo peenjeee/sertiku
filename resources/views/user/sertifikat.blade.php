@@ -116,7 +116,7 @@
                             </svg>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <p class="text-white font-medium truncate">{{ $cert->title ?? 'Sertifikat' }}</p>
+                            <p class="text-white font-medium truncate">{{ $cert->course_name ?? 'Sertifikat' }}</p>
                             <p class="text-white/50 text-sm">{{ $cert->issuer->name ?? 'Lembaga' }} •
                                 {{ $cert->created_at->format('d M Y') }}</p>
                         </div>
