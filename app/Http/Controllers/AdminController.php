@@ -79,9 +79,15 @@ class AdminController extends Controller
             });
         }
 
-        // Filter by type
+        // Filter by type (pengguna/user/personal = same, lembaga/institution = same)
         if ($request->filled('type')) {
-            $query->where('account_type', $request->type);
+            if ($request->type === 'pengguna') {
+                $query->whereIn('account_type', ['pengguna', 'user', 'personal']);
+            } elseif ($request->type === 'lembaga') {
+                $query->whereIn('account_type', ['lembaga', 'institution']);
+            } else {
+                $query->where('account_type', $request->type);
+            }
         }
 
         // Filter by status
@@ -97,8 +103,8 @@ class AdminController extends Controller
 
         $userStats = [
             'total' => User::count(),
-            'pengguna' => User::where('account_type', 'pengguna')->count(),
-            'lembaga' => User::where('account_type', 'lembaga')->count(),
+            'pengguna' => User::whereIn('account_type', ['pengguna', 'user', 'personal'])->count(),
+            'lembaga' => User::whereIn('account_type', ['lembaga', 'institution'])->count(),
             'active' => User::where('profile_completed', true)->count(),
         ];
 

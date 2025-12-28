@@ -105,7 +105,7 @@
                                 @if($user->account_type === 'admin')
                                     <span
                                         class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">Admin</span>
-                                @elseif($user->account_type === 'lembaga')
+                                @elseif(in_array($user->account_type, ['lembaga', 'institution']))
                                     <span
                                         class="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">Lembaga</span>
                                 @else
@@ -232,7 +232,7 @@
                                 @if($user->account_type === 'admin')
                                     <span
                                         class="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">Admin</span>
-                                @elseif($user->account_type === 'lembaga')
+                                @elseif(in_array($user->account_type, ['lembaga', 'institution']))
                                     <span
                                         class="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-medium rounded-full">Lembaga</span>
                                 @else

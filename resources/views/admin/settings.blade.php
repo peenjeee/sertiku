@@ -37,11 +37,11 @@
                     <input type="email" name="admin_email" value="{{ $settings['admin_email'] }}" readonly
                         class="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm bg-gray-50 text-gray-500">
                 </div>
-                <!-- <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition">
+                <button disabled type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition">
                     Simpan Pengaturan
-                </button> -->
+                </button>
             </form>
-        </div>
+        </div>  
 
         <!-- System Info -->
         <div class="glass-card rounded-2xl p-6 animate-fade-in-up stagger-2">
