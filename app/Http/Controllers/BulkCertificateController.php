@@ -25,7 +25,30 @@ class BulkCertificateController extends Controller
         $user = Auth::user();
         $templates = $user->templates()->where('is_active', true)->get();
 
-        return view('lembaga.sertifikat.bulk', compact('templates'));
+        // Blockchain quotas
+        $canUseBlockchain = $user->canUseBlockchain();
+        $blockchainLimit = $user->getBlockchainLimit();
+        $blockchainUsed = $user->getBlockchainUsedThisMonth();
+        // Prevent division by zero or negative
+        $remainingBlockchain = max(0, $blockchainLimit - $blockchainUsed);
+
+        // IPFS quotas
+        $canUseIpfs = $user->canUseIpfs();
+        $ipfsLimit = $user->getIpfsLimit();
+        $ipfsUsed = $user->getIpfsUsedThisMonth();
+        $remainingIpfs = max(0, $ipfsLimit - $ipfsUsed);
+
+        return view('lembaga.sertifikat.bulk', compact(
+            'templates',
+            'canUseBlockchain',
+            'blockchainLimit',
+            'blockchainUsed',
+            'remainingBlockchain',
+            'canUseIpfs',
+            'ipfsLimit',
+            'ipfsUsed',
+            'remainingIpfs'
+        ));
     }
 
 
@@ -302,6 +325,18 @@ class BulkCertificateController extends Controller
                 // Check limit per iteration strictly
                 if (!$user->canIssueCertificate()) {
                     $errors[] = "Kuota habis pada baris " . ($rowIndex + 2);
+                    break;
+                }
+
+                // Check Blockchain Limit
+                if ($blockchainEnabled && !$user->canUseBlockchain()) {
+                    $errors[] = "Kuota Blockchain habis pada baris " . ($rowIndex + 2);
+                    break;
+                }
+
+                // Check IPFS Limit
+                if ($ipfsEnabled && !$user->canUseIpfs()) {
+                    $errors[] = "Kuota IPFS habis pada baris " . ($rowIndex + 2);
                     break;
                 }
 

@@ -190,14 +190,31 @@ class LembagaController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('recipient_name', 'like', "%{$search}%")
+                    ->orWhere('recipient_email', 'like', "%{$search}%")
                     ->orWhere('course_name', 'like', "%{$search}%")
                     ->orWhere('certificate_number', 'like', "%{$search}%");
             });
         }
 
-        // Filter by status
+        // Filter by Date
+        if ($request->has('issue_date') && $request->issue_date) {
+            $query->whereDate('issue_date', $request->issue_date);
+        }
+
+        // Filter by Status
         if ($request->has('status') && $request->status) {
-            $query->where('status', $request->status);
+            $status = $request->status;
+            if ($status === 'revoked') {
+                $query->where('status', 'revoked');
+            } elseif ($status === 'expired') {
+                $query->where('expire_date', '<', now());
+            } elseif ($status === 'active') {
+                $query->where('status', '!=', 'revoked')
+                    ->where(function ($q) {
+                        $q->whereNull('expire_date')
+                            ->orWhere('expire_date', '>=', now());
+                    });
+            }
         }
 
         // Filter by category

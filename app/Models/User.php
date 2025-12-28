@@ -223,8 +223,7 @@ class User extends Authenticatable
         return $this->certificates()
             ->whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
-            ->whereNotNull('blockchain_tx_hash')
-            ->where('blockchain_status', 'confirmed')
+            ->whereIn('blockchain_status', ['confirmed', 'pending', 'processing'])
             ->count();
     }
 

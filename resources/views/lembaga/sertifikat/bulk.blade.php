@@ -189,7 +189,7 @@
                             <div class="space-y-4">
                                 <!-- Blockchain -->
                                 <div
-                                    class="p-5 rounded-2xl bg-gray-800 border border-gray-700 hover:border-purple-500/30 transition duration-300">
+                                    class="p-5 rounded-2xl bg-gray-800 border {{ !$canUseBlockchain ? 'border-red-500/30 opacity-75' : 'border-gray-700 hover:border-purple-500/30' }} transition duration-300">
                                     <div class="flex items-center justify-between mb-2">
                                         <div class="flex items-center gap-2">
                                             <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor"
@@ -199,16 +199,25 @@
                                             </svg>
                                             <span class="text-white font-bold text-base">Blockchain Verification</span>
                                             <span
-                                                class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-500/20 text-purple-300">GRATIS</span>
+                                                class="px-2 py-0.5 rounded text-[10px] font-bold {{ $canUseBlockchain ? 'bg-purple-500/20 text-purple-300' : 'bg-red-500/20 text-red-300' }}">
+                                                {{ $remainingBlockchain }}/{{ $blockchainLimit }}
+                                            </span>
                                         </div>
-                                        <label class="relative inline-flex items-center cursor-pointer">
+                                        <label class="relative inline-flex items-center {{ $canUseBlockchain ? 'cursor-pointer' : 'cursor-not-allowed' }}">
                                             <input type="checkbox" name="blockchain_enabled" value="1"
-                                                class="peer sr-only">
+                                                class="peer sr-only" {{ !$canUseBlockchain ? 'disabled' : '' }}>
                                             <div
                                                 class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600">
                                             </div>
                                         </label>
                                     </div>
+                                    
+                                    @if(!$canUseBlockchain)
+                                        <div class="mb-3 p-2 bg-red-900/30 border border-red-500/30 rounded text-red-300 text-xs">
+                                            Kuota Blockchain habis. <a href="{{ url('/#harga') }}" class="underline hover:text-white">Upgrade</a>
+                                        </div>
+                                    @endif
+
                                     <p class="text-gray-300 text-sm mb-3">
                                         Upload ke Blockchain (Polygon)
                                     </p>
@@ -239,7 +248,7 @@
 
                                 <!-- IPFS -->
                                 <div
-                                    class="p-5 rounded-2xl bg-gray-800 border border-gray-700 hover:border-cyan-500/30 transition duration-300">
+                                    class="p-5 rounded-2xl bg-gray-800 border {{ !$canUseIpfs ? 'border-red-500/30 opacity-75' : 'border-gray-700 hover:border-cyan-500/30' }} transition duration-300">
                                     <div class="flex items-center justify-between mb-2">
                                         <div class="flex items-center gap-2">
                                             <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor"
@@ -249,15 +258,24 @@
                                             </svg>
                                             <span class="text-white font-bold text-base">IPFS Storage</span>
                                             <span
-                                                class="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-500/20 text-cyan-300">Web3</span>
+                                                class="px-2 py-0.5 rounded text-[10px] font-bold {{ $canUseIpfs ? 'bg-cyan-500/20 text-cyan-300' : 'bg-red-500/20 text-red-300' }}">
+                                                {{ $remainingIpfs }}/{{ $ipfsLimit }}
+                                            </span>
                                         </div>
-                                        <label class="relative inline-flex items-center cursor-pointer">
-                                            <input type="checkbox" name="ipfs_enabled" value="1" class="peer sr-only">
+                                        <label class="relative inline-flex items-center {{ $canUseIpfs ? 'cursor-pointer' : 'cursor-not-allowed' }}">
+                                            <input type="checkbox" name="ipfs_enabled" value="1" class="peer sr-only" {{ !$canUseIpfs ? 'disabled' : '' }}>
                                             <div
                                                 class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-600">
                                             </div>
                                         </label>
                                     </div>
+                                    
+                                    @if(!$canUseIpfs)
+                                        <div class="mb-3 p-2 bg-red-900/30 border border-red-500/30 rounded text-red-300 text-xs">
+                                            Kuota IPFS habis. <a href="{{ url('/#harga') }}" class="underline hover:text-white">Upgrade</a>
+                                        </div>
+                                    @endif
+
                                     <p class="text-gray-300 text-sm mb-3">
                                         Upload ke IPFS (Storacha)
                                     </p>
@@ -438,6 +456,30 @@
             // Check blockchain/IPFS enabled
             const blockchainEnabled = form.querySelector('input[name="blockchain_enabled"]')?.checked;
             const ipfsEnabled = form.querySelector('input[name="ipfs_enabled"]')?.checked;
+
+            // QUOTA PRE-CHECK
+            const remainingBlockchain = {{ $remainingBlockchain }};
+            const remainingIpfs = {{ $remainingIpfs }};
+
+            if (blockchainEnabled && rowCount > remainingBlockchain) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Kuota Blockchain Tidak Cukup',
+                    html: `File Anda berisi estimasi <b>${rowCount}</b> data, namun sisa kuota Blockchain Anda hanya <b>${remainingBlockchain}</b>.<br><br>Silakan upgrade paket atau kurangi data.`,
+                    confirmButtonColor: '#3B82F6'
+                });
+                return;
+            }
+
+            if (ipfsEnabled && rowCount > remainingIpfs) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Kuota IPFS Tidak Cukup',
+                    html: `File Anda berisi estimasi <b>${rowCount}</b> data, namun sisa kuota IPFS Anda hanya <b>${remainingIpfs}</b>.<br><br>Silakan upgrade paket atau kurangi data.`,
+                    confirmButtonColor: '#3B82F6'
+                });
+                return;
+            }
 
             // Calculate estimated time: 3 sec per cert, +5 sec if blockchain, +3 sec if IPFS
             const timePerCert = 3 + (blockchainEnabled ? 5 : 0) + (ipfsEnabled ? 3 : 0);

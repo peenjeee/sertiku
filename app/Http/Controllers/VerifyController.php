@@ -29,6 +29,12 @@ class VerifyController extends Controller
 
         if ($certificate) {
             $isValid = $certificate->isValid();
+            $isExpired = $certificate->expire_date && $certificate->expire_date->isPast();
+
+            if ($isExpired) {
+                $isValid = false;
+                $certificate->status = 'expired'; // Virtual status for display
+            }
 
             // Perform verification logging
             \App\Models\ActivityLog::log(
@@ -98,11 +104,14 @@ class VerifyController extends Controller
                     'hash' => $certificate->hash,
                     'certificate' => $certificateData,
                     'is_revoked' => $certificate->status === 'revoked',
+                    'is_expired' => $isExpired ?? false,
                 ];
 
-                // Add warning message for revoked certificates
+                // Add warning message for revoked or expired certificates
                 if ($certificate->status === 'revoked') {
                     $response['revoked_message'] = 'Sertifikat ini telah DICABUT oleh penerbit dan tidak lagi valid.';
+                } elseif (isset($isExpired) && $isExpired) {
+                    $response['expired_message'] = 'Sertifikat ini telah KADALUARSA pada ' . $certificate->expire_date->format('d F Y') . ' dan tidak lagi valid.';
                 }
 
                 return response()->json($response);
@@ -138,6 +147,12 @@ class VerifyController extends Controller
 
         if ($certificate) {
             $isValid = $certificate->isValid();
+            $isExpired = $certificate->expire_date && $certificate->expire_date->isPast();
+
+            if ($isExpired) {
+                $isValid = false;
+                $certificate->status = 'expired'; // Virtual status
+            }
 
             // Log verification activity
 

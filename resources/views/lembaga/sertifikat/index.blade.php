@@ -77,18 +77,51 @@
         </div>
 
         <!-- Search & Action -->
-        <div class="flex items-center gap-4">
-            <div class="relative flex-1">
-                <svg class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-white/40" fill="none"
-                    stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <input type="text" placeholder="Cari berdasarkan nama, course, atau ID..."
-                    class="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
+        <div class="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
+            <form action="{{ route('lembaga.sertifikat.index') }}" method="GET" class="flex flex-wrap items-center gap-3 w-full md:w-auto flex-1">
+                <!-- Search Input -->
+                <div class="relative flex-1 min-w-[200px]">
+                    <svg class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-white/40" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input type="text" name="search" value="{{ request('search') }}" 
+                        placeholder="Nama, Email, Course, ID..."
+                        class="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/20 rounded-lg text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <!-- Date Filter -->
+                <input type="date" name="issue_date" value="{{ request('issue_date') }}" class="py-2.5 px-3 bg-white/5 border border-white/20 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 [color-scheme:dark]">
+
+                <!-- Status Filter -->
+                <select name="status" class="py-2.5 px-3 bg-white/5 border border-white/20 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 [&>option]:text-gray-900">
+                    <option value="">Semua Status</option>
+                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktif</option>
+                    <option value="revoked" {{ request('status') == 'revoked' ? 'selected' : '' }}>Dicabut</option>
+                    <option value="expired" {{ request('status') == 'expired' ? 'selected' : '' }}>Expired</option>
+                </select>
+
+                <!-- Category Filter -->
+                <select name="category" class="py-2.5 px-3 bg-white/5 border border-white/20 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 [&>option]:text-gray-900">
+                    <option value="">Semua Kategori</option>
+                    <option value="Bootcamp" {{ request('category') == 'Bootcamp' ? 'selected' : '' }}>Bootcamp</option>
+                    <option value="Workshop" {{ request('category') == 'Workshop' ? 'selected' : '' }}>Workshop</option>
+                    <option value="Seminar" {{ request('category') == 'Seminar' ? 'selected' : '' }}>Seminar</option>
+                    <option value="Sertifikasi" {{ request('category') == 'Sertifikasi' ? 'selected' : '' }}>Sertifikasi</option>
+                    <option value="Pelatihan" {{ request('category') == 'Pelatihan' ? 'selected' : '' }}>Pelatihan</option>
+                    <option value="Webinar" {{ request('category') == 'Webinar' ? 'selected' : '' }}>Webinar</option>
+                </select>
+
+                <button type="submit" class="p-2.5 bg-blue-600 rounded-lg hover:bg-blue-700 text-white transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
+            </form>
+
             <a href="{{ route('lembaga.sertifikat.create') }}"
-                class="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg text-white text-sm font-bold hover:from-blue-700 hover:to-indigo-700 transition">
+                class="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg text-white text-sm font-bold hover:from-blue-700 hover:to-indigo-700 transition flex-shrink-0">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                         d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
