@@ -65,15 +65,15 @@
             <div class="relative group">
                 <div
                     class="w-24 h-24 lg:w-28 lg:h-28 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                    @if($user->avatar)
+                    @if($user->avatar && (str_starts_with($user->avatar, '/storage/') || str_starts_with($user->avatar, 'http')))
                         <img src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                     @else
                         <template x-if="previewUrl">
                             <img :src="previewUrl" alt="Avatar" class="w-full h-full object-cover">
                         </template>
                         <template x-if="!previewUrl">
-                            <span
-                                class="text-white font-bold text-3xl lg:text-4xl">{{ strtoupper(substr($user->name ?? 'U', 0, 1)) }}</span>
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name ?? 'U') }}&email={{ urlencode($user->email) }}&background=3B82F6&color=fff&bold=true&size=128"
+                                alt="Avatar" class="w-full h-full object-cover">
                         </template>
                     @endif
                 </div>

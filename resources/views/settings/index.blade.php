@@ -45,7 +45,7 @@
                             class="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6 pb-6 border-b border-white/10">
                             <div class="relative group">
                                 <img id="avatar-preview"
-                                    src="{{ $user->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=3B82F6&color=fff' }}"
+                                    src="{{ ($user->avatar && (str_starts_with($user->avatar, '/storage/') || str_starts_with($user->avatar, 'http'))) ? $user->avatar : 'https://ui-avatars.com/api/?name=' . urlencode($user->name ?? 'U') . '&email=' . urlencode($user->email) . '&background=3B82F6&color=fff&bold=true&size=80' }}"
                                     alt="Profile" class="w-20 h-20 rounded-full border-2 border-[#3B82F6] object-cover">
                                 <label for="avatar-input"
                                     class="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition cursor-pointer">

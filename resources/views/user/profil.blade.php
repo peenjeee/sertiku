@@ -25,10 +25,11 @@
             {{-- Avatar --}}
             <div
                 class="w-20 h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-3xl lg:text-4xl flex-shrink-0 overflow-hidden">
-                @if($user->avatar)
+                @if($user->avatar && (str_starts_with($user->avatar, '/storage/') || str_starts_with($user->avatar, 'http')))
                     <img src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                 @else
-                    {{ strtoupper(substr($user->name ?? 'U', 0, 1)) }}
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name ?? 'U') }}&email={{ urlencode($user->email) }}&background=3B82F6&color=fff&bold=true&size=96"
+                        alt="Avatar" class="w-full h-full object-cover">
                 @endif
             </div>
 
@@ -140,7 +141,7 @@
                     <div class="p-4 rounded-xl bg-white/5 border border-white/10 text-center hover-lift transition group">
                         <div
                             class="w-12 h-12 mx-auto mb-2 rounded-full flex items-center justify-center
-                            {{ $achievement['unlocked'] ? 'bg-gradient-to-br from-yellow-400 to-orange-500' : 'bg-white/10' }}">
+                                    {{ $achievement['unlocked'] ? 'bg-gradient-to-br from-yellow-400 to-orange-500' : 'bg-white/10' }}">
                             @if($achievement['unlocked'])
                                 <span class="text-2xl">{{ $achievement['icon'] }}</span>
                             @else
@@ -246,11 +247,12 @@
                             <p class="text-white font-medium truncate">{{ $cert->course_name ?? 'Sertifikat' }}</p>
                             <p class="text-white/50 text-sm">
                                 {{ $cert->user->institution_name ?? $cert->user->name ?? 'Lembaga' }} •
-                                {{ $cert->issue_date?->format('d M Y') }}</p>
+                                {{ $cert->issue_date?->format('d M Y') }}
+                            </p>
                         </div>
                         <span class="px-3 py-1 rounded-full text-xs
-                            @if($cert->status === 'active') bg-green-500/20 text-green-400
-                            @else bg-red-500/20 text-red-400 @endif">
+                                    @if($cert->status === 'active') bg-green-500/20 text-green-400
+                                    @else bg-red-500/20 text-red-400 @endif">
                             {{ $cert->status === 'active' ? 'Aktif' : 'Dicabut' }}
                         </span>
                     </div>

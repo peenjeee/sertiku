@@ -148,14 +148,12 @@
                                 <template x-if="!previewUrl">
                                     <div class="flex items-center gap-6">
                                         <div class="relative">
-                                            @if(Auth::user()->avatar && file_exists(storage_path('app/public/' . Auth::user()->avatar)))
-                                                <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="Avatar"
+                                            @if(Auth::user()->avatar && (str_starts_with(Auth::user()->avatar, '/storage/') || str_starts_with(Auth::user()->avatar, 'http')))
+                                                <img src="{{ Auth::user()->avatar }}" alt="Avatar"
                                                     class="w-24 h-24 rounded-full object-cover border-4 border-[#1E3A8F]">
                                             @else
-                                                <div
-                                                    class="w-24 h-24 rounded-full bg-blue-500 flex items-center justify-center text-white text-3xl font-bold border-4 border-[#1E3A8F]">
-                                                    {{ substr(Auth::user()->institution_name ?? Auth::user()->name, 0, 2) }}
-                                                </div>
+                                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->institution_name ?? Auth::user()->name) }}&email={{ urlencode(Auth::user()->email) }}&background=3B82F6&color=fff&bold=true&size=96"
+                                                    alt="Avatar" class="w-24 h-24 rounded-full object-cover border-4 border-[#1E3A8F]">
                                             @endif
 
                                             {{-- Edit Button overlay --}}
