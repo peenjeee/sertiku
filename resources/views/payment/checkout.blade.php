@@ -202,22 +202,25 @@
                 orderExpiredAt = null;
             }
 
-            // Function to check if form is valid and toggle button states
-            function updateButtonStates() {
+            // Function to check if form is valid
+            function isFormValid() {
                 const nameInput = document.querySelector('input[name="name"]');
                 const emailInput = document.querySelector('input[name="email"]');
+                return nameInput.value.trim() !== '' && emailInput.value.trim() !== '';
+            }
+
+            // Function to show validation alert
+            function showValidationAlert() {
+                alert('Mohon lengkapi data Nama dan Email terlebih dahulu.');
+            }
+
+            // Function to toggle button states
+            function updateButtonStates() {
                 const payButton = document.getElementById('pay-button');
-                const btnContinue = document.getElementById('btn-continue-payment');
-                const btnChange = document.getElementById('btn-change-payment');
+                const hasPendingOrder = currentSnapToken && currentOrderNumber && !isOrderExpired();
 
-                const isValid = nameInput.value.trim() !== '' && emailInput.value.trim() !== '';
-
-                // Disable/enable main button
-                payButton.disabled = !isValid;
-
-                // Disable/enable pending order buttons if they exist
-                if (btnContinue) btnContinue.disabled = !isValid;
-                if (btnChange) btnChange.disabled = !isValid;
+                // Main "Buat Pesanan Baru" button: disabled if pending order exists OR data not valid
+                payButton.disabled = hasPendingOrder || !isFormValid();
             }
 
             // Listen for input changes
@@ -385,23 +388,37 @@
 
                     // Continue Payment - open existing popup
                     btnContinue.addEventListener('click', function () {
+                        // Check if form is valid first
+                        if (!isFormValid()) {
+                            showValidationAlert();
+                            return;
+                        }
+
                         if (currentSnapToken && !isOrderExpired()) {
                             openMidtransPopup(currentSnapToken, currentOrderNumber);
                         } else {
                             alert('Pesanan sudah expired. Silakan buat pesanan baru.');
                             pendingOrderInfo.classList.add('hidden');
                             clearStoredOrder();
+                            updateButtonStates();
                         }
                     });
 
                     // Change Payment Method - open popup to select different method
                     btnChange.addEventListener('click', function () {
+                        // Check if form is valid first
+                        if (!isFormValid()) {
+                            showValidationAlert();
+                            return;
+                        }
+
                         if (currentSnapToken && !isOrderExpired()) {
                             openMidtransPopup(currentSnapToken, currentOrderNumber);
                         } else {
                             alert('Pesanan sudah expired. Silakan buat pesanan baru.');
                             pendingOrderInfo.classList.add('hidden');
                             clearStoredOrder();
+                            updateButtonStates();
                         }
                     });
 
