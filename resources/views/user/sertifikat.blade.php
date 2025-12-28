@@ -11,7 +11,7 @@
     </div>
 
     {{-- Stats Cards --}}
-    <div class="grid grid-cols-3 gap-2 sm:gap-4 mb-6">
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-6">
         {{-- Total Sertifikat --}}
         <div class="stat-card-blue rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-5 animate-fade-in-up stagger-1">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
@@ -48,8 +48,28 @@
             </div>
         </div>
 
+        {{-- Kadaluarsa --}}
+        <div class="stat-card rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-5 animate-fade-in-up stagger-3"
+            style="background: rgba(217, 119, 6, 0.1); border: 1px solid rgba(217, 119, 6, 0.3);">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <p class="text-white/60 text-[10px] sm:text-xs lg:text-sm">Kadaluarsa</p>
+                    <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-white mt-1">{{ $stats['kadaluarsa'] ?? 0 }}
+                    </p>
+                </div>
+                <div
+                    class="hidden sm:flex w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-amber-500/20 items-center justify-center">
+                    <svg class="w-5 h-5 lg:w-6 lg:h-6 text-amber-400" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
         {{-- Dicabut --}}
-        <div class="stat-card rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-5 animate-fade-in-up stagger-3">
+        <div class="stat-card rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-5 animate-fade-in-up stagger-4">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <p class="text-white/60 text-[10px] sm:text-xs lg:text-sm">Dicabut</p>
@@ -122,13 +142,13 @@
                             </p>
                         </div>
                         <span class="px-3 py-1 rounded-full text-xs flex-shrink-0
-                                        @if($cert->status === 'revoked') bg-red-500/20 text-red-400
-                                        @elseif($cert->expire_date < now()) bg-amber-500/20 text-amber-400
-                                        @elseif($cert->status === 'active') bg-green-500/20 text-green-400
-                                        @else bg-gray-500/20 text-gray-400 @endif
-                                    ">
+                                                        @if($cert->status === 'revoked') bg-red-500/20 text-red-400
+                                                        @elseif($cert->expire_date && $cert->expire_date < now()) bg-amber-500/20 text-amber-400
+                                                        @elseif($cert->status === 'active') bg-green-500/20 text-green-400
+                                                        @else bg-gray-500/20 text-gray-400 @endif
+                                                    ">
                             @if($cert->status === 'revoked') Dicabut
-                            @elseif($cert->expire_date < now()) Kadaluarsa
+                            @elseif($cert->expire_date && $cert->expire_date < now()) Kadaluarsa
                             @elseif($cert->status === 'active') Aktif
                             @else {{ ucfirst($cert->status) }} @endif
                         </span>

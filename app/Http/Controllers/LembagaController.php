@@ -227,8 +227,17 @@ class LembagaController extends Controller
         // Get stats
         $stats = [
             'total' => $user->certificates()->count(),
-            'active' => $user->certificates()->where('status', 'active')->count(),
+            'active' => $user->certificates()
+                ->where('status', '!=', 'revoked')
+                ->where(function ($q) {
+                    $q->whereNull('expire_date')
+                        ->orWhere('expire_date', '>=', now());
+                })->count(),
             'revoked' => $user->certificates()->where('status', 'revoked')->count(),
+            'expired' => $user->certificates()
+                ->where('status', '!=', 'revoked')
+                ->whereNotNull('expire_date')
+                ->where('expire_date', '<', now())->count(),
         ];
 
         return view('lembaga.sertifikat.index', compact('certificates', 'stats'));

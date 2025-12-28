@@ -141,7 +141,7 @@
                     <div class="p-4 rounded-xl bg-white/5 border border-white/10 text-center hover-lift transition group">
                         <div
                             class="w-12 h-12 mx-auto mb-2 rounded-full flex items-center justify-center
-                                                    {{ $achievement['unlocked'] ? 'bg-gradient-to-br from-yellow-400 to-orange-500' : 'bg-white/10' }}">
+                                                            {{ $achievement['unlocked'] ? 'bg-gradient-to-br from-yellow-400 to-orange-500' : 'bg-white/10' }}">
                             @if($achievement['unlocked'])
                                 <span class="flex items-center justify-center">{!! $achievement['icon'] !!}</span>
                             @else
@@ -251,12 +251,12 @@
                             </p>
                         </div>
                         <span class="px-3 py-1 rounded-full text-xs
-                                                    @if($cert->status === 'revoked') bg-red-500/20 text-red-400
-                                                    @elseif($cert->expire_date < now()) bg-amber-500/20 text-amber-400
-                                                    @elseif($cert->status === 'active') bg-green-500/20 text-green-400
-                                                    @else bg-gray-500/20 text-gray-400 @endif">
+                                                            @if($cert->status === 'revoked') bg-red-500/20 text-red-400
+                                                            @elseif($cert->expire_date && $cert->expire_date < now()) bg-amber-500/20 text-amber-400
+                                                            @elseif($cert->status === 'active') bg-green-500/20 text-green-400
+                                                            @else bg-gray-500/20 text-gray-400 @endif">
                             @if($cert->status === 'revoked') Dicabut
-                            @elseif($cert->expire_date < now()) Kadaluarsa
+                            @elseif($cert->expire_date && $cert->expire_date < now()) Kadaluarsa
                             @elseif($cert->status === 'active') Aktif
                             @else {{ ucfirst($cert->status) }} @endif
                         </span>

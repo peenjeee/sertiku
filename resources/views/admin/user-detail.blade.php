@@ -107,7 +107,7 @@
                                 <p class="text-gray-500 text-xs">{{ $cert->created_at->format('d M Y') }}</p>
                                 @if($cert->status === 'revoked')
                                     <span class="text-red-600 text-xs font-medium">Dicabut</span>
-                                @elseif($cert->expire_date < now())
+                                @elseif($cert->expire_date && $cert->expire_date < now())
                                     <span class="text-yellow-600 text-xs font-medium">Kadaluarsa</span>
                                 @elseif($cert->status === 'active')
                                     <span class="text-emerald-600 text-xs font-medium">Aktif</span>

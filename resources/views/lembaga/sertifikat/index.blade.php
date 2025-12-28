@@ -37,7 +37,7 @@
         @endif
 
         <!-- Stats Cards -->
-        <div class="grid grid-cols-3 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div class="bg-blue-500/20 border border-blue-500/30 rounded-xl p-4 flex items-center gap-3">
                 <div class="w-10 h-10 bg-blue-500/30 rounded-lg flex items-center justify-center">
                     <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,6 +60,18 @@
                 <div>
                     <p class="text-white text-xl font-bold">{{ $stats['active'] ?? 0 }}</p>
                     <p class="text-white/60 text-xs">Aktif</p>
+                </div>
+            </div>
+            <div class="bg-amber-500/20 border border-amber-500/30 rounded-xl p-4 flex items-center gap-3">
+                <div class="w-10 h-10 bg-amber-500/30 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-white text-xl font-bold">{{ $stats['expired'] ?? 0 }}</p>
+                    <p class="text-white/60 text-xs">Kadaluarsa</p>
                 </div>
             </div>
             <div class="bg-red-500/20 border border-red-500/30 rounded-xl p-4 flex items-center gap-3">
@@ -139,12 +151,14 @@
                         <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 relative">
                             <!-- Status Badge -->
                             <div class="absolute top-3 right-3">
-                                @if($certificate->status === 'active')
-                                    <span class="px-2 py-1 bg-emerald-500 text-white text-xs font-bold rounded">✓ Aktif</span>
-                                @elseif($certificate->status === 'revoked')
+                                @if($certificate->status === 'revoked')
                                     <span class="px-2 py-1 bg-red-500 text-white text-xs font-bold rounded">✕ Dicabut</span>
+                                @elseif($certificate->expire_date && $certificate->expire_date < now())
+                                    <span class="px-2 py-1 bg-amber-500 text-white text-xs font-bold rounded">⏱ Kadaluarsa</span>
+                                @elseif($certificate->status === 'active')
+                                    <span class="px-2 py-1 bg-emerald-500 text-white text-xs font-bold rounded">✓ Aktif</span>
                                 @else
-                                    <span class="px-2 py-1 bg-amber-500 text-white text-xs font-bold rounded">Kadaluarsa</span>
+                                    <span class="px-2 py-1 bg-gray-500 text-white text-xs font-bold rounded">{{ ucfirst($certificate->status) }}</span>
                                 @endif
                             </div>
 

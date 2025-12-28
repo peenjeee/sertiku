@@ -101,7 +101,16 @@ class UserController extends Controller
             'total' => Certificate::where('recipient_email', $user->email)->orWhere('user_id', $user->id)->count(),
             'aktif' => Certificate::where(function ($q) use ($user) {
                 $q->where('recipient_email', $user->email)->orWhere('user_id', $user->id);
-            })->where('status', 'active')->count(),
+            })->where('status', '!=', 'revoked')
+                ->where(function ($q) {
+                    $q->whereNull('expire_date')
+                        ->orWhere('expire_date', '>=', now());
+                })->count(),
+            'kadaluarsa' => Certificate::where(function ($q) use ($user) {
+                $q->where('recipient_email', $user->email)->orWhere('user_id', $user->id);
+            })->where('status', '!=', 'revoked')
+                ->whereNotNull('expire_date')
+                ->where('expire_date', '<', now())->count(),
             'dicabut' => Certificate::where(function ($q) use ($user) {
                 $q->where('recipient_email', $user->email)->orWhere('user_id', $user->id);
             })->where('status', 'revoked')->count(),

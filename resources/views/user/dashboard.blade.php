@@ -129,10 +129,10 @@
                 @forelse($recentActivity as $activity)
                     <div class="flex items-start gap-3">
                         <div class="w-2 h-2 rounded-full mt-2
-                                            @if($activity['type'] === 'new') bg-blue-400
-                                            @elseif($activity['type'] === 'view') bg-yellow-400
-                                            @else bg-purple-400 @endif
-                                        "></div>
+                                                @if($activity['type'] === 'new') bg-blue-400
+                                                @elseif($activity['type'] === 'view') bg-yellow-400
+                                                @else bg-purple-400 @endif
+                                            "></div>
                         <div class="flex-1 min-w-0">
                             <p class="text-white text-sm font-medium">{{ $activity['title'] }}</p>
                             <p class="text-white/50 text-xs truncate">{{ $activity['subtitle'] }}</p>
@@ -177,12 +177,12 @@
                             </p>
                         </div>
                         @if($cert->status === 'revoked') bg-red-500/20 text-red-400
-                        @elseif($cert->expire_date < now()) bg-amber-500/20 text-amber-400
+                        @elseif($cert->expire_date && $cert->expire_date < now()) bg-amber-500/20 text-amber-400
                         @elseif($cert->status === 'active') bg-green-500/20 text-green-400
                         @else bg-gray-500/20 text-gray-400 @endif
                         ">
                         @if($cert->status === 'revoked') Dicabut
-                        @elseif($cert->expire_date < now()) Kadaluarsa
+                        @elseif($cert->expire_date && $cert->expire_date < now()) Kadaluarsa
                         @elseif($cert->status === 'active') Aktif
                         @else {{ ucfirst($cert->status) }} @endif
                         </span>

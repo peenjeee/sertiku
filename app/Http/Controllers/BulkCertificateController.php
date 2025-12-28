@@ -43,6 +43,22 @@ class BulkCertificateController extends Controller
         $certificateUsed = $user->getCertificatesUsedThisMonth();
         $remainingCertificates = max(0, $certificateLimit - $certificateUsed);
 
+        // Certificate stats for stat cards
+        $stats = [
+            'total' => $user->certificates()->count(),
+            'active' => $user->certificates()
+                ->where('status', '!=', 'revoked')
+                ->where(function ($q) {
+                    $q->whereNull('expire_date')
+                        ->orWhere('expire_date', '>=', now());
+                })->count(),
+            'revoked' => $user->certificates()->where('status', 'revoked')->count(),
+            'expired' => $user->certificates()
+                ->where('status', '!=', 'revoked')
+                ->whereNotNull('expire_date')
+                ->where('expire_date', '<', now())->count(),
+        ];
+
         return view('lembaga.sertifikat.bulk', compact(
             'templates',
             'canUseBlockchain',
@@ -55,7 +71,8 @@ class BulkCertificateController extends Controller
             'remainingIpfs',
             'certificateLimit',
             'certificateUsed',
-            'remainingCertificates'
+            'remainingCertificates',
+            'stats'
         ));
     }
 

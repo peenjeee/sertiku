@@ -102,7 +102,8 @@
                         <div>
                             <h3 class="text-[#1E3A8A] font-bold text-sm lg:text-lg">Terbitkan Sertifikat</h3>
                             <p class="text-[#3B82F6] text-xs lg:text-sm">Sisa kuota:
-                                {{ $remainingCerts }}/{{ $certificateLimit }}</p>
+                                {{ $remainingCerts }}/{{ $certificateLimit }}
+                            </p>
                         </div>
                     </div>
                 </a>
@@ -363,6 +364,8 @@
                             class="filter-btn active px-3 lg:px-4 py-2 lg:py-3 bg-[#1E3A8F] text-white text-xs lg:text-sm rounded-lg font-medium whitespace-nowrap">Semua</button>
                         <button onclick="setFilter('active')" data-filter="active"
                             class="filter-btn px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg hover:bg-gray-50 whitespace-nowrap">Aktif</button>
+                        <button onclick="setFilter('expired')" data-filter="expired"
+                            class="filter-btn px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg hover:bg-gray-50 whitespace-nowrap">Kadaluarsa</button>
                         <button onclick="setFilter('revoked')" data-filter="revoked"
                             class="filter-btn px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg hover:bg-gray-50 whitespace-nowrap">Dicabut</button>
                     </div>
@@ -406,9 +409,15 @@
                                         // No email - use UI Avatars with name only
                                         $avatarUrl = 'https://ui-avatars.com/api/?name=' . urlencode($cert->recipient_name) . '&background=random&color=fff&bold=true&size=40';
                                     }
+
+                                    // Calculate virtual status for filter
+                                    $virtualStatus = $cert->status;
+                                    if ($cert->status !== 'revoked' && $cert->expire_date && $cert->expire_date < now()) {
+                                        $virtualStatus = 'expired';
+                                    }
                                 @endphp
                                 <tr class="border-b border-[#F1F5F9] hover:bg-[#F8FAFC] cert-row"
-                                    data-status="{{ $cert->status }}" data-name="{{ strtolower($cert->recipient_name) }}"
+                                    data-status="{{ $virtualStatus }}" data-name="{{ strtolower($cert->recipient_name) }}"
                                     data-cert="{{ strtolower($cert->certificate_number) }}">
                                     <td class="py-4 px-4">
                                         <div class="flex items-center gap-3">
@@ -441,7 +450,7 @@
                                                 <span class="w-1.5 h-1.5 bg-[#DC2626] rounded-full"></span>
                                                 Dicabut
                                             </span>
-                                        @elseif($cert->expire_date < now())
+                                        @elseif($cert->expire_date && $cert->expire_date < now())
                                             <span
                                                 class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FEF3C7] text-[#D97706] text-sm rounded-full font-medium">
                                                 <span class="w-1.5 h-1.5 bg-[#D97706] rounded-full"></span>
