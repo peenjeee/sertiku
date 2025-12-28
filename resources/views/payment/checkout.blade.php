@@ -183,6 +183,8 @@
     @if($package->price > 0)
         {{-- Midtrans Snap JS --}}
         <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ $clientKey }}"></script>
+        {{-- SweetAlert2 --}}
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             // Store order data from server (if pending order exists)
             let currentSnapToken = {!! $pendingOrder ? "'" . $pendingOrder->snap_token . "'" : 'null' !!};
@@ -211,7 +213,12 @@
 
             // Function to show validation alert
             function showValidationAlert() {
-                alert('Mohon lengkapi data Nama dan Email terlebih dahulu.');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Data Belum Lengkap',
+                    text: 'Mohon lengkapi data Nama dan Email terlebih dahulu.',
+                    confirmButtonColor: '#3B82F6',
+                });
             }
 
             // Function to toggle button states
@@ -256,25 +263,18 @@
                         window.location.href = '{{ url("/payment/success") }}/' + orderNumber;
                     },
                     onPending: function (result) {
-                        // Stay on checkout page - don't redirect
-                        // The user can click the button again to resume payment
+                        // Stay on checkout page
                         currentSnapToken = snapToken;
                         currentOrderNumber = orderNumber;
 
-                        // Reset button state
-                        const payButton = document.getElementById('pay-button');
-                        const buttonText = document.getElementById('button-text');
-                        const buttonLoading = document.getElementById('button-loading');
-                        payButton.disabled = false;
-                        buttonText.classList.remove('hidden');
-                        buttonLoading.classList.add('hidden');
-
-                        // Show info message
-                        const errorMessage = document.getElementById('error-message');
-                        errorMessage.textContent = 'Pesanan sedang menunggu pembayaran. Klik tombol Bayar untuk melanjutkan.';
-                        errorMessage.classList.remove('hidden');
-                        errorMessage.classList.remove('text-red-400');
-                        errorMessage.classList.add('text-yellow-400');
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Menunggu Pembayaran',
+                            text: 'Silakan selesaikan pembayaran Anda.',
+                            confirmButtonColor: '#3B82F6',
+                        }).then(() => {
+                            location.reload();
+                        });
                     },
                     onError: function (result) {
                         // Reset button state
@@ -285,11 +285,12 @@
                         buttonText.classList.remove('hidden');
                         buttonLoading.classList.add('hidden');
 
-                        const errorMessage = document.getElementById('error-message');
-                        errorMessage.textContent = 'Pembayaran gagal. Silakan coba lagi.';
-                        errorMessage.classList.remove('hidden');
-                        errorMessage.classList.remove('text-yellow-400');
-                        errorMessage.classList.add('text-red-400');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Pembayaran Gagal',
+                            text: 'Silakan coba lagi.',
+                            confirmButtonColor: '#EF4444',
+                        });
                     },
                     onClose: function () {
                         // Just re-enable button, stay on page
@@ -378,6 +379,73 @@
                 }
             });
 
+            // Helper function for Cancel/Change Order
+            async function cancelCurrentOrder(isChangeMethod = false) {
+                if (!currentOrderNumber) return;
+
+                const actionText = isChangeMethod
+                    ? 'Pesanan saat ini akan dibatalkan agar Anda dapat memilih metode pembayaran baru.'
+                    : 'Anda yakin ingin membatalkan pesanan ini?';
+
+                const confirmButtonText = isChangeMethod ? 'Ya, Ganti Metode' : 'Ya, Batalkan';
+
+                const result = await Swal.fire({
+                    title: 'Konfirmasi',
+                    text: actionText,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#EF4444',
+                    cancelButtonColor: '#6B7280',
+                    confirmButtonText: confirmButtonText,
+                    cancelButtonText: 'Tidak'
+                });
+
+                if (result.isConfirmed) {
+                    try {
+                        const response = await fetch('/payment/cancel', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                            },
+                            body: JSON.stringify({ order_number: currentOrderNumber }),
+                        });
+
+                        const data = await response.json();
+
+                        if (data.success) {
+                            const pendingOrderInfo = document.getElementById('pending-order-info');
+                            if (pendingOrderInfo) pendingOrderInfo.classList.add('hidden');
+
+                            clearStoredOrder();
+                            updateButtonStates();
+
+                            // Hide error message if any
+                            const errorMessage = document.getElementById('error-message');
+                            if (errorMessage) errorMessage.classList.add('hidden');
+
+                            await Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: 'Pesanan berhasil dibatalkan.',
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                        } else {
+                            throw new Error(data.error || 'Gagal membatalkan pesanan.');
+                        }
+                    } catch (error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: error.message || 'Terjadi kesalahan saat membatalkan pesanan.',
+                            confirmButtonColor: '#EF4444',
+                        });
+                    }
+                }
+            }
+
             // If there's a pending order, setup button handlers
             @if($pendingOrder)
                 document.addEventListener('DOMContentLoaded', function () {
@@ -386,71 +454,41 @@
                     const btnCancel = document.getElementById('btn-cancel-order');
                     const pendingOrderInfo = document.getElementById('pending-order-info');
 
-                    // Continue Payment - open existing popup
+                    // Continue Payment
                     btnContinue.addEventListener('click', function () {
-                        // Check if form is valid first
                         if (!isFormValid()) {
                             showValidationAlert();
                             return;
                         }
-
+                        
                         if (currentSnapToken && !isOrderExpired()) {
                             openMidtransPopup(currentSnapToken, currentOrderNumber);
                         } else {
-                            alert('Pesanan sudah expired. Silakan buat pesanan baru.');
-                            pendingOrderInfo.classList.add('hidden');
-                            clearStoredOrder();
-                            updateButtonStates();
+                             Swal.fire({
+                                icon: 'error',
+                                title: 'Expired',
+                                text: 'Pesanan sudah expired. Silakan buat pesanan baru.',
+                                confirmButtonColor: '#EF4444',
+                            }).then(() => {
+                                if(pendingOrderInfo) pendingOrderInfo.classList.add('hidden');
+                                clearStoredOrder();
+                                updateButtonStates();
+                            });
                         }
                     });
 
-                    // Change Payment Method - open popup to select different method
+                    // Change Payment Method -> Trigger Cancel -> New Order Flow
                     btnChange.addEventListener('click', function () {
-                        // Check if form is valid first
                         if (!isFormValid()) {
                             showValidationAlert();
                             return;
                         }
-
-                        if (currentSnapToken && !isOrderExpired()) {
-                            openMidtransPopup(currentSnapToken, currentOrderNumber);
-                        } else {
-                            alert('Pesanan sudah expired. Silakan buat pesanan baru.');
-                            pendingOrderInfo.classList.add('hidden');
-                            clearStoredOrder();
-                            updateButtonStates();
-                        }
+                        cancelCurrentOrder(true);
                     });
 
                     // Cancel Order
-                    btnCancel.addEventListener('click', async function () {
-                        if (!confirm('Yakin ingin membatalkan pesanan ini?')) return;
-
-                        try {
-                            const response = await fetch('/payment/cancel', {
-                                method: 'POST',
-                                headers: {
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                    'Content-Type': 'application/json',
-                                    'Accept': 'application/json',
-                                },
-                                body: JSON.stringify({ order_number: currentOrderNumber }),
-                            });
-
-                            const data = await response.json();
-
-                            if (data.success) {
-                                alert('Pesanan berhasil dibatalkan.');
-                                pendingOrderInfo.classList.add('hidden');
-                                clearStoredOrder();
-                                // Change button text back to normal
-                                document.getElementById('button-text').textContent = 'Bayar {{ $package->formatted_price }}';
-                            } else {
-                                alert(data.error || 'Gagal membatalkan pesanan.');
-                            }
-                        } catch (error) {
-                            alert('Terjadi kesalahan. Silakan coba lagi.');
-                        }
+                    btnCancel.addEventListener('click', function() {
+                        cancelCurrentOrder(false);
                     });
                 });
             @endif
