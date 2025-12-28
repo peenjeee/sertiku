@@ -126,6 +126,34 @@
                         <div class="border-t border-gray-700 pt-6">
                             <h3 class="text-sm font-bold text-white mb-6">Pengaturan Tambahan</h3>
 
+                            <!-- Kirim Email -->
+                            <div class="mb-6">
+                                <label
+                                    class="flex items-center justify-between cursor-pointer p-4 rounded-xl bg-gray-800 border border-gray-700 hover:bg-gray-700 transition group">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <span class="block text-white font-medium text-sm">Kirim email ke
+                                                penerima</span>
+                                            <span class="block text-gray-400 text-xs mt-0.5">Penerima akan menerima
+                                                email berisi informasi sertifikat.</span>
+                                        </div>
+                                    </div>
+                                    <div class="relative">
+                                        <input type="checkbox" name="send_email" value="1" class="peer sr-only" checked>
+                                        <div
+                                            class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+
                             <!-- Default Category & Description -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                 <div>
@@ -155,34 +183,6 @@
                                         <code>description</code> di file kosong.
                                     </p>
                                 </div>
-                            </div>
-
-                            <!-- Kirim Email -->
-                            <div class="mb-6">
-                                <label
-                                    class="flex items-center justify-between cursor-pointer p-4 rounded-xl bg-gray-800 border border-gray-700 hover:bg-gray-700 transition group">
-                                    <div class="flex items-center gap-3">
-                                        <div
-                                            class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <span class="block text-white font-medium text-sm">Kirim email ke
-                                                penerima</span>
-                                            <span class="block text-gray-400 text-xs mt-0.5">Penerima akan menerima
-                                                email berisi informasi sertifikat.</span>
-                                        </div>
-                                    </div>
-                                    <div class="relative">
-                                        <input type="checkbox" name="send_email" value="1" class="peer sr-only" checked>
-                                        <div
-                                            class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
-                                        </div>
-                                    </div>
-                                </label>
                             </div>
 
                             <!-- Advanced Verification Options -->

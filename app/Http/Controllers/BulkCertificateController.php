@@ -23,7 +23,7 @@ class BulkCertificateController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $templates = $user->templates()->where('is_active', true)->get();
+        $templates = $user->templates()->where('is_active', true)->latest()->get();
 
         // Blockchain quotas
         $canUseBlockchain = $user->canUseBlockchain();

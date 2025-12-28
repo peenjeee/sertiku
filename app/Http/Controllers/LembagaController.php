@@ -41,7 +41,7 @@ class LembagaController extends Controller
     public function createSertifikat()
     {
         $user = Auth::user();
-        $templates = $user->templates()->where('is_active', true)->get();
+        $templates = $user->templates()->where('is_active', true)->latest()->get();
 
         return view('lembaga.sertifikat.create', compact('templates'));
     }
