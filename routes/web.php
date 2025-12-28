@@ -300,6 +300,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/pengaturan/avatar', [\App\Http\Controllers\LembagaController::class, 'updateAvatar'])->name('settings.avatar');
         Route::delete('/pengaturan/avatar', [\App\Http\Controllers\LembagaController::class, 'removeAvatar'])->name('settings.avatar.remove');
         Route::put('/pengaturan/password', [\App\Http\Controllers\LembagaController::class, 'updatePassword'])->name('settings.password');
+        Route::post('/pengaturan/document', [\App\Http\Controllers\LembagaController::class, 'updateDocument'])->name('settings.document.update');
+        Route::delete('/pengaturan/document', [\App\Http\Controllers\LembagaController::class, 'deleteDocument'])->name('settings.document.delete');
 
         // Activity Log
         Route::get('/activity-log', [\App\Http\Controllers\LembagaController::class, 'activityLog'])->name('activity-log');

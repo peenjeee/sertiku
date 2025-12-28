@@ -672,4 +672,72 @@ class LembagaController extends Controller
 
         return view('lembaga.activity-log', compact('logs'));
     }
+
+    /**
+     * Update a document (NPWP, Akta, SIUP).
+     */
+    public function updateDocument(Request $request)
+    {
+        $request->validate([
+            'document_type' => 'required|in:doc_npwp,doc_akta,doc_siup',
+            'document' => 'required|file|mimes:pdf,jpg,jpeg,png|max:4096',
+        ]);
+
+        $user = Auth::user();
+        $documentType = $request->document_type;
+        $pathField = $documentType . '_path';
+
+        // Delete old file if exists
+        if ($user->$pathField) {
+            Storage::disk('public')->delete($user->$pathField);
+        }
+
+        // Store new file
+        $path = $request->file('document')->store('documents/' . $user->id, 'public');
+
+        // Update user
+        $user->update([
+            $pathField => $path,
+        ]);
+
+        $documentNames = [
+            'doc_npwp' => 'NPWP / NIB',
+            'doc_akta' => 'Akta Pendirian / SK Lembaga',
+            'doc_siup' => 'SIUP / Izin Operasional',
+        ];
+
+        return back()->with('success', 'Dokumen ' . $documentNames[$documentType] . ' berhasil diperbarui!');
+    }
+
+    /**
+     * Delete a document (NPWP, Akta, SIUP).
+     */
+    public function deleteDocument(Request $request)
+    {
+        $request->validate([
+            'document_type' => 'required|in:doc_npwp,doc_akta,doc_siup',
+        ]);
+
+        $user = Auth::user();
+        $documentType = $request->document_type;
+        $pathField = $documentType . '_path';
+
+        // Delete file if exists
+        if ($user->$pathField) {
+            Storage::disk('public')->delete($user->$pathField);
+        }
+
+        // Update user
+        $user->update([
+            $pathField => null,
+        ]);
+
+        $documentNames = [
+            'doc_npwp' => 'NPWP / NIB',
+            'doc_akta' => 'Akta Pendirian / SK Lembaga',
+            'doc_siup' => 'SIUP / Izin Operasional',
+        ];
+
+        return back()->with('success', 'Dokumen ' . $documentNames[$documentType] . ' berhasil dihapus!');
+    }
 }

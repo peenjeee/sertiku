@@ -366,6 +366,214 @@
         </div>
     @endif
 
+    {{-- ============================================= --}}
+    {{-- SECTION 4: Dokumen Lembaga (Only for Lembaga) --}}
+    {{-- ============================================= --}}
+    @if($user->account_type === 'lembaga' || $user->account_type === 'institution')
+        <div class="bg-white rounded-2xl shadow-lg p-5 lg:p-6 mt-6 animate-fade-in-up">
+            <h3 class="text-lg font-semibold text-gray-800 mb-6 flex items-center gap-2">
+                <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Dokumen Lembaga
+            </h3>
+
+            <p class="text-gray-500 text-sm mb-6">Dokumen yang diupload saat pendaftaran. Anda dapat melihat, mengupdate,
+                atau menghapus dokumen.</p>
+
+            <div class="space-y-4">
+                {{-- NPWP / NIB --}}
+                <div
+                    class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-200 gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-800">NPWP / NIB</p>
+                            @if($user->doc_npwp_path)
+                                <p class="text-xs text-green-600 flex items-center gap-1">
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    Dokumen tersedia
+                                </p>
+                            @else
+                                <p class="text-xs text-gray-400">Belum diupload</p>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        @if($user->doc_npwp_path)
+                            <a href="{{ asset('storage/' . $user->doc_npwp_path) }}" target="_blank"
+                                class="px-3 py-1.5 rounded-lg bg-gray-200 text-gray-700 text-sm hover:bg-gray-300 transition">
+                                Lihat
+                            </a>
+                        @endif
+                        <form action="{{ route('lembaga.settings.document.update') }}" method="POST"
+                            enctype="multipart/form-data" class="inline">
+                            @csrf
+                            <input type="hidden" name="document_type" value="doc_npwp">
+                            <label
+                                class="px-3 py-1.5 rounded-lg bg-blue-500 text-white text-sm hover:bg-blue-600 transition cursor-pointer">
+                                {{ $user->doc_npwp_path ? 'Ganti' : 'Upload' }}
+                                <input type="file" name="document" class="hidden" accept=".pdf,.jpg,.jpeg,.png"
+                                    onchange="this.form.submit()">
+                            </label>
+                        </form>
+                        @if($user->doc_npwp_path)
+                            <form action="{{ route('lembaga.settings.document.delete') }}" method="POST" class="inline"
+                                onsubmit="return confirm('Yakin ingin menghapus dokumen ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <input type="hidden" name="document_type" value="doc_npwp">
+                                <button type="submit"
+                                    class="px-3 py-1.5 rounded-lg bg-red-500 text-white text-sm hover:bg-red-600 transition">
+                                    Hapus
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                </div>
+
+                {{-- Akta Pendirian / SK Lembaga --}}
+                <div
+                    class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-200 gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-800">Akta Pendirian / SK Lembaga</p>
+                            @if($user->doc_akta_path)
+                                <p class="text-xs text-green-600 flex items-center gap-1">
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    Dokumen tersedia
+                                </p>
+                            @else
+                                <p class="text-xs text-gray-400">Belum diupload</p>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        @if($user->doc_akta_path)
+                            <a href="{{ asset('storage/' . $user->doc_akta_path) }}" target="_blank"
+                                class="px-3 py-1.5 rounded-lg bg-gray-200 text-gray-700 text-sm hover:bg-gray-300 transition">
+                                Lihat
+                            </a>
+                        @endif
+                        <form action="{{ route('lembaga.settings.document.update') }}" method="POST"
+                            enctype="multipart/form-data" class="inline">
+                            @csrf
+                            <input type="hidden" name="document_type" value="doc_akta">
+                            <label
+                                class="px-3 py-1.5 rounded-lg bg-blue-500 text-white text-sm hover:bg-blue-600 transition cursor-pointer">
+                                {{ $user->doc_akta_path ? 'Ganti' : 'Upload' }}
+                                <input type="file" name="document" class="hidden" accept=".pdf,.jpg,.jpeg,.png"
+                                    onchange="this.form.submit()">
+                            </label>
+                        </form>
+                        @if($user->doc_akta_path)
+                            <form action="{{ route('lembaga.settings.document.delete') }}" method="POST" class="inline"
+                                onsubmit="return confirm('Yakin ingin menghapus dokumen ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <input type="hidden" name="document_type" value="doc_akta">
+                                <button type="submit"
+                                    class="px-3 py-1.5 rounded-lg bg-red-500 text-white text-sm hover:bg-red-600 transition">
+                                    Hapus
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                </div>
+
+                {{-- SIUP / Izin Operasional --}}
+                <div
+                    class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-200 gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-800">SIUP / Izin Operasional</p>
+                            @if($user->doc_siup_path)
+                                <p class="text-xs text-green-600 flex items-center gap-1">
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    Dokumen tersedia
+                                </p>
+                            @else
+                                <p class="text-xs text-gray-400">Belum diupload (Opsional)</p>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        @if($user->doc_siup_path)
+                            <a href="{{ asset('storage/' . $user->doc_siup_path) }}" target="_blank"
+                                class="px-3 py-1.5 rounded-lg bg-gray-200 text-gray-700 text-sm hover:bg-gray-300 transition">
+                                Lihat
+                            </a>
+                        @endif
+                        <form action="{{ route('lembaga.settings.document.update') }}" method="POST"
+                            enctype="multipart/form-data" class="inline">
+                            @csrf
+                            <input type="hidden" name="document_type" value="doc_siup">
+                            <label
+                                class="px-3 py-1.5 rounded-lg bg-blue-500 text-white text-sm hover:bg-blue-600 transition cursor-pointer">
+                                {{ $user->doc_siup_path ? 'Ganti' : 'Upload' }}
+                                <input type="file" name="document" class="hidden" accept=".pdf,.jpg,.jpeg,.png"
+                                    onchange="this.form.submit()">
+                            </label>
+                        </form>
+                        @if($user->doc_siup_path)
+                            <form action="{{ route('lembaga.settings.document.delete') }}" method="POST" class="inline"
+                                onsubmit="return confirm('Yakin ingin menghapus dokumen ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <input type="hidden" name="document_type" value="doc_siup">
+                                <button type="submit"
+                                    class="px-3 py-1.5 rounded-lg bg-red-500 text-white text-sm hover:bg-red-600 transition">
+                                    Hapus
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 p-3 rounded-lg bg-blue-50 border border-blue-200">
+                <p class="text-blue-700 text-xs flex items-start gap-2">
+                    <svg class="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Dokumen digunakan untuk verifikasi lembaga dan tidak akan dibagikan ke pihak lain. Format yang didukung:
+                    PDF, JPG, PNG (Maks 4MB).
+                </p>
+            </div>
+        </div>
+    @endif
+
     @push('scripts')
         <script>
             function photoUpload() {
