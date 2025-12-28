@@ -275,7 +275,7 @@
                     </div>
 
                     <!-- Send Email Option -->
-                    <div id="send-email-option" class="hidden">
+                    <div id="send-email-option">
                         <div class="flex items-start gap-4">
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" name="send_email" id="send_email" value="1" class="sr-only peer" {{ old('send_email', true) ? 'checked' : '' }}>
@@ -510,19 +510,37 @@
                 if (!this.checkValidity()) {
                     const firstInvalid = this.querySelector(':invalid');
                     if (firstInvalid) {
-                        const label = firstInvalid.closest('.space-y-2')?.querySelector('label')?.textContent?.replace('*', '').trim()
-                            || firstInvalid.name || 'Field';
+                        let label = firstInvalid.name || 'Field';
 
-                        Swal.fire({
-                            icon: 'warning',
-                            title: 'Mohon Lengkapi Data',
-                            text: `${label} wajib diisi`,
-                            confirmButtonColor: '#3B82F6',
-                            background: '#0f172a',
-                            color: '#fff'
-                        }).then(() => {
-                            setTimeout(() => firstInvalid.focus(), 300);
-                        });
+                        // Try to find label
+                        try {
+                            // Try closest parent div with a label
+                            const parentDiv = firstInvalid.closest('div');
+                            if (parentDiv) {
+                                const labelEl = parentDiv.querySelector('label');
+                                if (labelEl) {
+                                    label = labelEl.textContent.replace('*', '').trim();
+                                }
+                            }
+                        } catch (err) {
+                            console.error('Label finding error:', err);
+                        }
+
+                        if (typeof Swal !== 'undefined') {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Mohon Lengkapi Data',
+                                text: `${label} wajib diisi`,
+                                confirmButtonColor: '#3B82F6',
+                                background: '#0f172a',
+                                color: '#fff'
+                            }).then(() => {
+                                setTimeout(() => firstInvalid.focus(), 300);
+                            });
+                        } else {
+                            alert(`${label} wajib diisi`);
+                            firstInvalid.focus();
+                        }
                         return;
                     }
                 }
@@ -704,16 +722,23 @@
         const sendEmailCheckbox = document.getElementById('send_email');
 
         function toggleSendEmailOption() {
-            if (recipientEmailInput && sendEmailOption) {
+            if (recipientEmailInput && sendEmailCheckbox) {
                 const hasEmail = recipientEmailInput.value.trim() !== '';
+
                 if (hasEmail) {
-                    sendEmailOption.classList.remove('hidden');
-                    // Auto-check the checkbox when email is first entered
-                    if (sendEmailCheckbox && !sendEmailCheckbox.dataset.userChanged) {
+                    // Enable checkbox
+                    sendEmailCheckbox.removeAttribute('disabled');
+                    sendEmailCheckbox.parentElement.classList.remove('opacity-50', 'cursor-not-allowed');
+
+                    // Auto-check if first time
+                    if (!sendEmailCheckbox.dataset.userChanged) {
                         sendEmailCheckbox.checked = true;
                     }
                 } else {
-                    sendEmailOption.classList.add('hidden');
+                    // Disable and uncheck
+                    sendEmailCheckbox.setAttribute('disabled', 'disabled');
+                    sendEmailCheckbox.checked = false;
+                    sendEmailCheckbox.parentElement.classList.add('opacity-50', 'cursor-not-allowed');
                 }
             }
         }
@@ -727,7 +752,7 @@
 
         if (recipientEmailInput) {
             recipientEmailInput.addEventListener('input', toggleSendEmailOption);
-            // Check on load in case of old() value
+            // Check on load
             toggleSendEmailOption();
         }
         });

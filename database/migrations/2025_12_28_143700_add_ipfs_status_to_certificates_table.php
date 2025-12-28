@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('certificates', function (Blueprint $table) {
-            $table->string('ipfs_status')->default('pending')->nullable()->after('ipfs_url');
+            $table->string('ipfs_status')->nullable()->after('ipfs_url');
         });
     }
 
