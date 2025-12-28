@@ -374,6 +374,8 @@
 
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- SheetJS for Excel parsing -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
     <script>
         // Function to count rows in CSV file
         function countCSVRows(file) {
@@ -387,6 +389,35 @@
                 };
                 reader.onerror = () => resolve(0);
                 reader.readAsText(file);
+            });
+        }
+
+        // Function to count rows in Excel file using SheetJS
+        function countExcelRows(file) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        
+                        // Get first sheet
+                        const firstSheetName = workbook.SheetNames[0];
+                        const worksheet = workbook.Sheets[firstSheetName];
+                        
+                        // Convert to JSON to count rows
+                        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                        
+                        // Filter out empty rows and subtract 1 for header
+                        const nonEmptyRows = jsonData.filter(row => row.some(cell => cell !== null && cell !== undefined && cell !== ''));
+                        resolve(Math.max(0, nonEmptyRows.length - 1));
+                    } catch (error) {
+                        console.error('Excel parsing error:', error);
+                        resolve(null); // Fallback to server estimation
+                    }
+                };
+                reader.onerror = () => resolve(null);
+                reader.readAsArrayBuffer(file);
             });
         }
 
@@ -444,13 +475,13 @@
                 didOpen: () => Swal.showLoading()
             });
 
-            // Count rows (only works for CSV)
+            // Count rows (supports both CSV and Excel now)
             let rowCount = null;
             if (isCSV) {
                 rowCount = await countCSVRows(file);
-            } 
-            // For Excel, we cannot accurately count client-side without libraries. 
-            // We set it to null to indicate "unknown" and let server handle validation.
+            } else if (isExcel) {
+                rowCount = await countExcelRows(file);
+            }
 
             // Check blockchain/IPFS enabled
             const blockchainEnabled = form.querySelector('input[name="blockchain_enabled"]')?.checked;
