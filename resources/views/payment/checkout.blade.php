@@ -257,21 +257,29 @@
                 const buttonLoading = document.getElementById('button-loading');
                 const errorMessage = document.getElementById('error-message');
 
-                // Validate required fields first (only if no existing order)
-                if (!currentSnapToken || !currentOrderNumber || isOrderExpired()) {
-                    const nameInput = form.querySelector('input[name="name"]');
-                    const emailInput = form.querySelector('input[name="email"]');
+                // If we have valid (non-expired) snap token, open popup directly - skip validation
+                if (currentSnapToken && currentOrderNumber && !isOrderExpired()) {
+                    payButton.disabled = true;
+                    buttonText.classList.add('hidden');
+                    buttonLoading.classList.remove('hidden');
+                    errorMessage.classList.add('hidden');
+                    openMidtransPopup(currentSnapToken, currentOrderNumber);
+                    return;
+                }
 
-                    if (!nameInput.value.trim()) {
-                        nameInput.focus();
-                        nameInput.reportValidity();
-                        return;
-                    }
-                    if (!emailInput.value.trim()) {
-                        emailInput.focus();
-                        emailInput.reportValidity();
-                        return;
-                    }
+                // Validate required fields (only when creating new order)
+                const nameInput = form.querySelector('input[name="name"]');
+                const emailInput = form.querySelector('input[name="email"]');
+
+                if (!nameInput.value.trim()) {
+                    nameInput.focus();
+                    nameInput.reportValidity();
+                    return;
+                }
+                if (!emailInput.value.trim()) {
+                    emailInput.focus();
+                    emailInput.reportValidity();
+                    return;
                 }
 
                 // Disable button and show loading
@@ -281,22 +289,6 @@
                 errorMessage.classList.add('hidden');
 
                 try {
-                    // Check if existing order is expired
-                    if (currentSnapToken && currentOrderNumber && isOrderExpired()) {
-                        // Clear expired order and create new one
-                        clearStoredOrder();
-                        errorMessage.textContent = 'Pesanan sebelumnya sudah expired. Membuat pesanan baru...';
-                        errorMessage.classList.remove('hidden');
-                        errorMessage.classList.remove('text-red-400');
-                        errorMessage.classList.add('text-yellow-400');
-                    }
-
-                    // If we have valid (non-expired) snap token, use it directly
-                    if (currentSnapToken && currentOrderNumber && !isOrderExpired()) {
-                        openMidtransPopup(currentSnapToken, currentOrderNumber);
-                        return;
-                    }
-
                     const formData = new FormData(form);
 
                     const response = await fetch('{{ route("checkout.process") }}', {
@@ -317,6 +309,8 @@
                     // Store for future use (in case user closes popup and clicks again)
                     currentSnapToken = data.snap_token;
                     currentOrderNumber = data.order_number;
+                    // Set expiry to 24 hours from now for new orders
+                    orderExpiredAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
                     // Open Midtrans Snap popup
                     openMidtransPopup(data.snap_token, data.order_number);

@@ -254,7 +254,7 @@
         <div class="flex items-center justify-between px-5 py-5 border-b border-white/10">
             <a href="{{ route('home') }}" class="flex items-center gap-3 hover:opacity-80 transition group">
                 <img src="{{ asset('favicon.ico') }}" alt="SertiKu"
-                    class="w-10 h-10 flex-shrink-0 group-hover:scale-105 transition">
+                    class="w-10 h-10 flex-shrink-0 group-hover:scale-105 transition brightness-0 invert">
                 <div class="logo-text">
                     <p class="text-white font-bold text-lg">SertiKu</p>
                     <p class="text-white/50 text-xs">Dashboard User</p>

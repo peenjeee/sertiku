@@ -445,7 +445,7 @@
                     <a href="{{ route('home') }}" class="flex items-center gap-3 hover:opacity-80 transition group">
                         <!-- SertiKu Logo -->
                         <img src="{{ asset('favicon.ico') }}" alt="SertiKu"
-                            class="w-10 h-10 flex-shrink-0 group-hover:scale-105 transition">
+                            class="w-10 h-10 flex-shrink-0 group-hover:scale-105 transition brightness-0 invert">
                         <div class="logo-text">
                             <h1 class="text-white font-bold text-xl tracking-tight drop-shadow-lg">SertiKu</h1>
                             <p class="text-[#BEDBFF] text-xs">Dashboard Lembaga</p>
