@@ -71,16 +71,9 @@ class ProcessBlockchainCertificate implements ShouldQueue
                     ['tx_hash' => $txHash]
                 );
 
-                // Dispatch IPFS job after blockchain confirms (so metadata includes tx_hash)
-                // Only if user explicitly requested IPFS upload
-                if ($this->ipfsEnabled) {
-                    $ipfsService = new \App\Services\IpfsService();
-                    if ($ipfsService->isEnabled()) {
-                        // Refresh certificate to get updated blockchain data
-                        $this->certificate->refresh();
-                        \App\Jobs\ProcessIpfsCertificate::dispatch($this->certificate);
-                    }
-                }
+                // NOTE: IPFS is now dispatched SEPARATELY from controller to avoid nested sync dispatch issues
+                // Previously this caused infinite loading when blockchain + IPFS were both enabled in sync mode
+                // The controller now dispatches ProcessIpfsCertificate after ProcessBlockchainCertificate completes
             } else {
                 Log::warning("Failed to store certificate {$this->certificate->certificate_number} on blockchain");
             }
@@ -92,7 +85,9 @@ class ProcessBlockchainCertificate implements ShouldQueue
                 'blockchain_status' => 'failed',
             ]);
 
-            throw $e; // Re-throw to trigger retry
+            // DO NOT re-throw in sync mode - it crashes the entire request
+            // In async mode (database/redis queue), the failed() method handles this
+            // throw $e;
         }
     }
 

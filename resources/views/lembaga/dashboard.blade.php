@@ -435,7 +435,23 @@
                                     </td>
                                     <td class="py-4 px-4 text-[#64748B]">{{ $cert->issue_date->format('d M Y') }}</td>
                                     <td class="py-4 px-4">
-                                        @if($cert->status === 'active')
+                                        @php
+                                            $isExpired = $cert->expire_date && \Carbon\Carbon::parse($cert->expire_date)->isPast();
+                                        @endphp
+                                        
+                                        @if($cert->status === 'revoked')
+                                            <span
+                                                class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FEF2F2] text-[#DC2626] text-sm rounded-full font-medium">
+                                                <span class="w-1.5 h-1.5 bg-[#DC2626] rounded-full"></span>
+                                                Dicabut
+                                            </span>
+                                        @elseif($isExpired)
+                                            <span
+                                                class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FEF3C7] text-[#D97706] text-sm rounded-full font-medium">
+                                                <span class="w-1.5 h-1.5 bg-[#D97706] rounded-full"></span>
+                                                Kadaluarsa
+                                            </span>
+                                        @elseif($cert->status === 'active')
                                             <span
                                                 class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#ECFDF5] text-[#059669] text-sm rounded-full font-medium">
                                                 <span class="w-1.5 h-1.5 bg-[#059669] rounded-full"></span>
@@ -443,9 +459,9 @@
                                             </span>
                                         @else
                                             <span
-                                                class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FEF2F2] text-[#DC2626] text-sm rounded-full font-medium">
-                                                <span class="w-1.5 h-1.5 bg-[#DC2626] rounded-full"></span>
-                                                Dicabut
+                                                class="inline-flex items-center gap-1 px-2.5 py-1 bg-[#F1F5F9] text-[#64748B] text-sm rounded-full font-medium">
+                                                <span class="w-1.5 h-1.5 bg-[#64748B] rounded-full"></span>
+                                                {{ ucfirst($cert->status) }}
                                             </span>
                                         @endif
                                     </td>

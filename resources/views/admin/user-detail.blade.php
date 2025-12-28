@@ -105,10 +105,15 @@
                             </div>
                             <div class="text-right">
                                 <p class="text-gray-500 text-xs">{{ $cert->created_at->format('d M Y') }}</p>
-                                @if($cert->status === 'active')
+                                @php $isExpired = $cert->expire_date && \Carbon\Carbon::parse($cert->expire_date)->isPast(); @endphp
+                                @if($cert->status === 'revoked')
+                                    <span class="text-red-600 text-xs font-medium">Dicabut</span>
+                                @elseif($isExpired)
+                                    <span class="text-amber-600 text-xs font-medium">Kadaluarsa</span>
+                                @elseif($cert->status === 'active')
                                     <span class="text-emerald-600 text-xs font-medium">Aktif</span>
                                 @else
-                                    <span class="text-red-600 text-xs font-medium">Dicabut</span>
+                                    <span class="text-gray-600 text-xs font-medium">{{ ucfirst($cert->status) }}</span>
                                 @endif
                             </div>
                         </div>

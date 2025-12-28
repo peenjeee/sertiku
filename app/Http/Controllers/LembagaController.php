@@ -51,6 +51,7 @@ class LembagaController extends Controller
      */
     public function storeSertifikat(Request $request)
     {
+        set_time_limit(300); // Increase timeout to 5 minutes for blockchain sync
         $user = Auth::user();
 
         // Check certificate limit
@@ -149,14 +150,29 @@ class LembagaController extends Controller
         }
 
         // If blockchain upload requested, dispatch job to process in background
-        // IPFS will be triggered AFTER blockchain confirms (inside the job)
-        // Status already set at creation time, just dispatch jobs (same as BulkCertificateController)
-        if ($validated['blockchain_enabled']) {
-            // Dispatch Blockchain Job (which handles IPFS internally if enabled)
-            \App\Jobs\ProcessBlockchainCertificate::dispatch($certificate, $ipfsEnabled);
-        } elseif ($ipfsEnabled) {
-            // IPFS only - dispatch job, status already 'pending' at creation
-            \App\Jobs\ProcessIpfsCertificate::dispatch($certificate);
+        // IPFS is now dispatched SEPARATELY to avoid nested sync dispatch issues
+        // Status already set at creation time, just dispatch jobs
+        // Wrapped in try-catch to prevent sync queue crashes
+        try {
+            if ($validated['blockchain_enabled']) {
+                // Dispatch Blockchain Job (no longer dispatches IPFS internally)
+                \App\Jobs\ProcessBlockchainCertificate::dispatch($certificate, false); // false = don't trigger IPFS from inside
+            }
+
+            // Dispatch IPFS separately (after blockchain in sync mode, or parallel in async mode)
+            if ($ipfsEnabled) {
+                \App\Jobs\ProcessIpfsCertificate::dispatch($certificate);
+            }
+        } catch (\Exception $e) {
+            // Log error but don't crash the request - certificate is already created
+            \Illuminate\Support\Facades\Log::error("Job dispatch error: " . $e->getMessage());
+            // Update status to failed so quota is not consumed
+            if ($validated['blockchain_enabled']) {
+                $certificate->update(['blockchain_status' => 'failed']);
+            }
+            if ($ipfsEnabled) {
+                $certificate->update(['ipfs_status' => 'failed']);
+            }
         }
 
         return redirect()->route('lembaga.sertifikat.index')
@@ -251,6 +267,14 @@ class LembagaController extends Controller
 
         $certificate->revoke($validated['reason'] ?? null);
 
+        // Log activity for certificate revocation
+        ActivityLog::log(
+            'revoke_certificate',
+            'Sertifikat dicabut: ' . $certificate->certificate_number . ' (' . $certificate->recipient_name . ')',
+            $certificate,
+            ['reason' => $validated['reason'] ?? 'Tidak ada alasan']
+        );
+
         return back()->with('success', 'Sertifikat berhasil dicabut.');
     }
 
@@ -274,6 +298,13 @@ class LembagaController extends Controller
             'revoked_at' => null,
             'revoked_reason' => null,
         ]);
+
+        // Log activity for certificate reactivation
+        ActivityLog::log(
+            'reactivate_certificate',
+            'Sertifikat diaktifkan kembali: ' . $certificate->certificate_number . ' (' . $certificate->recipient_name . ')',
+            $certificate
+        );
 
         return back()->with('success', 'Sertifikat berhasil diaktifkan kembali.');
     }

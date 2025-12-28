@@ -500,17 +500,17 @@
             // --- 1. EMAIL TOGGLE LOGIC ---
             const recipientEmailInput = document.getElementById('recipient_email');
             const sendEmailCheckbox = document.getElementById('send_email');
-            
+
             function toggleSendEmailOption() {
                 if (!recipientEmailInput || !sendEmailCheckbox) return;
-                 const hasEmail = recipientEmailInput.value.trim() !== '';
-                
+                const hasEmail = recipientEmailInput.value.trim() !== '';
+
                 if (hasEmail) {
                     // Email filled: Enable toggle
                     sendEmailCheckbox.removeAttribute('disabled');
                     sendEmailCheckbox.parentElement.classList.remove('opacity-50', 'cursor-not-allowed');
                     sendEmailCheckbox.parentElement.classList.add('cursor-pointer');
-                    
+
                     // Auto-check if it wasn't manually unchecked (optional, but user asked for default off, so maybe just enable)
                     // Let's just enable it and keep current state (which defaults to off)
                 } else {
@@ -525,7 +525,7 @@
             if (recipientEmailInput && sendEmailCheckbox) {
                 // Initial check
                 toggleSendEmailOption();
-                
+
                 // Listen for changes
                 recipientEmailInput.addEventListener('input', toggleSendEmailOption);
                 recipientEmailInput.addEventListener('change', toggleSendEmailOption);
@@ -533,7 +533,7 @@
 
             // --- 2. FORM SUBMIT & ALERT LOGIC ---
             const form = document.getElementById('certificate-form');
-            
+
             if (form) {
                 // Prevent native validation tooltips
                 form.setAttribute('novalidate', true);
@@ -548,7 +548,7 @@
                         const firstInvalid = this.querySelector(':invalid');
                         if (firstInvalid) {
                             let label = firstInvalid.getAttribute('name') || 'Field';
-                            
+
                             // Try to find label text
                             try {
                                 const parentDiv = firstInvalid.closest('div');
@@ -556,7 +556,7 @@
                                     const labelEl = parentDiv.querySelector('label');
                                     if (labelEl) label = labelEl.textContent.replace('*', '').trim();
                                 }
-                            } catch (err) {}
+                            } catch (err) { }
 
                             // Show Error Alert
                             if (typeof Swal !== 'undefined') {
@@ -615,10 +615,10 @@
                             showConfirmButton: false,
                             didOpen: () => {
                                 Swal.showLoading();
-                                
+
                                 // Animate Progress Bar
                                 const progressBar = document.getElementById('swal-progress-bar');
-                                if(progressBar) {
+                                if (progressBar) {
                                     setTimeout(() => { progressBar.style.width = '40%'; }, 500);
                                     setTimeout(() => { progressBar.style.width = '70%'; }, 1500);
                                     setTimeout(() => { progressBar.style.width = '90%'; }, estimatedTime * 800);
@@ -635,6 +635,5 @@
                 });
             }
         });
-    </script>
     </script>
 </x-layouts.lembaga>

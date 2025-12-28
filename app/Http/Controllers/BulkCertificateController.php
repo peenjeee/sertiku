@@ -181,6 +181,7 @@ class BulkCertificateController extends Controller
      */
     public function store(Request $request)
     {
+        set_time_limit(1800); // Increase timeout for bulk processing
         $user = Auth::user();
 
         // 1. Initial Validation
@@ -372,13 +373,15 @@ class BulkCertificateController extends Controller
                     Mail::to($rowData['recipient_email'])->queue(new CertificateIssuedMail($certificate));
                 }
 
-                // 6. Blockchain & IPFS Jobs
+                // 6. Blockchain & IPFS Jobs (dispatched SEPARATELY to avoid nested sync issues)
                 // Status already set at creation, just dispatch jobs
                 if ($blockchainEnabled) {
-                    // Dispatch Blockchain Job (which handles IPFS internally if enabled)
-                    ProcessBlockchainCertificate::dispatch($certificate, $ipfsEnabled);
-                } elseif ($ipfsEnabled) {
-                    // IPFS only - status already set to 'pending' at creation
+                    // Dispatch Blockchain Job (no longer dispatches IPFS internally)
+                    ProcessBlockchainCertificate::dispatch($certificate, false);
+                }
+
+                // Dispatch IPFS separately
+                if ($ipfsEnabled) {
                     ProcessIpfsCertificate::dispatch($certificate);
                 }
 

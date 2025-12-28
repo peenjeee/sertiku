@@ -69,7 +69,9 @@ class ProcessIpfsCertificate implements ShouldQueue
         } catch (\Exception $e) {
             $this->certificate->update(['ipfs_status' => 'failed']);
             Log::error("ProcessIpfsCertificate: Error - " . $e->getMessage());
-            throw $e; // Rethrow to trigger retry
+            // DO NOT re-throw in sync mode - it crashes the entire request
+            // In async mode (database/redis queue), the failed() method handles this
+            // throw $e;
         }
     }
 

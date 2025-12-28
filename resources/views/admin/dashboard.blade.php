@@ -99,7 +99,8 @@
                     </div>
                     <p class="text-emerald-600 text-3xl font-bold">{{ number_format($stats['sertifikat_aktif']) }}</p>
                     <p class="text-gray-500 text-xs mt-1">
-                        {{ $stats['sertifikat_aktif'] > 0 ? 'Aktif dan valid' : 'Belum ada data' }}</p>
+                        {{ $stats['sertifikat_aktif'] > 0 ? 'Aktif dan valid' : 'Belum ada data' }}
+                    </p>
                 </div>
                 <div class="w-12 h-12 icon-circle-green rounded-xl flex items-center justify-center">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -122,7 +123,8 @@
                     </div>
                     <p class="text-red-600 text-3xl font-bold">{{ number_format($stats['sertifikat_dicabut']) }}</p>
                     <p class="text-gray-500 text-xs mt-1">
-                        {{ $stats['sertifikat_dicabut'] > 0 ? 'Dicabut' : 'Belum ada data' }}</p>
+                        {{ $stats['sertifikat_dicabut'] > 0 ? 'Dicabut' : 'Belum ada data' }}
+                    </p>
                 </div>
                 <div class="w-12 h-12 icon-circle-red rounded-xl flex items-center justify-center">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -148,7 +150,8 @@
                     </div>
                     <p class="text-orange-600 text-3xl font-bold">{{ number_format($stats['total_verifikasi']) }}</p>
                     <p class="text-gray-500 text-xs mt-1">
-                        {{ $stats['total_verifikasi'] > 0 ? 'Permintaan verifikasi' : 'Belum ada data' }}</p>
+                        {{ $stats['total_verifikasi'] > 0 ? 'Permintaan verifikasi' : 'Belum ada data' }}
+                    </p>
                 </div>
                 <div class="w-12 h-12 icon-circle-orange rounded-xl flex items-center justify-center">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -198,12 +201,19 @@
                                     <span class="text-gray-500 text-sm">{{ $cert->created_at->format('d M Y') }}</span>
                                 </td>
                                 <td class="py-3 px-2">
-                                    @if($cert->status === 'active')
+                                    @php $isExpired = $cert->expire_date && \Carbon\Carbon::parse($cert->expire_date)->isPast(); @endphp
+                                    @if($cert->status === 'revoked')
+                                        <span
+                                            class="px-2 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full">Dicabut</span>
+                                    @elseif($isExpired)
+                                        <span
+                                            class="px-2 py-1 bg-amber-100 text-amber-700 text-xs font-medium rounded-full">Kadaluarsa</span>
+                                    @elseif($cert->status === 'active')
                                         <span
                                             class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-full">Aktif</span>
                                     @else
                                         <span
-                                            class="px-2 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full">Dicabut</span>
+                                            class="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full">{{ ucfirst($cert->status) }}</span>
                                     @endif
                                 </td>
                             </tr>
