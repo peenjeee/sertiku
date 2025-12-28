@@ -253,7 +253,6 @@ class LembagaController extends Controller
     public function revokeSertifikat(Request $request, Certificate $certificate)
     {
         // Ensure user owns this certificate
-        // Ensure user owns this certificate
         if ((int) $certificate->user_id !== (int) Auth::id()) {
             abort(403, 'Unauthorized access to this certificate.');
         }
@@ -263,6 +262,14 @@ class LembagaController extends Controller
         ]);
 
         $certificate->revoke($validated['reason'] ?? null);
+
+        // Log Activity
+        ActivityLog::log(
+            'revoke_certificate',
+            "Mencabut sertifikat {$certificate->certificate_number}",
+            $certificate,
+            ['reason' => $validated['reason'] ?? null]
+        );
 
         return back()->with('success', 'Sertifikat berhasil dicabut.');
     }
@@ -287,6 +294,13 @@ class LembagaController extends Controller
             'revoked_at' => null,
             'revoked_reason' => null,
         ]);
+
+        // Log Activity
+        ActivityLog::log(
+            'reactivate_certificate',
+            "Mengaktifkan kembali sertifikat {$certificate->certificate_number}",
+            $certificate
+        );
 
         return back()->with('success', 'Sertifikat berhasil diaktifkan kembali.');
     }

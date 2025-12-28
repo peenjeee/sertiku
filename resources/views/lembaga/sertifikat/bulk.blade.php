@@ -490,9 +490,22 @@
 
             // QUOTA PRE-CHECK (Only if rowCount is known)
             if (rowCount !== null) {
+                const remainingCertificates = {{ $remainingCertificates }};
                 const remainingBlockchain = {{ $remainingBlockchain }};
                 const remainingIpfs = {{ $remainingIpfs }};
 
+                // 1. Certificate Quota Check (Always required)
+                if (rowCount > remainingCertificates) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Kuota Sertifikat Tidak Cukup',
+                        html: `File Anda berisi <b>${rowCount}</b> data, namun sisa kuota Sertifikat Anda hanya <b>${remainingCertificates}</b>.<br><br>Silakan upgrade paket atau kurangi data.`,
+                        confirmButtonColor: '#3B82F6'
+                    });
+                    return;
+                }
+
+                // 2. Blockchain Quota Check (If enabled)
                 if (blockchainEnabled && rowCount > remainingBlockchain) {
                     Swal.fire({
                         icon: 'error',
@@ -503,6 +516,7 @@
                     return;
                 }
 
+                // 3. IPFS Quota Check (If enabled)
                 if (ipfsEnabled && rowCount > remainingIpfs) {
                     Swal.fire({
                         icon: 'error',
@@ -547,7 +561,7 @@
                         <span id="swal-status" class="text-blue-600 font-medium animate-pulse">Menyiapkan data...</span>
                     </div>
                     
-                    // <p class="text-xs text-gray-400 mt-2">Estimasi: <span id="swal-countdown">${totalEstimated}</span> detik</p>
+                    <p class="text-xs text-gray-400 mt-2">Estimasi: <span id="swal-countdown">${totalEstimated}</span> detik</p>
                 `,
                 allowOutsideClick: false,
                 allowEscapeKey: false,

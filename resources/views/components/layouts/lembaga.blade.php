@@ -785,7 +785,7 @@
                     Butuh bantuan? Chat dengan kami!
                 </span>
                 <!-- Notification dot -->
-                <span class="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-[#0F172A]"></span>
+                <!-- <span class="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-[#0F172A]"></span> -->
             </button>
         </div>
     </div>

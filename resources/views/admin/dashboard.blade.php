@@ -198,12 +198,14 @@
                                     <span class="text-gray-500 text-sm">{{ $cert->created_at->format('d M Y') }}</span>
                                 </td>
                                 <td class="py-3 px-2">
-                                    @if($cert->status === 'active')
-                                        <span
-                                            class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-full">Aktif</span>
+                                    @if($cert->status === 'revoked')
+                                        <span class="px-2 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full">Dicabut</span>
+                                    @elseif($cert->expire_date < now())
+                                        <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-medium rounded-full">Kadaluarsa</span>
+                                    @elseif($cert->status === 'active')
+                                        <span class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-full">Aktif</span>
                                     @else
-                                        <span
-                                            class="px-2 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full">Dicabut</span>
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full">{{ ucfirst($cert->status) }}</span>
                                     @endif
                                 </td>
                             </tr>

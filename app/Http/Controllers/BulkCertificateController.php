@@ -38,6 +38,11 @@ class BulkCertificateController extends Controller
         $ipfsUsed = $user->getIpfsUsedThisMonth();
         $remainingIpfs = max(0, $ipfsLimit - $ipfsUsed);
 
+        // Certificate quotas
+        $certificateLimit = $user->getCertificateLimit();
+        $certificateUsed = $user->getCertificatesUsedThisMonth();
+        $remainingCertificates = max(0, $certificateLimit - $certificateUsed);
+
         return view('lembaga.sertifikat.bulk', compact(
             'templates',
             'canUseBlockchain',
@@ -47,7 +52,10 @@ class BulkCertificateController extends Controller
             'canUseIpfs',
             'ipfsLimit',
             'ipfsUsed',
-            'remainingIpfs'
+            'remainingIpfs',
+            'certificateLimit',
+            'certificateUsed',
+            'remainingCertificates'
         ));
     }
 
