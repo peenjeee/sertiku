@@ -153,7 +153,8 @@
                                                     class="w-24 h-24 rounded-full object-cover border-4 border-[#1E3A8F]">
                                             @else
                                                 <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->institution_name ?? Auth::user()->name) }}&email={{ urlencode(Auth::user()->email) }}&background=3B82F6&color=fff&bold=true&size=96"
-                                                    alt="Avatar" class="w-24 h-24 rounded-full object-cover border-4 border-[#1E3A8F]">
+                                                    alt="Avatar"
+                                                    class="w-24 h-24 rounded-full object-cover border-4 border-[#1E3A8F]">
                                             @endif
 
                                             {{-- Edit Button overlay --}}
@@ -593,6 +594,13 @@
                         this.isDragging = false;
                         const file = event.dataTransfer.files[0];
                         this.processFile(file);
+
+                        // Set file to input element for form submission
+                        if (file) {
+                            const dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(file);
+                            this.$refs.fileInput.files = dataTransfer.files;
+                        }
                     },
 
                     processFile(file) {

@@ -124,13 +124,16 @@
                                     if ($certificate->recipient_email) {
                                         $registeredUser = \App\Models\User::where('email', $certificate->recipient_email)->first();
                                         
-                                        if ($registeredUser && $registeredUser->avatar && str_starts_with($registeredUser->avatar, '/storage/')) {
-                                            // User is registered and has custom avatar
+                                        if ($registeredUser && $registeredUser->avatar && (str_starts_with($registeredUser->avatar, '/storage/') || str_starts_with($registeredUser->avatar, 'http'))) {
+                                            // User is registered and has custom or Google avatar
                                             $avatarUrl = $registeredUser->avatar;
                                         } else {
-                                            // Email exists but user not registered or no custom avatar - use UI Avatars
+                                            // User not registered or no avatar - use UI Avatars
                                             $avatarUrl = 'https://ui-avatars.com/api/?name=' . urlencode($certificate->recipient_name) . '&email=' . urlencode($certificate->recipient_email) . '&background=random&color=fff&bold=true';
                                         }
+                                    } else {
+                                        // No email - use UI Avatars with name only
+                                        $avatarUrl = 'https://ui-avatars.com/api/?name=' . urlencode($certificate->recipient_name) . '&background=random&color=fff&bold=true';
                                     }
                                 @endphp
                                 <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center overflow-hidden">
