@@ -278,7 +278,7 @@
                     <div id="send-email-option">
                         <div class="flex items-start gap-4">
                             <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" name="send_email" id="send_email" value="1" class="sr-only peer" {{ old('send_email', true) ? 'checked' : '' }}>
+                                <input type="checkbox" name="send_email" id="send_email" value="1" class="sr-only peer" {{ old('send_email', false) ? 'checked' : '' }}>
                                 <div
                                     class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
                                 </div>
@@ -504,7 +504,15 @@
             form.setAttribute('novalidate', true);
 
             form.addEventListener('submit', function (e) {
+                console.log('Form submitted');
                 e.preventDefault();
+
+                // Ensure Swal is loaded
+                if (typeof Swal === 'undefined') {
+                    console.error('SweetAlert2 is not loaded!');
+                    alert('Error: Sistem notifikasi tidak dimuat. Mohon refresh halaman.');
+                    return; // Don't submit if we can't show progress
+                }
 
                 // Validate form first
                 if (!this.checkValidity()) {
@@ -538,11 +546,24 @@
                                 setTimeout(() => firstInvalid.focus(), 300);
                             });
                         } else {
+                            // Fallback if Swal is not loaded
                             alert(`${label} wajib diisi`);
                             firstInvalid.focus();
                         }
-                        return;
+                        return; // Stop execution
                     }
+                    // Fallback generic alert if checkValidity is false but no input found (rare)
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Mohon Lengkapi Data',
+                            text: 'Harap periksa kembali isian form Anda.',
+                            confirmButtonColor: '#3B82F6'
+                        });
+                    } else {
+                        alert('Harap periksa kembali isian form Anda.');
+                    }
+                    return;
                 }
 
                 // Check options

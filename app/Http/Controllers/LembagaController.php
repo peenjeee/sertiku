@@ -73,10 +73,10 @@ class LembagaController extends Controller
         ]);
 
         // Set blockchain_enabled flag
-        $validated['blockchain_enabled'] = $request->has('blockchain_enabled') && $request->blockchain_enabled == '1';
+        $validated['blockchain_enabled'] = $request->boolean('blockchain_enabled');
 
         // Get IPFS enabled flag (not stored in database, triggers job)
-        $ipfsEnabled = $request->has('ipfs_enabled') && $request->ipfs_enabled == '1';
+        $ipfsEnabled = $request->boolean('ipfs_enabled');
 
         // Check blockchain limit if user wants to use blockchain
         if ($validated['blockchain_enabled'] && !$user->canUseBlockchain()) {
@@ -98,6 +98,9 @@ class LembagaController extends Controller
         // Remove non-database fields from validated data
         unset($validated['send_email']);
         unset($validated['ipfs_enabled']);
+
+        // Explicitly set ipfs_status to null if not enabled (overrides DB default)
+        $validated['ipfs_status'] = $ipfsEnabled ? 'pending' : null;
 
         // Create certificate
         $certificate = $user->certificates()->create($validated);
