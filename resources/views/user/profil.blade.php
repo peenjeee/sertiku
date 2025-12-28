@@ -141,9 +141,9 @@
                     <div class="p-4 rounded-xl bg-white/5 border border-white/10 text-center hover-lift transition group">
                         <div
                             class="w-12 h-12 mx-auto mb-2 rounded-full flex items-center justify-center
-                                    {{ $achievement['unlocked'] ? 'bg-gradient-to-br from-yellow-400 to-orange-500' : 'bg-white/10' }}">
+                                            {{ $achievement['unlocked'] ? 'bg-gradient-to-br from-yellow-400 to-orange-500' : 'bg-white/10' }}">
                             @if($achievement['unlocked'])
-                                <span class="text-2xl">{{ $achievement['icon'] }}</span>
+                                <span class="flex items-center justify-center">{!! $achievement['icon'] !!}</span>
                             @else
                                 <svg class="w-6 h-6 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -251,8 +251,8 @@
                             </p>
                         </div>
                         <span class="px-3 py-1 rounded-full text-xs
-                                    @if($cert->status === 'active') bg-green-500/20 text-green-400
-                                    @else bg-red-500/20 text-red-400 @endif">
+                                            @if($cert->status === 'active') bg-green-500/20 text-green-400
+                                            @else bg-red-500/20 text-red-400 @endif">
                             {{ $cert->status === 'active' ? 'Aktif' : 'Dicabut' }}
                         </span>
                     </div>

@@ -72,16 +72,26 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        $query = Certificate::where('recipient_email', $user->email)
-            ->orWhere('user_id', $user->id);
+        $query = Certificate::where(function ($q) use ($user) {
+            $q->where('recipient_email', $user->email)
+                ->orWhere('user_id', $user->id);
+        });
 
         // Search
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                    ->orWhere('certificate_id', 'like', "%{$search}%")
-                    ->orWhere('hash', 'like', "%{$search}%");
+        if ($request->filled('search') || $request->filled('id')) {
+            $query->where(function ($q) use ($request) {
+                if ($request->filled('search')) {
+                    $search = $request->search;
+                    $q->where('course_name', 'like', "%{$search}%")
+                        ->orWhere('certificate_number', 'like', "%{$search}%")
+                        ->orWhere('hash', 'like', "%{$search}%");
+                }
+
+                if ($request->filled('id')) {
+                    $id = $request->id;
+                    $q->orWhere('certificate_number', 'like', "%{$id}%")
+                        ->orWhere('hash', 'like', "%{$id}%");
+                }
             });
         }
 
@@ -152,49 +162,56 @@ class UserController extends Controller
             [
                 'name' => 'Pemula',
                 'description' => 'Dapatkan sertifikat pertama',
-                'icon' => '🎯',
+                'icon' => '<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>', // Lightning
                 'unlocked' => $totalCerts >= 1,
             ],
             [
                 'name' => 'Kolektor',
                 'description' => 'Kumpulkan 5 sertifikat',
-                'icon' => '📚',
+                // Book/Collection
+                'icon' => '<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>',
                 'unlocked' => $totalCerts >= 5,
             ],
             [
                 'name' => 'Master',
                 'description' => 'Kumpulkan 10 sertifikat',
-                'icon' => '🏆',
+                // Trophy/Cup
+                'icon' => '<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
                 'unlocked' => $totalCerts >= 10,
             ],
             [
                 'name' => 'Terverifikasi',
                 'description' => '3 sertifikat aktif',
-                'icon' => '✅',
+                // Shield Check
+                'icon' => '<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
                 'unlocked' => $activeCerts >= 3,
             ],
             [
                 'name' => 'Multitalenta',
                 'description' => '3 kategori berbeda',
-                'icon' => '🌟',
+                // Cube/Puzzle
+                'icon' => '<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>',
                 'unlocked' => $categories >= 3,
             ],
             [
                 'name' => 'Networker',
                 'description' => 'Dari 3 lembaga berbeda',
-                'icon' => '🤝',
+                // Globe/Network
+                'icon' => '<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" /></svg>',
                 'unlocked' => $lembaga >= 3,
             ],
             [
                 'name' => 'Legend',
                 'description' => 'Kumpulkan 25 sertifikat',
-                'icon' => '👑',
+                // Crown
+                'icon' => '<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z" /></svg>',
                 'unlocked' => $totalCerts >= 25,
             ],
             [
                 'name' => 'Elite',
                 'description' => 'Kumpulkan 50 sertifikat',
-                'icon' => '💎',
+                // Diamond/Star
+                'icon' => '<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>',
                 'unlocked' => $totalCerts >= 50,
             ],
         ];
