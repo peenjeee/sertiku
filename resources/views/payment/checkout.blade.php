@@ -88,8 +88,7 @@
 
             {{-- Order Summary --}}
             <div class="lg:col-span-2">
-                <div
-                    class="top-8 rounded-[28px] border border-[rgba(255,255,255,0.14)] bg-[rgba(15,23,42,0.9)] p-6">
+                <div class="top-8 rounded-[28px] border border-[rgba(255,255,255,0.14)] bg-[rgba(15,23,42,0.9)] p-6">
                     <h2 class="text-lg font-semibold text-white">Ringkasan Pesanan</h2>
 
                     <div class="mt-6 flex items-center gap-4">
@@ -160,6 +159,20 @@
             // Store order data from server (if pending order exists)
             let currentSnapToken = {!! $pendingOrder ? "'" . $pendingOrder->snap_token . "'" : 'null' !!};
             let currentOrderNumber = {!! $pendingOrder ? "'" . $pendingOrder->order_number . "'" : 'null' !!};
+            let orderExpiredAt = {!! $pendingOrder ? "new Date('" . $pendingOrder->expired_at->toISOString() . "')" : 'null' !!};
+
+            // Check if current order is expired
+            function isOrderExpired() {
+                if (!orderExpiredAt) return false;
+                return new Date() > orderExpiredAt;
+            }
+
+            // Clear stored order data (for creating new order)
+            function clearStoredOrder() {
+                currentSnapToken = null;
+                currentOrderNumber = null;
+                orderExpiredAt = null;
+            }
 
             // Function to open Midtrans popup
             function openMidtransPopup(snapToken, orderNumber) {
@@ -186,7 +199,7 @@
                         // The user can click the button again to resume payment
                         currentSnapToken = snapToken;
                         currentOrderNumber = orderNumber;
-                        
+
                         // Show info message
                         const errorMessage = document.getElementById('error-message');
                         errorMessage.textContent = 'Pesanan sedang menunggu pembayaran. Klik tombol Bayar untuk melanjutkan.';
@@ -207,11 +220,11 @@
                         const payButton = document.getElementById('pay-button');
                         const buttonText = document.getElementById('button-text');
                         const buttonLoading = document.getElementById('button-loading');
-                        
+
                         payButton.disabled = false;
                         buttonText.classList.remove('hidden');
                         buttonLoading.classList.add('hidden');
-                        
+
                         // Store tokens for next click
                         currentSnapToken = snapToken;
                         currentOrderNumber = orderNumber;
@@ -235,8 +248,18 @@
                 errorMessage.classList.add('hidden');
 
                 try {
-                    // If we already have a snap token from previous attempt, use it directly
-                    if (currentSnapToken && currentOrderNumber) {
+                    // Check if existing order is expired
+                    if (currentSnapToken && currentOrderNumber && isOrderExpired()) {
+                        // Clear expired order and create new one
+                        clearStoredOrder();
+                        errorMessage.textContent = 'Pesanan sebelumnya sudah expired. Membuat pesanan baru...';
+                        errorMessage.classList.remove('hidden');
+                        errorMessage.classList.remove('text-red-400');
+                        errorMessage.classList.add('text-yellow-400');
+                    }
+
+                    // If we have valid (non-expired) snap token, use it directly
+                    if (currentSnapToken && currentOrderNumber && !isOrderExpired()) {
                         openMidtransPopup(currentSnapToken, currentOrderNumber);
                         return;
                     }
@@ -279,13 +302,13 @@
 
             // If there's a pending order, show info
             @if($pendingOrder)
-            document.addEventListener('DOMContentLoaded', function() {
-                const errorMessage = document.getElementById('error-message');
-                errorMessage.textContent = 'Anda memiliki pesanan tertunda. Klik tombol Bayar untuk melanjutkan pembayaran.';
-                errorMessage.classList.remove('hidden');
-                errorMessage.classList.remove('text-red-400');
-                errorMessage.classList.add('text-yellow-400');
-            });
+                document.addEventListener('DOMContentLoaded', function () {
+                    const errorMessage = document.getElementById('error-message');
+                    errorMessage.textContent = 'Anda memiliki pesanan tertunda. Klik tombol Bayar untuk melanjutkan pembayaran.';
+                    errorMessage.classList.remove('hidden');
+                    errorMessage.classList.remove('text-red-400');
+                    errorMessage.classList.add('text-yellow-400');
+                });
             @endif
         </script>
     @else
