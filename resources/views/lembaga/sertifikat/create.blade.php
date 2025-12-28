@@ -607,7 +607,7 @@
                                     <div class="w-full bg-gray-200 rounded-full h-2.5 mb-1 overflow-hidden">
                                         <div id="swal-progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-1000" style="width: 5%"></div>
                                     </div>
-                                    <p class="text-xs text-gray-400 text-right mt-1">Estimasi: ~${estimatedTime} detik</p>
+                                    // <p class="text-xs text-gray-400 text-right mt-1">Estimasi: ~${estimatedTime} detik</p>
                                 </div>
                             `,
                             allowOutsideClick: false,

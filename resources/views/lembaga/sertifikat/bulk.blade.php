@@ -483,9 +483,10 @@
                 rowCount = await countExcelRows(file);
             }
 
-            // Check blockchain/IPFS enabled
+            // Check blockchain/IPFS/Email enabled
             const blockchainEnabled = form.querySelector('input[name="blockchain_enabled"]')?.checked;
             const ipfsEnabled = form.querySelector('input[name="ipfs_enabled"]')?.checked;
+            const sendEmailEnabled = form.querySelector('input[name="send_email"]')?.checked;
 
             // QUOTA PRE-CHECK (Only if rowCount is known)
             if (rowCount !== null) {
@@ -515,7 +516,7 @@
 
             // Calculate estimated time
             // If unknown count, assume default 20s for UX
-            const timePerCert = 3 + (blockchainEnabled ? 5 : 0) + (ipfsEnabled ? 3 : 0);
+            const timePerCert = 3 + (blockchainEnabled ? 5 : 0) + (ipfsEnabled ? 3 : 0) + (sendEmailEnabled ? 2 : 0);
             const totalEstimated = rowCount !== null ? Math.max(10, rowCount * timePerCert) : 20;
 
             let rowCountDisplay = rowCount !== null ? `${rowCount} Sertifikat` : '<span class="italic text-gray-500">Estimasi Server (Excel)</span>';
@@ -529,8 +530,9 @@
                             <span class="text-blue-600 font-mono text-lg">${rowCountDisplay}</span>
                         </div>
                         <div class="space-y-1 mb-2 text-sm">
+                            ${sendEmailEnabled ? '<div class="flex items-center gap-2 text-yellow-600 font-medium"><div class="w-2 h-2 rounded-full bg-yellow-500"></div> Email: Mengirim ke penerima</div>' : ''}
                             ${blockchainEnabled ? '<div class="flex items-center gap-2 text-purple-600 font-medium"><div class="w-2 h-2 rounded-full bg-purple-500"></div> Blockchain: Menyimpan ke Polygon Network</div>' : ''}
-                            ${ipfsEnabled ? '<div class="flex items-center gap-2 text-cyan-600 font-medium"><div class="w-2 h-2 rounded-full bg-cyan-500"></div> IPFS: Menyimpan ke Storacha Network</div>' : ''}
+                            ${ipfsEnabled ? '<div class="flex items-center gap-2 text-cyan-600 font-medium"><div class="w-2 h-2 rounded-full bg-cyan-500"></div> IPFS: Menyimpan ke Pinata Network</div>' : ''}
                         </div>
                     </div>
                     
@@ -545,7 +547,7 @@
                         <span id="swal-status" class="text-blue-600 font-medium animate-pulse">Menyiapkan data...</span>
                     </div>
                     
-                    <p class="text-xs text-gray-400 mt-2">Estimasi: <span id="swal-countdown">${totalEstimated}</span> detik</p>
+                    // <p class="text-xs text-gray-400 mt-2">Estimasi: <span id="swal-countdown">${totalEstimated}</span> detik</p>
                 `,
                 allowOutsideClick: false,
                 allowEscapeKey: false,
