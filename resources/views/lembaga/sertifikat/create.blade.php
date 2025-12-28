@@ -275,7 +275,7 @@
                     </div>
 
                     <!-- Send Email Option -->
-                    <div id="send-email-option" class="hidden">
+                    <div id="send-email-option">
                         <div class="flex items-start gap-4">
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" name="send_email" id="send_email" value="1" class="sr-only peer" {{ old('send_email', true) ? 'checked' : '' }}>
@@ -698,38 +698,7 @@
                 });
             });
 
-        // Toggle send email option based on email input
-        const recipientEmailInput = document.getElementById('recipient_email');
-        const sendEmailOption = document.getElementById('send-email-option');
-        const sendEmailCheckbox = document.getElementById('send_email');
-
-        function toggleSendEmailOption() {
-            if (recipientEmailInput && sendEmailOption) {
-                const hasEmail = recipientEmailInput.value.trim() !== '';
-                if (hasEmail) {
-                    sendEmailOption.classList.remove('hidden');
-                    // Auto-check the checkbox when email is first entered
-                    if (sendEmailCheckbox && !sendEmailCheckbox.dataset.userChanged) {
-                        sendEmailCheckbox.checked = true;
-                    }
-                } else {
-                    sendEmailOption.classList.add('hidden');
-                }
-            }
-        }
-
-        // Track if user manually changed the checkbox
-        if (sendEmailCheckbox) {
-            sendEmailCheckbox.addEventListener('change', function () {
-                this.dataset.userChanged = 'true';
-            });
-        }
-
-        if (recipientEmailInput) {
-            recipientEmailInput.addEventListener('input', toggleSendEmailOption);
-            // Check on load in case of old() value
-            toggleSendEmailOption();
-        }
+        // Send email toggle visibility logic removed to keep it always visible
         });
     </script>
 </x-layouts.lembaga>

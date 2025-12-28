@@ -356,4 +356,27 @@
             </div>
         @endif
     </div>
+    <script>
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                confirmButtonColor: '#3B82F6',
+                background: '#1e293b',
+                color: '#fff'
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: '{{ session('error') }}',
+                confirmButtonColor: '#EF4444',
+                background: '#1e293b',
+                color: '#fff'
+            });
+        @endif
+    </script>
 </x-layouts.lembaga>

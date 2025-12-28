@@ -444,46 +444,50 @@
                 didOpen: () => Swal.showLoading()
             });
 
-            // Count rows (only works for CSV, estimate for Excel)
-            let rowCount = 0;
+            // Count rows (only works for CSV)
+            let rowCount = null;
             if (isCSV) {
                 rowCount = await countCSVRows(file);
-            } else {
-                // Estimate for Excel based on file size (rough estimate: ~100 bytes per row)
-                rowCount = Math.max(1, Math.floor(file.size / 100));
-            }
+            } 
+            // For Excel, we cannot accurately count client-side without libraries. 
+            // We set it to null to indicate "unknown" and let server handle validation.
 
             // Check blockchain/IPFS enabled
             const blockchainEnabled = form.querySelector('input[name="blockchain_enabled"]')?.checked;
             const ipfsEnabled = form.querySelector('input[name="ipfs_enabled"]')?.checked;
 
-            // QUOTA PRE-CHECK
-            const remainingBlockchain = {{ $remainingBlockchain }};
-            const remainingIpfs = {{ $remainingIpfs }};
+            // QUOTA PRE-CHECK (Only if rowCount is known)
+            if (rowCount !== null) {
+                const remainingBlockchain = {{ $remainingBlockchain }};
+                const remainingIpfs = {{ $remainingIpfs }};
 
-            if (blockchainEnabled && rowCount > remainingBlockchain) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Kuota Blockchain Tidak Cukup',
-                    html: `File Anda berisi estimasi <b>${rowCount}</b> data, namun sisa kuota Blockchain Anda hanya <b>${remainingBlockchain}</b>.<br><br>Silakan upgrade paket atau kurangi data.`,
-                    confirmButtonColor: '#3B82F6'
-                });
-                return;
+                if (blockchainEnabled && rowCount > remainingBlockchain) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Kuota Blockchain Tidak Cukup',
+                        html: `File Anda berisi <b>${rowCount}</b> data, namun sisa kuota Blockchain Anda hanya <b>${remainingBlockchain}</b>.<br><br>Silakan upgrade paket atau kurangi data.`,
+                        confirmButtonColor: '#3B82F6'
+                    });
+                    return;
+                }
+
+                if (ipfsEnabled && rowCount > remainingIpfs) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Kuota IPFS Tidak Cukup',
+                        html: `File Anda berisi <b>${rowCount}</b> data, namun sisa kuota IPFS Anda hanya <b>${remainingIpfs}</b>.<br><br>Silakan upgrade paket atau kurangi data.`,
+                        confirmButtonColor: '#3B82F6'
+                    });
+                    return;
+                }
             }
 
-            if (ipfsEnabled && rowCount > remainingIpfs) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Kuota IPFS Tidak Cukup',
-                    html: `File Anda berisi estimasi <b>${rowCount}</b> data, namun sisa kuota IPFS Anda hanya <b>${remainingIpfs}</b>.<br><br>Silakan upgrade paket atau kurangi data.`,
-                    confirmButtonColor: '#3B82F6'
-                });
-                return;
-            }
-
-            // Calculate estimated time: 3 sec per cert, +5 sec if blockchain, +3 sec if IPFS
+            // Calculate estimated time
+            // If unknown count, assume default 20s for UX
             const timePerCert = 3 + (blockchainEnabled ? 5 : 0) + (ipfsEnabled ? 3 : 0);
-            const totalEstimated = Math.max(10, rowCount * timePerCert);
+            const totalEstimated = rowCount !== null ? Math.max(10, rowCount * timePerCert) : 20;
+
+            let rowCountDisplay = rowCount !== null ? `${rowCount} Sertifikat` : '<span class="italic text-gray-500">Estimasi Server (Excel)</span>';
 
             Swal.fire({
                 title: 'Menerbitkan Sertifikat...',
@@ -491,7 +495,7 @@
                     <div class="text-left mb-4 px-4">
                         <div class="flex justify-between items-center bg-blue-50 p-3 rounded-lg border border-blue-100 mb-3">
                             <span class="text-blue-800 font-bold">Total Data:</span>
-                            <span class="text-blue-600 font-mono text-lg">${rowCount} Sertifikat</span>
+                            <span class="text-blue-600 font-mono text-lg">${rowCountDisplay}</span>
                         </div>
                         <div class="space-y-1 mb-2 text-sm">
                             ${blockchainEnabled ? '<div class="flex items-center gap-2 text-purple-600 font-medium"><div class="w-2 h-2 rounded-full bg-purple-500"></div> Blockchain: Menyimpan ke Polygon Network</div>' : ''}
@@ -506,8 +510,8 @@
                     </div>
                     
                     <div class="flex justify-between text-xs px-1 mb-1">
-                        <span id="swal-counter" class="text-gray-500">0 / ${rowCount}</span>
-                        <span id="swal-status" class="text-blue-600 font-medium animate-pulse">Membaca file...</span>
+                        <span id="swal-counter" class="text-gray-500">${rowCount !== null ? `0 / ${rowCount}` : 'Memproses...'}</span>
+                        <span id="swal-status" class="text-blue-600 font-medium animate-pulse">Menyiapkan data...</span>
                     </div>
                     
                     <p class="text-xs text-gray-400 mt-2">Estimasi: <span id="swal-countdown">${totalEstimated}</span> detik</p>
@@ -538,17 +542,26 @@
                     }, 1000);
 
                     // Progress Simulation
-                    const simIntervalTime = (timePerCert * 1000) * 0.8; 
+                    // If rowCount unknown, animate to 90% slowly
+                    const targetCount = rowCount || 100;
+                    const simIntervalTime = rowCount !== null ? ((timePerCert * 1000) * 0.8) : 200; 
                     
                     const progressInterval = setInterval(() => {
-                        if (processed < rowCount) {
+                        if (processed < targetCount) {
                             processed++;
-                            const percent = Math.min(Math.round((processed / rowCount) * 100), 99);
+                            
+                            let percent;
+                            if (rowCount !== null) {
+                                percent = Math.min(Math.round((processed / rowCount) * 100), 99);
+                                if (counterEl) counterEl.textContent = `${processed} / ${rowCount}`;
+                            } else {
+                                // Fake progress for unknown count (logarithmic slowdown)
+                                percent = Math.min(processed, 95); 
+                            }
                             
                             if (progressEl) progressEl.style.width = `${percent}%`;
-                            if (counterEl) counterEl.textContent = `${processed} / ${rowCount}`;
                             
-                            // Randomize status text for liveliness
+                            // Randomize status
                             const statuses = ['Memproses...', 'Generate PDF...', 'Hashing...'];
                             if (blockchainEnabled) statuses.push('Blockchain Sync...');
                             if (ipfsEnabled) statuses.push('IPFS Upload...');
@@ -556,11 +569,14 @@
                             if (statusEl) statusEl.textContent = statuses[Math.floor(Math.random() * statuses.length)];
                             
                         } else {
-                            if (statusEl) statusEl.textContent = 'Menyelesaikan...';
-                            if (progressEl) progressEl.style.width = '100%';
-                            clearInterval(progressInterval);
+                            // If unknown count, we just stay at 95% until page reloads
+                            if (rowCount !== null) {
+                                if (statusEl) statusEl.textContent = 'Menyelesaikan...';
+                                if (progressEl) progressEl.style.width = '100%';
+                                clearInterval(progressInterval);
+                            }
                         }
-                    }, 500); 
+                    }, simIntervalTime); 
                 }
             });
 
