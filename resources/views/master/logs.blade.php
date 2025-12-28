@@ -88,7 +88,7 @@
                                 <td class="py-4 px-5">
                                     <span
                                         class="px-2 py-1 rounded-lg bg-{{ $log->color }}-500/20 text-{{ $log->color }}-400 text-xs">
-                                        {{ $log->icon }} {{ ucwords(str_replace('_', ' ', $log->action)) }}
+                                        {{ ucwords(str_replace('_', ' ', $log->action)) }}
                                     </span>
                                 </td>
                                 <td class="py-4 px-5">

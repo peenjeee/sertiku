@@ -138,7 +138,7 @@
                 <p class="text-yellow-300/70 text-sm mt-1">
                     Saldo wallet Anda kurang dari 0.1 MATIC. Segera top up untuk melanjutkan penerbitan sertifikat blockchain.
                 </p>
-                <a href="https://faucet.polygon.technology/" target="_blank"
+                <a href="https://faucet.stakepool.dev.br/amoy" target="_blank"
                    class="inline-flex items-center gap-1 text-yellow-400 text-sm mt-2 hover:underline">
                     Dapatkan Testnet MATIC (Faucet)
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -269,6 +269,19 @@ class AdminController extends Controller
     }
 
     /**
+     * Clear Application Cache
+     */
+    public function clearCache()
+    {
+        \Artisan::call('cache:clear');
+        \Artisan::call('config:clear');
+        \Artisan::call('route:clear');
+        \Artisan::call('view:clear');
+
+        return back()->with('success', 'Cache berhasil dibersihkan!');
+    }
+
+    /**
      * Admin Profile Page
      */
     public function profile()

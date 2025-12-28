@@ -479,6 +479,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Settings
     Route::get('/settings', [\App\Http\Controllers\AdminController::class, 'settings'])->name('settings');
     Route::post('/settings', [\App\Http\Controllers\AdminController::class, 'updateSettings'])->name('settings.update');
+    Route::post('/settings/clear-cache', [\App\Http\Controllers\AdminController::class, 'clearCache'])->name('settings.clear-cache');
 
     // Profile
     Route::get('/profile', [\App\Http\Controllers\AdminController::class, 'profile'])->name('profile');
