@@ -38,9 +38,9 @@
                         {{-- Telepon --}}
                         <div>
                             <label for="phone" class="mb-2 block text-sm font-medium text-[rgba(219,234,254,0.9)]">
-                                Nomor Telepon
+                                Nomor Telepon <span class="text-red-400">*</span>
                             </label>
-                            <input type="tel" id="phone" name="phone"
+                            <input type="tel" id="phone" name="phone" required
                                 class="w-full rounded-[12px] border border-[rgba(255,255,255,0.12)] bg-[rgba(15,23,42,0.6)] px-4 py-3 text-sm text-white placeholder:text-[rgba(190,219,255,0.5)] focus:border-[#3B82F6] focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/30"
                                 placeholder="08xxxxxxxxxx">
                         </div>
@@ -49,9 +49,9 @@
                         <div>
                             <label for="institution"
                                 class="mb-2 block text-sm font-medium text-[rgba(219,234,254,0.9)]">
-                                Nama Institusi/Lembaga
+                                Nama Institusi/Lembaga <span class="text-red-400">*</span>
                             </label>
-                            <input type="text" id="institution" name="institution"
+                            <input type="text" id="institution" name="institution" required
                                 class="w-full rounded-[12px] border border-[rgba(255,255,255,0.12)] bg-[rgba(15,23,42,0.6)] px-4 py-3 text-sm text-white placeholder:text-[rgba(190,219,255,0.5)] focus:border-[#3B82F6] focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/30"
                                 placeholder="Nama universitas/organisasi">
                         </div>
@@ -208,7 +208,13 @@
             function isFormValid() {
                 const nameInput = document.querySelector('input[name="name"]');
                 const emailInput = document.querySelector('input[name="email"]');
-                return nameInput.value.trim() !== '' && emailInput.value.trim() !== '';
+                const phoneInput = document.querySelector('input[name="phone"]');
+                const instInput = document.querySelector('input[name="institution"]');
+
+                return nameInput.value.trim() !== '' &&
+                    emailInput.value.trim() !== '' &&
+                    phoneInput.value.trim() !== '' &&
+                    instInput.value.trim() !== '';
             }
 
             // Function to show validation alert
@@ -216,7 +222,7 @@
                 Swal.fire({
                     icon: 'warning',
                     title: 'Data Belum Lengkap',
-                    text: 'Mohon lengkapi data Nama dan Email terlebih dahulu.',
+                    text: 'Mohon lengkapi semua data yang bertanda bintang (*).',
                     confirmButtonColor: '#3B82F6',
                 });
             }
@@ -234,9 +240,13 @@
             document.addEventListener('DOMContentLoaded', function () {
                 const nameInput = document.querySelector('input[name="name"]');
                 const emailInput = document.querySelector('input[name="email"]');
+                const phoneInput = document.querySelector('input[name="phone"]');
+                const instInput = document.querySelector('input[name="institution"]');
 
                 nameInput.addEventListener('input', updateButtonStates);
                 emailInput.addEventListener('input', updateButtonStates);
+                phoneInput.addEventListener('input', updateButtonStates);
+                instInput.addEventListener('input', updateButtonStates);
 
                 // Initial check
                 updateButtonStates();
@@ -331,6 +341,20 @@
                 if (!emailInput.value.trim()) {
                     emailInput.focus();
                     emailInput.reportValidity();
+                    return;
+                }
+
+                const phoneInput = form.querySelector('input[name="phone"]');
+                const instInput = form.querySelector('input[name="institution"]');
+
+                if (!phoneInput.value.trim()) {
+                    phoneInput.focus();
+                    phoneInput.reportValidity();
+                    return;
+                }
+                if (!instInput.value.trim()) {
+                    instInput.focus();
+                    instInput.reportValidity();
                     return;
                 }
 
@@ -460,17 +484,17 @@
                             showValidationAlert();
                             return;
                         }
-                        
+
                         if (currentSnapToken && !isOrderExpired()) {
                             openMidtransPopup(currentSnapToken, currentOrderNumber);
                         } else {
-                             Swal.fire({
+                            Swal.fire({
                                 icon: 'error',
                                 title: 'Expired',
                                 text: 'Pesanan sudah expired. Silakan buat pesanan baru.',
                                 confirmButtonColor: '#EF4444',
                             }).then(() => {
-                                if(pendingOrderInfo) pendingOrderInfo.classList.add('hidden');
+                                if (pendingOrderInfo) pendingOrderInfo.classList.add('hidden');
                                 clearStoredOrder();
                                 updateButtonStates();
                             });
@@ -487,7 +511,7 @@
                     });
 
                     // Cancel Order
-                    btnCancel.addEventListener('click', function() {
+                    btnCancel.addEventListener('click', function () {
                         cancelCurrentOrder(false);
                     });
                 });
