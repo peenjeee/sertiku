@@ -84,6 +84,14 @@
                     @csrf
                     @method('PUT')
 
+                    {{-- Template Name --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Template</label>
+                        <input type="text" name="name" value="{{ old('name', $template->name) }}" required
+                            class="w-full rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                            placeholder="Nama template...">
+                    </div>
+
                     {{-- Hidden Inputs for Coordinates --}}
                     <input type="hidden" name="name_position_x" id="input_name_x"
                         value="{{ $template->name_position_x ?? 50 }}">
@@ -100,8 +108,18 @@
 
                     {{-- Recipient Name Settings --}}
                     <div>
-                        <h3 class="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                            <div class="w-1 h-4 bg-red-500 rounded-full"></div> Pengaturan Nama
+                        <h3 class="font-semibold text-gray-900 mb-4 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <div class="w-1 h-4 bg-red-500 rounded-full"></div> Pengaturan Nama
+                            </div>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" name="is_name_visible" id="input_is_name_visible" value="1"
+                                    {{ ($template->is_name_visible ?? true) ? 'checked' : '' }} class="sr-only peer">
+                                <div
+                                    class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600">
+                                </div>
+                                <span class="ms-2 text-xs font-medium text-gray-700">Tampil</span>
+                            </label>
                         </h3>
 
                         <div class="space-y-4">
@@ -165,8 +183,18 @@
 
                     {{-- QR Code Settings --}}
                     <div>
-                        <h3 class="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                            <div class="w-1 h-4 bg-blue-500 rounded-full"></div> Pengaturan QR Code
+                        <h3 class="font-semibold text-gray-900 mb-4 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <div class="w-1 h-4 bg-blue-500 rounded-full"></div> Pengaturan QR Code
+                            </div>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" name="is_qr_visible" id="input_is_qr_visible" value="1"
+                                    {{ ($template->is_qr_visible ?? true) ? 'checked' : '' }} class="sr-only peer">
+                                <div
+                                    class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600">
+                                </div>
+                                <span class="ms-2 text-xs font-medium text-gray-700">Tampil</span>
+                            </label>
                         </h3>
 
                         <div class="space-y-4">
@@ -397,7 +425,32 @@
             // --- Init Listeners ---
 
             // Text Changes
+            // Text Changes
             inputSampleName.addEventListener('input', updatePreview);
+
+            // Toggle Visibility
+            const checkName = document.getElementById('input_is_name_visible');
+            const checkQr = document.getElementById('input_is_qr_visible');
+
+            function toggleVisibility(checkbox, element) {
+                if (checkbox.checked) {
+                    element.classList.remove('hidden');
+                } else {
+                    element.classList.add('hidden');
+                }
+            }
+
+            if (checkName) {
+                // Init
+                toggleVisibility(checkName, dragName);
+                checkName.addEventListener('change', () => toggleVisibility(checkName, dragName));
+            }
+
+            if (checkQr) {
+                // Init
+                toggleVisibility(checkQr, dragQr);
+                checkQr.addEventListener('change', () => toggleVisibility(checkQr, dragQr));
+            }
 
             // Font Size Sync
             syncInputs(rangeFontSize, inputFontSize);

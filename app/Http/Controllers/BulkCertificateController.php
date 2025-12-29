@@ -209,6 +209,10 @@ class BulkCertificateController extends Controller
         $user = Auth::user();
 
         // 1. Initial Validation
+        // Increase limits for bulk processing (especially with Sync Queue + Blockchain)
+        set_time_limit(0); // Unlimited execution time
+        ini_set('memory_limit', '2048M'); // Increase memory limit
+
         $request->validate([
             'template_id' => 'required|exists:templates,id',
             'file' => 'required|file|mimes:csv,txt,xlsx|max:10240',
@@ -384,6 +388,7 @@ class BulkCertificateController extends Controller
                     $certificate->generatePdf();
                 } catch (\Throwable $e) {
                     Log::error("Bulk PDF Error: " . $e->getMessage());
+                    // Continue even if PDF fails (consistent with single upload)
                 }
 
                 // 3. Generate Hashes
@@ -397,14 +402,38 @@ class BulkCertificateController extends Controller
                     Mail::to($rowData['recipient_email'])->queue(new CertificateIssuedMail($certificate));
                 }
 
-                // 6. Blockchain & IPFS Jobs
-                // Status already set at creation, just dispatch jobs
+                // 6. Send In-App Notification (Parity with Single Upload)
+                if (!empty($rowData['recipient_email'])) {
+                    $recipient = \App\Models\User::where('email', $rowData['recipient_email'])->first();
+                    if ($recipient) {
+                        try {
+                            $recipient->notify((new \App\Notifications\CertificateReceived($certificate))->delay(now()->addSeconds(5)));
+                        } catch (\Exception $e) {
+                            // Ignore notification error
+                            Log::warning("Bulk Notification Error: " . $e->getMessage());
+                        }
+                    }
+                }
+
+                // 7. Blockchain & IPFS Jobs
+                // Logic updated to match LembagaController exactly
                 if ($blockchainEnabled) {
-                    // Dispatch Blockchain Job (which handles IPFS internally if enabled)
-                    ProcessBlockchainCertificate::dispatch($certificate, $ipfsEnabled);
+                    $blockchainService = new \App\Services\BlockchainService();
+
+                    if ($blockchainService->isEnabled()) {
+                        // Dispatch Blockchain Job (which handles IPFS internally if enabled)
+                        ProcessBlockchainCertificate::dispatch($certificate, $ipfsEnabled);
+                    } else {
+                        // Blockchain not configured - update status (override the 'pending' set at creation)
+                        $certificate->update([
+                            'blockchain_status' => 'disabled',
+                        ]);
+                    }
                 } elseif ($ipfsEnabled) {
-                    // IPFS only - status already set to 'pending' at creation
-                    ProcessIpfsCertificate::dispatch($certificate);
+                    $ipfsService = new \App\Services\IpfsService();
+                    if ($ipfsService->isEnabled()) {
+                        \App\Jobs\ProcessIpfsCertificate::dispatch($certificate);
+                    }
                 }
 
                 $successCount++;

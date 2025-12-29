@@ -317,10 +317,26 @@ class LembagaController extends Controller
     /**
      * Show the template gallery.
      */
-    public function indexTemplate()
+    public function indexTemplate(Request $request)
     {
         $user = Auth::user();
-        $templates = $user->templates()->latest()->paginate(12);
+        $query = $user->templates()->latest();
+
+        // Search by name
+        if ($request->has('search') && $request->search != '') {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Filter by status
+        if ($request->has('status') && $request->status != '') {
+            if ($request->status == 'active') {
+                $query->where('is_active', true);
+            } elseif ($request->status == 'inactive') {
+                $query->where('is_active', false);
+            }
+        }
+
+        $templates = $query->paginate(12)->withQueryString();
 
         $stats = [
             'total' => $user->templates()->count(),
@@ -409,10 +425,12 @@ class LembagaController extends Controller
             'name_position_y' => $validated['name_position_y'] ?? 45,
             'name_font_size' => $validated['name_font_size'] ?? 52,
             'name_font_color' => $validated['name_font_color'] ?? '#1a1a1a',
+            'is_name_visible' => $request->boolean('is_name_visible'),
             'name_font_family' => $validated['name_font_family'] ?? 'Great Vibes',
             'qr_position_x' => $validated['qr_position_x'] ?? 90,
             'qr_position_y' => $validated['qr_position_y'] ?? 85,
             'qr_size' => $validated['qr_size'] ?? 80,
+            'is_qr_visible' => $request->boolean('is_qr_visible'),
         ]);
 
         return redirect()->route('lembaga.template.index')
@@ -443,17 +461,25 @@ class LembagaController extends Controller
         }
 
         $validated = $request->validate([
+            'name' => 'required|string|max:255',
             'name_position_x' => 'required|integer|min:0|max:100',
             'name_position_y' => 'required|integer|min:0|max:100',
             'name_font_size' => 'required|integer|min:20|max:150',
             'name_font_color' => 'required|string',
             'name_font_family' => 'nullable|string',
+            'is_name_visible' => 'nullable|boolean',
             'qr_position_x' => 'required|integer|min:0|max:100',
             'qr_position_y' => 'required|integer|min:0|max:100',
             'qr_size' => 'required|integer|min:40|max:200',
+            'is_qr_visible' => 'nullable|boolean',
         ]);
 
-        $template->update($validated);
+        // Handle checkboxes (boolean) explicitly as they might be missing from request if unchecked
+        $data = $validated;
+        $data['is_name_visible'] = $request->boolean('is_name_visible');
+        $data['is_qr_visible'] = $request->boolean('is_qr_visible');
+
+        $template->update($data);
 
         return redirect()->route('lembaga.template.index')
             ->with('success', 'Posisi template berhasil diperbarui!');
