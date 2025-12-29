@@ -399,7 +399,7 @@
                                 </div>
                             </label>
                             <div class="flex-1">
-                                <p class="text-gray-800 font-medium text-sm">Upload ke IPFS (Storacha)</p>
+                                <p class="text-gray-800 font-medium text-sm">Upload ke IPFS</p>
                                 <p class="text-gray-500 text-xs mt-1">Simpan metadata sertifikat ke jaringan IPFS + Filecoin
                                     untuk
                                     penyimpanan desentralisasi permanen.</p>

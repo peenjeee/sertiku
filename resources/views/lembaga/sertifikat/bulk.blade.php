@@ -294,7 +294,7 @@
                                     @endif
 
                                     <p class="text-gray-300 text-sm mb-3">
-                                        Upload ke IPFS (Storacha)
+                                        Upload ke IPFS
                                     </p>
                                     <p class="text-gray-500 text-xs leading-relaxed">
                                         Simpan metadata sertifikat ke jaringan IPFS + Filecoin untuk penyimpanan

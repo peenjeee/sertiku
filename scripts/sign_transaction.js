@@ -45,11 +45,20 @@ async function signAndSendTransaction() {
         // Sign and send transaction
         const txResponse = await wallet.sendTransaction(tx);
 
-        // Wait for confirmation (1 block)
-        const receipt = await txResponse.wait(1);
+        // Wait for confirmation with 60 second timeout
+        const timeoutMs = 60000;
+        const timeoutPromise = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Transaction confirmation timeout')), timeoutMs)
+        );
 
-        // Output the transaction hash
-        console.log(receipt.hash);
+        try {
+            const receipt = await Promise.race([txResponse.wait(1), timeoutPromise]);
+            // Output the transaction hash
+            console.log(receipt.hash);
+        } catch (waitError) {
+            // Transaction sent but confirmation timed out - output tx hash anyway
+            console.log(txResponse.hash);
+        }
 
     } catch (error) {
         console.error('Error:', error.message);
