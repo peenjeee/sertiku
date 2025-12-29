@@ -209,7 +209,7 @@
                         <p class="text-white/50 text-xs">PolygonScan Explorer</p>
                     </div>
                 </a>
-                <a href="https://faucet.polygon.technology/"
+                <a href="https://faucet.stakepool.dev.br/amoy/"
                    target="_blank"
                    class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition">
                     <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
