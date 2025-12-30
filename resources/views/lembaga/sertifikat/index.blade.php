@@ -37,7 +37,7 @@
         @endif
 
         <!-- Stats Cards -->
-        <div class="grid grid-cols-3 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div class="bg-blue-500/20 border border-blue-500/30 rounded-xl p-4 flex items-center gap-3">
                 <div class="w-10 h-10 bg-blue-500/30 rounded-lg flex items-center justify-center">
                     <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,6 +60,18 @@
                 <div>
                     <p class="text-white text-xl font-bold">{{ $stats['active'] ?? 0 }}</p>
                     <p class="text-white/60 text-xs">Aktif</p>
+                </div>
+            </div>
+            <div class="bg-amber-500/20 border border-amber-500/30 rounded-xl p-4 flex items-center gap-3">
+                <div class="w-10 h-10 bg-amber-500/30 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-white text-xl font-bold">{{ $stats['expired'] ?? 0 }}</p>
+                    <p class="text-white/60 text-xs">Kadaluarsa</p>
                 </div>
             </div>
             <div class="bg-red-500/20 border border-red-500/30 rounded-xl p-4 flex items-center gap-3">
@@ -86,7 +98,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67"
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
-                    <input type="text" name="search" value="{{ request('search') }}" 
+                    <input type="text" name="search" value="{{ request('search') }}"
                         placeholder="Nama, Email, Course, ID..."
                         class="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/20 rounded-lg text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
@@ -143,7 +155,7 @@
                                     // Check expiration first (takes priority over status)
                                     $isExpired = $certificate->expire_date && \Carbon\Carbon::parse($certificate->expire_date)->isPast();
                                 @endphp
-                                
+
                                 @if($certificate->status === 'revoked')
                                     <span class="px-2 py-1 bg-red-500 text-white text-xs font-bold rounded">✕ Dicabut</span>
                                 @elseif($isExpired)
@@ -160,10 +172,10 @@
                                     // Check if recipient is registered in system
                                     $registeredUser = null;
                                     $avatarUrl = null;
-                                    
+
                                     if ($certificate->recipient_email) {
                                         $registeredUser = \App\Models\User::where('email', $certificate->recipient_email)->first();
-                                        
+
                                         if ($registeredUser && $registeredUser->avatar && (str_starts_with($registeredUser->avatar, '/storage/') || str_starts_with($registeredUser->avatar, 'http'))) {
                                             // User is registered and has custom or Google avatar
                                             $avatarUrl = $registeredUser->avatar;

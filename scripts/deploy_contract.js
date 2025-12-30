@@ -128,10 +128,22 @@ async function deployContract() {
     console.log('Transaction hash:', contract.deploymentTransaction().hash);
     console.log('Waiting for confirmation...\n');
 
-    // Wait for deployment
-    await contract.waitForDeployment();
+    // Wait for deployment with 120 second timeout (deployments take longer)
+    const timeoutMs = 120000;
+    const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Deployment confirmation timeout after 120 seconds')), timeoutMs)
+    );
 
-    const contractAddress = await contract.getAddress();
+    let contractAddress;
+    try {
+        await Promise.race([contract.waitForDeployment(), timeoutPromise]);
+        contractAddress = await contract.getAddress();
+    } catch (waitError) {
+        console.log('Warning:', waitError.message);
+        console.log('Transaction was sent but confirmation timed out.');
+        console.log('Check PolygonScan for transaction:', contract.deploymentTransaction().hash);
+        process.exit(1);
+    }
 
     console.log('==========================================');
     console.log('CONTRACT DEPLOYED SUCCESSFULLY!');

@@ -11,7 +11,7 @@
                     </svg>
                 </div>
                 <h1 class="text-4xl font-bold text-white mb-4">Kebijakan Cookie</h1>
-                <p class="text-[#BEDBFF]">Terakhir diperbarui: 9 Desember 2025</p>
+                <p class="text-[#BEDBFF]">Terakhir diperbarui: 29 Desember 2025</p>
             </div>
 
             {{-- Content Card --}}

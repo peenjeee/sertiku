@@ -142,19 +142,35 @@ async function main() {
                 status: 'pending'
             }));
 
-            // Wait for confirmation
-            const receipt = await tx.wait();
+            // Wait for confirmation with 60 second timeout
+            const timeoutMs = 60000;
+            const timeoutPromise = new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('Transaction confirmation timeout after 60 seconds')), timeoutMs)
+            );
 
-            console.log(JSON.stringify({
-                success: true,
-                transactionHash: tx.hash,
-                hash: certHash,
-                certificateNumber: certNumber,
-                recipientName: recipientName,
-                status: 'confirmed',
-                blockNumber: receipt.blockNumber,
-                gasUsed: receipt.gasUsed.toString()
-            }));
+            try {
+                const receipt = await Promise.race([tx.wait(), timeoutPromise]);
+                console.log(JSON.stringify({
+                    success: true,
+                    transactionHash: tx.hash,
+                    hash: certHash,
+                    certificateNumber: certNumber,
+                    recipientName: recipientName,
+                    status: 'confirmed',
+                    blockNumber: receipt.blockNumber,
+                    gasUsed: receipt.gasUsed.toString()
+                }));
+            } catch (waitError) {
+                // Transaction was sent but confirmation timed out
+                console.log(JSON.stringify({
+                    success: true,
+                    transactionHash: tx.hash,
+                    hash: certHash,
+                    certificateNumber: certNumber,
+                    status: 'pending',
+                    warning: waitError.message
+                }));
+            }
 
         } catch (error) {
             console.log(JSON.stringify({

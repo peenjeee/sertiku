@@ -1,12 +1,29 @@
 <x-layouts.lembaga>
     <div class="space-y-6">
-        <!-- Header -->
-        <div class="flex items-center justify-between">
-            <div>
-                <h1 class="text-2xl font-bold text-white mb-2">Import Data Sertifikat (Bulk)</h1>
-                <p class="text-white/60">Upload file CSV atau Excel (.xlsx) untuk menerbitkan banyak sertifikat
-                    sekaligus.</p>
+        <!-- Header with Quota Display -->
+        <div class="info-box rounded-2xl p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-white text-2xl font-bold mb-2">Import Data Sertifikat (Bulk)</h1>
+                    <p class="text-white/70 text-base">Upload file CSV atau Excel untuk menerbitkan banyak sertifikat sekaligus</p>
+                </div>
+                <!-- Usage Badge -->
+                <div class="flex items-center gap-3">
+                    <div class="text-right">
+                        <p class="text-white/60 text-xs">Sisa Kuota Bulan Ini</p>
+                        <p class="text-white font-bold">{{ $remainingCertificates }} / {{ $certificateLimit }}</p>
+                    </div>
+                    <div
+                        class="w-12 h-12 rounded-full flex items-center justify-center {{ $remainingCertificates <= 10 ? 'bg-red-500/20' : 'bg-green-500/20' }}">
+                        <span
+                            class="text-lg font-bold {{ $remainingCertificates <= 10 ? 'text-red-400' : 'text-green-400' }}">{{ $remainingCertificates }}</span>
+                    </div>
+                </div>
             </div>
+        </div>
+
+        <!-- Download Template Button -->
+        <div class="flex justify-end">
             <div class="relative" x-data="{ open: false }">
                 <button @click="open = !open" type="button"
                     class="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-white text-sm transition flex items-center gap-2">
@@ -277,7 +294,7 @@
                                     @endif
 
                                     <p class="text-gray-300 text-sm mb-3">
-                                        Upload ke IPFS (Storacha)
+                                        Upload ke IPFS
                                     </p>
                                     <p class="text-gray-500 text-xs leading-relaxed">
                                         Simpan metadata sertifikat ke jaringan IPFS + Filecoin untuk penyimpanan
@@ -490,9 +507,22 @@
 
             // QUOTA PRE-CHECK (Only if rowCount is known)
             if (rowCount !== null) {
+                const remainingCertificates = {{ $remainingCertificates }};
                 const remainingBlockchain = {{ $remainingBlockchain }};
                 const remainingIpfs = {{ $remainingIpfs }};
 
+                // 1. Certificate Quota Check (Always required)
+                if (rowCount > remainingCertificates) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Kuota Sertifikat Tidak Cukup',
+                        html: `File Anda berisi <b>${rowCount}</b> data, namun sisa kuota Sertifikat Anda hanya <b>${remainingCertificates}</b>.<br><br>Silakan upgrade paket atau kurangi data.`,
+                        confirmButtonColor: '#3B82F6'
+                    });
+                    return;
+                }
+
+                // 2. Blockchain Quota Check (If enabled)
                 if (blockchainEnabled && rowCount > remainingBlockchain) {
                     Swal.fire({
                         icon: 'error',
@@ -503,6 +533,7 @@
                     return;
                 }
 
+                // 3. IPFS Quota Check (If enabled)
                 if (ipfsEnabled && rowCount > remainingIpfs) {
                     Swal.fire({
                         icon: 'error',
@@ -547,7 +578,7 @@
                         <span id="swal-status" class="text-blue-600 font-medium animate-pulse">Menyiapkan data...</span>
                     </div>
                     
-                    // <p class="text-xs text-gray-400 mt-2">Estimasi: <span id="swal-countdown">${totalEstimated}</span> detik</p>
+                    <p class="text-xs text-gray-400 mt-2">Estimasi: <span id="swal-countdown">${totalEstimated}</span> detik</p>
                 `,
                 allowOutsideClick: false,
                 allowEscapeKey: false,

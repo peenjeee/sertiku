@@ -431,6 +431,11 @@ Route::middleware(['auth'])->prefix('lembaga')->name('lembaga.')->group(function
         // System Template Generator
         Route::get('/template/create', [\App\Http\Controllers\LembagaController::class, 'createTemplate'])->name('template.create');
         Route::post('/template/system', [\App\Http\Controllers\LembagaController::class, 'storeSystemTemplate'])->name('template.storeSystem');
+
+        // AI Template Generator
+        Route::get('/template/ai', [\App\Http\Controllers\LembagaController::class, 'createAITemplate'])->name('template.ai');
+        Route::post('/template/ai/generate', [\App\Http\Controllers\LembagaController::class, 'generateAITemplate'])->name('template.ai.generate');
+        Route::post('/template/ai/store', [\App\Http\Controllers\LembagaController::class, 'storeAITemplate'])->name('template.ai.store');
     });
 
     // Template

@@ -168,8 +168,18 @@
 
                         <!-- Name Settings -->
                         <div>
-                            <h3 class="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                                <div class="w-1 h-4 bg-red-500 rounded-full"></div> Pengaturan Nama
+                            <h3 class="font-semibold text-gray-900 mb-4 flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-1 h-4 bg-red-500 rounded-full"></div> Pengaturan Nama
+                                </div>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="checkbox" name="is_name_visible" id="input_is_name_visible" value="1"
+                                        checked class="sr-only peer">
+                                    <div
+                                        class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600">
+                                    </div>
+                                    <span class="ms-2 text-xs font-medium text-gray-700">Tampil</span>
+                                </label>
                             </h3>
                             <div class="space-y-4">
                                 <!-- Font Family -->
@@ -217,8 +227,18 @@
 
                         <!-- QR Settings -->
                         <div>
-                            <h3 class="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                                <div class="w-1 h-4 bg-blue-500 rounded-full"></div> Pengaturan QR Code
+                            <h3 class="font-semibold text-gray-900 mb-4 flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-1 h-4 bg-blue-500 rounded-full"></div> Pengaturan QR Code
+                                </div>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="checkbox" name="is_qr_visible" id="input_is_qr_visible" value="1"
+                                        checked class="sr-only peer">
+                                    <div
+                                        class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600">
+                                    </div>
+                                    <span class="ms-2 text-xs font-medium text-gray-700">Tampil</span>
+                                </label>
                             </h3>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Ukuran QR (px)</label>
@@ -439,6 +459,30 @@
                     updatePreview();
                 }
             });
+
+            // Toggle Visibility
+            const checkName = document.getElementById('input_is_name_visible');
+            const checkQr = document.getElementById('input_is_qr_visible');
+
+            if (checkName) {
+                checkName.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        dragName.classList.remove('hidden');
+                    } else {
+                        dragName.classList.add('hidden');
+                    }
+                });
+            }
+
+            if (checkQr) {
+                checkQr.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        dragQr.classList.remove('hidden');
+                    } else {
+                        dragQr.classList.add('hidden');
+                    }
+                });
+            }
 
             // --- Drag Logic ---
             function handleDragStart(e, element, type) {

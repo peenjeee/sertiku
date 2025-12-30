@@ -84,6 +84,8 @@ class ActivityLog extends Model
             'enterprise_form' => '🏢',
             'cta_lead' => '🎣',
             'status_notification' => '🔔',
+            'revoke_certificate' => '🚫',
+            'reactivate_certificate' => '🔄',
             default => '📝',
         };
     }
@@ -110,6 +112,8 @@ class ActivityLog extends Model
             'enterprise_form' => 'indigo',
             'cta_lead' => 'cyan',
             'status_notification' => 'blue',
+            'revoke_certificate' => 'red',
+            'reactivate_certificate' => 'green',
             default => 'indigo',
         };
     }

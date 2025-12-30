@@ -120,7 +120,7 @@
                                 telah kadaluarsa pada {{ \Carbon\Carbon::parse($certificate->expire_date)->format('d F Y') }}.
                             </p>
                             <p class="text-white/50 text-sm mb-4">Data blockchain tetap valid, namun sertifikat tidak lagi berlaku.</p>
-                            
+
                             {{-- Show blockchain data for expired certificate --}}
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                                 @if(isset($onChainData['certificateNumber']) && $onChainData['certificateNumber'])

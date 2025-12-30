@@ -151,7 +151,7 @@ TURNSTILE_SECRET_KEY=your-secret-key
 SertiKu menggunakan Polygon (Amoy Testnet) untuk menyimpan hash sertifikat di blockchain.
 
 1. Buat wallet di [MetaMask](https://metamask.io/)
-2. Dapatkan MATIC testnet dari [Polygon Faucet](https://faucet.polygon.technology/)
+2. Dapatkan MATIC testnet dari [Polygon Faucet](https://faucet.stakepool.dev.br/amoy/)
 3. Deploy smart contract atau gunakan contract yang sudah ada
 
 ```env

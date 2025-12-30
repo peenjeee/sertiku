@@ -147,20 +147,22 @@
         @endif
 
         {{-- Name (offset +1% down for DOMPDF adjustment) --}}
-        <div class="recipient-name-anchor" style="left: {{ $nameX }}%; top: {{ $nameY + 1 }}%;">
-            <div class="recipient-name" style="font-size: {{ $scaledNameFontSize }}pt;">
-                {{ $certificate->recipient_name }}
+        @if($certificate->template->is_name_visible ?? true)
+            <div class="recipient-name-anchor" style="left: {{ $nameX }}%; top: {{ $nameY + 1 }}%;">
+                <div class="recipient-name" style="font-size: {{ $scaledNameFontSize }}pt;">
+                    {{ $certificate->recipient_name }}
+                </div>
             </div>
-        </div>
+        @endif
 
-        @if($certificate->qr_code_path)
+        @if($certificate->qr_code_path && ($certificate->template->is_qr_visible ?? true))
             {{-- QR Code (offset -1% left for DOMPDF adjustment) --}}
             <div class="qr-code-anchor" style="left: {{ $qrX - 1 }}%; top: {{ $qrY }}%;">
                 <div class="qr-code-box" style="
-                                    width: {{ $scaledQrSize }}pt; 
-                                    height: {{ $scaledQrSize }}pt; 
-                                    margin-left: -{{ $scaledQrHalfSize }}pt; 
-                                    margin-top: -{{ $scaledQrHalfSize }}pt;">
+                                        width: {{ $scaledQrSize }}pt; 
+                                        height: {{ $scaledQrSize }}pt; 
+                                        margin-left: -{{ $scaledQrHalfSize }}pt; 
+                                        margin-top: -{{ $scaledQrHalfSize }}pt;">
                     <img src="{{ storage_path('app/public/' . $certificate->qr_code_path) }}"
                         style="width: 100%; height: 100%;">
                 </div>
