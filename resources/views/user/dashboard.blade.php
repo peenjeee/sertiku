@@ -176,15 +176,16 @@
                                 {{ $cert->created_at->format('d M Y') }}
                             </p>
                         </div>
-                        @if($cert->status === 'revoked') bg-red-500/20 text-red-400
-                        @elseif($cert->expire_date && $cert->expire_date < now()) bg-amber-500/20 text-amber-400
-                        @elseif($cert->status === 'active') bg-green-500/20 text-green-400
-                        @else bg-gray-500/20 text-gray-400 @endif
+                        <span class="px-3 py-1 rounded-full text-xs font-medium
+                            @if($cert->status === 'revoked') bg-red-500/20 text-red-400
+                            @elseif($cert->expire_date && $cert->expire_date < now()) bg-amber-500/20 text-amber-400
+                            @elseif($cert->status === 'active') bg-green-500/20 text-green-400
+                            @else bg-gray-500/20 text-gray-400 @endif
                         ">
-                        @if($cert->status === 'revoked') Dicabut
-                        @elseif($cert->expire_date && $cert->expire_date < now()) Kadaluarsa
-                        @elseif($cert->status === 'active') Aktif
-                        @else {{ ucfirst($cert->status) }} @endif
+                            @if($cert->status === 'revoked') Dicabut
+                            @elseif($cert->expire_date && $cert->expire_date < now()) Kadaluarsa
+                            @elseif($cert->status === 'active') Aktif
+                            @else {{ ucfirst($cert->status) }} @endif
                         </span>
                         @if($cert->pdf_url)
                             <a href="{{ $cert->pdf_url }}" target="_blank" class="text-white/40 hover:text-white transition"
