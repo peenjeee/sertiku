@@ -901,7 +901,7 @@ md:-left-8 md:-top-8 md:h-16 md:w-16 z-10">
 
             {{-- Subjudul --}}
             <p class="mx-auto mt-3 max-w-xl text-[15px] leading-snug text-[rgba(226,232,240,0.95)]">
-                Bergabunglah dengan 67+ lembaga yang telah mempercayai
+                Bergabunglah dengan {{ $totalLembaga }}+ Lembaga yang telah mempercayai
                 <br class="hidden md:block">
                 SertiKu untuk kebutuhan sertifikasi digital mereka.
             </p>
@@ -943,7 +943,7 @@ md:-left-8 md:-top-8 md:h-16 md:w-16 z-10">
 
             {{-- Keterangan kecil --}}
             <p class="mt-4 text-[11px] text-[rgba(226,232,240,0.9)]">
-                Gratis untuk 67 sertifikat pertama. Tidak perlu kartu kredit.
+                Gratis untuk 50 sertifikat pertama. Tidak perlu kartu kredit.
             </p>
         </div>
     </section>
