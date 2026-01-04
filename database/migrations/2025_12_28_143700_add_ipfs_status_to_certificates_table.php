@@ -11,6 +11,12 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('certificates', function (Blueprint $table) {
+            // 1. Cek jika ipfs_url belum ada, maka buatkan dulu
+            if (!Schema::hasColumn('certificates', 'ipfs_url')) {
+                $table->string('ipfs_url')->nullable();
+            }
+
+            // 2. Baru tambahkan ipfs_status setelah ipfs_url
             $table->string('ipfs_status')->nullable()->after('ipfs_url');
         });
     }
@@ -21,7 +27,8 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('certificates', function (Blueprint $table) {
-            $table->dropColumn('ipfs_status');
+            // Hapus kedua kolom jika migrasi di-rollback
+            $table->dropColumn(['ipfs_url', 'ipfs_status']);
         });
     }
 };
