@@ -463,9 +463,12 @@ class AdminController extends Controller
         $blockchainService = new \App\Services\BlockchainService();
         $walletInfo = $blockchainService->getWalletInfo();
 
+        // Get actual on-chain count from smart contract
+        $contractStats = $blockchainService->getContractStats();
+
         // Get blockchain certificates stats
         $blockchainStats = [
-            'total_blockchain' => Certificate::whereNotNull('blockchain_tx_hash')->count(),
+            'total_blockchain' => $contractStats['totalCertificates'] ?? 0, // Use smart contract count
             'pending' => Certificate::where('blockchain_status', 'pending')->count(),
             'confirmed' => Certificate::where('blockchain_status', 'confirmed')->count(),
             'failed' => Certificate::where('blockchain_status', 'failed')->count(),

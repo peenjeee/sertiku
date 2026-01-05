@@ -399,7 +399,7 @@ class BlockchainService
         $txCount = $this->getTransactionCount();
 
         // Estimate remaining certificates based on average gas cost
-        $avgGasCostMatic = 0.003; // ~0.003 MATIC per transaction
+        $avgGasCostMatic = 0.02; // ~0.02 MATIC per certificate (user confirmed)
         $remainingCerts = $balance ? floor($balance['matic'] / $avgGasCostMatic) : 0;
 
         return [

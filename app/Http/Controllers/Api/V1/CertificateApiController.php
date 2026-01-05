@@ -76,9 +76,11 @@ class CertificateApiController extends Controller
         $totalCertificates = Certificate::count();
         $activeCertificates = Certificate::where('status', 'active')->count();
         $totalIssuers = User::whereHas('certificates')->count();
-        $blockchainCertificates = Certificate::where('blockchain_enabled', true)
-            ->where('blockchain_status', 'confirmed')
-            ->count();
+
+        // Get actual on-chain count from smart contract
+        $blockchainService = new \App\Services\BlockchainService();
+        $contractStats = $blockchainService->getContractStats();
+        $blockchainCertificates = $contractStats['totalCertificates'] ?? 0;
 
         return response()->json([
             'success' => true,

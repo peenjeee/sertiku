@@ -16,18 +16,18 @@ class MasterController extends Controller
     {
         // Get comprehensive stats
         $stats = [
-            'total_users'        => User::count(),
-            'total_admins'       => User::where('is_admin', true)->count(),
-            'total_masters'      => User::where('is_master', true)->count(),
-            'total_lembaga'      => User::where('account_type', 'lembaga')->count(),
-            'total_pengguna'     => User::where('account_type', 'pengguna')->count(),
+            'total_users' => User::count(),
+            'total_admins' => User::where('is_admin', true)->count(),
+            'total_masters' => User::where('is_master', true)->count(),
+            'total_lembaga' => User::where('account_type', 'lembaga')->count(),
+            'total_pengguna' => User::where('account_type', 'pengguna')->count(),
             'total_certificates' => Certificate::count(),
-            'total_orders'       => Order::count(),
-            'total_revenue'      => Order::where('status', 'paid')->sum('amount') ?? 0,
+            'total_orders' => Order::count(),
+            'total_revenue' => Order::where('status', 'paid')->sum('amount') ?? 0,
         ];
 
         // Recent activities
-        $recentUsers  = User::latest()->take(5)->get();
+        $recentUsers = User::latest()->take(5)->get();
         $recentOrders = Order::with('user', 'package')->latest()->take(5)->get();
 
         // All admins list
@@ -42,7 +42,7 @@ class MasterController extends Controller
     public function manageAdmins()
     {
         $admins = User::where('is_admin', true)->orderBy('is_master', 'desc')->get();
-        $users  = User::where('is_admin', false)->get();
+        $users = User::where('is_admin', false)->get();
 
         return view('master.admins', compact('admins', 'users'));
     }
@@ -52,11 +52,11 @@ class MasterController extends Controller
      */
     public function promoteToAdmin(Request $request, User $user)
     {
-        if (! auth()->user()->is_master) {
+        if (!auth()->user()->is_master) {
             abort(403);
         }
 
-        $user->is_admin     = true;
+        $user->is_admin = true;
         $user->account_type = 'admin';
         $user->save();
 
@@ -75,7 +75,7 @@ class MasterController extends Controller
      */
     public function demoteAdmin(Request $request, User $user)
     {
-        if (! auth()->user()->is_master) {
+        if (!auth()->user()->is_master) {
             abort(403);
         }
 
@@ -89,7 +89,7 @@ class MasterController extends Controller
             return back()->with('error', 'Tidak dapat menurunkan diri sendiri.');
         }
 
-        $user->is_admin     = false;
+        $user->is_admin = false;
         $user->account_type = 'pengguna';
         $user->save();
 
@@ -150,14 +150,17 @@ class MasterController extends Controller
     public function blockchain()
     {
         $blockchainService = new \App\Services\BlockchainService();
-        $walletInfo        = $blockchainService->getWalletInfo();
+        $walletInfo = $blockchainService->getWalletInfo();
+
+        // Get actual on-chain count from smart contract
+        $contractStats = $blockchainService->getContractStats();
 
         // Get blockchain certificates stats
         $blockchainStats = [
-            'total_blockchain' => Certificate::whereNotNull('blockchain_tx_hash')->count(),
-            'pending'          => Certificate::where('blockchain_status', 'pending')->count(),
-            'confirmed'        => Certificate::where('blockchain_status', 'confirmed')->count(),
-            'failed'           => Certificate::where('blockchain_status', 'failed')->count(),
+            'total_blockchain' => $contractStats['totalCertificates'] ?? 0, // Use smart contract count
+            'pending' => Certificate::where('blockchain_status', 'pending')->count(),
+            'confirmed' => Certificate::where('blockchain_status', 'confirmed')->count(),
+            'failed' => Certificate::where('blockchain_status', 'failed')->count(),
         ];
 
         // Recent blockchain transactions
