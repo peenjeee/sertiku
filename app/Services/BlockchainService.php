@@ -520,9 +520,8 @@ class BlockchainService
             // Use full path for hosting, fallback to 'node' for local
             $nodePath = env('NODE_PATH', 'node');
 
-            // Add --max-old-space-size=50 (Extremely strict for shared hosting)
-            // If this still fails, we might need to default to PHP signing.
-            $command = "{$nodePath} --max-old-space-size=50 --no-warnings {$scriptPath} store {$hash} {$certNumber} {$recipientName} {$courseName} {$issueDate} {$issuerName} 2>&1";
+            // Add --max-old-space-size=150 (Increased from 50MB as per request)
+            $command = "{$nodePath} --max-old-space-size=150 --no-warnings {$scriptPath} store {$hash} {$certNumber} {$recipientName} {$courseName} {$issueDate} {$issuerName} 2>&1";
 
             Log::info('BlockchainService: Storing certificate via smart contract with full data');
 
@@ -580,7 +579,7 @@ class BlockchainService
 
             $hash = escapeshellarg($certHash);
             $nodePath = env('NODE_PATH', 'node');
-            $command = "{$nodePath} --max-old-space-size=64 --no-warnings {$scriptPath} verify {$hash} 2>&1";
+            $command = "{$nodePath} --max-old-space-size=150 --no-warnings {$scriptPath} verify {$hash} 2>&1";
 
             $output = shell_exec($command);
             $output = trim($output ?? '');
@@ -616,7 +615,7 @@ class BlockchainService
             }
 
             $nodePath = env('NODE_PATH', 'node');
-            $command = "{$nodePath} --max-old-space-size=64 --no-warnings {$scriptPath} stats 2>&1";
+            $command = "{$nodePath} --max-old-space-size=150 --no-warnings {$scriptPath} stats 2>&1";
             $output = shell_exec($command);
             $output = trim($output ?? '');
 
