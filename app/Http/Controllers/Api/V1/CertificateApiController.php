@@ -257,7 +257,7 @@ class CertificateApiController extends Controller
         // Generate file hashes
         $certificate->generateFileHashes();
 
-        // Process blockchain if enabled
+        // Process blockchain if enabled (background queue, processed via cron)
         if ($blockchainEnabled) {
             $blockchainService = new \App\Services\BlockchainService();
             if ($blockchainService->isEnabled()) {

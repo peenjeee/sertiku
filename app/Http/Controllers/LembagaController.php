@@ -165,14 +165,14 @@ class LembagaController extends Controller
         }
 
         // If blockchain upload requested, dispatch job to process in background
-        // IPFS will be triggered AFTER blockchain confirms (inside the job)
+        // Queue processed via cron (queue:work --once) to avoid OOM
         // Status already set at creation time, just dispatch jobs (same as BulkCertificateController)
         try {
             if ($validated['blockchain_enabled']) {
                 $blockchainService = new \App\Services\BlockchainService();
 
                 if ($blockchainService->isEnabled()) {
-                    // Dispatch Blockchain Job (which handles IPFS internally if enabled)
+                    // Dispatch Blockchain Job to background queue
                     \App\Jobs\ProcessBlockchainCertificate::dispatch($certificate, $ipfsEnabled);
                 } else {
                     // Blockchain not configured - update status
@@ -181,7 +181,7 @@ class LembagaController extends Controller
             } elseif ($ipfsEnabled) {
                 $ipfsService = new \App\Services\IpfsService();
                 if ($ipfsService->isEnabled()) {
-                    // IPFS only - dispatch job
+                    // IPFS only - dispatch to queue
                     \App\Jobs\ProcessIpfsCertificate::dispatch($certificate);
                 }
             }

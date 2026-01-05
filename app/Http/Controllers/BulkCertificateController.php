@@ -432,7 +432,7 @@ class BulkCertificateController extends Controller
                         $blockchainService = new \App\Services\BlockchainService();
 
                         if ($blockchainService->isEnabled()) {
-                            // Dispatch Blockchain Job (which handles IPFS internally if enabled)
+                            // Dispatch Blockchain Job to background queue
                             ProcessBlockchainCertificate::dispatch($certificate, $ipfsEnabled);
                         } else {
                             // Blockchain not configured - update status (override the 'pending' set at creation)

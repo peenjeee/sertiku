@@ -74,7 +74,7 @@ class ProcessBlockchainCertificate implements ShouldQueue
                     ['tx_hash' => $txHash]
                 );
 
-                // Dispatch IPFS job after blockchain confirms (so metadata includes tx_hash)
+                // Dispatch IPFS job after blockchain confirms
                 // Only if user explicitly requested IPFS upload
                 if ($this->ipfsEnabled) {
                     $ipfsService = new \App\Services\IpfsService();
