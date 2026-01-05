@@ -49,6 +49,9 @@ class ProcessBlockchainCertificate implements ShouldQueue
      */
     public function handle(BlockchainService $blockchainService): void
     {
+        // Increase memory limit for this job as it involves file processing and crypto operations
+        ini_set('memory_limit', '1024M');
+
         Log::info("Processing blockchain for certificate: {$this->certificate->certificate_number}");
 
         try {
