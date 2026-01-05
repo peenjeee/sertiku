@@ -500,21 +500,16 @@
             // --- 1. EMAIL TOGGLE LOGIC ---
             const recipientEmailInput = document.getElementById('recipient_email');
             const sendEmailCheckbox = document.getElementById('send_email');
-            
+
             function toggleSendEmailOption() {
                 if (!recipientEmailInput || !sendEmailCheckbox) return;
-                 const hasEmail = recipientEmailInput.value.trim() !== '';
-                
+                const hasEmail = recipientEmailInput.value.trim() !== '';
+
                 if (hasEmail) {
-                    // Email filled: Enable toggle
                     sendEmailCheckbox.removeAttribute('disabled');
                     sendEmailCheckbox.parentElement.classList.remove('opacity-50', 'cursor-not-allowed');
                     sendEmailCheckbox.parentElement.classList.add('cursor-pointer');
-                    
-                    // Auto-check if it wasn't manually unchecked (optional, but user asked for default off, so maybe just enable)
-                    // Let's just enable it and keep current state (which defaults to off)
                 } else {
-                    // Email empty: Disable and Uncheck
                     sendEmailCheckbox.setAttribute('disabled', 'disabled');
                     sendEmailCheckbox.checked = false;
                     sendEmailCheckbox.parentElement.classList.add('opacity-50', 'cursor-not-allowed');
@@ -523,42 +518,33 @@
             }
 
             if (recipientEmailInput && sendEmailCheckbox) {
-                // Initial check
                 toggleSendEmailOption();
-                
-                // Listen for changes
                 recipientEmailInput.addEventListener('input', toggleSendEmailOption);
                 recipientEmailInput.addEventListener('change', toggleSendEmailOption);
             }
 
             // --- 2. FORM SUBMIT & ALERT LOGIC ---
             const form = document.getElementById('certificate-form');
-            
+
             if (form) {
-                // Prevent native validation tooltips
                 form.setAttribute('novalidate', true);
 
                 form.addEventListener('submit', function (e) {
-                    // Stop submission immediately
                     e.preventDefault();
-                    console.log('Form submit intercepted');
 
                     // Check validation
                     if (!this.checkValidity()) {
                         const firstInvalid = this.querySelector(':invalid');
                         if (firstInvalid) {
                             let label = firstInvalid.getAttribute('name') || 'Field';
-                            
-                            // Try to find label text
                             try {
                                 const parentDiv = firstInvalid.closest('div');
                                 if (parentDiv) {
                                     const labelEl = parentDiv.querySelector('label');
                                     if (labelEl) label = labelEl.textContent.replace('*', '').trim();
                                 }
-                            } catch (err) {}
+                            } catch (err) { }
 
-                            // Show Error Alert
                             if (typeof Swal !== 'undefined') {
                                 Swal.fire({
                                     icon: 'warning',
@@ -575,7 +561,7 @@
                                 alert(`${label} wajib diisi`);
                                 firstInvalid.focus();
                             }
-                            return; // Stop here
+                            return;
                         }
                     }
 
@@ -589,7 +575,7 @@
                     if (ipfsEnabled) estimatedTime += 10;
                     if (sendEmail) estimatedTime += 5;
 
-                    // Show Progress Alert
+                    // Show Progress Alert with Countdown
                     if (typeof Swal !== 'undefined') {
                         Swal.fire({
                             title: 'Menerbitkan Sertifikat...',
@@ -600,14 +586,17 @@
                                         <div class="flex items-center gap-2 text-gray-700">
                                             <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div> Generating PDF
                                         </div>
-                                        ${sendEmail ? '<div class="flex items-center gap-2 text-gray-700"><div class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div> Mengirim Email</div>' : ''}
-                                        ${blockchainEnabled ? '<div class="flex items-center gap-2 text-purple-600"><div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div> Blockchain (Polygon)</div>' : ''}
-                                        ${ipfsEnabled ? '<div class="flex items-center gap-2 text-cyan-600"><div class="w-2 h-2 bg-cyan-500 rounded-full animate-pulse"></div> Upload IPFS</div>' : ''}
+                                        ${sendEmail ? '<div class="flex items-center gap-2 text-yellow-600 font-medium"><div class="w-2 h-2 rounded-full bg-yellow-500"></div> Email: Mengirim ke penerima</div>' : ''}
+                                        ${blockchainEnabled ? '<div class="flex items-center gap-2 text-purple-600 font-medium"><div class="w-2 h-2 rounded-full bg-purple-500"></div> Blockchain: Menyimpan ke Polygon Network</div>' : ''}
+                                        ${ipfsEnabled ? '<div class="flex items-center gap-2 text-cyan-600 font-medium"><div class="w-2 h-2 rounded-full bg-cyan-500"></div> IPFS: Upload ke Decentralized Storage</div>' : ''}
                                     </div>
                                     <div class="w-full bg-gray-200 rounded-full h-2.5 mb-1 overflow-hidden">
-                                        <div id="swal-progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-1000" style="width: 5%"></div>
+                                        <div id="swal-progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: 5%"></div>
                                     </div>
-                                    <p class="text-xs text-gray-400 text-right mt-1">Estimasi: ~${estimatedTime} detik</p>
+                                    <!-- COUNTDOWN DISPLAY -->
+                                    <p class="text-xs text-gray-400 text-right mt-1">
+                                        Estimasi: ~<span id="countdown-timer">${estimatedTime}</span> detik
+                                    </p>
                                 </div>
                             `,
                             allowOutsideClick: false,
@@ -615,14 +604,32 @@
                             showConfirmButton: false,
                             didOpen: () => {
                                 Swal.showLoading();
-                                
-                                // Animate Progress Bar
+
+                                // Animate Progress Bar (Fake Progress)
                                 const progressBar = document.getElementById('swal-progress-bar');
-                                if(progressBar) {
-                                    setTimeout(() => { progressBar.style.width = '40%'; }, 500);
-                                    setTimeout(() => { progressBar.style.width = '70%'; }, 1500);
-                                    setTimeout(() => { progressBar.style.width = '90%'; }, estimatedTime * 800);
-                                }
+                                const countdownTimer = document.getElementById('countdown-timer');
+
+                                let currentProgress = 5;
+                                let timeLeft = estimatedTime;
+
+                                // Progress bar animation interval
+                                const progressInterval = setInterval(() => {
+                                    if (currentProgress < 95) {
+                                        currentProgress += (90 / (estimatedTime * 10)); // Increment smoother
+                                        if (progressBar) progressBar.style.width = Math.min(currentProgress, 95) + '%';
+                                    }
+                                }, 100);
+
+                                // Countdown timer interval
+                                const timerInterval = setInterval(() => {
+                                    timeLeft--;
+                                    if (countdownTimer) {
+                                        countdownTimer.textContent = Math.max(0, timeLeft);
+                                    }
+                                    if (timeLeft <= 0) {
+                                        clearInterval(timerInterval);
+                                    }
+                                }, 1000);
 
                                 // ACTUALLY SUBMIT FORM
                                 form.submit();
@@ -635,6 +642,5 @@
                 });
             }
         });
-    </script>
     </script>
 </x-layouts.lembaga>

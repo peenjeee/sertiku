@@ -869,6 +869,10 @@ class LembagaController extends Controller
             // Save image
             Storage::disk('public')->put($filename, $imageContent);
 
+            // Calculate hashes
+            $md5 = md5($imageContent);
+            $sha256 = hash('sha256', $imageContent);
+
             // Set dimensions based on orientation
             $width = $validated['orientation'] === 'portrait' ? 794 : 1123;
             $height = $validated['orientation'] === 'portrait' ? 1123 : 794;
@@ -878,11 +882,13 @@ class LembagaController extends Controller
                 'name' => $validated['name'],
                 'description' => 'AI Generated Template (' . ($validated['style'] ?? 'custom') . ')',
                 'file_path' => $filename,
-                'thumbnail_path' => $filename,
+                'thumbnail_path' => $filename, // Use same file for thumbnail for now
                 'orientation' => $validated['orientation'],
                 'width' => $width,
                 'height' => $height,
                 'is_active' => true,
+                'md5' => $md5,
+                'sha256' => $sha256,
             ]);
 
             return redirect()->route('lembaga.template.index')

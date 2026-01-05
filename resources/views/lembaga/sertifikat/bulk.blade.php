@@ -560,6 +560,9 @@
                             <span class="text-blue-800 font-bold">Total Data:</span>
                             <span class="text-blue-600 font-mono text-lg">${rowCountDisplay}</span>
                         </div>
+                        <div class="flex items-center gap-2 text-gray-700">
+                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div> Generating PDF
+                        </div>
                         <div class="space-y-1 mb-2 text-sm">
                             ${sendEmailEnabled ? '<div class="flex items-center gap-2 text-yellow-600 font-medium"><div class="w-2 h-2 rounded-full bg-yellow-500"></div> Email: Mengirim ke penerima</div>' : ''}
                             ${blockchainEnabled ? '<div class="flex items-center gap-2 text-purple-600 font-medium"><div class="w-2 h-2 rounded-full bg-purple-500"></div> Blockchain: Menyimpan ke Polygon Network</div>' : ''}
