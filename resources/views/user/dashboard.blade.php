@@ -160,42 +160,45 @@
         </div>
 
         @if($recentCertificates->count() > 0)
-            <div class="grid gap-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 @foreach($recentCertificates as $cert)
-                    <div class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
-                        <div
-                            class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+                    <div class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                        {{-- Certificate Icon --}}
+                        <div class="shrink-0 w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                             </svg>
                         </div>
+                        {{-- Certificate Info --}}
                         <div class="flex-1 min-w-0">
                             <p class="text-white font-medium truncate">{{ $cert->course_name ?? 'Sertifikat' }}</p>
-                            <p class="text-white/50 text-sm">{{ $cert->issuer->name ?? 'Lembaga' }} •
-                                {{ $cert->created_at->format('d M Y') }}
-                            </p>
+                            <p class="text-white/50 text-sm truncate">{{ $cert->issuer->name ?? 'Lembaga' }} • {{ $cert->created_at->format('d M Y') }}</p>
                         </div>
-                        <span class="px-3 py-1 rounded-full text-xs font-medium
-                            @if($cert->status === 'revoked') bg-red-500/20 text-red-400
-                            @elseif($cert->expire_date && $cert->expire_date < now()) bg-amber-500/20 text-amber-400
-                            @elseif($cert->status === 'active') bg-green-500/20 text-green-400
-                            @else bg-gray-500/20 text-gray-400 @endif
-                        ">
-                            @if($cert->status === 'revoked') Dicabut
-                            @elseif($cert->expire_date && $cert->expire_date < now()) Kadaluarsa
-                            @elseif($cert->status === 'active') Aktif
-                            @else {{ ucfirst($cert->status) }} @endif
-                        </span>
-                        @if($cert->pdf_url)
-                            <a href="{{ $cert->pdf_url }}" target="_blank" class="text-white/40 hover:text-white transition"
-                                title="Download PDF">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                </svg>
-                            </a>
-                        @endif
+                        {{-- Status Badge & Actions --}}
+                        <div class="shrink-0 flex items-center gap-3">
+                            <span class="px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap
+                                @if($cert->status === 'revoked') bg-red-500/20 text-red-400
+                                @elseif($cert->expire_date && $cert->expire_date < now()) bg-amber-500/20 text-amber-400
+                                @elseif($cert->status === 'active') bg-green-500/20 text-green-400
+                                @else bg-gray-500/20 text-gray-400 @endif
+                            ">
+                                @if($cert->status === 'revoked') Dicabut
+                                @elseif($cert->expire_date && $cert->expire_date < now()) Kadaluarsa
+                                @elseif($cert->status === 'active') Aktif
+                                @else {{ ucfirst($cert->status) }} @endif
+                            </span>
+                            @if($cert->pdf_url)
+                                <a href="{{ $cert->pdf_url }}" target="_blank"
+                                    class="p-2 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition"
+                                    title="Download PDF">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                </a>
+                            @endif
+                        </div>
                     </div>
                 @endforeach
             </div>

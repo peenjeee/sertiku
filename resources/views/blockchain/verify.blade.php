@@ -404,10 +404,50 @@
                                     blockchain</p>
                             </div>
                         </div>
-                        <div class="p-6">
+                        <div class="p-6 space-y-4">
                             <p class="text-white/70 mb-4">Sertifikat <strong>{{ $certificate->certificate_number }}</strong>
                                 ditemukan di database tetapi hash-nya tidak tersimpan di blockchain.</p>
-                            <p class="text-white/50 text-sm">Status: {{ $certificate->blockchain_status ?? 'Tidak ada' }}</p>
+                            <p class="text-white/50 text-sm">Status: {{ $certificate->blockchain_status ?? 'confirmed' }}</p>
+
+                            {{-- Certificate Details --}}
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <div class="bg-white/5 rounded-xl p-4">
+                                    <p class="text-white/50 text-xs mb-1">Nomor Sertifikat</p>
+                                    <p class="text-white font-bold">{{ $certificate->certificate_number }}</p>
+                                </div>
+                                @if($certificate->recipient_name)
+                                    <div class="bg-white/5 rounded-xl p-4">
+                                        <p class="text-white/50 text-xs mb-1">Nama Penerima</p>
+                                        <p class="text-white font-bold">{{ $certificate->recipient_name }}</p>
+                                    </div>
+                                @endif
+                                @if($certificate->course_name)
+                                    <div class="bg-white/5 rounded-xl p-4">
+                                        <p class="text-white/50 text-xs mb-1">Nama Kursus</p>
+                                        <p class="text-white font-bold">{{ $certificate->course_name }}</p>
+                                    </div>
+                                @endif
+                                @if($certificate->issue_date)
+                                    <div class="bg-white/5 rounded-xl p-4">
+                                        <p class="text-white/50 text-xs mb-1">Tanggal Terbit</p>
+                                        <p class="text-white font-bold">{{ \Carbon\Carbon::parse($certificate->issue_date)->format('d F Y') }}</p>
+                                    </div>
+                                @endif
+                            </div>
+
+                            {{-- Action Button --}}
+                            @if($certificate->hash ?? false)
+                                <div class="flex flex-wrap gap-3 pt-4">
+                                    <a href="{{ route('verifikasi.show', $certificate->hash) }}"
+                                        class="px-4 py-2 bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded-lg text-sm font-medium hover:bg-blue-500/30 transition flex items-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        Lihat Detail Sertifikat
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
 
