@@ -1,15 +1,38 @@
-# SertiKu Sitemap
-User-agent: *
-Allow: /
+# https://sertiku.web.id robots.txt
+# Last Updated: 2026-01-05
 
-# Block admin and internal pages
+User-agent: Googlebot
+Allow: /
 Disallow: /admin/
 Disallow: /superadmin/
 Disallow: /master/
 Disallow: /api/
 Disallow: /storage/
+Disallow: /login
+Disallow: /register
+Disallow: /password/
+Disallow: /verify-otp
+Crawl-delay: 1
 
-# Block authentication pages
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /superadmin/
+Disallow: /master/
+Disallow: /api/
+Disallow: /storage/
+Disallow: /login
+Disallow: /register
+Disallow: /password/
+Disallow: /verify-otp
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /superadmin/
+Disallow: /master/
+Disallow: /api/
+Disallow: /storage/
 Disallow: /login
 Disallow: /register
 Disallow: /password/
@@ -17,6 +40,3 @@ Disallow: /verify-otp
 
 # Sitemap
 Sitemap: https://sertiku.web.id/sitemap.xml
-
-# Crawl-delay (optional, be nice to servers)
-Crawl-delay: 1
