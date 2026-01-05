@@ -20,11 +20,11 @@ class BlockchainController extends Controller
      */
     public function verify(Request $request)
     {
-        $query       = $request->input('q');
-        $result      = null;
+        $query = $request->input('q');
+        $result = null;
         $certificate = null;
         $onChainData = null;
-        $error       = null;
+        $error = null;
 
         if ($query) {
             // Try to find certificate by number, hash, or IPFS CID
@@ -36,11 +36,40 @@ class BlockchainController extends Controller
                 ->first();
 
             if ($certificate) {
-                // Get the hash to verify (prefer certificate_sha256 as it's what we store on-chain now)
-                $hashToVerify = $certificate->certificate_sha256 ?? $certificate->blockchain_hash;
+                // Get the hash to verify
+                // IMPORTANT: blockchain_hash is what we actually store on-chain via smart contract
+                // certificate_sha256 is just the PDF file hash (no 0x prefix) - NOT what's on blockchain
+                $hashToVerify = $certificate->blockchain_hash;
+
+                // Ensure 0x prefix for smart contract
+                if ($hashToVerify && !str_starts_with($hashToVerify, '0x')) {
+                    $hashToVerify = '0x' . $hashToVerify;
+                }
 
                 if ($hashToVerify) {
-                    // Get on-chain data
+                    // Get on-chain data using blockchain_hash
+                    $onChainData = $this->blockchain->verifyCertificateOnChain($hashToVerify);
+
+                    if ($onChainData && isset($onChainData['exists']) && $onChainData['exists']) {
+                        $result = 'found';
+                    } else {
+                        // Fallback: try with certificate_sha256 (some older certs may use this)
+                        if ($certificate->certificate_sha256) {
+                            $fallbackHash = '0x' . ltrim($certificate->certificate_sha256, '0x');
+                            $onChainData = $this->blockchain->verifyCertificateOnChain($fallbackHash);
+
+                            if ($onChainData && isset($onChainData['exists']) && $onChainData['exists']) {
+                                $result = 'found';
+                            } else {
+                                $result = 'not_on_chain';
+                            }
+                        } else {
+                            $result = 'not_on_chain';
+                        }
+                    }
+                } else if ($certificate->certificate_sha256) {
+                    // No blockchain_hash, try certificate_sha256
+                    $hashToVerify = '0x' . ltrim($certificate->certificate_sha256, '0x');
                     $onChainData = $this->blockchain->verifyCertificateOnChain($hashToVerify);
 
                     if ($onChainData && isset($onChainData['exists']) && $onChainData['exists']) {
@@ -84,7 +113,7 @@ class BlockchainController extends Controller
 
                                 $inputData = $txData['data'];
                                 if (strlen($inputData) >= 74) { // 0x + 8 chars method ID + 64 chars data
-                                                                    // Extract the potential certificate hash
+                                    // Extract the potential certificate hash
                                     $potentialCertHash = '0x' . substr($inputData, 10, 64);
 
                                     // Verify this extracted hash
@@ -105,56 +134,75 @@ class BlockchainController extends Controller
                             }
                         }
                     }
-                } else if (strlen($query) >= 46 && (str_starts_with($query, 'Qm') || str_starts_with($query, 'bafy'))) {
+                } else if (strlen($query) >= 46 && (str_starts_with($query, 'Qm') || str_starts_with($query, 'baf'))) {
                     // 3. Try as IPFS CID (Fetch Metadata -> Get Hash -> Verify)
+                    // CIDv0 starts with 'Qm', CIDv1 starts with 'baf' (bafy, bafk, bafyb, etc.)
                     try {
                         // Use a public gateway to fetch metadata
-                        $ipfsUrl  = "https://gateway.pinata.cloud/ipfs/" . $query;
-                        $response = Http::timeout(5)->get($ipfsUrl);
+                        $ipfsUrl = "https://gateway.pinata.cloud/ipfs/" . $query;
+                        $response = Http::timeout(10)->get($ipfsUrl);
 
                         if ($response->successful()) {
                             $metadata = $response->json();
 
                             // Check if it's our metadata format
                             if (isset($metadata['certificate_number']) && isset($metadata['recipient_name'])) {
-                                // Create a temporary Certificate object for display
-                                $certificate = new Certificate([
-                                    'certificate_number' => $metadata['certificate_number'],
-                                    'recipient_name'     => $metadata['recipient_name'],
-                                    'course_name'        => $metadata['course_name'] ?? 'N/A',
-                                    'blockchain_hash'    => $metadata['blockchain_hash'] ?? null,
-                                    'blockchain_tx_hash' => $metadata['blockchain_tx_hash'] ?? null,
-                                    'ipfs_cid'           => $query, // The CID we searched for
-                                ]);
 
-                                // Manually set issue_date since it's casted
-                                if (isset($metadata['issue_date'])) {
-                                    $certificate->issue_date = \Carbon\Carbon::parse($metadata['issue_date']);
-                                }
+                                // First, try to find the certificate in our database
+                                // This gives us complete data including proper blockchain_hash
+                                $certificate = Certificate::where('certificate_number', $metadata['certificate_number'])
+                                    ->orWhere('ipfs_cid', $query)
+                                    ->first();
 
-                                // Mock the User relationship for Issuer Name if possible, or handle in view
-                                // Since we can't easily mock the relation on a non-saved model without key,
-                                // we will attach the issuer name dynamically if needed, or the view should handle optional user.
+                                if ($certificate) {
+                                    // Found in database - use blockchain_hash for verification
+                                    $hashToVerify = $certificate->blockchain_hash;
 
-                                // Check blockchain hash
-                                if (isset($metadata['blockchain_hash']) && str_starts_with($metadata['blockchain_hash'], '0x')) {
-                                    $certHashFromIpfs = $metadata['blockchain_hash'];
+                                    if ($hashToVerify) {
+                                        if (!str_starts_with($hashToVerify, '0x')) {
+                                            $hashToVerify = '0x' . $hashToVerify;
+                                        }
 
-                                    // Verify this hash on chain
-                                    $onChainData = $this->blockchain->verifyCertificateOnChain($certHashFromIpfs);
+                                        $onChainData = $this->blockchain->verifyCertificateOnChain($hashToVerify);
 
-                                    if ($onChainData && isset($onChainData['exists']) && $onChainData['exists']) {
-                                        $result = 'found';
+                                        if ($onChainData && isset($onChainData['exists']) && $onChainData['exists']) {
+                                            $result = 'found';
+                                        } else {
+                                            $result = 'not_on_chain';
+                                        }
                                     } else {
-                                        // On IPFS, has hash, but NOT on chain?
-                                        // Means it claims to be on chain but isn't.
-                                        // Could be 'not_on_chain' (Found in DB/IPFS, but verification failed)
-                                        $result = 'not_on_chain';
+                                        $result = 'no_blockchain';
                                     }
                                 } else {
-                                    // Found on IPFS, but NO blockchain hash in metadata
-                                    // This means it's a valid certificate stored on IPFS only
-                                    $result = 'no_blockchain';
+                                    // Not in database - create temporary Certificate from IPFS metadata
+                                    $certificate = new Certificate([
+                                        'certificate_number' => $metadata['certificate_number'],
+                                        'recipient_name' => $metadata['recipient_name'],
+                                        'course_name' => $metadata['course_name'] ?? 'N/A',
+                                        'blockchain_hash' => $metadata['blockchain_hash'] ?? null,
+                                        'blockchain_tx_hash' => $metadata['blockchain_tx_hash'] ?? null,
+                                        'ipfs_cid' => $query,
+                                    ]);
+
+                                    if (isset($metadata['issue_date'])) {
+                                        $certificate->issue_date = \Carbon\Carbon::parse($metadata['issue_date']);
+                                    }
+
+                                    // Verify using blockchain_hash from IPFS metadata
+                                    if (isset($metadata['blockchain_hash']) && str_starts_with($metadata['blockchain_hash'], '0x')) {
+                                        $certHashFromIpfs = $metadata['blockchain_hash'];
+
+                                        $onChainData = $this->blockchain->verifyCertificateOnChain($certHashFromIpfs);
+
+                                        if ($onChainData && isset($onChainData['exists']) && $onChainData['exists']) {
+                                            $result = 'found';
+                                        } else {
+                                            $result = 'not_on_chain';
+                                        }
+                                    } else {
+                                        // On IPFS but no blockchain hash - valid IPFS-only certificate
+                                        $result = 'no_blockchain';
+                                    }
                                 }
                             } else {
                                 $result = 'not_found';
@@ -173,7 +221,7 @@ class BlockchainController extends Controller
 
         // Get contract stats
         $contractStats = $this->blockchain->getContractStats();
-        $walletInfo    = $this->blockchain->getWalletInfo();
+        $walletInfo = $this->blockchain->getWalletInfo();
 
         return view('blockchain.verify', compact(
             'query',
@@ -186,14 +234,14 @@ class BlockchainController extends Controller
         ));
     }
 
-/**
- * API endpoint for AJAX verification
- */
+    /**
+     * API endpoint for AJAX verification
+     */
     public function verifyApi(Request $request)
     {
         $query = $request->input('q');
 
-        if (! $query) {
+        if (!$query) {
             return response()->json(['error' => 'Query required'], 400);
         }
 
@@ -206,26 +254,26 @@ class BlockchainController extends Controller
             $onChainData = $this->blockchain->verifyCertificateOnChain($certificate->blockchain_hash);
 
             $response = [
-                'success'     => true,
+                'success' => true,
                 'certificate' => [
                     'certificate_number' => $certificate->certificate_number,
-                    'recipient_name'     => $certificate->recipient_name,
-                    'course_name'        => $certificate->course_name,
-                    'issue_date'         => $certificate->issue_date?->format('Y-m-d'),
-                    'blockchain_hash'    => $certificate->blockchain_hash,
+                    'recipient_name' => $certificate->recipient_name,
+                    'course_name' => $certificate->course_name,
+                    'issue_date' => $certificate->issue_date?->format('Y-m-d'),
+                    'blockchain_hash' => $certificate->blockchain_hash,
                     'blockchain_tx_hash' => $certificate->blockchain_tx_hash,
-                    'blockchain_status'  => $certificate->blockchain_status,
-                    'status'             => $certificate->status,
+                    'blockchain_status' => $certificate->blockchain_status,
+                    'status' => $certificate->status,
                 ],
-                'on_chain'    => $onChainData,
-                'is_revoked'  => $certificate->status === 'revoked',
+                'on_chain' => $onChainData,
+                'is_revoked' => $certificate->status === 'revoked',
             ];
 
             // Add warning message for revoked certificates
             if ($certificate->status === 'revoked') {
                 $response['revoked_message'] = 'Sertifikat ini telah DICABUT oleh penerbit dan tidak lagi valid.';
-                $response['revoked_at']      = $certificate->revoked_at?->toIso8601String();
-                $response['revoked_reason']  = $certificate->revoked_reason;
+                $response['revoked_at'] = $certificate->revoked_at?->toIso8601String();
+                $response['revoked_reason'] = $certificate->revoked_reason;
             }
 
             return response()->json($response);

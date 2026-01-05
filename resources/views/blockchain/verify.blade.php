@@ -373,8 +373,8 @@
                                     </a>
                                 @endif
 
-                                @if($certificate ?? false)
-                                    <a href="{{ route('verifikasi.show', $certificate->hash) }}"
+                                @if(($certificate ?? false) && $certificate->id)
+                                    <a href="{{ route('verifikasi.show', $certificate->hash ?? $certificate->certificate_number) }}"
                                         class="px-4 py-2 bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded-lg text-sm font-medium hover:bg-blue-500/30 transition flex items-center gap-2">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -436,7 +436,7 @@
                             </div>
 
                             {{-- Action Button --}}
-                            @if($certificate->hash ?? false)
+                            @if(($certificate->id ?? false) && ($certificate->hash ?? false))
                                 <div class="flex flex-wrap gap-3 pt-4">
                                     <a href="{{ route('verifikasi.show', $certificate->hash) }}"
                                         class="px-4 py-2 bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded-lg text-sm font-medium hover:bg-blue-500/30 transition flex items-center gap-2">
