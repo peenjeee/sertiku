@@ -386,7 +386,7 @@ Route::post('/payment/cancel', [PaymentController::class, 'cancelOrder'])->middl
 Route::get('/payment/success/{orderNumber}', [PaymentController::class, 'success'])->middleware('auth')->name('payment.success');
 Route::post('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
 Route::get('/contact-enterprise', [PaymentController::class, 'contactEnterprise'])->name('contact.enterprise');
-Route::post('/contact-enterprise', [PaymentController::class, 'sendContactEnterprise'])->name('contact.enterprise.send');
+Route::post('/contact-enterprise', [PaymentController::class, 'sendContactEnterprise'])->name('contact.enterprise.send.legacy');
 
 /*
 |--------------------------------------------------------------------------
@@ -397,7 +397,7 @@ Route::post('/contact-enterprise', [PaymentController::class, 'sendContactEnterp
 Route::get('/bantuan', [\App\Http\Controllers\PageController::class, 'bantuan'])->name('bantuan');
 Route::get('/status', [\App\Http\Controllers\PageController::class, 'status'])->name('status');
 Route::get('/kontak', [\App\Http\Controllers\PageController::class, 'kontak'])->name('kontak');
-Route::post('/kontak', [\App\Http\Controllers\PageController::class, 'sendKontak'])->name('kontak.send');
+Route::post('/kontak', [\App\Http\Controllers\PageController::class, 'sendKontak'])->name('kontak.send.legacy');
 
 // Legal Pages
 Route::get('/privasi', [\App\Http\Controllers\PageController::class, 'privasi'])->name('privasi');
