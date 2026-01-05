@@ -60,8 +60,9 @@ class ProcessBlockchainCertificate implements ShouldQueue
                 'blockchain_status' => 'processing',
             ]);
 
-            // Store on blockchain using smart contract
-            $txHash = $blockchainService->storeWithContract($this->certificate);
+            // Store on blockchain using Pure PHP method (avoid Node.js OOM on shared hosting)
+            // This uses storeCertificateHash which tries signWithPhp first
+            $txHash = $blockchainService->storeCertificateHash($this->certificate);
 
             if ($txHash) {
                 Log::info("Certificate {$this->certificate->certificate_number} stored on blockchain: {$txHash}");

@@ -78,17 +78,11 @@ class BlockchainService
             // Generate certificate hash
             $certHash = $this->generateCertificateHash($certificate);
 
-            // Try Pure PHP signing first (Low Memory)
+            // Use Pure PHP signing only (avoid Node.js OOM on shared hosting)
             $txHash = $this->signWithPhp($certHash);
 
-            // Fallback to Node.js only if PHP fails (though PHP is preferred)
-            if (!$txHash) {
-                try {
-                    $txHash = $this->signWithNode($certHash);
-                } catch (\Exception $e) {
-                    Log::warning("NodeJS fallback also failed: " . $e->getMessage());
-                }
-            }
+            // Note: Node.js fallback disabled due to OOM issues on shared hosting
+            // If PHP signing fails, the certificate will be marked as pending/failed
 
             if ($txHash) {
                 // Update certificate with blockchain info
