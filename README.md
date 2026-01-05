@@ -1,4 +1,4 @@
-# 🔐 SertiKu
+# SertiKu
 
 Platform terdepan untuk menerbitkan, mengelola, dan memverifikasi sertifikat digital dengan teknologi QR Code dan blockchain.
 
@@ -22,45 +22,46 @@ Platform terdepan untuk menerbitkan, mengelola, dan memverifikasi sertifikat dig
 [![WalletConnect](https://img.shields.io/badge/WalletConnect-Web3Modal-3B99FC?style=flat-square&logo=walletconnect&logoColor=white)](https://walletconnect.com/)
 
 [![Midtrans](https://img.shields.io/badge/Midtrans-Payment-00A9E0?style=flat-square&logo=money&logoColor=white)](https://midtrans.com/)
+[![NOWPayments](https://img.shields.io/badge/NOWPayments-Crypto-00C26F?style=flat-square&logo=bitcoin&logoColor=white)](https://nowpayments.io/)
 [![QR Code](https://img.shields.io/badge/QR_Code-Generator-000000?style=flat-square&logo=qrcode&logoColor=white)](https://github.com/SimpleSoftwareIO/simple-qrcode)
 [![PWA](https://img.shields.io/badge/PWA-Ready-5A0FC8?style=flat-square&logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
 [![n8n](https://img.shields.io/badge/n8n-Automation-EA4B71?style=flat-square&logo=n8n&logoColor=white)](https://n8n.io/)
 
-## ✨ Fitur
+## Fitur
 
-### Autentikasi & Keamanan
-- 🔑 Multi-method Login: Email/Password, Google OAuth, Wallet (MetaMask/WalletConnect)
-- 📧 Verifikasi Email OTP - Kode 6 digit dikirim ke email untuk aktivasi akun
-- 🛡️ Google reCAPTCHA v2 - Proteksi bot pada form login dan register
-- ☁️ Cloudflare Turnstile - CAPTCHA tambahan untuk keamanan berlapis
-- 🔒 Reset Password via Email - Link reset dengan token yang aman
-- 🍪 Cookie Consent Banner - Kepatuhan regulasi privasi
+### Autentikasi dan Keamanan
+- Multi-method Login: Email/Password, Google OAuth, Wallet (MetaMask/WalletConnect)
+- Verifikasi Email OTP - Kode 6 digit dikirim ke email untuk aktivasi akun
+- Google reCAPTCHA v2 - Proteksi bot pada form login dan register
+- Cloudflare Turnstile - CAPTCHA tambahan untuk keamanan berlapis
+- Reset Password via Email - Link reset dengan token yang aman
+- Cookie Consent Banner - Kepatuhan regulasi privasi
 
 ### Sertifikat Digital
-- 📄 Upload dan kelola sertifikat digital
-- 🎨 **Interactive Template Editor** - Drag & drop positioning, Google Fonts, color picker
-- 📦 **Bulk Upload** - Import data dari CSV/Excel untuk penerbitan massal
-- 🔍 Verifikasi sertifikat dengan QR Code
-- 🔗 **Blockchain Integration** - Simpan hash sertifikat ke Polygon Network
-- 🌐 **IPFS Storage** - Penyimpanan desentralisasi via Pinata Network
-- 🔐 **File Integrity Verification** - Verifikasi keaslian file dengan SHA-256 hash dan MD5
-- 📈 Tracking status sertifikat
+- Upload dan kelola sertifikat digital
+- Interactive Template Editor - Drag and drop positioning, Google Fonts, color picker
+- Bulk Upload - Import data dari CSV/Excel untuk penerbitan massal
+- Verifikasi sertifikat dengan QR Code
+- Blockchain Integration - Simpan hash sertifikat ke Polygon Network
+- IPFS Storage - Penyimpanan desentralisasi via Pinata Network
+- File Integrity Verification - Verifikasi keaslian file dengan SHA-256 hash dan MD5
+- Tracking status sertifikat
 
-### Dashboard & Manajemen
-- 📊 Dashboard analytics dengan chart interaktif dan filter tahun
-- 👥 Multi-role: User, Lembaga, Admin, Master
-- 🔔 Notifikasi real-time
-- 📱 Responsive design untuk mobile
-- 💬 Support Ticket System
+### Dashboard dan Manajemen
+- Dashboard analytics dengan chart interaktif dan filter tahun
+- Multi-role: User, Lembaga, Admin, Master
+- Notifikasi real-time
+- Responsive design untuk mobile
+- Support Ticket System
 
-### PWA & SEO
-- 📲 Progressive Web App - Install ke home screen dengan banner prompt
-- 🔔 Push Notifications - Notifikasi browser
-- 🔍 SEO Optimized - Meta tags, Open Graph, JSON-LD structured data
-- 🗺️ Sitemap & robots.txt - Auto-generated untuk search engines
-- 📊 Google Search Console & Bing Webmaster Tools verified
+### PWA dan SEO
+- Progressive Web App - Install ke home screen dengan banner prompt
+- Push Notifications - Notifikasi browser
+- SEO Optimized - Meta tags, Open Graph, JSON-LD structured data
+- Sitemap dan robots.txt - Auto-generated untuk search engines
+- Google Search Console dan Bing Webmaster Tools verified
 
-## 🚀 Instalasi
+## Instalasi
 
 ```bash
 # Clone repository
@@ -75,14 +76,14 @@ npm install
 cp .env.example .env
 php artisan key:generate
 
-# Buat database & jalankan migration
+# Buat database dan jalankan migration
 php artisan migrate
 
 # Clear cache
 php artisan optimize:clear
 ```
 
-## ⚙️ Konfigurasi
+## Konfigurasi
 
 ### Google OAuth
 
@@ -91,7 +92,7 @@ php artisan optimize:clear
 3. Pergi ke **APIs & Services** > **Credentials**
 4. Buat **OAuth client ID** (Web application)
 5. Tambahkan redirect URI: `http://127.0.0.1:8000/auth/google/callback`
-6. Copy Client ID & Client Secret
+6. Copy Client ID dan Client Secret
 
 ```env
 GOOGLE_CLIENT_ID=your-client-id
@@ -99,7 +100,7 @@ GOOGLE_CLIENT_SECRET=your-client-secret
 GOOGLE_REDIRECT_URI=http://127.0.0.1:8000/auth/google/callback
 ```
 
-### Gmail SMTP (untuk OTP & Reset Password)
+### Gmail SMTP (untuk OTP dan Reset Password)
 
 1. Buka [Google App Passwords](https://myaccount.google.com/apppasswords)
 2. Buat App Password baru (pilih Mail)
@@ -130,13 +131,13 @@ RECAPTCHA_SECRET_KEY=your-secret-key
 
 ### Cloudflare Turnstile (Opsional - CAPTCHA Tambahan)
 
-1. Buka [Cloudflare Dashboard](https://dash.cloudflare.com) → **Turnstile**
+1. Buka [Cloudflare Dashboard](https://dash.cloudflare.com) lalu Turnstile
 2. Klik **Add site**
 3. Konfigurasi:
    - **Site name**: `SertiKu`
    - **Domain**: `localhost`, `127.0.0.1`, `sertiku.web.id`
    - **Widget Type**: **Managed** (recommended)
-4. Copy Site Key & Secret Key
+4. Copy Site Key dan Secret Key
 
 ```env
 TURNSTILE_ENABLED=true
@@ -175,6 +176,20 @@ MIDTRANS_IS_PRODUCTION=false
 MIDTRANS_IS_3DS=true
 ```
 
+### NOWPayments Crypto Gateway (Opsional)
+
+Untuk pembayaran menggunakan cryptocurrency:
+
+1. Daftar di [NOWPayments](https://nowpayments.io/)
+2. Buat API Key di Dashboard
+3. Set IPN Secret untuk callback verification
+
+```env
+NOWPAYMENTS_API_KEY=your-api-key
+NOWPAYMENTS_IPN_SECRET=your-ipn-secret
+NOWPAYMENTS_SANDBOX=true
+```
+
 ### IPFS Storage via Pinata (Opsional)
 
 Untuk penyimpanan desentralisasi sertifikat:
@@ -189,7 +204,7 @@ PINATA_JWT=your-pinata-jwt-token
 PINATA_GATEWAY_URL=your-gateway.mypinata.cloud
 ```
 
-## 🔄 Deployment
+## Deployment
 
 Deploy manual via cPanel Terminal:
 
@@ -202,7 +217,7 @@ php artisan route:cache
 php artisan view:cache
 ```
 
-## ▶️ Menjalankan
+## Menjalankan
 
 ```bash
 # Terminal 1: Jalankan Vite/TailwindCSS
@@ -214,43 +229,18 @@ php artisan serve
 
 Buka: http://127.0.0.1:8000/
 
-## 👤 Akun Demo
+## Akun Demo
 
-<table>
-  <thead>
-    <tr>
-      <th>Role</th>
-      <th>Email</th>
-      <th>Password</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>👤 User</td>
-      <td><code>user@sertiku.web.id</code></td>
-      <td><code>User1234</code></td>
-    </tr>
-    <tr>
-      <td>🏢 Lembaga</td>
-      <td><code>lembaga@sertiku.web.id</code></td>
-      <td><code>Lembaga1234</code></td>
-    </tr>
-    <tr>
-      <td>⚙️ Admin</td>
-      <td><code>admin@sertiku.web.id</code></td>
-      <td><code>Admin1234</code></td>
-    </tr>
-    <tr>
-      <td>👑 Master</td>
-      <td><code>master@sertiku.web.id</code></td>
-      <td><code>Master123</code></td>
-    </tr>
-  </tbody>
-</table>
+| Role | Email | Password |
+|------|-------|----------|
+| User | `user@sertiku.web.id` | `User1234` |
+| Lembaga | `lembaga@sertiku.web.id` | `Lembaga1234` |
+| Admin | `admin@sertiku.web.id` | `Admin1234` |
+| Master | `master@sertiku.web.id` | `Master123` |
 
 > **Note:** Akun dengan domain `@sertiku.web.id` tidak memerlukan verifikasi OTP.
 
-## 📁 Struktur Project
+## Struktur Project
 
 ```
 sertiku/
@@ -283,39 +273,39 @@ sertiku/
 └── .env
 ```
 
-## 🔐 Alur Autentikasi
+## Alur Autentikasi
 
 ### Register
 ```
-Form Register → Kirim OTP → Verifikasi OTP → Dashboard
+Form Register --> Kirim OTP --> Verifikasi OTP --> Dashboard
 ```
 
 ### Login (Email belum terverifikasi)
 ```
-Login → Kirim OTP → Verifikasi OTP → Dashboard
+Login --> Kirim OTP --> Verifikasi OTP --> Dashboard
 ```
 
 ### Login (Email sudah terverifikasi)
 ```
-Login → Dashboard
+Login --> Dashboard
 ```
 
 ### Wallet Login
 ```
-Connect Wallet → Input Email → Kirim OTP → Verifikasi → Dashboard
+Connect Wallet --> Input Email --> Kirim OTP --> Verifikasi --> Dashboard
 ```
 
 ### Reset Password
 ```
-Forgot Password → Kirim Link → Klik Link → Input Password Baru → Login
+Forgot Password --> Kirim Link --> Klik Link --> Input Password Baru --> Login
 ```
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
 <p align="center">
-  Made with ❤️ by SertiKu Team
+  SertiKu Team
 </p>
