@@ -215,10 +215,16 @@
                                                     d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                                             </svg>
                                             <span class="text-white font-bold text-base">Blockchain Verification</span>
-                                            <span
-                                                class="px-2 py-0.5 rounded text-[10px] font-bold {{ $canUseBlockchain ? 'bg-purple-500/20 text-purple-300' : 'bg-red-500/20 text-red-300' }}">
-                                                {{ $remainingBlockchain }}/{{ $blockchainLimit }}
-                                            </span>
+                                            @if($blockchainLimit > 0)
+                                                <span
+                                                    class="px-2 py-0.5 rounded text-[10px] font-bold {{ $canUseBlockchain ? 'bg-purple-500/20 text-purple-300' : 'bg-red-500/20 text-red-300' }}">
+                                                    {{ $remainingBlockchain }}/{{ $blockchainLimit }}
+                                                </span>
+                                            @else
+                                                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-gray-700 text-gray-400">
+                                                    Tidak Tersedia
+                                                </span>
+                                            @endif
                                         </div>
                                         <label class="relative inline-flex items-center {{ $canUseBlockchain ? 'cursor-pointer' : 'cursor-not-allowed' }}">
                                             <input type="checkbox" name="blockchain_enabled" value="1"
@@ -231,7 +237,11 @@
                                     
                                     @if(!$canUseBlockchain)
                                         <div class="mb-3 p-2 bg-red-900/30 border border-red-500/30 rounded text-red-300 text-xs">
-                                            Kuota Blockchain habis. <a href="{{ url('/#harga') }}" class="underline hover:text-white">Upgrade</a>
+                                            @if($blockchainLimit == 0)
+                                                Fitur Blockchain tidak tersedia di paket ini. <a href="{{ url('/#harga') }}" class="underline hover:text-white">Upgrade</a>
+                                            @else
+                                                Kuota Blockchain habis. <a href="{{ url('/#harga') }}" class="underline hover:text-white">Upgrade</a>
+                                            @endif
                                         </div>
                                     @endif
 

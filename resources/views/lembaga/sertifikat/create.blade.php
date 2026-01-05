@@ -301,10 +301,16 @@
                                     d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                             </svg>
                             <span class="text-gray-800 text-base font-bold">Blockchain Verification</span>
-                            <span
-                                class="ml-2 px-2 py-0.5 {{ $canUseBlockchain ? 'bg-purple-100 text-purple-600' : 'bg-red-100 text-red-600' }} text-xs font-medium rounded-full">
-                                {{ $remainingBlockchain }}/{{ $blockchainLimit }}
-                            </span>
+                            @if($blockchainLimit > 0)
+                                <span
+                                    class="ml-2 px-2 py-0.5 {{ $canUseBlockchain ? 'bg-purple-100 text-purple-600' : 'bg-red-100 text-red-600' }} text-xs font-medium rounded-full">
+                                    {{ $remainingBlockchain }}/{{ $blockchainLimit }}
+                                </span>
+                            @else
+                                <span class="ml-2 px-2 py-0.5 bg-gray-200 text-gray-500 text-xs font-medium rounded-full">
+                                    Tidak Tersedia
+                                </span>
+                            @endif
                         </div>
 
                         @if(!$canUseBlockchain)
@@ -314,9 +320,15 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                     </svg>
-                                    <p class="text-red-700 text-sm font-medium">Kuota Blockchain habis
-                                        ({{ $blockchainUsed }}/{{ $blockchainLimit }}). <a href="{{ url('/#harga') }}"
-                                            class="underline">Upgrade paket</a></p>
+                                    <p class="text-red-700 text-sm font-medium">
+                                        @if($blockchainLimit == 0)
+                                            Fitur Blockchain tidak tersedia di paket ini. <a href="{{ url('/#harga') }}"
+                                                class="underline">Upgrade paket</a>
+                                        @else
+                                            Kuota Blockchain habis ({{ $blockchainUsed }}/{{ $blockchainLimit }}). <a
+                                                href="{{ url('/#harga') }}" class="underline">Upgrade paket</a>
+                                        @endif
+                                    </p>
                                 </div>
                             </div>
                         @endif
