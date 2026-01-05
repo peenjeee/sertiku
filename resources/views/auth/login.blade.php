@@ -1,5 +1,5 @@
 {{-- resources/views/auth/login.blade.php --}}
-<x-layouts.app title="SertiKu – Login Akun"
+<x-layouts.app title="SertiKu – Login Akun Sertifikat Digital Anda"
     description="Masuk ke akun SertiKu Anda untuk mengelola, menerbitkan, dan memverifikasi sertifikat digital dengan keamanan blockchain.">
 
     {{-- WalletConnect Project ID meta tag (read by web3modal.js) --}}

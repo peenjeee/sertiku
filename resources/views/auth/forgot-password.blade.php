@@ -1,4 +1,4 @@
-<x-layouts.app title="SertiKu – Lupa Password"
+<x-layouts.app title="SertiKu – Reset Password Akun Anda dengan Aman"
     description="Reset password akun SertiKu Anda dengan mudah dan aman. Masukkan email untuk mendapatkan link pemulihan.">
     <main
         class="min-h-screen bg-gradient-to-b from-[#0F172A] via-[#1E293B] to-[#0F172A] px-4 py-10 flex items-center justify-center">
