@@ -78,12 +78,16 @@ class BlockchainService
             // Generate certificate hash
             $certHash = $this->generateCertificateHash($certificate);
 
-            // Try Node.js signing first (most reliable)
-            $txHash = $this->signWithNode($certHash);
+            // Try Pure PHP signing first (Low Memory)
+            $txHash = $this->signWithPhp($certHash);
 
-            // Fallback to direct RPC if Node.js not available
+            // Fallback to Node.js only if PHP fails (though PHP is preferred)
             if (!$txHash) {
-                $txHash = $this->signWithDirectRpc($certHash);
+                try {
+                    $txHash = $this->signWithNode($certHash);
+                } catch (\Exception $e) {
+                    Log::warning("NodeJS fallback also failed: " . $e->getMessage());
+                }
             }
 
             if ($txHash) {
@@ -122,48 +126,64 @@ class BlockchainService
     /**
      * Sign transaction using Node.js script (most reliable method)
      */
-    protected function signWithNode(string $dataHash): ?string
+    /**
+     * Sign transaction using Pure PHP (No Node.js required)
+     * Uses kornrunner/ethereum-offline-raw-tx package
+     */
+    protected function signWithPhp(string $dataHash): ?string
     {
-        $scriptPath = base_path('scripts/sign_transaction.js');
-
-        if (!file_exists($scriptPath)) {
-            Log::warning('BlockchainService: Node script not found at ' . $scriptPath);
-            throw new \Exception("Node Script NOT FOUND at: " . $scriptPath);
-        }
-
         try {
-            // Build command with escaped arguments
-            $nodeScript = escapeshellarg($scriptPath);
-            $privateKey = escapeshellarg($this->privateKey);
-            $walletAddress = escapeshellarg($this->walletAddress);
-            $hash = escapeshellarg($dataHash);
-            $rpcUrl = escapeshellarg($this->rpcUrl);
-
-            // Add memory limit to Node.js process (256MB) to prevent OOM
-            $command = "node --max-old-space-size=256 {$nodeScript} {$privateKey} {$walletAddress} {$hash} {$rpcUrl} 2>&1";
-
-            Log::info('BlockchainService: Executing Node.js signing script');
-
-            $output = shell_exec($command);
-            $output = trim($output ?? '');
-
-            Log::info('BlockchainService: Node.js output: ' . $output);
-
-            if (str_starts_with($output, '0x') && strlen($output) === 66) {
-                return $output;
+            // Get nonce
+            $nonce = $this->getNonce();
+            if (!$nonce) {
+                return null;
             }
 
-            // Check if output contains error
-            if (str_contains($output, 'Error:')) {
-                Log::error('BlockchainService Node.js Error: ' . $output);
-                throw new \Exception("NodeJS Script Error: " . $output);
+            // Get gas price
+            $gasPrice = $this->getGasPrice();
+            if (!$gasPrice) {
+                $gasPrice = '0x3B9ACA00'; // 1 Gwei fallback
+            }
+
+            // Prepare transaction data
+            // Note: We need to convert hex strings to proper format for the library
+            $transaction = new \KornRunner\Ethereum\Transaction(
+                $nonce,
+                $gasPrice,
+                '0x6270', // Gas limit ~25200
+                $this->walletAddress, // To (self)
+                '0x0', // Value
+                $dataHash // Data
+            );
+
+            // Sign transaction
+            $privateKey = $this->privateKey;
+            $rawTx = $transaction->getRaw($privateKey, $this->chainId);
+
+            // Broadcast transaction
+            $response = Http::timeout(30)->post($this->rpcUrl, [
+                'jsonrpc' => '2.0',
+                'method' => 'eth_sendRawTransaction',
+                'params' => ['0x' . $rawTx],
+                'id' => 1,
+            ]);
+
+            if ($response->successful()) {
+                $result = $response->json();
+                if (isset($result['result'])) {
+                    return $result['result']; // Returns tx hash
+                }
+
+                if (isset($result['error'])) {
+                    Log::error('BlockchainService PHP Sign Error: ' . json_encode($result['error']));
+                }
             }
 
             return null;
 
         } catch (\Exception $e) {
-            Log::error('BlockchainService: Node.js execution failed: ' . $e->getMessage());
-            throw $e;
+            Log::error('BlockchainService PHP Sign Exception: ' . $e->getMessage());
+            return null;
         }
     }
 
