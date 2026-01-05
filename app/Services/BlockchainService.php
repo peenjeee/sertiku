@@ -510,8 +510,8 @@ class BlockchainService
             // Use full path for hosting, fallback to 'node' for local
             $nodePath = env('NODE_PATH', 'node');
 
-            // Add --max-old-space-size=256 to prevent OOM Killed error on hosting
-            $command = "{$nodePath} --max-old-space-size=256 {$scriptPath} store {$hash} {$certNumber} {$recipientName} {$courseName} {$issueDate} {$issuerName} 2>&1";
+            // Add --max-old-space-size=128 to prevent OOM Killed error on hosting
+            $command = "{$nodePath} --max-old-space-size=128 {$scriptPath} store {$hash} {$certNumber} {$recipientName} {$courseName} {$issueDate} {$issuerName} 2>&1";
 
             Log::info('BlockchainService: Storing certificate via smart contract with full data');
 

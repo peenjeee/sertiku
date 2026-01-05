@@ -37,8 +37,8 @@ class ProcessIpfsCertificate implements ShouldQueue
      */
     public function handle(IpfsService $ipfsService): void
     {
-        // Increase memory limit for this job
-        ini_set('memory_limit', '1024M');
+        // Set reasonable memory limit for shared hosting (avoid OOM Killed)
+        ini_set('memory_limit', '256M');
 
         Log::info("ProcessIpfsCertificate: Starting IPFS upload for certificate {$this->certificate->certificate_number}");
         $this->certificate->update(['ipfs_status' => 'processing']);
