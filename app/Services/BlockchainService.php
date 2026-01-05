@@ -127,20 +127,26 @@ class BlockchainService
     protected function signWithPhp(string $dataHash): ?string
     {
         try {
+            Log::info('BlockchainService signWithPhp: Starting with hash ' . $dataHash);
+
             // Get nonce
             $nonce = $this->getNonce();
             if (!$nonce) {
+                Log::error('BlockchainService signWithPhp: Failed to get nonce');
                 return null;
             }
+            Log::info('BlockchainService signWithPhp: Nonce = ' . $nonce);
 
             // Get gas price
             $gasPrice = $this->getGasPrice();
             if (!$gasPrice) {
                 $gasPrice = '0x3B9ACA00'; // 1 Gwei fallback
+                Log::info('BlockchainService signWithPhp: Using fallback gas price');
             }
+            Log::info('BlockchainService signWithPhp: GasPrice = ' . $gasPrice);
 
             // Prepare transaction data
-            // Note: We need to convert hex strings to proper format for the library
+            Log::info('BlockchainService signWithPhp: Creating transaction to ' . $this->walletAddress);
             $transaction = new \KornRunner\Ethereum\Transaction(
                 $nonce,
                 $gasPrice,
@@ -152,9 +158,12 @@ class BlockchainService
 
             // Sign transaction
             $privateKey = $this->privateKey;
+            Log::info('BlockchainService signWithPhp: Signing with chainId ' . $this->chainId);
             $rawTx = $transaction->getRaw($privateKey, $this->chainId);
+            Log::info('BlockchainService signWithPhp: Raw transaction created, length = ' . strlen($rawTx));
 
             // Broadcast transaction
+            Log::info('BlockchainService signWithPhp: Broadcasting to ' . $this->rpcUrl);
             $response = Http::timeout(30)->post($this->rpcUrl, [
                 'jsonrpc' => '2.0',
                 'method' => 'eth_sendRawTransaction',
@@ -162,21 +171,28 @@ class BlockchainService
                 'id' => 1,
             ]);
 
+            Log::info('BlockchainService signWithPhp: Response status = ' . $response->status());
+
             if ($response->successful()) {
                 $result = $response->json();
+                Log::info('BlockchainService signWithPhp: Response = ' . json_encode($result));
+
                 if (isset($result['result'])) {
+                    Log::info('BlockchainService signWithPhp: SUCCESS tx = ' . $result['result']);
                     return $result['result']; // Returns tx hash
                 }
 
                 if (isset($result['error'])) {
                     Log::error('BlockchainService PHP Sign Error: ' . json_encode($result['error']));
                 }
+            } else {
+                Log::error('BlockchainService signWithPhp: HTTP failed, body = ' . $response->body());
             }
 
             return null;
 
         } catch (\Exception $e) {
-            Log::error('BlockchainService PHP Sign Exception: ' . $e->getMessage());
+            Log::error('BlockchainService PHP Sign Exception: ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine());
             return null;
         }
     }

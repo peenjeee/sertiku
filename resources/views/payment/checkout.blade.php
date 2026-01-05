@@ -56,6 +56,84 @@
                                 placeholder="Nama universitas/organisasi">
                         </div>
 
+                        {{-- Payment Method Selection --}}
+                        <div>
+                            <label class="mb-3 block text-sm font-medium text-[rgba(219,234,254,0.9)]">
+                                Metode Pembayaran
+                            </label>
+                            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                                {{-- Midtrans --}}
+                                <label
+                                    class="relative flex cursor-pointer rounded-[12px] border border-[rgba(255,255,255,0.12)] bg-[rgba(15,23,42,0.6)] p-4 focus:outline-none focus:ring-2 focus:ring-[#3B82F6] hover:bg-[rgba(15,23,42,0.8)] transition">
+                                    <input type="radio" name="payment_method" value="midtrans" class="peer sr-only"
+                                        checked>
+                                    <span class="flex flex-1">
+                                        <span class="flex flex-col">
+                                            <span class="block text-sm font-medium text-white">Transfer & QRIS</span>
+                                            <span
+                                                class="mt-1 flex items-center text-xs text-[rgba(190,219,255,0.7)]">Virtual
+                                                Account, QRIS, E-Wallet</span>
+                                        </span>
+                                    </span>
+                                    <svg class="h-5 w-5 text-blue-500 opacity-0 peer-checked:opacity-100"
+                                        fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span
+                                        class="pointer-events-none absolute -inset-px rounded-[12px] border-2 border-transparent peer-checked:border-blue-500"
+                                        aria-hidden="true"></span>
+                                </label>
+
+                                {{-- Crypto --}}
+                                <label
+                                    class="relative flex cursor-pointer rounded-[12px] border border-[rgba(255,255,255,0.12)] bg-[rgba(15,23,42,0.6)] p-4 focus:outline-none focus:ring-2 focus:ring-[#3B82F6] hover:bg-[rgba(15,23,42,0.8)] transition">
+                                    <input type="radio" name="payment_method" value="crypto" class="peer sr-only">
+                                    <span class="flex flex-1">
+                                        <span class="flex flex-col">
+                                            <span class="block text-sm font-medium text-white">Cryptocurrency</span>
+                                            <span
+                                                class="mt-1 flex items-center text-xs text-[rgba(190,219,255,0.7)]">BTC,
+                                                ETH, USDT, SOL</span>
+                                        </span>
+                                    </span>
+                                    <svg class="h-5 w-5 text-blue-500 opacity-0 peer-checked:opacity-100"
+                                        fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span
+                                        class="pointer-events-none absolute -inset-px rounded-[12px] border-2 border-transparent peer-checked:border-blue-500"
+                                        aria-hidden="true"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        {{-- Crypto Currency Selection (Hidden by default) --}}
+                        <div id="crypto-options" class="hidden">
+                            <label for="pay_currency"
+                                class="mb-2 block text-sm font-medium text-[rgba(219,234,254,0.9)]">
+                                Pilih Mata Uang Crypto
+                            </label>
+                            <select id="pay_currency" name="pay_currency"
+                                class="w-full rounded-[12px] border border-[rgba(255,255,255,0.12)] bg-[rgba(15,23,42,0.6)] px-4 py-3 text-sm text-white focus:border-[#3B82F6] focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/30">
+                                <option value="usdttrc20">USDT (TRC20 - Tron)</option>
+                                <option value="usdt">USDT (ERC20 - Ethereum)</option>
+                                <option value="btc">BTC (Bitcoin)</option>
+                                <option value="eth">ETH (Ethereum)</option>
+                                <option value="matic">MATIC (Polygon)</option>
+                                <option value="bnb">BNB (BSC - BEP20)</option>
+                                <option value="sol">SOL (Solana)</option>
+                                <option value="trx">TRX (Tron)</option>
+                                <option value="ltc">LTC (Litecoin)</option>
+                            </select>
+                            <p class="mt-2 text-xs text-yellow-400">
+                                * Pastikan memilih jaringan yang benar saat pembayaran. USDT TRC20 lebih hemat fee.
+                            </p>
+                        </div>
+
                         {{-- Error/Info Message --}}
                         <div id="error-message"
                             class="hidden rounded-[12px] bg-red-500/20 border border-red-500/30 p-4 text-sm text-red-300">
@@ -320,6 +398,18 @@
                 });
             }
 
+            // Payment Method Toggle
+            document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const cryptoOptions = document.getElementById('crypto-options');
+                    if (this.value === 'crypto') {
+                        cryptoOptions.classList.remove('hidden');
+                    } else {
+                        cryptoOptions.classList.add('hidden');
+                    }
+                });
+            });
+
             document.getElementById('checkout-form').addEventListener('submit', async function (e) {
                 e.preventDefault();
 
@@ -358,6 +448,9 @@
                     return;
                 }
 
+                // Check payment method
+                const paymentMethod = form.querySelector('input[name="payment_method"]:checked').value;
+
                 // Disable button and show loading
                 payButton.disabled = true;
                 buttonText.classList.add('hidden');
@@ -367,7 +460,12 @@
                 try {
                     const formData = new FormData(form);
 
-                    const response = await fetch('{{ route("checkout.process") }}', {
+                    // Choose endpoint based on payment method
+                    const endpoint = paymentMethod === 'crypto' 
+                        ? '{{ route("payment.crypto") }}'
+                        : '{{ route("checkout.process") }}';
+
+                    const response = await fetch(endpoint, {
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -382,14 +480,25 @@
                         throw new Error(data.error);
                     }
 
-                    // Store for future use (in case user closes popup and clicks again)
-                    currentSnapToken = data.snap_token;
-                    currentOrderNumber = data.order_number;
-                    // Set expiry to 24 hours from now for new orders
-                    orderExpiredAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+                    if (paymentMethod === 'crypto') {
+                        // Redirect to NOWPayments invoice
+                        if (data.invoice_url) {
+                            window.location.href = data.invoice_url;
+                        } else {
+                            throw new Error('Gagal mendapatkan link pembayaran.');
+                        }
+                    } else {
+                        // Midtrans Flow
+                        // Store for future use (in case user closes popup and clicks again)
+                        currentSnapToken = data.snap_token;
+                        currentOrderNumber = data.order_number;
+                        // Set expiry to 24 hours from now for new orders
+                        orderExpiredAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
-                    // Open Midtrans Snap popup
-                    openMidtransPopup(data.snap_token, data.order_number);
+                        // Open Midtrans Snap popup
+                        openMidtransPopup(data.snap_token, data.order_number);
+                    }
+
                 } catch (error) {
                     errorMessage.textContent = error.message || 'Terjadi kesalahan. Silakan coba lagi.';
                     errorMessage.classList.remove('hidden');

@@ -15,8 +15,10 @@
         "laravel/sanctum": "^4.2",
         "laravel/socialite": "^5.23",
         "laravel/tinker": "^2.10.1",
+        "livewire/livewire": "^3.7",
         "midtrans/midtrans-php": "^2.6",
         "phpoffice/phpspreadsheet": "^5.3",
+        "predis/predis": "^3.3",
         "simplesoftwareio/simple-qrcode": "^4.2"
     },
     "require-dev": {

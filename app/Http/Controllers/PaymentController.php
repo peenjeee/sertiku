@@ -438,4 +438,129 @@ class PaymentController extends Controller
         return redirect()->route('contact.enterprise')
             ->with('success', 'Terima kasih! Tim kami akan segera menghubungi Anda.');
     }
+
+    /**
+     * Process crypto payment via NOWPayments
+     */
+    public function processCrypto(Request $request)
+    {
+        $validated = $request->validate([
+            'package_id' => 'required|exists:packages,id',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'nullable|string|max:20',
+            'institution' => 'nullable|string|max:255',
+            'pay_currency' => 'required|string|in:btc,eth,ltc,usdt,sol,bnb,trx,matic,usdttrc20',
+        ]);
+
+        $package = Package::findOrFail($validated['package_id']);
+
+        // Check for existing pending order for this user and package
+        $order = Order::where('user_id', auth()->id())
+            ->where('package_id', $package->id)
+            ->where('status', 'pending')
+            ->where('expired_at', '>', now())
+            ->latest()
+            ->first();
+
+        // If no pending order, create new one
+        if (!$order) {
+            $order = Order::create([
+                'user_id' => auth()->id(),
+                'package_id' => $package->id,
+                'order_number' => Order::generateOrderNumber(),
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'] ?? null,
+                'institution' => $validated['institution'] ?? null,
+                'amount' => $package->price,
+                'status' => 'pending',
+                'expired_at' => now()->addHours(24),
+            ]);
+        }
+
+        $nowpayments = new \App\Services\NowPaymentsService();
+
+        if (!$nowpayments->isConfigured()) {
+            return response()->json(['error' => 'Crypto payment tidak tersedia'], 500);
+        }
+
+        // Create invoice (hosted checkout)
+        $invoice = $nowpayments->createInvoice([
+            'amount' => (int) $order->amount,
+            'currency' => 'idr',
+            'order_id' => $order->order_number,
+            'description' => 'SertiKu ' . ($order->package->name ?? 'Package'),
+            'success_url' => route('payment.success', $order->order_number),
+            'cancel_url' => route('checkout', $order->package->slug ?? 'professional'),
+        ]);
+
+        if ($invoice && isset($invoice['invoice_url'])) {
+            // Save invoice ID to order
+            $order->update([
+                'payment_type' => 'crypto',
+                'notes' => json_encode([
+                    'nowpayments_invoice_id' => $invoice['id'] ?? null,
+                    'pay_currency' => $validated['pay_currency'],
+                ]),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'invoice_url' => $invoice['invoice_url'],
+            ]);
+        }
+
+        return response()->json(['error' => 'Gagal membuat pembayaran crypto'], 500);
+    }
+
+    /**
+     * Handle NOWPayments IPN callback
+     */
+    public function nowpaymentsCallback(Request $request)
+    {
+        Log::info('NOWPayments IPN Received', $request->all());
+
+        $nowpayments = new \App\Services\NowPaymentsService();
+
+        // Verify signature if IPN secret is configured
+        $signature = $request->header('x-nowpayments-sig');
+        if ($signature) {
+            if (!$nowpayments->verifyIpnSignature($request->all(), $signature)) {
+                Log::warning('NOWPayments IPN: Invalid signature');
+                return response()->json(['error' => 'Invalid signature'], 400);
+            }
+        }
+
+        $data = $request->all();
+        $orderId = $data['order_id'] ?? null;
+        $paymentStatus = $data['payment_status'] ?? null;
+
+        if (!$orderId || !$paymentStatus) {
+            return response()->json(['error' => 'Missing data'], 400);
+        }
+
+        // Find order by order_number
+        $order = Order::where('order_number', $orderId)->first();
+
+        if (!$order) {
+            Log::warning('NOWPayments IPN: Order not found - ' . $orderId);
+            return response()->json(['error' => 'Order not found'], 404);
+        }
+
+        Log::info('NOWPayments IPN: Processing order ' . $orderId . ' with status ' . $paymentStatus);
+
+        // Update order based on payment status
+        if ($nowpayments->isPaymentCompleted($paymentStatus)) {
+            if ($order->status !== 'paid') {
+                $order->markAsPaid('crypto_' . ($data['pay_currency'] ?? 'unknown'), $data['payment_id'] ?? null);
+                Log::info('NOWPayments IPN: Order marked as paid - ' . $orderId);
+            }
+        } elseif ($paymentStatus === 'failed' || $paymentStatus === 'expired') {
+            $order->update(['status' => 'failed']);
+            Log::info('NOWPayments IPN: Order marked as failed - ' . $orderId);
+        }
+
+        return response()->json(['success' => true]);
+    }
 }

@@ -61,4 +61,10 @@ return [
         'api_key' => env('UPTIMEROBOT_API_KEY'),
     ],
 
+    'nowpayments' => [
+        'api_key' => env('NOWPAYMENTS_API_KEY'),
+        'ipn_secret' => env('NOWPAYMENTS_IPN_SECRET'),
+        'sandbox' => false, // Forced to false to fix .env issue
+    ],
+
 ];
