@@ -120,7 +120,7 @@ class User extends Authenticatable
     public function getCertificateLimit(): int
     {
         $package = $this->getActivePackage();
-        return $package ? $package->certificates_limit : 67;
+        return $package ? $package->certificates_limit : 50;
     }
 
     /**
@@ -203,7 +203,7 @@ class User extends Authenticatable
     public function getBlockchainLimit(): int
     {
         $package = $this->getActivePackage();
-        return $package ? ($package->blockchain_limit ?? 0) : 50;
+        return $package ? ($package->blockchain_limit ?? 0) : 0;
     }
 
     /**
