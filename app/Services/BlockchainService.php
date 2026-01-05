@@ -224,38 +224,53 @@ class BlockchainService
             $issueDate = $certificate->issue_date ? $certificate->issue_date->format('Y-m-d') : '';
             $issuerBaseName = $certificate->user ? ($certificate->user->institution_name ?? $certificate->user->name ?? '') : '';
 
-            // Build issuer name with file hashes for on-chain integrity verification
+            // Build issuer name with file hashes in JSON format for structured on-chain storage
             $fileHashes = $certificate->getFileHashes();
-            $hashParts = [];
 
-            // Certificate/PDF hashes
-            if (!empty($fileHashes['certificate']['sha256']))
-                $hashParts[] = 'PDF_SHA256:' . $fileHashes['certificate']['sha256'];
-            if (!empty($fileHashes['certificate']['md5']))
-                $hashParts[] = 'PDF_MD5:' . $fileHashes['certificate']['md5'];
+            // Construct the comprehensive JSON payload matching the requested schema
+            $jsonPayload = [
+                'certificate_number' => $certNumber,
+                'recipient_name' => $recipientName,
+                'course_name' => $courseName,
+                'issue_date' => $issueDate,
+                'issuer' => $issuerBaseName,
+                // File hashes will be mapped to the expected keys below
+            ];
 
-            // QR Code hashes
-            if (!empty($fileHashes['qr_code']['sha256']))
-                $hashParts[] = 'QR_SHA256:' . $fileHashes['qr_code']['sha256'];
-            if (!empty($fileHashes['qr_code']['md5']))
-                $hashParts[] = 'QR_MD5:' . $fileHashes['qr_code']['md5'];
+            // Map PDF hashes
+            if (!empty($fileHashes['certificate'])) {
+                $jsonPayload['pdf_file_hashes'] = $fileHashes['certificate'];
+            }
 
-            // Template hashes (from certificate's template relationship)
+            // Map QR hashes
+            if (!empty($fileHashes['qr_code'])) {
+                $jsonPayload['qr_code_hashes'] = $fileHashes['qr_code'];
+            }
+
+            // Map Template hashes (from certificate's template relationship)
             if ($certificate->template) {
+                $tplHashes = [];
                 if (!empty($certificate->template->sha256))
-                    $hashParts[] = 'TPL_SHA256:' . $certificate->template->sha256;
+                    $tplHashes['sha256'] = $certificate->template->sha256;
                 if (!empty($certificate->template->md5))
-                    $hashParts[] = 'TPL_MD5:' . $certificate->template->md5;
+                    $tplHashes['md5'] = $certificate->template->md5;
+
+                if (!empty($tplHashes)) {
+                    $jsonPayload['template_hashes'] = $tplHashes;
+                }
             }
 
-            $issuerName = $issuerBaseName;
-            if (!empty($hashParts)) {
-                $issuerName .= ' | ' . implode(' | ', $hashParts);
-            }
+            // Encode as pretty-printed JSON to match the user's visual requirement (Image 3)
+            // Note: This increases gas usage due to extra whitespace
+            $issuerName = json_encode($jsonPayload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+
+
 
             // Encode the smart contract function call
             // Function: storeCertificate(bytes32 _dataHash, string _certificateNumber, string _recipientName, string _courseName, string _issueDate, string _issuerName)
-            $functionData = $this->encodeStoreCertificate($certHash, $certNumber, $recipientName, $courseName, $issueDate, $issuerName);
+            // Note: Contract REQUIRES certificate number (validation error: 'Certificate number required').
+            // We pass $certNumber, but keep others empty to minimize raw view noise.
+            $functionData = $this->encodeStoreCertificate($certHash, $certNumber, "", "", "", $issuerName);
 
             Log::info('BlockchainService signWithContract: Encoded function data length = ' . strlen($functionData));
 
