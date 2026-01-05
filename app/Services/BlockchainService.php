@@ -139,7 +139,8 @@ class BlockchainService
             $hash = escapeshellarg($dataHash);
             $rpcUrl = escapeshellarg($this->rpcUrl);
 
-            $command = "node {$nodeScript} {$privateKey} {$walletAddress} {$hash} {$rpcUrl} 2>&1";
+            // Add memory limit to Node.js process (256MB) to prevent OOM
+            $command = "node --max-old-space-size=256 {$nodeScript} {$privateKey} {$walletAddress} {$hash} {$rpcUrl} 2>&1";
 
             Log::info('BlockchainService: Executing Node.js signing script');
 
