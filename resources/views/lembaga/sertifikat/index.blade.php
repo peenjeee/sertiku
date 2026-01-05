@@ -7,6 +7,8 @@
                 Anda</p>
         </div>
 
+
+
         <!-- Success/Error Messages -->
         @if(session('success'))
             <div class="bg-emerald-500/20 border border-emerald-500/30 rounded-lg p-4 text-emerald-400">
@@ -376,26 +378,49 @@
         @endif
     </div>
     <script>
-        @if(session('success'))
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: '{{ session('success') }}',
-                confirmButtonColor: '#3B82F6',
-                background: '#1e293b',
-                color: '#fff'
-            });
-        @endif
+        document.addEventListener('DOMContentLoaded', function() {
+            @if(session('blockchain_process_started'))
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Proses Blockchain Berjalan',
+                        html: 'Proses Blockchain dan IPFS akan memakan waktu.<br>Silahkan tunggu blockchain dan IPFS menerima, cek refresh halaman secara berkala.',
+                        confirmButtonColor: '#3B82F6',
+                        background: '#1e293b',
+                        color: '#fff',
+                        timer: 10000,
+                        timerProgressBar: true
+                    });
+                } else {
+                    alert("Proses Blockchain berjalan. Mohon tunggu verifikasi.");
+                }
+            @elseif(session('success'))
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: '{{ session('success') }}',
+                        confirmButtonColor: '#3B82F6',
+                        background: '#1e293b',
+                        color: '#fff',
+                        timer: 3000,
+                        timerProgressBar: true
+                    });
+                }
+            @endif
 
-        @if(session('error'))
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal!',
-                text: '{{ session('error') }}',
-                confirmButtonColor: '#EF4444',
-                background: '#1e293b',
-                color: '#fff'
-            });
-        @endif
+            @if(session('error'))
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: '{{ session('error') }}',
+                        confirmButtonColor: '#EF4444',
+                        background: '#1e293b',
+                        color: '#fff'
+                    });
+                }
+            @endif
+        });
     </script>
 </x-layouts.lembaga>

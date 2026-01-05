@@ -107,7 +107,11 @@ class LembagaController extends Controller
         $certificate = $user->certificates()->create($validated);
 
         // Generate QR code for the certificate
-        $certificate->generateQrCode();
+        try {
+            $certificate->generateQrCode();
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error("Failed to generate QR Code for cert {$certificate->id}: " . $e->getMessage());
+        }
 
         // Generate PDF for the certificate (Critical for File Verification)
         try {
@@ -118,7 +122,11 @@ class LembagaController extends Controller
         }
 
         // Generate file hashes (SHA256/MD5) for certificate and QR
-        $certificate->generateFileHashes();
+        try {
+            $certificate->generateFileHashes();
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error("Failed to generate file hashes for cert {$certificate->id}: " . $e->getMessage());
+        }
 
         // Increment template usage if template was used
         if ($certificate->template_id) {
@@ -135,28 +143,56 @@ class LembagaController extends Controller
         // Send email to recipient if email exists and send_email is checked
         if ($sendEmail && !empty($validated['recipient_email'])) {
             // Send certificate email via queue
-            Mail::to($validated['recipient_email'])
-                ->queue(new CertificateIssuedMail($certificate));
+            try {
+                Mail::to($validated['recipient_email'])
+                    ->queue(new CertificateIssuedMail($certificate));
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error("Failed to queue email for cert {$certificate->id}: " . $e->getMessage());
+            }
         }
 
         // Send in-app notification to recipient if they have an account
         if (!empty($validated['recipient_email'])) {
-            $recipient = \App\Models\User::where('email', $validated['recipient_email'])->first();
-            if ($recipient) {
-                // Use queue to send notification in background
-                $recipient->notify((new \App\Notifications\CertificateReceived($certificate))->delay(now()->addSeconds(5)));
+            try {
+                $recipient = \App\Models\User::where('email', $validated['recipient_email'])->first();
+                if ($recipient) {
+                    // Use queue to send notification in background
+                    $recipient->notify((new \App\Notifications\CertificateReceived($certificate))->delay(now()->addSeconds(5)));
+                }
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error("Failed to send notification for cert {$certificate->id}: " . $e->getMessage());
             }
         }
 
         // If blockchain upload requested, dispatch job to process in background
         // IPFS will be triggered AFTER blockchain confirms (inside the job)
         // Status already set at creation time, just dispatch jobs (same as BulkCertificateController)
-        if ($validated['blockchain_enabled']) {
-            // Dispatch Blockchain Job (which handles IPFS internally if enabled)
-            \App\Jobs\ProcessBlockchainCertificate::dispatch($certificate, $ipfsEnabled);
-        } elseif ($ipfsEnabled) {
-            // IPFS only - dispatch job, status already 'pending' at creation
-            \App\Jobs\ProcessIpfsCertificate::dispatch($certificate);
+        try {
+            if ($validated['blockchain_enabled']) {
+                $blockchainService = new \App\Services\BlockchainService();
+
+                if ($blockchainService->isEnabled()) {
+                    // Dispatch Blockchain Job (which handles IPFS internally if enabled)
+                    \App\Jobs\ProcessBlockchainCertificate::dispatch($certificate, $ipfsEnabled);
+                } else {
+                    // Blockchain not configured - update status
+                    $certificate->update(['blockchain_status' => 'disabled']);
+                }
+            } elseif ($ipfsEnabled) {
+                $ipfsService = new \App\Services\IpfsService();
+                if ($ipfsService->isEnabled()) {
+                    // IPFS only - dispatch job
+                    \App\Jobs\ProcessIpfsCertificate::dispatch($certificate);
+                }
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error("Failed to dispatch Blockchain/IPFS job for cert {$certificate->id}: " . $e->getMessage());
+        }
+
+        if ($validated['blockchain_enabled'] || $ipfsEnabled) {
+            return redirect()->route('lembaga.sertifikat.index')
+                ->with('success', 'Sertifikat berhasil diterbitkan!')
+                ->with('blockchain_process_started', true);
         }
 
         return redirect()->route('lembaga.sertifikat.index')

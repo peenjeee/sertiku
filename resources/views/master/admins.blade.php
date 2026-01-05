@@ -27,7 +27,7 @@
                 <div class="flex items-center gap-4 p-4 rounded-xl bg-white/5">
                     <div
                         class="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden
-                                            {{ $admin->is_master ? 'bg-gradient-to-br from-purple-500 to-pink-500' : 'bg-gradient-to-br from-blue-500 to-indigo-600' }}">
+                                                {{ $admin->is_master ? 'bg-gradient-to-br from-purple-500 to-pink-500' : 'bg-gradient-to-br from-blue-500 to-indigo-600' }}">
                         @if($admin->avatar && (str_starts_with($admin->avatar, '/storage/') || str_starts_with($admin->avatar, 'http')))
                             <img src="{{ $admin->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                         @else
@@ -71,7 +71,7 @@
             @forelse($users->take(20) as $user)
                 <div class="flex items-center gap-4 p-4 rounded-xl bg-white/5">
                     <div
-                        class="w-10 h-10 rounded-full bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center overflow-hidden">
+                        class="w-10 h-10 rounded-full bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center overflow-hidden flex-shrink-0">
                         @if($user->avatar && (str_starts_with($user->avatar, '/storage/') || str_starts_with($user->avatar, 'http')))
                             <img src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                         @else
@@ -80,20 +80,22 @@
                         @endif
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="text-white font-medium text-sm">{{ $user->name ?? 'Unnamed' }}</p>
-                        <p class="text-white/50 text-xs">{{ $user->email }}</p>
+                        <div class="flex items-center gap-2 mb-0.5">
+                            <p class="text-white font-medium text-sm truncate">{{ $user->name ?? 'Unnamed' }}</p>
+                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold flex-shrink-0
+                                                   @if($user->account_type === 'lembaga' || $user->account_type === 'institution') bg-green-500/20 text-green-400
+                                                @else 
+                                                            bg-yellow-500/20 text-yellow-400 
+                                                        @endif
+                                                ">{{ ucfirst($user->account_type ?? 'user') }}</span>
+                        </div>
+                        <p class="text-white/50 text-xs truncate">{{ $user->email }}</p>
                     </div>
-                    <span class="px-2 py-1 rounded-full text-xs
-                                            @if($user->account_type === 'lembaga' || $user->account_type === 'institution') bg-green-500/20 text-green-400
-                                            @else 
-                                                bg-yellow-500/20 text-yellow-400 
-                                            @endif
-                                        ">{{ ucfirst($user->account_type ?? 'user') }}</span>
-                    <form action="{{ route('master.admins.promote', $user) }}" method="POST" class="inline"
+                    <form action="{{ route('master.admins.promote', $user) }}" method="POST" class="inline flex-shrink-0"
                         onsubmit="return confirmAction(event, 'Yakin ingin menjadikan {{ $user->name }} sebagai Admin?')">
                         @csrf
                         <button type="submit"
-                            class="px-3 py-1 rounded-lg bg-blue-500/20 text-blue-400 text-sm hover:bg-blue-500/30 transition">
+                            class="px-3 py-1.5 rounded-lg bg-blue-500/20 text-blue-400 text-xs font-bold hover:bg-blue-500/30 transition whitespace-nowrap">
                             Jadikan Admin
                         </button>
                     </form>

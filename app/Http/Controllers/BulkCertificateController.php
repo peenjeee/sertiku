@@ -381,7 +381,12 @@ class BulkCertificateController extends Controller
                 $certificate = $user->certificates()->create($certData);
 
                 // 1. Generate QR
-                $certificate->generateQrCode();
+                try {
+                    $certificate->generateQrCode();
+                } catch (\Throwable $e) {
+                    Log::error("Bulk QR Error: " . $e->getMessage());
+                    // Continue even if QR fails
+                }
 
                 // 2. Generate PDF
                 try {
@@ -392,7 +397,12 @@ class BulkCertificateController extends Controller
                 }
 
                 // 3. Generate Hashes
-                $certificate->generateFileHashes();
+                try {
+                    $certificate->generateFileHashes();
+                } catch (\Throwable $e) {
+                    Log::error("Bulk Hash Error: " . $e->getMessage());
+                    // Continue even if hash generation fails
+                }
 
                 // 4. Increment Usage
                 $template->incrementUsage();
@@ -417,23 +427,28 @@ class BulkCertificateController extends Controller
 
                 // 7. Blockchain & IPFS Jobs
                 // Logic updated to match LembagaController exactly
-                if ($blockchainEnabled) {
-                    $blockchainService = new \App\Services\BlockchainService();
+                try {
+                    if ($blockchainEnabled) {
+                        $blockchainService = new \App\Services\BlockchainService();
 
-                    if ($blockchainService->isEnabled()) {
-                        // Dispatch Blockchain Job (which handles IPFS internally if enabled)
-                        ProcessBlockchainCertificate::dispatch($certificate, $ipfsEnabled);
-                    } else {
-                        // Blockchain not configured - update status (override the 'pending' set at creation)
-                        $certificate->update([
-                            'blockchain_status' => 'disabled',
-                        ]);
+                        if ($blockchainService->isEnabled()) {
+                            // Dispatch Blockchain Job (which handles IPFS internally if enabled)
+                            ProcessBlockchainCertificate::dispatch($certificate, $ipfsEnabled);
+                        } else {
+                            // Blockchain not configured - update status (override the 'pending' set at creation)
+                            $certificate->update([
+                                'blockchain_status' => 'disabled',
+                            ]);
+                        }
+                    } elseif ($ipfsEnabled) {
+                        $ipfsService = new \App\Services\IpfsService();
+                        if ($ipfsService->isEnabled()) {
+                            \App\Jobs\ProcessIpfsCertificate::dispatch($certificate);
+                        }
                     }
-                } elseif ($ipfsEnabled) {
-                    $ipfsService = new \App\Services\IpfsService();
-                    if ($ipfsService->isEnabled()) {
-                        \App\Jobs\ProcessIpfsCertificate::dispatch($certificate);
-                    }
+                } catch (\Throwable $e) {
+                    Log::error("Bulk Blockchain/IPFS Error: " . $e->getMessage());
+                    // Continue even if blockchain/IPFS dispatch fails
                 }
 
                 $successCount++;
@@ -453,7 +468,12 @@ class BulkCertificateController extends Controller
                 ->withErrors($errors);
         }
 
-        return redirect()->route('lembaga.sertifikat.index')
-            ->with('success', $msg);
+        $redirect = redirect()->route('lembaga.sertifikat.index')->with('success', $msg);
+
+        if ($blockchainEnabled || $ipfsEnabled) {
+            $redirect->with('blockchain_process_started', true);
+        }
+
+        return $redirect;
     }
 }
