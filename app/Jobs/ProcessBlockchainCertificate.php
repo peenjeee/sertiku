@@ -60,9 +60,10 @@ class ProcessBlockchainCertificate implements ShouldQueue
                 'blockchain_status' => 'processing',
             ]);
 
-            // Store on blockchain using Node.js + Smart Contract (as requested)
-            // This is the "Reverted" behavior: Node + DB + Queue
-            $txHash = $blockchainService->storeWithContract($this->certificate);
+            // Store on blockchain using PHP-Only signing (No Node.js)
+            // Node.js keeps getting "Killed" on shared hosting, so we use pure PHP
+            // This sends data directly to blockchain via RPC without spawning processes
+            $txHash = $blockchainService->storeCertificateHash($this->certificate);
 
             if ($txHash) {
                 Log::info("Certificate {$this->certificate->certificate_number} stored on blockchain: {$txHash}");
