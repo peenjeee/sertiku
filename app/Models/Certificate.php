@@ -267,6 +267,7 @@ class Certificate extends Model
     /**
      * Generate and save QR code for this certificate.
      * The QR contains verification URL with hash.
+     * Includes Sertiku logo in the center (embedded in SVG, no Imagick required).
      */
     public function generateQrCode(): string
     {
@@ -276,25 +277,79 @@ class Certificate extends Model
             Storage::disk('public')->makeDirectory($directory);
         }
 
-        // Generate filename based on certificate number (using SVG format - no imagick needed)
+        // Generate filename based on certificate number
         $filename = $directory . '/' . $this->certificate_number . '.svg';
 
         // Generate QR code with verification URL
         $verificationUrl = $this->verification_url;
 
-        // Use SVG format which doesn't require imagick extension
+        // Generate SVG QR code
         $qrCode = QrCode::size(300)
             ->margin(2)
-            ->errorCorrection('H')
+            ->errorCorrection('H') // High error correction for logo overlay
             ->generate($verificationUrl);
 
+        // Embed logo in the center of the SVG
+        $qrCodeWithLogo = $this->embedLogoInSvg($qrCode);
+
         // Save QR code to storage
-        Storage::disk('public')->put($filename, $qrCode);
+        Storage::disk('public')->put($filename, $qrCodeWithLogo);
 
         // Update certificate with QR code path
         $this->update(['qr_code_path' => $filename]);
 
         return $filename;
+    }
+
+    /**
+     * Embed Sertiku logo in the center of SVG QR code.
+     */
+    private function embedLogoInSvg(string $svgContent): string
+    {
+        // Path to Sertiku logo
+        $logoPath = public_path('android-chrome-192x192.png');
+
+        if (!file_exists($logoPath)) {
+            return $svgContent; // Return original if logo not found
+        }
+
+        // Convert logo to base64
+        $logoBase64 = base64_encode(file_get_contents($logoPath));
+        $logoDataUri = 'data:image/png;base64,' . $logoBase64;
+
+        // Calculate logo position (center of 300x300 SVG)
+        // Logo size: 20% of QR size = 60px
+        $logoSize = 60;
+        $logoX = (300 - $logoSize) / 2; // 120
+        $logoY = (300 - $logoSize) / 2; // 120
+
+        // Create white background circle behind logo for better visibility
+        $whiteCircle = sprintf(
+            '<circle cx="150" cy="150" r="%d" fill="white"/>',
+            ($logoSize / 2) + 5 // Slightly larger than logo
+        );
+
+        // Create logo image element
+        $logoElement = sprintf(
+            '<image x="%d" y="%d" width="%d" height="%d" href="%s" clip-path="url(#logoClip)"/>',
+            $logoX,
+            $logoY,
+            $logoSize,
+            $logoSize,
+            $logoDataUri
+        );
+
+        // Create clip path for rounded logo
+        $clipPath = sprintf(
+            '<defs><clipPath id="logoClip"><circle cx="150" cy="150" r="%d"/></clipPath></defs>',
+            $logoSize / 2
+        );
+
+        // Insert elements before closing </svg> tag
+        $closingTag = '</svg>';
+        $insertContent = $clipPath . $whiteCircle . $logoElement;
+
+        return str_replace($closingTag, $insertContent . $closingTag, $svgContent);
     }
 
     /**
