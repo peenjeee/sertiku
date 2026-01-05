@@ -384,6 +384,35 @@ class PaymentController extends Controller
     {
         $order = Order::where('order_number', $orderNumber)->with('package')->firstOrFail();
 
+        // Check status directly to API if still pending (backup for missed webhook)
+        if ($order->status === 'pending' && $order->snap_token) {
+            try {
+                // Configure Midtrans
+                \Midtrans\Config::$serverKey = config('permissions.midtrans_server_key') ?? env('MIDTRANS_SERVER_KEY');
+                \Midtrans\Config::$isProduction = config('permissions.midtrans_is_production') ?? env('MIDTRANS_PRODUCTION', false);
+                \Midtrans\Config::$isSanitized = true;
+                \Midtrans\Config::$is3ds = true;
+
+                $status = \Midtrans\Transaction::status($orderNumber);
+                $transactionStatus = $status->transaction_status;
+                $fraudStatus = $status->fraud_status;
+
+                if ($transactionStatus == 'capture') {
+                    if ($fraudStatus == 'challenge') {
+                        // Challenge
+                    } else {
+                        $order->markAsPaid('midtrans_' . $status->payment_type, $status->transaction_id);
+                    }
+                } else if ($transactionStatus == 'settlement') {
+                    $order->markAsPaid('midtrans_' . $status->payment_type, $status->transaction_id);
+                } else if ($transactionStatus == 'cancel' || $transactionStatus == 'deny' || $transactionStatus == 'expire') {
+                    $order->update(['status' => 'failed']);
+                }
+            } catch (\Exception $e) {
+                \Log::error('Midtrans status check error: ' . $e->getMessage());
+            }
+        }
+
         // If order is paid and WA not yet sent, send it now (backup mechanism)
         if ($order->status === 'paid' && !$order->wa_sent && $order->phone) {
             try {

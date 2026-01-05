@@ -11,10 +11,17 @@ $kernel->bootstrap();
 
 echo "Simulating NOWPayments IPN...\n";
 
-// 1. Get the latest pending valid order
-$order = Order::where('status', 'pending')
-    ->latest()
-    ->first();
+$targetOrderNumber = $argv[1] ?? null;
+
+if ($targetOrderNumber) {
+    echo "Targeting Order: $targetOrderNumber\n";
+    $order = Order::where('order_number', $targetOrderNumber)->first();
+} else {
+    // 1. Get the latest pending valid order
+    $order = Order::where('status', 'pending')
+        ->latest()
+        ->first();
+}
 
 if (!$order) {
     // Fallback: finding latest pending regardless of method
