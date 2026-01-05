@@ -75,14 +75,19 @@ class BlockchainService
         }
 
         try {
-            // Generate certificate hash
+            // Try Smart Contract approach first (full data on-chain like Node.js)
+            if (!empty($this->contractAddress)) {
+                $txHash = $this->signWithContract($certificate);
+                if ($txHash) {
+                    Log::info("Certificate {$certificate->certificate_number} stored on blockchain via contract: {$txHash}");
+                    return $txHash;
+                }
+                Log::warning('BlockchainService: Contract call failed, falling back to simple hash');
+            }
+
+            // Fallback: Simple hash-only transaction (if contract not configured)
             $certHash = $this->generateCertificateHash($certificate);
-
-            // Use Pure PHP signing only (avoid Node.js OOM on shared hosting)
             $txHash = $this->signWithPhp($certHash);
-
-            // Note: Node.js fallback disabled due to OOM issues on shared hosting
-            // If PHP signing fails, the certificate will be marked as pending/failed
 
             if ($txHash) {
                 // Update certificate with blockchain info
@@ -94,13 +99,12 @@ class BlockchainService
                 ]);
 
                 Log::info("Certificate {$certificate->certificate_number} stored on blockchain: {$txHash}");
-
                 return $txHash;
             }
 
             // If all methods fail, still save the hash for reference
             $certificate->update([
-                'blockchain_hash' => $certHash,
+                'blockchain_hash' => $certHash ?? $this->generateCertificateHash($certificate),
                 'blockchain_status' => 'pending',
             ]);
 
@@ -195,6 +199,223 @@ class BlockchainService
             Log::error('BlockchainService PHP Sign Exception: ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine());
             return null;
         }
+    }
+
+    /**
+     * Sign transaction calling Smart Contract storeCertificate function
+     * This encodes the full certificate data like Node.js approach
+     */
+    protected function signWithContract(Certificate $certificate): ?string
+    {
+        try {
+            if (empty($this->contractAddress)) {
+                Log::error('BlockchainService signWithContract: Contract address not configured');
+                return null;
+            }
+
+            // Generate certificate hash
+            $certHash = $this->generateCertificateHash($certificate);
+            Log::info('BlockchainService signWithContract: Starting with hash ' . $certHash);
+
+            // Prepare certificate data
+            $certNumber = $certificate->certificate_number ?? '';
+            $recipientName = $certificate->recipient_name ?? '';
+            $courseName = $certificate->course_name ?? '';
+            $issueDate = $certificate->issue_date ? $certificate->issue_date->format('Y-m-d') : '';
+            $issuerBaseName = $certificate->user ? ($certificate->user->institution_name ?? $certificate->user->name ?? '') : '';
+
+            // Build issuer name with file hashes for on-chain integrity verification
+            $fileHashes = $certificate->getFileHashes();
+            $hashParts = [];
+
+            // Certificate/PDF hashes
+            if (!empty($fileHashes['certificate']['sha256']))
+                $hashParts[] = 'PDF_SHA256:' . $fileHashes['certificate']['sha256'];
+            if (!empty($fileHashes['certificate']['md5']))
+                $hashParts[] = 'PDF_MD5:' . $fileHashes['certificate']['md5'];
+
+            // QR Code hashes
+            if (!empty($fileHashes['qr_code']['sha256']))
+                $hashParts[] = 'QR_SHA256:' . $fileHashes['qr_code']['sha256'];
+            if (!empty($fileHashes['qr_code']['md5']))
+                $hashParts[] = 'QR_MD5:' . $fileHashes['qr_code']['md5'];
+
+            // Template hashes (from certificate's template relationship)
+            if ($certificate->template) {
+                if (!empty($certificate->template->sha256))
+                    $hashParts[] = 'TPL_SHA256:' . $certificate->template->sha256;
+                if (!empty($certificate->template->md5))
+                    $hashParts[] = 'TPL_MD5:' . $certificate->template->md5;
+            }
+
+            $issuerName = $issuerBaseName;
+            if (!empty($hashParts)) {
+                $issuerName .= ' | ' . implode(' | ', $hashParts);
+            }
+
+            // Encode the smart contract function call
+            // Function: storeCertificate(bytes32 _dataHash, string _certificateNumber, string _recipientName, string _courseName, string _issueDate, string _issuerName)
+            $functionData = $this->encodeStoreCertificate($certHash, $certNumber, $recipientName, $courseName, $issueDate, $issuerName);
+
+            Log::info('BlockchainService signWithContract: Encoded function data length = ' . strlen($functionData));
+
+            // Get nonce
+            $nonce = $this->getNonce();
+            if (!$nonce) {
+                Log::error('BlockchainService signWithContract: Failed to get nonce');
+                return null;
+            }
+            Log::info('BlockchainService signWithContract: Nonce = ' . $nonce);
+
+            // Get gas price
+            $gasPrice = $this->getGasPrice();
+            if (!$gasPrice) {
+                $gasPrice = '0x3B9ACA00'; // 1 Gwei fallback
+            }
+            Log::info('BlockchainService signWithContract: GasPrice = ' . $gasPrice);
+
+            // Create transaction to CONTRACT address (not wallet)
+            Log::info('BlockchainService signWithContract: Creating transaction to contract ' . $this->contractAddress);
+            $transaction = new \kornrunner\Ethereum\Transaction(
+                $nonce,
+                $gasPrice,
+                '0xF4240', // Gas limit ~1000000 for contract call with large hash data
+                $this->contractAddress, // To: Smart Contract
+                '0x0', // Value: 0
+                $functionData // Data: encoded function call
+            );
+
+            // Sign transaction
+            $rawTx = $transaction->getRaw($this->privateKey, $this->chainId);
+            Log::info('BlockchainService signWithContract: Raw transaction created, length = ' . strlen($rawTx));
+
+            // Broadcast transaction
+            $response = Http::timeout(60)->post($this->rpcUrl, [
+                'jsonrpc' => '2.0',
+                'method' => 'eth_sendRawTransaction',
+                'params' => ['0x' . $rawTx],
+                'id' => 1,
+            ]);
+
+            Log::info('BlockchainService signWithContract: Response status = ' . $response->status());
+
+            if ($response->successful()) {
+                $result = $response->json();
+                Log::info('BlockchainService signWithContract: Response = ' . json_encode($result));
+
+                if (isset($result['result'])) {
+                    $txHash = $result['result'];
+                    Log::info('BlockchainService signWithContract: SUCCESS tx = ' . $txHash);
+
+                    // Update certificate with blockchain info
+                    $certificate->update([
+                        'blockchain_hash' => $certHash,
+                        'blockchain_tx_hash' => $txHash,
+                        'blockchain_status' => 'confirmed',
+                        'blockchain_verified_at' => now(),
+                    ]);
+
+                    return $txHash;
+                }
+
+                if (isset($result['error'])) {
+                    Log::error('BlockchainService signWithContract Error: ' . json_encode($result['error']));
+                }
+            } else {
+                Log::error('BlockchainService signWithContract: HTTP failed, body = ' . $response->body());
+            }
+
+            return null;
+
+        } catch (\Exception $e) {
+            Log::error('BlockchainService signWithContract Exception: ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine());
+            return null;
+        }
+    }
+
+    /**
+     * ABI-encode the storeCertificate function call
+     * Function signature: storeCertificate(bytes32,string,string,string,string,string)
+     */
+    protected function encodeStoreCertificate(
+        string $dataHash,
+        string $certNumber,
+        string $recipientName,
+        string $courseName,
+        string $issueDate,
+        string $issuerName
+    ): string {
+        // Function selector: keccak256("storeCertificate(bytes32,string,string,string,string,string)")[:4]
+        // = 0x2e64cec1 (pre-computed)
+        $functionSelector = $this->getFunctionSelector('storeCertificate(bytes32,string,string,string,string,string)');
+
+        // ABI encode parameters
+        // bytes32 is static (32 bytes)
+        // strings are dynamic (offset + length + data)
+
+        // Remove 0x prefix from hash and pad to 32 bytes
+        $hashBytes = str_pad(substr($dataHash, 2), 64, '0', STR_PAD_LEFT);
+
+        // Dynamic data offsets (each is 32 bytes = 64 hex chars)
+        // We have 6 parameters, first is static (bytes32), rest are dynamic (string)
+        // Offset for param 1 (bytes32): inline at position 0
+        // Offset for param 2 (string certNumber): 6 * 32 = 192 = 0xC0
+        // Then we add each string's size dynamically
+
+        $staticPart = '';
+        $dynamicPart = '';
+
+        // Param 0: bytes32 dataHash (static, inline)
+        $staticPart .= $hashBytes;
+
+        // Calculate offsets for dynamic strings (5 strings)
+        // Start offset = 6 * 32 = 192 bytes = 0xC0
+        $baseOffset = 6 * 32;
+        $strings = [$certNumber, $recipientName, $courseName, $issueDate, $issuerName];
+        $encodedStrings = [];
+        $currentOffset = $baseOffset;
+
+        // First pass: calculate offsets
+        $offsets = [];
+        foreach ($strings as $str) {
+            $offsets[] = $currentOffset;
+            $strLen = strlen($str);
+            $paddedLen = ceil($strLen / 32) * 32;
+            if ($paddedLen == 0)
+                $paddedLen = 32;
+            $currentOffset += 32 + $paddedLen; // 32 for length + padded string
+        }
+
+        // Add offsets to static part
+        foreach ($offsets as $offset) {
+            $staticPart .= str_pad(dechex($offset), 64, '0', STR_PAD_LEFT);
+        }
+
+        // Second pass: encode strings
+        foreach ($strings as $str) {
+            $strHex = bin2hex($str);
+            $strLen = strlen($str);
+            $paddedLen = ceil($strLen / 32) * 32;
+            if ($paddedLen == 0)
+                $paddedLen = 32;
+
+            // Length (32 bytes)
+            $dynamicPart .= str_pad(dechex($strLen), 64, '0', STR_PAD_LEFT);
+            // String data (padded to 32 bytes)
+            $dynamicPart .= str_pad($strHex, $paddedLen * 2, '0', STR_PAD_RIGHT);
+        }
+
+        return '0x' . $functionSelector . $staticPart . $dynamicPart;
+    }
+
+    /**
+     * Get function selector (first 4 bytes of keccak256 hash)
+     */
+    protected function getFunctionSelector(string $functionSignature): string
+    {
+        // Use kornrunner/keccak for hashing
+        $hash = \kornrunner\Keccak::hash($functionSignature, 256);
+        return substr($hash, 0, 8); // First 4 bytes = 8 hex chars
     }
 
     /**
