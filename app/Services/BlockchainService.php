@@ -579,7 +579,7 @@ class BlockchainService
 
             $hash = escapeshellarg($certHash);
             $nodePath = env('NODE_PATH', 'node');
-            $command = "{$nodePath} {$scriptPath} verify {$hash} 2>&1";
+            $command = "{$nodePath} --max-old-space-size=80 --no-warnings {$scriptPath} verify {$hash} 2>&1";
 
             $output = shell_exec($command);
             $output = trim($output ?? '');
@@ -615,7 +615,7 @@ class BlockchainService
             }
 
             $nodePath = env('NODE_PATH', 'node');
-            $command = "{$nodePath} {$scriptPath} stats 2>&1";
+            $command = "{$nodePath} --max-old-space-size=80 --no-warnings {$scriptPath} stats 2>&1";
             $output = shell_exec($command);
             $output = trim($output ?? '');
 
