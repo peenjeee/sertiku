@@ -25,6 +25,7 @@ class Order extends Model
         'notes',
         'paid_at',
         'expired_at',
+        'wa_sent',
     ];
 
     protected $casts = [
@@ -97,7 +98,14 @@ class Order extends Model
         \Illuminate\Support\Facades\Log::info('sendWhatsAppInvoice called', [
             'order_number' => $this->order_number,
             'phone' => $this->phone,
+            'wa_sent' => $this->wa_sent ?? false,
         ]);
+
+        // Check if already sent to prevent duplicate
+        if ($this->wa_sent) {
+            \Illuminate\Support\Facades\Log::info('sendWhatsAppInvoice: Already sent, skipping');
+            return;
+        }
 
         // Check if phone number exists
         if (empty($this->phone)) {
@@ -131,6 +139,12 @@ class Order extends Model
             );
 
             \Illuminate\Support\Facades\Log::info('sendWhatsAppInvoice result', $result);
+
+            // Mark as sent to prevent duplicate
+            if ($result['success'] ?? false) {
+                $this->update(['wa_sent' => true]);
+                \Illuminate\Support\Facades\Log::info('sendWhatsAppInvoice: Marked wa_sent = true');
+            }
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Failed to send WhatsApp invoice: ' . $e->getMessage());
         }

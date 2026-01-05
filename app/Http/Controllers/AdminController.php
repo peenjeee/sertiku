@@ -40,8 +40,8 @@ class AdminController extends Controller
         $period = $request->get('period', '30'); // days
         $year = $request->get('year', now()->year); // year filter
 
-        // Stats with percentage change
-        $stats = $this->getAnalyticsStats($period);
+        // Stats with percentage change (filtered by period and year)
+        $stats = $this->getAnalyticsStats($period, $year);
 
         // Get available years for filter (from earliest certificate to current year)
         $earliestYear = Certificate::min('created_at');
@@ -59,7 +59,7 @@ class AdminController extends Controller
             ->take(10)
             ->get(['certificate_number', 'updated_at']);
 
-        return view('admin.analytics', compact('stats', 'certificatesTrend', 'verificationActivity', 'recentVerifications', 'availableYears', 'year'));
+        return view('admin.analytics', compact('stats', 'certificatesTrend', 'verificationActivity', 'recentVerifications', 'availableYears', 'year', 'period'));
     }
 
     /**
@@ -355,43 +355,72 @@ class AdminController extends Controller
     /**
      * Helper: Get analytics stats with percentage change
      */
-    private function getAnalyticsStats($days)
+    private function getAnalyticsStats($days, $year = null)
     {
+        $year = $year ?? now()->year;
         $now = now();
         $periodStart = $now->copy()->subDays($days);
         $prevPeriodStart = $periodStart->copy()->subDays($days);
 
-        // Current period counts
-        $currentVerifications = Certificate::where('updated_at', '>=', $periodStart)->count();
+        // Current period counts (within selected period AND year)
+        $currentVerifications = Certificate::where('updated_at', '>=', $periodStart)
+            ->whereYear('created_at', $year)
+            ->count();
         $currentCertificates = Certificate::where('status', 'active')
-            ->where('created_at', '>=', $periodStart)->count();
+            ->where('created_at', '>=', $periodStart)
+            ->whereYear('created_at', $year)
+            ->count();
         $currentLembaga = User::where('account_type', 'lembaga')
-            ->where('created_at', '>=', $periodStart)->count();
-        $currentUsers = User::where('created_at', '>=', $periodStart)->count();
+            ->where('created_at', '>=', $periodStart)
+            ->whereYear('created_at', $year)
+            ->count();
+        $currentUsers = User::where('profile_completed', true)
+            ->where('created_at', '>=', $periodStart)
+            ->whereYear('created_at', $year)
+            ->count();
 
-        // Previous period counts
-        $prevVerifications = Certificate::whereBetween('updated_at', [$prevPeriodStart, $periodStart])->count();
+        // Previous period counts (for comparison)
+        $prevVerifications = Certificate::whereBetween('updated_at', [$prevPeriodStart, $periodStart])
+            ->whereYear('created_at', $year)
+            ->count();
         $prevCertificates = Certificate::where('status', 'active')
-            ->whereBetween('created_at', [$prevPeriodStart, $periodStart])->count();
+            ->whereBetween('created_at', [$prevPeriodStart, $periodStart])
+            ->whereYear('created_at', $year)
+            ->count();
         $prevLembaga = User::where('account_type', 'lembaga')
-            ->whereBetween('created_at', [$prevPeriodStart, $periodStart])->count();
-        $prevUsers = User::whereBetween('created_at', [$prevPeriodStart, $periodStart])->count();
+            ->whereBetween('created_at', [$prevPeriodStart, $periodStart])
+            ->whereYear('created_at', $year)
+            ->count();
+        $prevUsers = User::where('profile_completed', true)
+            ->whereBetween('created_at', [$prevPeriodStart, $periodStart])
+            ->whereYear('created_at', $year)
+            ->count();
+
+        // Total counts for the selected year
+        $totalVerifikasi = Certificate::whereYear('created_at', $year)->count();
+        $totalSertifikatAktif = Certificate::where('status', 'active')->whereYear('created_at', $year)->count();
+        $totalLembaga = User::where('account_type', 'lembaga')->whereYear('created_at', $year)->count();
+        $totalPenggunaAktif = User::where('profile_completed', true)->whereYear('created_at', $year)->count();
 
         return [
             'total_verifikasi' => [
-                'value' => Certificate::count(),
+                'value' => $totalVerifikasi,
+                'period_value' => $currentVerifications,
                 'change' => $this->calculatePercentChange($prevVerifications, $currentVerifications),
             ],
             'sertifikat_aktif' => [
-                'value' => Certificate::where('status', 'active')->count(),
+                'value' => $totalSertifikatAktif,
+                'period_value' => $currentCertificates,
                 'change' => $this->calculatePercentChange($prevCertificates, $currentCertificates),
             ],
             'lembaga_terdaftar' => [
-                'value' => User::where('account_type', 'lembaga')->count(),
+                'value' => $totalLembaga,
+                'period_value' => $currentLembaga,
                 'change' => $this->calculatePercentChange($prevLembaga, $currentLembaga),
             ],
             'pengguna_aktif' => [
-                'value' => User::where('profile_completed', true)->count(),
+                'value' => $totalPenggunaAktif,
+                'period_value' => $currentUsers,
                 'change' => $this->calculatePercentChange($prevUsers, $currentUsers),
             ],
         ];
