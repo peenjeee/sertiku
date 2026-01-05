@@ -147,7 +147,7 @@ class BlockchainService
 
             // Prepare transaction data
             Log::info('BlockchainService signWithPhp: Creating transaction to ' . $this->walletAddress);
-            $transaction = new \KornRunner\Ethereum\Transaction(
+            $transaction = new \kornrunner\Ethereum\Transaction(
                 $nonce,
                 $gasPrice,
                 '0x6270', // Gas limit ~25200
