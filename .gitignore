@@ -25,3 +25,5 @@ Thumbs.db
 /storage/app/backups
 scripts/node_modules
 scripts/package-lock.json
+/.agent/workflows
+

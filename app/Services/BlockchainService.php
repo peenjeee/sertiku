@@ -75,8 +75,6 @@ class BlockchainService
         }
 
         try {
-            Log::info("BlockchainService: storeCertificateHash called. Contract Address: '" . $this->contractAddress . "'");
-
             // Try Smart Contract approach first (full data on-chain like Node.js)
             if (!empty($this->contractAddress)) {
                 $txHash = $this->signWithContract($certificate);
