@@ -2,6 +2,7 @@
     "name": "sertiku-scripts",
     "dependencies": {
         "@web3-storage/w3cli": "^7.0.0",
-        "ethers": "^6.0.0"
+        "ethers": "^6.0.0",
+        "solc": "^0.8.26"
     }
 }
