@@ -43,6 +43,52 @@ class BlockchainService
     }
 
     /**
+     * Get wallet balance in MATIC via RPC
+     * @return float|null Balance in MATIC, null on error
+     */
+    public function getWalletBalance(): ?float
+    {
+        if (!$this->isEnabled()) {
+            return null;
+        }
+
+        try {
+            $response = Http::timeout(10)->post($this->rpcUrl, [
+                'jsonrpc' => '2.0',
+                'method' => 'eth_getBalance',
+                'params' => [$this->walletAddress, 'latest'],
+                'id' => 1,
+            ]);
+
+            if ($response->successful() && isset($response->json()['result'])) {
+                $weiHex = $response->json()['result'];
+                // Convert from hex Wei to MATIC (1 MATIC = 10^18 Wei)
+                $wei = hexdec($weiHex);
+                return $wei / 1e18;
+            }
+
+            return null;
+        } catch (\Exception $e) {
+            Log::warning('BlockchainService: Failed to get wallet balance: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Check if wallet balance is too low for transactions
+     * @param float $minBalance Minimum balance in MATIC (default 0.01)
+     * @return bool True if balance is low, false if OK or unknown
+     */
+    public function isLowBalance(float $minBalance = 1): bool
+    {
+        $balance = $this->getWalletBalance();
+        if ($balance === null) {
+            return false; // Can't determine, don't block
+        }
+        return $balance < $minBalance;
+    }
+
+    /**
      * Generate SHA-256 hash of certificate data
      * Includes file integrity hashes for verification
      */
@@ -560,39 +606,7 @@ class BlockchainService
         return null;
     }
 
-    /**
-     * Get wallet MATIC balance
-     */
-    public function getWalletBalance(): ?array
-    {
-        if (empty($this->walletAddress)) {
-            return null;
-        }
-
-        try {
-            $response = Http::timeout(10)->post($this->rpcUrl, [
-                'jsonrpc' => '2.0',
-                'method' => 'eth_getBalance',
-                'params' => [$this->walletAddress, 'latest'],
-                'id' => 1,
-            ]);
-
-            if ($response->successful() && isset($response->json()['result'])) {
-                $balanceWei = hexdec($response->json()['result']);
-                $balanceMatic = $balanceWei / 1e18;
-
-                return [
-                    'wei' => $balanceWei,
-                    'matic' => round($balanceMatic, 6),
-                    'formatted' => number_format($balanceMatic, 4) . ' MATIC',
-                ];
-            }
-        } catch (\Exception $e) {
-            Log::error('BlockchainService: Failed to get wallet balance: ' . $e->getMessage());
-        }
-
-        return null;
-    }
+    // Note: getWalletBalance() method is defined at the top of this class (returns ?float)
 
     /**
      * Get transaction count (nonce) for wallet
@@ -626,18 +640,19 @@ class BlockchainService
      */
     public function getWalletInfo(): array
     {
-        $balance = $this->getWalletBalance();
+        $balance = $this->getWalletBalance(); // Now returns ?float (MATIC amount)
         $txCount = $this->getTransactionCount();
 
         // Estimate remaining certificates based on average gas cost
         $avgGasCostMatic = 0.02; // ~0.02 MATIC per certificate (user confirmed)
-        $remainingCerts = $balance ? floor($balance['matic'] / $avgGasCostMatic) : 0;
+        $remainingCerts = $balance !== null ? floor($balance / $avgGasCostMatic) : 0;
 
         return [
             'enabled' => $this->isEnabled(),
             'wallet_address' => $this->walletAddress,
             'short_address' => $this->walletAddress ? substr($this->walletAddress, 0, 6) . '...' . substr($this->walletAddress, -4) : null,
             'balance' => $balance,
+            'balance_formatted' => $balance !== null ? number_format($balance, 4) . ' MATIC' : null,
             'transaction_count' => $txCount,
             'remaining_certs' => $remainingCerts,
             'network' => $this->chainId === '80002' ? 'Polygon Amoy (Testnet)' : 'Polygon Mainnet',

@@ -18,6 +18,12 @@
         $ipfsUsed = $user->getIpfsUsedThisMonth();
         $canUseIpfs = $user->canUseIpfs();
         $remainingIpfs = $user->getRemainingIpfs();
+
+        // Low Balance Check
+        $blockchainService = app(\App\Services\BlockchainService::class);
+        $walletBalance = $blockchainService->getWalletBalance();
+        $isLowBalance = $blockchainService->isLowBalance(1); // Min 0.01 MATIC
+        $blockchainDisabled = !$canUseBlockchain || $isLowBalance;
     @endphp
 
     <div class="space-y-6">
@@ -294,7 +300,7 @@
 
                 <!-- Blockchain Option -->
                 @if(config('blockchain.enabled'))
-                    <div class="glass-card rounded-2xl p-6 {{ !$canUseBlockchain ? 'opacity-60' : '' }}">
+                    <div class="glass-card rounded-2xl p-6 {{ $blockchainDisabled ? 'opacity-60' : '' }}">
                         <div class="flex items-center pb-3 border-b border-gray-200 mb-4">
                             <svg class="w-5 h-5 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -303,7 +309,7 @@
                             <span class="text-gray-800 text-base font-bold">Blockchain Verification</span>
                             @if($blockchainLimit > 0)
                                 <span
-                                    class="ml-2 px-2 py-0.5 {{ $canUseBlockchain ? 'bg-purple-100 text-purple-600' : 'bg-red-100 text-red-600' }} text-xs font-medium rounded-full">
+                                    class="ml-2 px-2 py-0.5 {{ !$blockchainDisabled ? 'bg-purple-100 text-purple-600' : 'bg-red-100 text-red-600' }} text-xs font-medium rounded-full">
                                     {{ $remainingBlockchain }}/{{ $blockchainLimit }}
                                 </span>
                             @else
@@ -313,7 +319,21 @@
                             @endif
                         </div>
 
-                        @if(!$canUseBlockchain)
+                        {{-- Low Balance Warning --}}
+                        @if($isLowBalance)
+                            <div class="bg-orange-50 border border-orange-200 rounded-lg p-3 mb-4">
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                    <p class="text-orange-700 text-sm font-medium">
+                                        Fitur blockchain sedang tidak tersedia. 
+                                        <a href="{{ url('/support/tickets') }}" class="underline hover:text-orange-900">Hubungi Admin</a>
+                                    </p>
+                                </div>
+                            </div>
+                        @elseif(!$canUseBlockchain)
                             <div class="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
                                 <div class="flex items-center gap-2">
                                     <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -335,10 +355,10 @@
 
                         <div class="flex items-start gap-4">
                             <label
-                                class="relative inline-flex items-center {{ $canUseBlockchain ? 'cursor-pointer' : 'cursor-not-allowed' }}">
-                                <input type="checkbox" name="blockchain_enabled" value="1" class="sr-only peer" {{ old('blockchain_enabled') ? 'checked' : '' }} {{ !$canUseBlockchain ? 'disabled' : '' }}>
+                                class="relative inline-flex items-center {{ !$blockchainDisabled ? 'cursor-pointer' : 'cursor-not-allowed' }}">
+                                <input type="checkbox" name="blockchain_enabled" value="1" class="sr-only peer" {{ old('blockchain_enabled') ? 'checked' : '' }} {{ $blockchainDisabled ? 'disabled' : '' }}>
                                 <div
-                                    class="w-11 h-6 {{ $canUseBlockchain ? 'bg-gray-300 peer-checked:bg-purple-600' : 'bg-gray-200' }} peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all">
+                                    class="w-11 h-6 {{ !$blockchainDisabled ? 'bg-gray-300 peer-checked:bg-purple-600' : 'bg-gray-200' }} peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all">
                                 </div>
                             </label>
                             <div class="flex-1">

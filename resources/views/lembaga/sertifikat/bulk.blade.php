@@ -1,4 +1,11 @@
 <x-layouts.lembaga>
+    @php
+        // Low Balance Check
+        $blockchainService = app(\App\Services\BlockchainService::class);
+        $walletBalance = $blockchainService->getWalletBalance();
+        $isLowBalance = $blockchainService->isLowBalance(1); // Min 0.01 MATIC
+        $blockchainDisabled = !$canUseBlockchain || $isLowBalance;
+    @endphp
     <div class="space-y-6">
         <!-- Header with Quota Display -->
         <div class="info-box rounded-2xl p-6">
@@ -206,7 +213,7 @@
                             <div class="space-y-4">
                                 <!-- Blockchain -->
                                 <div
-                                    class="p-5 rounded-2xl bg-gray-800 border {{ !$canUseBlockchain ? 'border-red-500/30 opacity-75' : 'border-gray-700 hover:border-purple-500/30' }} transition duration-300">
+                                    class="p-5 rounded-2xl bg-gray-800 border {{ $blockchainDisabled ? 'border-red-500/30 opacity-75' : 'border-gray-700 hover:border-purple-500/30' }} transition duration-300">
                                     <div class="flex items-center justify-between mb-2">
                                         <div class="flex items-center gap-2">
                                             <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor"
@@ -217,7 +224,7 @@
                                             <span class="text-white font-bold text-base">Blockchain Verification</span>
                                             @if($blockchainLimit > 0)
                                                 <span
-                                                    class="px-2 py-0.5 rounded text-[10px] font-bold {{ $canUseBlockchain ? 'bg-purple-500/20 text-purple-300' : 'bg-red-500/20 text-red-300' }}">
+                                                    class="px-2 py-0.5 rounded text-[10px] font-bold {{ !$blockchainDisabled ? 'bg-purple-500/20 text-purple-300' : 'bg-red-500/20 text-red-300' }}">
                                                     {{ $remainingBlockchain }}/{{ $blockchainLimit }}
                                                 </span>
                                             @else
@@ -226,16 +233,22 @@
                                                 </span>
                                             @endif
                                         </div>
-                                        <label class="relative inline-flex items-center {{ $canUseBlockchain ? 'cursor-pointer' : 'cursor-not-allowed' }}">
+                                        <label class="relative inline-flex items-center {{ !$blockchainDisabled ? 'cursor-pointer' : 'cursor-not-allowed' }}">
                                             <input type="checkbox" name="blockchain_enabled" value="1"
-                                                class="peer sr-only" {{ !$canUseBlockchain ? 'disabled' : '' }}>
+                                                class="peer sr-only" {{ $blockchainDisabled ? 'disabled' : '' }}>
                                             <div
                                                 class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600">
                                             </div>
                                         </label>
                                     </div>
                                     
-                                    @if(!$canUseBlockchain)
+                                    {{-- Low Balance Warning --}}
+                                    @if($isLowBalance)
+                                        <div class="mb-3 p-2 bg-orange-900/30 border border-orange-500/30 rounded text-orange-300 text-xs">
+                                            Fitur blockchain sedang tidak tersedia. 
+                                            <a href="{{ url('/support/tickets') }}" class="underline hover:text-white">Hubungi Admin</a>
+                                        </div>
+                                    @elseif(!$canUseBlockchain)
                                         <div class="mb-3 p-2 bg-red-900/30 border border-red-500/30 rounded text-red-300 text-xs">
                                             @if($blockchainLimit == 0)
                                                 Fitur Blockchain tidak tersedia di paket ini. <a href="{{ url('/#harga') }}" class="underline hover:text-white">Upgrade</a>
