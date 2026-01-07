@@ -27,13 +27,17 @@
         .header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            /* Align to top to handle height differences */
             margin-bottom: 40px;
             border-bottom: 3px solid #3B82F6;
             padding-bottom: 20px;
         }
 
         .logo {
+            display: flex;
+            align-items: center;
+            /* Center icon and text vertically */
             font-size: 28px;
             font-weight: bold;
             color: #1E3A8F;
@@ -46,42 +50,62 @@
         .invoice-title h1 {
             font-size: 24px;
             color: #10B981;
-            margin-bottom: 5px;
+            margin-bottom: 12px;
+            /* Increased separation */
+            margin-top: 5px;
+            /* Align with logo text */
         }
 
         .invoice-title .status {
             display: inline-block;
             background: #10B981;
             color: white;
-            padding: 5px 15px;
+            padding: 8px 20px;
+            /* More padding */
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 13px;
+            /* Slightly larger text */
             font-weight: bold;
+            vertical-align: middle;
         }
 
         .info-section {
             margin-bottom: 30px;
         }
 
+        /* Use table layout for better DomPDF compatibility than flex */
         .info-row {
-            display: flex;
-            margin-bottom: 20px;
+            display: table;
+            width: 100%;
+            margin-bottom: 25px;
+            /* Increased separation between rows */
         }
 
         .info-col {
-            flex: 1;
+            display: table-cell;
+            width: 50%;
+            vertical-align: top;
+            padding-right: 20px;
+            /* Space between columns */
         }
 
         .info-label {
             color: #666;
-            font-size: 12px;
-            margin-bottom: 5px;
+            font-size: 11px;
+            /* Slightly smaller for contrast */
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            /* More space between label and value */
             text-transform: uppercase;
         }
 
         .info-value {
             font-weight: bold;
             font-size: 14px;
+            line-height: 1.5;
+            /* Better line height for multi-line text */
+            color: #1f2937;
         }
 
         .table {
@@ -147,14 +171,14 @@
         <div class="header">
             <div class="logo">
                 {{-- SertiKu Logo Image --}}
-                <img src="{{ public_path('favicon.svg') }}" width="40" height="40" alt="Logo" style="vertical-align: middle; margin-right: 8px;">
-                <span style="font-size: 28px; font-weight: bold; color: #1E3A8F;">SertiKu</span>
+                <img src="{{ public_path('favicon.svg') }}" width="40" height="40" alt="Logo"
+                    style="vertical-align: middle; margin-right: 8px;">
+                <span style="font-size: 28px; font-weight: bold; color: #1E3A8F;">  SertiKu</span>
             </div>
             <div class="invoice-title">
                 <h1>INVOICE</h1>
                 <span class="status">
                     {{-- Checkmark Icon (Base64 SVG) --}}
-                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIzIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgZD0iTTUgMTNsNCA0TDE5IDciIC8+PC9zdmc+" width="12" height="12" alt="Check" style="vertical-align: middle; margin-right: 4px;">
                     LUNAS
                 </span>
             </div>
