@@ -79,7 +79,7 @@ class BlockchainService
      * @param float $minBalance Minimum balance in MATIC (default 0.01)
      * @return bool True if balance is low, false if OK or unknown
      */
-    public function isLowBalance(float $minBalance = 1): bool
+    public function isLowBalance(float $minBalance = 0.01): bool
     {
         $balance = $this->getWalletBalance();
         if ($balance === null) {

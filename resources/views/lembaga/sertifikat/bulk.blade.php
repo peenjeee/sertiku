@@ -3,7 +3,7 @@
         // Low Balance Check
         $blockchainService = app(\App\Services\BlockchainService::class);
         $walletBalance = $blockchainService->getWalletBalance();
-        $isLowBalance = $blockchainService->isLowBalance(1); // Min 0.01 MATIC
+        $isLowBalance = $blockchainService->isLowBalance(0.01); // Min 0.01 MATIC
         $blockchainDisabled = !$canUseBlockchain || $isLowBalance;
     @endphp
     <div class="space-y-6">
