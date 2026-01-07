@@ -385,32 +385,67 @@ class PaymentController extends Controller
         $order = Order::where('order_number', $orderNumber)->with('package')->firstOrFail();
 
         // Check status directly to API if still pending (backup for missed webhook)
-        if ($order->status === 'pending' && $order->snap_token) {
+        // This works even if snap_token is null (user paid outside popup)
+        if ($order->status === 'pending') {
+            \Log::info('Payment success page: Order still pending, checking Midtrans API', [
+                'order_number' => $orderNumber,
+                'has_snap_token' => !empty($order->snap_token),
+            ]);
+
             try {
-                // Configure Midtrans
-                \Midtrans\Config::$serverKey = config('permissions.midtrans_server_key') ?? env('MIDTRANS_SERVER_KEY');
-                \Midtrans\Config::$isProduction = config('permissions.midtrans_is_production') ?? env('MIDTRANS_PRODUCTION', false);
+                // Configure Midtrans (use same config as constructor)
+                \Midtrans\Config::$serverKey = config('midtrans.server_key');
+                \Midtrans\Config::$isProduction = config('midtrans.is_production');
                 \Midtrans\Config::$isSanitized = true;
-                \Midtrans\Config::$is3ds = true;
+                \Midtrans\Config::$is3ds = config('midtrans.is_3ds');
 
                 $status = \Midtrans\Transaction::status($orderNumber);
-                $transactionStatus = $status->transaction_status;
-                $fraudStatus = $status->fraud_status;
+                $transactionStatus = $status->transaction_status ?? null;
+                $fraudStatus = $status->fraud_status ?? null;
+
+                \Log::info('Midtrans API response on success page', [
+                    'order_number' => $orderNumber,
+                    'transaction_status' => $transactionStatus,
+                    'fraud_status' => $fraudStatus,
+                    'payment_type' => $status->payment_type ?? null,
+                    'full_response' => json_encode($status),
+                ]);
 
                 if ($transactionStatus == 'capture') {
                     if ($fraudStatus == 'challenge') {
-                        // Challenge
+                        \Log::info('Midtrans: Payment challenged', ['order_number' => $orderNumber]);
                     } else {
-                        $order->markAsPaid('midtrans_' . $status->payment_type, $status->transaction_id);
+                        \Log::info('Midtrans: Marking as paid (capture)', ['order_number' => $orderNumber]);
+                        $order->markAsPaid('midtrans_' . ($status->payment_type ?? 'unknown'), $status->transaction_id ?? null);
                     }
                 } else if ($transactionStatus == 'settlement') {
-                    $order->markAsPaid('midtrans_' . $status->payment_type, $status->transaction_id);
-                } else if ($transactionStatus == 'cancel' || $transactionStatus == 'deny' || $transactionStatus == 'expire') {
+                    \Log::info('Midtrans: Marking as paid (settlement)', ['order_number' => $orderNumber]);
+                    $order->markAsPaid('midtrans_' . ($status->payment_type ?? 'unknown'), $status->transaction_id ?? null);
+                } else if (in_array($transactionStatus, ['cancel', 'deny', 'expire'])) {
+                    \Log::info('Midtrans: Marking as failed', ['order_number' => $orderNumber, 'status' => $transactionStatus]);
                     $order->update(['status' => 'failed']);
+                } else {
+                    \Log::info('Midtrans: No action taken, status = ' . $transactionStatus, ['order_number' => $orderNumber]);
                 }
+
+                // Refresh order to get updated status
+                $order->refresh();
+
+                \Log::info('Order status after Midtrans check', [
+                    'order_number' => $orderNumber,
+                    'status' => $order->status,
+                ]);
             } catch (\Exception $e) {
-                \Log::error('Midtrans status check error: ' . $e->getMessage());
+                \Log::error('Midtrans status check error: ' . $e->getMessage(), [
+                    'order_number' => $orderNumber,
+                    'error_class' => get_class($e),
+                ]);
             }
+        } else {
+            \Log::info('Payment success page: Order already processed', [
+                'order_number' => $orderNumber,
+                'status' => $order->status,
+            ]);
         }
 
         // If order is paid and WA not yet sent, send it now (backup mechanism)
@@ -424,7 +459,8 @@ class PaymentController extends Controller
                         orderNumber: $order->order_number,
                         packageName: $order->package->name,
                         amount: (int) $order->amount,
-                        paymentDate: $order->paid_at ? $order->paid_at->format('d/m/Y H:i') : now()->format('d/m/Y H:i')
+                        paymentDate: $order->paid_at ? $order->paid_at->format('d/m/Y H:i') : now()->format('d/m/Y H:i'),
+                        order: $order
                     );
 
                     if ($result['success']) {

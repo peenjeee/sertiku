@@ -48,6 +48,10 @@
                         <span class="text-[rgba(190,219,255,0.7)]">Email</span>
                         <span class="text-white">{{ $order->email }}</span>
                     </div>
+                    <div class="flex justify-between">
+                        <span class="text-[rgba(190,219,255,0.7)]">No. Whatsapp</span>
+                        <span class="text-white">{{ $order->phone }}</span>
+                    </div>
                     <div class="flex justify-between border-t border-[rgba(255,255,255,0.1)] pt-3">
                         <span class="text-[rgba(190,219,255,0.7)]">Total</span>
                         <span class="text-lg font-bold text-white">{{ $order->formatted_amount }}</span>
@@ -73,7 +77,7 @@
                     @if($order->status === 'paid')
                         Paket Anda sudah aktif. Silakan lanjutkan ke dashboard untuk mulai menggunakan fitur premium.
                     @else
-                        Kami akan mengirim konfirmasi ke <strong class="text-white">{{ $order->email }}</strong> setelah
+                        Kami akan mengirim konfirmasi ke Whatsapp <strong class="text-white">{{ $order->phone }}</strong> setelah
                         pembayaran terverifikasi.
                     @endif
                 </p>
@@ -81,6 +85,16 @@
 
             {{-- Actions --}}
             <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+                @if($order->status !== 'paid')
+                    {{-- Check Status Button --}}
+                    <button id="checkStatusBtn" onclick="checkPaymentStatus()"
+                        class="inline-flex items-center justify-center gap-2 rounded-[12px] bg-gradient-to-b from-[#059669] to-[#10B981] px-6 py-3 text-sm font-semibold text-white shadow-[0_20px_40px_-20px_rgba(16,185,129,0.9)] hover:brightness-110 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        <span id="checkStatusText">Cek Status</span>
+                    </button>
+                @endif
                 <a href="{{ route('home') }}"
                     class="inline-flex items-center justify-center gap-2 rounded-[12px] bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-6 py-3 text-sm font-semibold text-white shadow-[0_20px_40px_-20px_rgba(37,99,235,0.9)] hover:brightness-110 transition">
                     Kembali ke Beranda
@@ -92,6 +106,44 @@
                     </a>
                 @endauth
             </div>
+
+            @if($order->status !== 'paid')
+                <script>
+                    function checkPaymentStatus() {
+                        const btn = document.getElementById('checkStatusBtn');
+                        const text = document.getElementById('checkStatusText');
+                        
+                        btn.disabled = true;
+                        text.textContent = 'Mengecek...';
+                        
+                        fetch('{{ route("payment.confirm") }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            },
+                            body: JSON.stringify({ order_number: '{{ $order->order_number }}' })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                text.textContent = 'Berhasil! Memuat ulang...';
+                                setTimeout(() => window.location.reload(), 1000);
+                            } else {
+                                text.textContent = 'Cek Status Pembayaran';
+                                btn.disabled = false;
+                            }
+                        })
+                        .catch(() => {
+                            text.textContent = 'Cek Status Pembayaran';
+                            btn.disabled = false;
+                        });
+                    }
+                    
+                    // Auto-refresh every 10 seconds for pending orders
+                    setTimeout(() => window.location.reload(), 10000);
+                </script>
+            @endif
         </div>
     </section>
 

@@ -135,7 +135,8 @@ class Order extends Model
                 orderNumber: $this->order_number,
                 packageName: $this->package->name,
                 amount: (int) $this->amount,
-                paymentDate: $this->paid_at->format('d/m/Y H:i')
+                paymentDate: $this->paid_at->format('d/m/Y H:i'),
+                order: $this
             );
 
             \Illuminate\Support\Facades\Log::info('sendWhatsAppInvoice result', $result);
