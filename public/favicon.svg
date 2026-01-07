@@ -1,6 +1,6 @@
 <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
     <!-- White background with rounded corners -->
-    <rect width="48" height="48" rx="8" fill="white"/>
+    <!-- White background removed -->
     
     <!-- Outer rounded square -->
     <path d="M35.9912 4.79883H11.9971C8.02159 4.79883 4.79883 8.02159 4.79883 11.9971V35.9912C4.79883 39.9667 8.02159 43.1894 11.9971 43.1894H35.9912C39.9667 43.1894 43.1894 39.9667 43.1894 35.9912V11.9971C43.1894 8.02159 39.9667 4.79883 35.9912 4.79883Z" stroke="#1E3A8F" stroke-width="2.8793" />

@@ -209,7 +209,14 @@
                 <div class="info-col">
                     <div class="info-label">Metode Pembayaran</div>
                     <div class="info-value">
-                        {{ ucfirst(str_replace('_', ' ', $order->payment_type ?? 'Online Payment')) }}
+                        @php
+                            $paymentType = $order->payment_type ?? 'Online Payment';
+                            if (Str::contains($paymentType, ['snap', 'midtrans'])) {
+                                echo 'Online Payment (Midtrans)';
+                            } else {
+                                echo ucfirst(str_replace('_', ' ', $paymentType));
+                            }
+                        @endphp
                     </div>
                 </div>
             </div>
