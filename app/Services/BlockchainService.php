@@ -83,7 +83,7 @@ class BlockchainService
     {
         $balance = $this->getWalletBalance();
         if ($balance === null) {
-            return false; // Can't determine, don't block
+            return true; // Can't determine, assume low/error to be safe
         }
         return $balance < $minBalance;
     }

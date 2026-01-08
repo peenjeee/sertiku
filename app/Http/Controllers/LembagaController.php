@@ -43,7 +43,13 @@ class LembagaController extends Controller
         $user = Auth::user();
         $templates = $user->templates()->where('is_active', true)->latest()->get();
 
-        return view('lembaga.sertifikat.create', compact('templates'));
+        // Check Blockchain Balance
+        $blockchainService = new \App\Services\BlockchainService();
+        $walletBalance = $blockchainService->getWalletBalance();
+        $isLowBalance = $blockchainService->isLowBalance(0.01);
+        $blockchainDisabled = !$user->canUseBlockchain() || $isLowBalance;
+
+        return view('lembaga.sertifikat.create', compact('templates', 'isLowBalance', 'blockchainDisabled'));
     }
 
     /**

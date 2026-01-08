@@ -246,7 +246,7 @@
                                     @if($isLowBalance)
                                         <div class="mb-3 p-2 bg-orange-900/30 border border-orange-500/30 rounded text-orange-300 text-xs">
                                             Fitur blockchain sedang tidak tersedia. 
-                                            <a href="{{ url('/support/tickets') }}" class="underline hover:text-white">Hubungi Admin</a>
+                                            <a href="{{ url('/contact-admin') }}" class="underline hover:text-white">Hubungi Admin</a>
                                         </div>
                                     @elseif(!$canUseBlockchain)
                                         <div class="mb-3 p-2 bg-red-900/30 border border-red-500/30 rounded text-red-300 text-xs">

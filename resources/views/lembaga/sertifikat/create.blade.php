@@ -19,11 +19,9 @@
         $canUseIpfs = $user->canUseIpfs();
         $remainingIpfs = $user->getRemainingIpfs();
 
-        // Low Balance Check
-        $blockchainService = app(\App\Services\BlockchainService::class);
-        $walletBalance = $blockchainService->getWalletBalance();
-        $isLowBalance = $blockchainService->isLowBalance(0.01); // Min 0.01 MATIC
-        $blockchainDisabled = !$canUseBlockchain || $isLowBalance;
+        // Low Balance Check (Passed from Controller)
+        $isLowBalance = $isLowBalance ?? false;
+        $blockchainDisabled = $blockchainDisabled ?? (!$canUseBlockchain || $isLowBalance);
     @endphp
 
     <div class="space-y-6">
@@ -329,7 +327,7 @@
                                     </svg>
                                     <p class="text-orange-700 text-sm font-medium">
                                         Fitur blockchain sedang tidak tersedia. 
-                                        <a href="{{ url('/support/tickets') }}" class="underline hover:text-orange-900">Hubungi Admin</a>
+                                        <a href="{{ url('/contact-admin') }}" class="underline hover:text-orange-900">Hubungi Admin</a>
                                     </p>
                                 </div>
                             </div>
