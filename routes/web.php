@@ -279,10 +279,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/sertifikat', [\App\Http\Controllers\LembagaController::class, 'indexSertifikat'])->name('sertifikat.index');
         Route::get('/sertifikat/create', [\App\Http\Controllers\LembagaController::class, 'createSertifikat'])->name('sertifikat.create');
         Route::post('/sertifikat', [\App\Http\Controllers\LembagaController::class, 'storeSertifikat'])->name('sertifikat.store');
-        Route::get('/sertifikat/{certificate}', [\App\Http\Controllers\LembagaController::class, 'showSertifikat'])->name('sertifikat.show');
-        Route::post('/sertifikat/{certificate}/revoke', [\App\Http\Controllers\LembagaController::class, 'revokeSertifikat'])->name('sertifikat.revoke');
-        Route::post('/sertifikat/{certificate}/reactivate', [\App\Http\Controllers\LembagaController::class, 'reactivateSertifikat'])->name('sertifikat.reactivate');
-
         // Bulk Upload & Advanced Features (Professional & Enterprise Only)
         Route::middleware(['professional'])->group(function () {
             Route::get('/sertifikat/bulk', [BulkCertificateController::class, 'index'])->name('sertifikat.bulk');
@@ -299,6 +295,10 @@ Route::middleware('auth')->group(function () {
             Route::post('/template/ai/generate', [\App\Http\Controllers\LembagaController::class, 'generateAITemplate'])->name('template.ai.generate');
             Route::post('/template/ai/store', [\App\Http\Controllers\LembagaController::class, 'storeAITemplate'])->name('template.ai.store');
         });
+
+        Route::get('/sertifikat/{certificate}', [\App\Http\Controllers\LembagaController::class, 'showSertifikat'])->name('sertifikat.show');
+        Route::post('/sertifikat/{certificate}/revoke', [\App\Http\Controllers\LembagaController::class, 'revokeSertifikat'])->name('sertifikat.revoke');
+        Route::post('/sertifikat/{certificate}/reactivate', [\App\Http\Controllers\LembagaController::class, 'reactivateSertifikat'])->name('sertifikat.reactivate');
 
         // Templates
         Route::get('/template', [\App\Http\Controllers\LembagaController::class, 'indexTemplate'])->name('template.index');
