@@ -103,12 +103,12 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])
 
 // Login Email
 Route::post('/login/email', [LoginController::class, 'loginEmail'])
-    ->middleware('guest')
+    ->middleware(['guest', 'throttle:login'])
     ->name('login.email');
 
 // Login Wallet (dipanggil JS/metamask)
 Route::post('/login/wallet', [LoginController::class, 'loginWallet'])
-    ->middleware('guest')
+    ->middleware(['guest', 'throttle:login'])
     ->name('login.wallet');
 
 // Login Google

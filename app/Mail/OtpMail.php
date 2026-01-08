@@ -33,6 +33,7 @@ class OtpMail extends Mailable
         return new Envelope(
             subject: 'Kode Verifikasi OTP - SertiKu',
         );
+
     }
 
     /**

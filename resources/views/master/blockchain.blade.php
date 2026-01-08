@@ -54,12 +54,12 @@
             <div class="text-right">
                 <p class="text-white/50 text-sm">Saldo</p>
                 <p class="text-3xl font-bold text-white">
-                    {{ $walletInfo['balance']['formatted'] ?? '0 MATIC' }}
+                    {{ $walletInfo['balance_formatted'] ?? '0 MATIC' }}
                 </p>
-                @if($walletInfo['balance'])
+                @if($walletInfo['balance'] !== null)
                     <!-- <p class="text-white/40 text-xs mt-1">
-                        ≈ Rp {{ number_format($walletInfo['balance']['matic'] * 10000, 0, ',', '.') }}
-                    </p> -->
+                            ≈ Rp {{ number_format($walletInfo['balance'] * 10000, 0, ',', '.') }}
+                        </p> -->
                 @endif
             </div>
         </div>
@@ -135,7 +135,7 @@
     </div>
 
     {{-- Low Balance Warning --}}
-    @if($walletInfo['balance'] && $walletInfo['balance']['matic'] < 0.1)
+    @if($walletInfo['balance'] !== null && $walletInfo['balance'] < 0.1)
         <div class="mb-6 p-4 rounded-xl bg-yellow-500/20 border border-yellow-500/30 animate-fade-in-up">
             <div class="flex items-start gap-3">
                 <svg class="w-5 h-5 text-yellow-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -225,9 +225,8 @@
                         <p class="text-white/50 text-xs">PolygonScan Explorer</p>
                     </div>
                 </a>
-                <a href="https://faucet.stakepool.dev.br/amoy"
-                   target="_blank"
-                   class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition">
+                <a href="https://faucet.stakepool.dev.br/amoy" target="_blank"
+                    class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition">
                     <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
                         <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
