@@ -29,5 +29,9 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (\Illuminate\Http\Exceptions\ThrottleRequestsException $e, $request) {
+            return back()
+                ->with('error', 'Terlalu banyak percobaan login. Silakan coba lagi nanti.')
+                ->with('retry_after', $e->getHeaders()['Retry-After']);
+        });
     })->create();

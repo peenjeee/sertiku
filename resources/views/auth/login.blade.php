@@ -526,7 +526,7 @@
                                 @endif
 
                                 {{-- Tombol Masuk --}}
-                                <button type="submit" class="mt-2 inline-flex w-full items-center justify-center rounded-xl
+                                <button type="submit" id="emailSubmitBtn" class="mt-2 inline-flex w-full items-center justify-center rounded-xl
                                                bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6]
                                                px-4 py-3 text-sm font-semibold text-white
                                                shadow-[0_10px_20px_rgba(37,99,235,0.45)]
@@ -945,4 +945,33 @@
         }
     </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            @if(session('retry_after'))
+                const retryAfter = {{ session('retry_after') }};
+                const btn = document.getElementById('emailSubmitBtn');
+
+                if (btn) {
+                    const originalText = btn.innerHTML;
+                    btn.disabled = true;
+                    btn.classList.add('opacity-50', 'cursor-not-allowed');
+
+                    let timeLeft = retryAfter;
+                    btn.innerHTML = `Tunggu ${timeLeft} detik`;
+
+                    const timer = setInterval(() => {
+                        timeLeft--;
+                        if (timeLeft <= 0) {
+                            clearInterval(timer);
+                            btn.disabled = false;
+                            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                            btn.innerHTML = originalText;
+                        } else {
+                            btn.innerHTML = `Tunggu ${timeLeft} detik`;
+                        }
+                    }, 1000);
+                }
+            @endif
+        });
+    </script>
 </x-layouts.app>

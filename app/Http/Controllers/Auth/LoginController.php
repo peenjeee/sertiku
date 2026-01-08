@@ -11,6 +11,8 @@ use App\Rules\Turnstile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
@@ -79,6 +81,17 @@ class LoginController extends Controller
         // Only use email and password for authentication
         $email = strtolower($request->input('email'));
         $password = $request->input('password');
+        // Rate Limiting Logic (Manual)
+        $throttleKey = 'login|' . $request->ip() . '|' . $email;
+
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+            return back()
+                ->with('error', 'Terlalu banyak percobaan login. Silakan coba lagi nanti.')
+                ->with('retry_after', $seconds)
+                ->onlyInput('email');
+        }
+
         $credentials = ['email' => $email, 'password' => $password];
 
         /**
@@ -139,6 +152,10 @@ class LoginController extends Controller
             $user->profile_completed = $dummyUsers[$email]['profile_completed'];
             $user->save();
 
+            $user->save();
+
+            RateLimiter::clear($throttleKey); // Clear attempts on success
+
             Auth::login($user, true);
             $request->session()->regenerate();
 
@@ -174,6 +191,7 @@ class LoginController extends Controller
          * ---------------------------------------------------------
          */
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            RateLimiter::clear($throttleKey); // Clear attempts on success
             $request->session()->regenerate();
 
             $user = Auth::user();
@@ -203,6 +221,8 @@ class LoginController extends Controller
 
             return redirect()->intended($this->getDashboardRoute($user));
         }
+
+        RateLimiter::hit($throttleKey); // Increment attempts on failure
 
         return back()
             ->withErrors(['email' => 'Email atau password salah.'])
