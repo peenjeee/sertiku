@@ -275,11 +275,7 @@ Route::middleware('auth')->group(function () {
         // Dashboard
         Route::get('/', [\App\Http\Controllers\LembagaController::class, 'dashboard'])->name('dashboard');
 
-        // Certificates
-        // Bulk Upload (Must be before wildcards)
-        Route::get('/sertifikat/bulk', [BulkCertificateController::class, 'index'])->name('sertifikat.bulk');
-        Route::post('/sertifikat/bulk', [BulkCertificateController::class, 'store'])->name('sertifikat.bulk.store');
-
+        // Sertifikat Standard Operations
         Route::get('/sertifikat', [\App\Http\Controllers\LembagaController::class, 'indexSertifikat'])->name('sertifikat.index');
         Route::get('/sertifikat/create', [\App\Http\Controllers\LembagaController::class, 'createSertifikat'])->name('sertifikat.create');
         Route::post('/sertifikat', [\App\Http\Controllers\LembagaController::class, 'storeSertifikat'])->name('sertifikat.store');
@@ -287,12 +283,31 @@ Route::middleware('auth')->group(function () {
         Route::post('/sertifikat/{certificate}/revoke', [\App\Http\Controllers\LembagaController::class, 'revokeSertifikat'])->name('sertifikat.revoke');
         Route::post('/sertifikat/{certificate}/reactivate', [\App\Http\Controllers\LembagaController::class, 'reactivateSertifikat'])->name('sertifikat.reactivate');
 
+        // Bulk Upload & Advanced Features (Professional & Enterprise Only)
+        Route::middleware(['professional'])->group(function () {
+            Route::get('/sertifikat/bulk', [BulkCertificateController::class, 'index'])->name('sertifikat.bulk');
+            Route::post('/sertifikat/bulk', [BulkCertificateController::class, 'store'])->name('sertifikat.bulk.store');
+            Route::get('/sertifikat/bulk/template-csv', [BulkCertificateController::class, 'downloadTemplateCsv'])->name('sertifikat.bulk.template-csv');
+            Route::get('/sertifikat/bulk/template-xlsx', [BulkCertificateController::class, 'downloadTemplateXlsx'])->name('sertifikat.bulk.template-xlsx');
+
+            // System Template Generator
+            Route::get('/template/create', [\App\Http\Controllers\LembagaController::class, 'createTemplate'])->name('template.create');
+            Route::post('/template/system', [\App\Http\Controllers\LembagaController::class, 'storeSystemTemplate'])->name('template.storeSystem');
+
+            // AI Template Generator
+            Route::get('/template/ai', [\App\Http\Controllers\LembagaController::class, 'createAITemplate'])->name('template.ai');
+            Route::post('/template/ai/generate', [\App\Http\Controllers\LembagaController::class, 'generateAITemplate'])->name('template.ai.generate');
+            Route::post('/template/ai/store', [\App\Http\Controllers\LembagaController::class, 'storeAITemplate'])->name('template.ai.store');
+        });
+
         // Templates
         Route::get('/template', [\App\Http\Controllers\LembagaController::class, 'indexTemplate'])->name('template.index');
         Route::get('/template/upload', [\App\Http\Controllers\LembagaController::class, 'uploadTemplate'])->name('template.upload');
         Route::post('/template', [\App\Http\Controllers\LembagaController::class, 'storeTemplate'])->name('template.store');
         Route::delete('/template/{template}', [\App\Http\Controllers\LembagaController::class, 'destroyTemplate'])->name('template.destroy');
         Route::post('/template/{template}/toggle', [\App\Http\Controllers\LembagaController::class, 'toggleTemplate'])->name('template.toggle');
+        Route::get('/template/{template}/edit-position', [\App\Http\Controllers\LembagaController::class, 'editTemplatePosition'])->name('template.editPosition');
+        Route::put('/template/{template}/position', [\App\Http\Controllers\LembagaController::class, 'updateTemplatePosition'])->name('template.updatePosition');
 
         // Settings/Pengaturan
         Route::get('/pengaturan', [\App\Http\Controllers\LembagaController::class, 'settings'])->name('settings');
@@ -305,6 +320,11 @@ Route::middleware('auth')->group(function () {
 
         // Activity Log
         Route::get('/activity-log', [\App\Http\Controllers\LembagaController::class, 'activityLog'])->name('activity-log');
+
+        // API Tokens (Professional & Enterprise only)
+        Route::get('/api-tokens', [\App\Http\Controllers\ApiTokenController::class, 'index'])->name('api-tokens.index');
+        Route::post('/api-tokens', [\App\Http\Controllers\ApiTokenController::class, 'store'])->name('api-tokens.store');
+        Route::delete('/api-tokens/{tokenId}', [\App\Http\Controllers\ApiTokenController::class, 'destroy'])->name('api-tokens.destroy');
     });
 
     // User (Personal) Routes - Only for personal (pengguna) accounts
@@ -415,46 +435,7 @@ Route::get('/cookie', [\App\Http\Controllers\PageController::class, 'cookie'])->
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth'])->prefix('lembaga')->name('lembaga.')->group(function () {
-    // Dashboard
-    Route::get('/', [\App\Http\Controllers\LembagaController::class, 'dashboard'])->name('dashboard');
 
-    // Sertifikat
-    Route::get('/sertifikat', [\App\Http\Controllers\LembagaController::class, 'indexSertifikat'])->name('sertifikat.index');
-    Route::get('/sertifikat/create', [\App\Http\Controllers\LembagaController::class, 'createSertifikat'])->name('sertifikat.create');
-    Route::post('/sertifikat', [\App\Http\Controllers\LembagaController::class, 'storeSertifikat'])->name('sertifikat.store');
-
-
-
-    // Bulk Upload (Professional & Enterprise Only)
-    Route::middleware(['professional'])->group(function () {
-        Route::get('/sertifikat/bulk', [BulkCertificateController::class, 'index'])->name('sertifikat.bulk');
-        Route::post('/sertifikat/bulk', [BulkCertificateController::class, 'store'])->name('sertifikat.bulk.store');
-        Route::get('/sertifikat/bulk/template-csv', [BulkCertificateController::class, 'downloadTemplateCsv'])->name('sertifikat.bulk.template-csv');
-        Route::get('/sertifikat/bulk/template-xlsx', [BulkCertificateController::class, 'downloadTemplateXlsx'])->name('sertifikat.bulk.template-xlsx');
-
-        // System Template Generator
-        Route::get('/template/create', [\App\Http\Controllers\LembagaController::class, 'createTemplate'])->name('template.create');
-        Route::post('/template/system', [\App\Http\Controllers\LembagaController::class, 'storeSystemTemplate'])->name('template.storeSystem');
-
-        // AI Template Generator
-        Route::get('/template/ai', [\App\Http\Controllers\LembagaController::class, 'createAITemplate'])->name('template.ai');
-        Route::post('/template/ai/generate', [\App\Http\Controllers\LembagaController::class, 'generateAITemplate'])->name('template.ai.generate');
-        Route::post('/template/ai/store', [\App\Http\Controllers\LembagaController::class, 'storeAITemplate'])->name('template.ai.store');
-    });
-
-    // Template
-    Route::get('/template', [\App\Http\Controllers\LembagaController::class, 'indexTemplate'])->name('template.index');
-    Route::get('/template/upload', [\App\Http\Controllers\LembagaController::class, 'uploadTemplate'])->name('template.upload'); // User Upload
-    Route::post('/template', [\App\Http\Controllers\LembagaController::class, 'storeTemplate'])->name('template.store');
-    Route::get('/template/{template}/edit-position', [\App\Http\Controllers\LembagaController::class, 'editTemplatePosition'])->name('template.editPosition');
-    Route::put('/template/{template}/position', [\App\Http\Controllers\LembagaController::class, 'updateTemplatePosition'])->name('template.updatePosition');
-
-    // API Tokens (Professional & Enterprise only)
-    Route::get('/api-tokens', [\App\Http\Controllers\ApiTokenController::class, 'index'])->name('api-tokens.index');
-    Route::post('/api-tokens', [\App\Http\Controllers\ApiTokenController::class, 'store'])->name('api-tokens.store');
-    Route::delete('/api-tokens/{tokenId}', [\App\Http\Controllers\ApiTokenController::class, 'destroy'])->name('api-tokens.destroy');
-});
 
 /*
 |--------------------------------------------------------------------------
