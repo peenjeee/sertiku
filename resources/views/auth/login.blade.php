@@ -67,9 +67,9 @@
                     emailTab.style.display = 'block';
                     walletTab.style.display = 'none';
 
-                    emailBtn.style.background = 'linear-gradient(180deg, #1E3A8F 0%, #3B82F6 100%)';
+                    emailBtn.style.background = '#2563EB';
                     emailBtn.style.color = 'white';
-                    emailBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1)';
+                    emailBtn.style.boxShadow = '0 2px 8px rgba(37,99,235,0.2)';
 
                     walletBtn.style.background = 'transparent';
                     walletBtn.style.color = 'rgba(255, 255, 255, 0.7)';
@@ -78,9 +78,9 @@
                     emailTab.style.display = 'none';
                     walletTab.style.display = 'block';
 
-                    walletBtn.style.background = 'linear-gradient(180deg, #1E3A8F 0%, #3B82F6 100%)';
+                    walletBtn.style.background = '#2563EB';
                     walletBtn.style.color = 'white';
-                    walletBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1)';
+                    walletBtn.style.boxShadow = '0 2px 8px rgba(37,99,235,0.2)';
 
                     emailBtn.style.background = 'transparent';
                     emailBtn.style.color = 'rgba(255, 255, 255, 0.7)';
@@ -872,19 +872,19 @@
                     <div class="text-left text-sm space-y-4 max-h-96 overflow-y-auto">
                         <p><strong>1. Informasi yang Kami Kumpulkan</strong><br>
                         Nama, email, Google ID, alamat wallet blockchain, dan data sertifikat.</p>
-                        
+
                         <p><strong>2. Penggunaan Informasi</strong><br>
                         Untuk menyediakan layanan verifikasi sertifikat dan mengelola akun Anda.</p>
-                        
+
                         <p><strong>3. Keamanan Data</strong><br>
                         Kami menggunakan enkripsi dan teknologi blockchain untuk melindungi data.</p>
-                        
+
                         <p><strong>4. Berbagi Informasi</strong><br>
                         Kami tidak menjual data Anda. Berbagi hanya dengan persetujuan atau kewajiban hukum.</p>
-                        
+
                         <p><strong>5. Hak Anda</strong><br>
                         Anda dapat mengakses, memperbarui, atau menghapus data pribadi kapan saja.</p>
-                        
+
                         <p class="text-xs text-gray-400 mt-4">Lihat selengkapnya di <a href="${'{{ route("privasi") }}'}" class="text-blue-400 hover:underline">halaman Privasi</a>.</p>
                     </div>
                 `;
@@ -894,19 +894,19 @@
                     <div class="text-left text-sm space-y-4 max-h-96 overflow-y-auto">
                         <p><strong>1. Penerimaan Syarat</strong><br>
                         Dengan menggunakan SertiKu, Anda menyetujui syarat dan ketentuan ini.</p>
-                        
+
                         <p><strong>2. Deskripsi Layanan</strong><br>
                         Platform penerbitan dan verifikasi sertifikat digital berbasis blockchain.</p>
-                        
+
                         <p><strong>3. Akun Pengguna</strong><br>
                         Anda bertanggung jawab menjaga kerahasiaan kredensial akun.</p>
-                        
+
                         <p><strong>4. Penggunaan yang Dilarang</strong><br>
                         Dilarang membuat sertifikat palsu atau menggunakan layanan untuk aktivitas ilegal.</p>
-                        
+
                         <p><strong>5. Hak Kekayaan Intelektual</strong><br>
                         Semua konten platform dilindungi hak cipta SertiKu.</p>
-                        
+
                         <p class="text-xs text-gray-400 mt-4">Lihat selengkapnya di <a href="${'{{ route("syarat") }}'}" class="text-blue-400 hover:underline">halaman Syarat & Ketentuan</a>.</p>
                     </div>
                 `;
@@ -916,17 +916,17 @@
                     <div class="text-left text-sm space-y-4 max-h-96 overflow-y-auto">
                         <p><strong>Apa itu Cookie?</strong><br>
                         File teks kecil yang disimpan di perangkat untuk mengingat preferensi Anda.</p>
-                        
+
                         <p><strong>Cookie yang Kami Gunakan:</strong></p>
                         <ul class="list-disc list-inside ml-2 space-y-1">
                             <li><strong>Esensial</strong> - Untuk login dan keamanan</li>
                             <li><strong>Analitik</strong> - Untuk memahami penggunaan website</li>
                             <li><strong>Fungsional</strong> - Untuk mengingat preferensi</li>
                         </ul>
-                        
+
                         <p><strong>Mengelola Cookie</strong><br>
                         Anda dapat mengontrol cookie melalui pengaturan browser.</p>
-                        
+
                         <p class="text-xs text-gray-400 mt-4">Lihat selengkapnya di <a href="${'{{ route("cookie") }}'}" class="text-blue-400 hover:underline">halaman Kebijakan Cookie</a>.</p>
                     </div>
                 `;

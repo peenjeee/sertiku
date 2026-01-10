@@ -4,7 +4,7 @@
 
     <main class="max-w-4xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
         <!-- Welcome Card -->
-        <div class="rounded-3xl border border-white/10 bg-gradient-to-br from-[#0F172A] to-[#1E293B] p-8 shadow-2xl">
+        <div class="rounded-3xl border border-white/10 bg-[#0F172A] p-8 shadow-2xl">
             <!-- Header -->
             <div class="text-center mb-8">
                 <div
@@ -69,7 +69,7 @@
                 <div class="grid md:grid-cols-2 gap-4 mb-6">
                     <!-- Personal Account -->
                     <div onclick="selectAccountType('personal')" id="card-personal"
-                        class="account-card bg-gradient-to-br from-emerald-500/10 to-green-600/5 border-2 border-emerald-500/30 rounded-2xl p-6 hover:border-emerald-400 transition cursor-pointer group">
+                        class="account-card bg-emerald-500/10 border-2 border-emerald-500/30 rounded-2xl p-6 hover:border-emerald-400 transition cursor-pointer group">
                         <div class="flex items-center gap-4 mb-4">
                             <div
                                 class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full flex items-center justify-center group-hover:scale-110 transition">
@@ -103,7 +103,7 @@
 
                     <!-- Institution Account -->
                     <div onclick="selectAccountType('institution')" id="card-institution"
-                        class="account-card bg-gradient-to-br from-blue-500/10 to-indigo-600/5 border-2 border-blue-500/30 rounded-2xl p-6 hover:border-blue-400 transition cursor-pointer group">
+                        class="account-card bg-blue-500/10 border-2 border-blue-500/30 rounded-2xl p-6 hover:border-blue-400 transition cursor-pointer group">
                         <div class="flex items-center gap-4 mb-4">
                             <div
                                 class="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center group-hover:scale-110 transition">
@@ -137,7 +137,7 @@
 
                 <!-- Continue Button -->
                 <button onclick="goToStep2()" id="btn-continue" disabled
-                    class="w-full py-4 px-6 bg-gradient-to-r from-gray-600 to-gray-700 text-white/50 font-bold text-center rounded-xl transition cursor-not-allowed">
+                    class="w-full py-4 px-6 bg-gray-600 text-white/50 font-bold text-center rounded-xl transition cursor-not-allowed">
                     <span class="flex items-center justify-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -197,7 +197,7 @@
                     </div>
 
                     <button type="submit" id="btn-submit-personal"
-                        class="w-full py-4 px-6 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold text-center rounded-xl shadow-lg shadow-emerald-500/25 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        class="w-full py-4 px-6 bg-[#10B981] hover:bg-[#059669] text-white font-bold text-center rounded-xl shadow-md shadow-emerald-500/20 transition disabled:opacity-50 disabled:cursor-not-allowed">
                         <span class="btn-text flex items-center justify-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -307,7 +307,7 @@
                     </div>
 
                     <button type="submit" id="btn-submit-institution"
-                        class="w-full py-4 px-6 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-center rounded-xl shadow-lg shadow-blue-500/25 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        class="w-full py-4 px-6 bg-[#3B82F6] hover:bg-[#2563EB] text-white font-bold text-center rounded-xl shadow-md shadow-blue-500/20 transition disabled:opacity-50 disabled:cursor-not-allowed">
                         <span class="btn-text flex items-center justify-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

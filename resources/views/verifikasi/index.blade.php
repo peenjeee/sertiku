@@ -36,8 +36,8 @@
                     <h1 class="text-[40px] leading-[50px] font-semibold text-white md:text-[52px] md:leading-[64px]">
                         Verifikasi Sertifikat
                     </h1>
-                    <h2 class="bg-[linear-gradient(90deg,#53EAFD_0%,#8EC5FF_100%)]
-                                   bg-clip-text text-[40px] leading-[50px] font-semibold text-transparent
+                    <h2 class="text-[#8EC5FF]
+                                   bg-clip-text text-[40px] leading-[50px] font-semibold
                                    md:text-[52px] md:leading-[64px] pb-4">
                         Digital Anda
                     </h2>
@@ -140,10 +140,10 @@
                     <div class="relative mt-2 flex flex-col gap-3 sm:flex-row sm:items-center">
                         {{-- Tombol VERIFIKASI --}}
                         <button type="submit" id="verifyBtn" class="inline-flex flex-1 items-center justify-center gap-2 rounded-[8px]
-                                           bg-[linear-gradient(180deg,#1E3A8F_0%,#3B82F6_100%)]
+                                           bg-[#2563EB]
                                            px-4 py-3 text-sm font-medium text-white
-                                           shadow-[0_10px_15px_-3px_rgba(43,127,255,0.5),0_4px_6px_-4px_rgba(43,127,255,0.5)]
-                                           hover:brightness-110 transition">
+                                           shadow-md shadow-blue-500/20
+                                           hover:bg-[#3B82F6] transition">
                             <span class="inline-flex h-4 w-4 items-center justify-center">
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -240,8 +240,8 @@
         <div class="relative flex flex-1 justify-center lg:justify-end animate-slide-in-right">
             {{-- glow belakang --}}
             <div class="pointer-events-none absolute top-16 h-[320px] w-[320px] rounded-full
-                           bg-[linear-gradient(135deg,rgba(0,211,242,0.3)_0%,rgba(43,127,255,0.3)_100%)]
-                           blur-[64px]">
+                           bg-[#2B7FFF]/15
+                           blur-[100px]">
             </div>
 
             <div class="relative w-full max-w-sm space-y-4">
@@ -254,11 +254,11 @@
                     <div class="mx-auto mb-6 flex h-24 w-24 items-center justify-center">
                         <div class="relative h-24 w-24">
                             <div class="absolute inset-0 rounded-[16px]
-                                           bg-[linear-gradient(135deg,#2B7FFF_0%,#00B8DB_100%)]
-                                           opacity-50 blur-[24px]">
+                                           bg-[#2B7FFF]/30
+                                           blur-[24px]">
                             </div>
                             <div class="absolute inset-0 rounded-[16px]
-                                           bg-[linear-gradient(180deg,#1E3A8F_0%,#3B82F6_100%)]
+                                           bg-[#2563EB]
                                            px-4 pt-4">
                                 <div class="relative h-full w-full">
                                     <svg width="64" height="64" viewBox="0 0 64 64" fill="none"

@@ -5,7 +5,7 @@
     {{-- Hero --}}
     <section class="relative overflow-hidden py-10 md:py-16 lg:py-20">
         <div
-            class="pointer-events-none absolute -right-32 top-0 h-96 w-96 rounded-full bg-gradient-to-r from-[#2B7FFF4D] to-[#00B8DB4D] blur-3xl opacity-60">
+            class="pointer-events-none absolute -right-32 top-0 h-96 w-96 rounded-full bg-[#2B7FFF]/15 blur-[120px] opacity-60">
         </div>
         <div class="mx-auto max-w-4xl px-4 text-center relative z-10">
             <h1
@@ -63,7 +63,7 @@
                         </div>
 
                         <button type="submit"
-                            class="w-full rounded-lg bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-5 lg:px-6 py-2.5 lg:py-3 text-sm font-medium text-white shadow-lg hover:brightness-110 transition">
+                            class="w-full rounded-lg bg-[#2563EB] px-5 lg:px-6 py-2.5 lg:py-3 text-sm font-medium text-white shadow-md shadow-blue-500/20 hover:bg-[#3B82F6] transition">
                             Kirim Pesan
                         </button>
                     </form>

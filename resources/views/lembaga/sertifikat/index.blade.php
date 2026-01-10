@@ -135,7 +135,7 @@
             </form>
 
             <a href="{{ route('lembaga.sertifikat.create') }}"
-                class="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg text-white text-sm font-bold hover:from-blue-700 hover:to-indigo-700 transition flex-shrink-0">
+                class="flex items-center gap-2 px-5 py-2.5 bg-[#2563EB] rounded-lg text-white text-sm font-bold shadow-md shadow-blue-500/20 hover:bg-[#3B82F6] transition flex-shrink-0">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                         d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -150,7 +150,7 @@
                 @foreach($certificates as $certificate)
                     <div class="glass-card rounded-2xl overflow-hidden hover:shadow-lg transition group">
                         <!-- Certificate Header -->
-                        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 relative">
+                        <div class="bg-[#2563EB] p-4 relative">
                             <!-- Status Badge -->
                             <div class="absolute top-3 right-3">
                                 @php
@@ -241,7 +241,7 @@
                                 <div class="flex items-center gap-2 mt-2">
                                     @if($certificate->blockchain_tx_hash)
                                         <a href="{{ $certificate->blockchain_explorer_url }}" target="_blank"
-                                            class="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-purple-500/20 to-indigo-500/20 border border-purple-500/30 text-purple-600 text-xs font-medium rounded-lg hover:from-purple-500/30 hover:to-indigo-500/30 transition group">
+                                            class="flex items-center gap-1.5 px-3 py-1.5 bg-purple-500/15 border border-purple-500/30 text-purple-600 text-xs font-medium rounded-lg hover:bg-purple-500/25 transition group">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
@@ -281,7 +281,7 @@
                                 <div class="flex items-center gap-2 mt-2">
                                     <a href="{{ config('ipfs.gateway_url', 'https://gateway.pinata.cloud/ipfs') }}/{{ $certificate->ipfs_cid }}"
                                         target="_blank"
-                                        class="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-teal-500/20 to-cyan-500/20 border border-teal-500/30 text-teal-600 text-xs font-medium rounded-lg hover:from-teal-500/30 hover:to-cyan-500/30 transition group">
+                                        class="flex items-center gap-1.5 px-3 py-1.5 bg-teal-500/15 border border-teal-500/30 text-teal-600 text-xs font-medium rounded-lg hover:bg-teal-500/25 transition group">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
@@ -367,7 +367,7 @@
                 <h3 class="text-gray-800 text-xl font-bold mb-2">Belum Ada Sertifikat</h3>
                 <p class="text-gray-500 mb-6">Mulai terbitkan sertifikat digital pertama Anda</p>
                 <a href="{{ route('lembaga.sertifikat.create') }}"
-                    class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-xl hover:from-blue-700 hover:to-indigo-700 transition">
+                    class="inline-flex items-center gap-2 px-6 py-3 bg-[#2563EB] text-white font-bold rounded-xl shadow-md shadow-blue-500/20 hover:bg-[#3B82F6] transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="M12 6v6m0 0v6m0-6h6m-6 0H6" />

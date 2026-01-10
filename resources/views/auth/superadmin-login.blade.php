@@ -14,7 +14,7 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            background: #0a0a0f;
             min-height: 100vh;
         }
 
@@ -26,13 +26,13 @@
         }
 
         .superadmin-badge {
-            background: linear-gradient(135deg, #7C3AED 0%, #A855F7 100%);
-            animation: pulse-glow 2s ease-in-out infinite;
+            background: #8B5CF6;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.25);
         }
 
         @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.4); }
-            50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.8); }
+            0%, 100% { box-shadow: 0 0 15px rgba(139, 92, 246, 0.2); }
+            50% { box-shadow: 0 0 25px rgba(139, 92, 246, 0.35); }
         }
 
         .input-field {
@@ -48,9 +48,8 @@
         }
 
         .btn-superadmin {
-            background: linear-gradient(135deg, #7C3AED 0%, #A855F7 50%, #7C3AED 100%);
-            background-size: 200% 200%;
-            animation: gradient-shift 3s ease infinite;
+            background: #8B5CF6;
+            transition: all 0.3s ease;
         }
 
         @keyframes gradient-shift {
@@ -60,8 +59,9 @@
         }
 
         .btn-superadmin:hover {
+            background: #7C3AED;
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.25);
         }
 
         .warning-strip {

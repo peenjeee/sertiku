@@ -5,7 +5,7 @@
 
             {{-- Success Icon --}}
             <div
-                class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#22C55E] to-[#4ADE80]">
+                class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[#22C55E]">
                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
@@ -82,7 +82,7 @@
             {{-- Actions --}}
             <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
                 <a href="{{ route('home') }}"
-                    class="inline-flex items-center justify-center gap-2 rounded-[12px] bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-6 py-3 text-sm font-semibold text-white shadow-[0_20px_40px_-20px_rgba(37,99,235,0.9)] hover:brightness-110 transition">
+                    class="inline-flex items-center justify-center gap-2 rounded-[12px] bg-[#2563EB] px-6 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/30 hover:bg-[#3B82F6] transition">
                     Kembali ke Beranda
                 </a>
                 @auth

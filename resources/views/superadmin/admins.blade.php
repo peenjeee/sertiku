@@ -29,7 +29,7 @@
                 <div class="flex items-center gap-4 p-4 rounded-xl bg-white/5">
                     <div
                         class="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden
-                                            {{ $admin->is_superadmin ? 'bg-gradient-to-br from-purple-500 to-pink-500' : 'bg-gradient-to-br from-blue-500 to-indigo-600' }}">
+                                            {{ $admin->is_superadmin ? 'bg-[#A855F7]' : 'bg-[#3B82F6]' }}">
                         @if($admin->avatar && str_starts_with($admin->avatar, '/storage/'))
                             <img src="{{ $admin->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                         @else
@@ -73,7 +73,7 @@
             @forelse($users->take(20) as $user)
                 <div class="flex items-center gap-4 p-4 rounded-xl bg-white/5">
                     <div
-                        class="w-10 h-10 rounded-full bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center overflow-hidden flex-shrink-0">
+                        class="w-10 h-10 rounded-full bg-[#6B7280] flex items-center justify-center overflow-hidden flex-shrink-0">
                         @if($user->avatar && str_starts_with($user->avatar, '/storage/'))
                             <img src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                         @else
@@ -86,8 +86,8 @@
                             <p class="text-white font-medium text-sm truncate">{{ $user->name ?? 'Unnamed' }}</p>
                             <span class="px-1.5 py-0.5 rounded text-[10px] font-bold flex-shrink-0
                                                    @if($user->account_type === 'lembaga' || $user->account_type === 'institution') bg-green-500/20 text-green-400
-                                                @else 
-                                                            bg-yellow-500/20 text-yellow-400 
+                                                @else
+                                                            bg-yellow-500/20 text-yellow-400
                                                         @endif
                                                 ">{{ ucfirst($user->account_type ?? 'user') }}</span>
                         </div>

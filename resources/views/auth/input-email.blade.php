@@ -11,7 +11,7 @@
                 {{-- Header --}}
                 <div class="text-center mb-8">
                     <div
-                        class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center">
+                        class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-[#10B981] flex items-center justify-center">
                         <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
@@ -58,16 +58,16 @@
                         <label for="email" class="block text-sm font-medium text-[#BEDBFF] mb-2">
                             Alamat Email
                         </label>
-                        <input type="email" id="email" name="email" value="{{ old('email') }}" required class="w-full px-4 py-3 rounded-xl border border-white/20 bg-white/5 
+                        <input type="email" id="email" name="email" value="{{ old('email') }}" required class="w-full px-4 py-3 rounded-xl border border-white/20 bg-white/5
                                       text-white placeholder:text-[#9CA3AF]
                                       focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500
                                       transition-all duration-200" placeholder="contoh@email.com">
                     </div>
 
                     {{-- Submit Button --}}
-                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-green-500 to-teal-600 
-                                   text-white font-semibold hover:from-green-600 hover:to-teal-700
-                                   transition-all duration-300 shadow-lg shadow-green-500/25">
+                    <button type="submit" class="w-full py-3 rounded-xl bg-[#10B981]
+                                   text-white font-semibold hover:bg-[#059669]
+                                   transition-all duration-300 shadow-md shadow-emerald-500/20">
                         Kirim Kode Verifikasi
                     </button>
                 </form>

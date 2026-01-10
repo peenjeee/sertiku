@@ -167,7 +167,7 @@
 
                         {{-- Submit Button --}}
                         <button type="submit" id="pay-button"
-                            class="w-full rounded-[12px] bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_20px_40px_-20px_rgba(37,99,235,0.9)] hover:brightness-110 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                            class="w-full rounded-[12px] bg-[#2563EB] px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-blue-500/30 hover:bg-[#3B82F6] transition disabled:opacity-50 disabled:cursor-not-allowed">
                             <span id="button-text">
                                 @if($package->price == 0)
                                     Daftar Gratis
@@ -199,7 +199,7 @@
 
                     <div class="mt-6 flex items-center gap-4">
                         <div
-                            class="flex h-12 w-12 items-center justify-center rounded-[16px] bg-gradient-to-br from-[#2B7FFF] to-[#00B8DB]">
+                            class="flex h-12 w-12 items-center justify-center rounded-[16px] bg-[#2B7FFF]">
                             <svg width="24" height="24" viewBox="0 0 32 32" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -461,7 +461,7 @@
                     const formData = new FormData(form);
 
                     // Choose endpoint based on payment method
-                    const endpoint = paymentMethod === 'crypto' 
+                    const endpoint = paymentMethod === 'crypto'
                         ? '{{ route("payment.crypto") }}'
                         : '{{ route("checkout.process") }}';
 

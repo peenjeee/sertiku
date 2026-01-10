@@ -1,14 +1,14 @@
 <x-layouts.app title="SertiKu – Buat Password Baru"
     description="Halaman keamanan untuk membuat password baru akun SertiKu Anda. Pastikan password kuat dan unik.">
     <main
-        class="min-h-screen bg-gradient-to-b from-[#0F172A] via-[#1E293B] to-[#0F172A] px-4 py-10 flex items-center justify-center">
+        class="min-h-screen bg-[#0F172A] px-4 py-10 flex items-center justify-center">
         <div class="relative w-full max-w-md">
             {{-- Glow effects --}}
             <div
-                class="pointer-events-none absolute -left-32 top-0 h-64 w-64 rounded-full bg-gradient-to-r from-[#2B7FFF4D] to-[#00B8DB4D] blur-3xl opacity-60">
+                class="pointer-events-none absolute -left-32 top-0 h-64 w-64 rounded-full bg-[#2B7FFF]/20 blur-[100px] opacity-40">
             </div>
             <div
-                class="pointer-events-none absolute -right-32 bottom-0 h-64 w-64 rounded-full bg-gradient-to-r from-[#AD46FF33] to-[#F6339A33] blur-3xl opacity-60">
+                class="pointer-events-none absolute -right-32 bottom-0 h-64 w-64 rounded-full bg-[#8B5CF6]/15 blur-[100px] opacity-40">
             </div>
 
             <div class="relative rounded-2xl bg-white/5 border border-white/10 p-6 md:p-8">
@@ -66,7 +66,7 @@
                     </div>
 
                     <button type="submit"
-                        class="w-full rounded-lg bg-gradient-to-r from-[#1E3A8F] to-[#3B82F6] px-6 py-3 text-sm font-medium text-white shadow-lg hover:brightness-110 transition">
+                        class="w-full rounded-lg bg-[#2563EB] px-6 py-3 text-sm font-medium text-white shadow-md shadow-blue-500/20 hover:bg-[#3B82F6] transition">
                         Reset Password
                     </button>
                 </form>

@@ -9,7 +9,7 @@
                 </p>
             </div>
             <a href="{{ route('lembaga.template.upload') }}"
-                class="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg text-white text-sm font-bold hover:from-blue-700 hover:to-indigo-700 transition">
+                class="flex items-center gap-2 px-4 py-2.5 bg-[#2563EB] rounded-lg text-white text-sm font-bold shadow-md shadow-blue-500/20 hover:bg-[#3B82F6] transition">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                         d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -92,7 +92,7 @@
                     <div class="glass-card rounded-2xl overflow-hidden group hover:shadow-lg transition">
                         <!-- Template Preview -->
                         <div
-                            class="relative aspect-[4/3] bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center">
+                            class="relative aspect-[4/3] bg-[#475569] flex items-center justify-center">
                             @if($template->thumbnail_path)
                                 <img src="{{ asset('storage/' . $template->thumbnail_path) }}" alt="{{ $template->name }}"
                                     class="w-full h-full object-cover">
@@ -197,7 +197,7 @@
                 <h3 class="text-gray-800 text-xl font-bold mb-2">Belum Ada Template</h3>
                 <p class="text-gray-500 mb-6">Upload template sertifikat pertama Anda untuk mulai menerbitkan sertifikat</p>
                 <a href="{{ route('lembaga.template.upload') }}"
-                    class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-xl hover:from-blue-700 hover:to-indigo-700 transition">
+                    class="inline-flex items-center gap-2 px-6 py-3 bg-[#2563EB] text-white font-bold rounded-xl shadow-md shadow-blue-500/20 hover:bg-[#3B82F6] transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />

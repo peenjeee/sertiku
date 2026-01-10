@@ -5,7 +5,7 @@
     {{-- Hero --}}
     <section class=" verflow-hidden py-16 md:py-24">
         <div
-            class="pointer-events-none absolute -left-32 top-0 h-96 w-96 rounded-full bg-gradient-to-r from-[#2B7FFF4D] to-[#00B8DB4D] blur-3xl opacity-60">
+            class="pointer-events-none absolute -left-32 top-0 h-96 w-96 rounded-full bg-[#2B7FFF]/15 blur-[120px] opacity-60">
         </div>
         <div class="mx-auto max-w-4xl px-4 text-center relative z-10">
             <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 animate-fade-in-up">Pusat Bantuan</h1>
@@ -182,12 +182,12 @@
     <section class="py-12 px-4">
         <div class="mx-auto max-w-3xl text-center">
             <div
-                class="rounded-2xl bg-gradient-to-r from-[#1E3A8F]/30 to-[#3B82F6]/30 border border-[#3B82F6]/30 p-8 animate-fade-in-up hover-glow">
+                class="rounded-2xl bg-[#1E3A8F]/20 border border-[#3B82F6]/30 p-8 animate-fade-in-up hover-glow">
                 <h3 class="text-xl font-semibold text-white mb-2">Masih butuh bantuan?</h3>
                 <p class="text-[#BEDBFF]/80 mb-6">Tim support kami siap membantu Anda 24/7</p>
                 <div class="flex flex-col sm:flex-row gap-3 justify-center">
                     <a href="{{ route('kontak') }}"
-                        class="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-6 py-3 text-sm font-medium text-white shadow-lg hover:brightness-110 transition">
+                        class="inline-flex items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-sm font-medium text-white shadow-md shadow-blue-500/20 hover:bg-[#3B82F6] transition">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />

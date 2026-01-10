@@ -82,7 +82,7 @@
                             <td class="py-4 px-4">
                                 <div class="flex items-center gap-3">
                                     <div
-                                        class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center overflow-hidden">
+                                        class="w-10 h-10 rounded-full bg-[#3B82F6] flex items-center justify-center overflow-hidden">
                                         @if($user->avatar && (str_starts_with($user->avatar, '/storage/') || str_starts_with($user->avatar, 'http')))
                                             <img src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                                         @else
@@ -182,7 +182,7 @@
                 <div class="p-4 hover:bg-gray-50 transition">
                     <div class="flex items-start gap-3">
                         <div
-                            class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                            class="w-10 h-10 rounded-full bg-[#3B82F6] flex items-center justify-center flex-shrink-0 overflow-hidden">
                             @if($user->avatar && (str_starts_with($user->avatar, '/storage/') || str_starts_with($user->avatar, 'http')))
                                 <img src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                             @else

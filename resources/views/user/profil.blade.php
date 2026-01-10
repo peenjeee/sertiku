@@ -9,7 +9,7 @@
                 <p class="text-white/60 mt-1">Lihat pencapaian dan informasi akun Anda</p>
             </div>
             <a href="{{ route('user.profil.edit') }}"
-                class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-sm hover:brightness-110 transition">
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3B82F6] text-white text-sm shadow-md shadow-blue-500/20 hover:bg-[#2563EB] transition">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -24,7 +24,7 @@
         <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4">
             {{-- Avatar --}}
             <div
-                class="w-20 h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-3xl lg:text-4xl flex-shrink-0 overflow-hidden">
+                class="w-20 h-20 lg:w-24 lg:h-24 rounded-full bg-[#3B82F6] flex items-center justify-center text-white font-bold text-3xl lg:text-4xl flex-shrink-0 overflow-hidden">
                 @if($user->avatar && (str_starts_with($user->avatar, '/storage/') || str_starts_with($user->avatar, 'http')))
                     <img src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                 @else
@@ -141,7 +141,7 @@
                     <div class="p-4 rounded-xl bg-white/5 border border-white/10 text-center hover-lift transition group">
                         <div
                             class="w-12 h-12 mx-auto mb-2 rounded-full flex items-center justify-center
-                                                            {{ $achievement['unlocked'] ? 'bg-gradient-to-br from-yellow-400 to-orange-500' : 'bg-white/10' }}">
+                                                            {{ $achievement['unlocked'] ? 'bg-[#F59E0B]' : 'bg-white/10' }}">
                             @if($achievement['unlocked'])
                                 <span class="flex items-center justify-center">{!! $achievement['icon'] !!}</span>
                             @else
@@ -237,7 +237,7 @@
                     <div
                         class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
                         <div
-                            class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0">
+                            class="w-10 h-10 rounded-lg bg-[#3B82F6] flex items-center justify-center flex-shrink-0">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />

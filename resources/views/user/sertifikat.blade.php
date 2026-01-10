@@ -4,7 +4,7 @@
     {{-- Header --}}
     <div class="mb-6 animate-fade-in-up pl-10 lg:pl-0">
         <h1
-            class="text-2xl lg:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+            class="text-2xl lg:text-3xl font-bold text-[#8EC5FF]">
             Sertifikat Saya
         </h1>
         <p class="text-white/60 mt-1">Lihat dan kelola semua sertifikat digital Anda</p>
@@ -110,7 +110,7 @@
                     class="flex-1 rounded-xl bg-white/5 border border-white/10 px-4 py-2.5 sm:py-3 text-sm sm:text-base text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                     placeholder="Atau masukkan ID Sertifikat...">
                 <button type="submit"
-                    class="w-full sm:w-auto px-6 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium hover:brightness-110 transition flex items-center justify-center gap-2">
+                    class="w-full sm:w-auto px-6 py-2.5 sm:py-3 rounded-xl bg-[#3B82F6] text-white font-medium shadow-md shadow-blue-500/20 hover:bg-[#2563EB] transition flex items-center justify-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -129,7 +129,7 @@
                     <div
                         class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
                         <div
-                            class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0">
+                            class="w-12 h-12 rounded-lg bg-[#3B82F6] flex items-center justify-center flex-shrink-0">
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />

@@ -12,7 +12,7 @@
         <div class="glass-card rounded-2xl p-6 animate-fade-in-up stagger-1">
             <div class="text-center">
                 <div
-                    class="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mx-auto mb-4 overflow-hidden">
+                    class="w-24 h-24 rounded-full bg-[#3B82F6] flex items-center justify-center mx-auto mb-4 overflow-hidden">
                     @if($admin->avatar && (str_starts_with($admin->avatar, '/storage/') || str_starts_with($admin->avatar, 'http')))
                         <img src="{{ $admin->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                     @else

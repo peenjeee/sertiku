@@ -256,7 +256,7 @@
             -ms-overflow-style: none;  /* IE and Edge */
             scrollbar-width: none;  /* Firefox */
         }
-        
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #0f172a;
@@ -269,11 +269,11 @@
     {{-- Background glow sesuai Figma --}}
     <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
         {{-- kiri atas biru --}}
-        <div class="absolute -left-40 top-0 h-80 w-80 rounded-full bg-[rgba(43,127,255,0.3)] blur-3xl"></div>
+        <div class="absolute -left-40 top-0 h-80 w-80 rounded-full bg-[#2B7FFF]/15 blur-[120px]"></div>
         {{-- kanan tengah biru --}}
-        <div class="absolute -right-32 top-1/3 h-80 w-80 rounded-full bg-[rgba(0,184,219,0.25)] blur-3xl"></div>
+        <div class="absolute -right-32 top-1/3 h-80 w-80 rounded-full bg-[#00B8DB]/12 blur-[120px]"></div>
         {{-- kanan bawah ungu --}}
-        <div class="absolute right-0 bottom-0 h-80 w-80 rounded-full bg-[rgba(173,70,255,0.2)] blur-3xl"></div>
+        <div class="absolute right-0 bottom-0 h-80 w-80 rounded-full bg-[#8B5CF6]/10 blur-[120px]"></div>
     </div>
 
     <x-navbar />
@@ -400,11 +400,11 @@
 
             0%,
             100% {
-                box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+                box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
             }
 
             50% {
-                box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+                box-shadow: 0 0 25px rgba(59, 130, 246, 0.3);
             }
         }
 
@@ -592,7 +592,7 @@
         window.confirmAction = function(e, message) {
             e.preventDefault();
             let form = e.target;
-            
+
             // If the element is a link (a tag), not a form
             if (form.tagName === 'A') {
                 Swal.fire({

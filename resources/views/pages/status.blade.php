@@ -4,7 +4,7 @@
     {{-- Hero --}}
     <section class="overflow-hidden py-16 md:py-20 px-4">
         <div
-            class="pointer-events-none absolute -left-32 top-0 h-96 w-96 rounded-full bg-gradient-to-r from-[#10B98133] to-[#00B8DB33] blur-3xl opacity-60 hidden md:block">
+            class="pointer-events-none absolute -left-32 top-0 h-96 w-96 rounded-full bg-[#10B981]/15 blur-[120px] opacity-60 hidden md:block">
         </div>
         <div class="mx-auto max-w-4xl px-4 text-center relative z-10">
             {{-- Status Badge --}}
@@ -152,7 +152,7 @@
     {{-- Subscribe --}}
     <section class="py-12 px-4">
         <div class="mx-auto max-w-3xl text-center">
-            <div class="rounded-2xl bg-gradient-to-r from-[#1E3A8F]/30 to-[#3B82F6]/30 border border-[#3B82F6]/30 p-8">
+            <div class="rounded-2xl bg-[#1E3A8F]/20 border border-[#3B82F6]/30 p-8">
                 <h3 class="text-xl font-semibold text-white mb-2">Dapatkan Notifikasi Status</h3>
                 <p class="text-[#BEDBFF]/80 mb-6">Dapatkan update jika ada gangguan layanan</p>
                 <form id="statusSubscribeForm" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
@@ -160,7 +160,7 @@
                     <input type="email" id="statusEmail" placeholder="email@contoh.com" required
                         class="flex-1 rounded-lg bg-white/10 border border-white/20 px-4 py-3 text-white text-sm placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]">
                     <button type="submit" id="statusSubmitBtn"
-                        class="w-full sm:w-auto rounded-lg bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-6 py-3 text-sm font-medium text-white hover:brightness-110 transition flex items-center justify-center gap-2 disabled:opacity-50">
+                        class="w-full sm:w-auto rounded-lg bg-[#2563EB] px-6 py-3 text-sm font-medium text-white shadow-md shadow-blue-500/20 hover:bg-[#3B82F6] transition flex items-center justify-center gap-2 disabled:opacity-50">
                         <span id="statusBtnText">Subscribe</span>
                         <svg id="statusSpinner" class="hidden animate-spin h-4 w-4 text-white"
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

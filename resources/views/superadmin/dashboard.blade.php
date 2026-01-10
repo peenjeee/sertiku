@@ -98,7 +98,7 @@
                     <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5">
                         <div
                             class="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden
-                                {{ $admin->is_superadmin ? 'bg-gradient-to-br from-purple-500 to-pink-500' : 'bg-gradient-to-br from-blue-500 to-indigo-600' }}">
+                                {{ $admin->is_superadmin ? 'bg-[#A855F7]' : 'bg-[#3B82F6]' }}">
                             @if($admin->avatar && str_starts_with($admin->avatar, '/storage/'))
                                 <img src="{{ $admin->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                             @else
@@ -131,7 +131,7 @@
                 @forelse($recentUsers as $user)
                     <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5">
                         <div
-                            class="w-10 h-10 rounded-full bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center overflow-hidden">
+                            class="w-10 h-10 rounded-full bg-[#6B7280] flex items-center justify-center overflow-hidden">
                             @if($user->avatar && str_starts_with($user->avatar, '/storage/'))
                                 <img src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                             @else

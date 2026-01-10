@@ -17,7 +17,7 @@
                 class="mt-20 relative w-full max-w-3xl rounded-[24px] border border-[rgba(255,255,255,0.14)] bg-[rgba(15,23,42,0.9)] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)]">
                 {{-- Garis gradien di atas kartu - RED for revoked, AMBER for expired, GREEN for valid --}}
                 <div
-                    class="h-3 w-full rounded-t-[24px] {{ $isRevoked ? 'bg-gradient-to-r from-[#EF4444] via-[#EF4444] to-[#F97316]' : ($isExpired ? 'bg-gradient-to-r from-[#F59E0B] via-[#F59E0B] to-[#EAB308]' : 'bg-gradient-to-r from-[#22C55E] via-[#22C55E] to-[#38BDF8]') }}">
+                    class="h-3 w-full rounded-t-[24px] {{ $isRevoked ? 'bg-[#EF4444]' : ($isExpired ? 'bg-[#F59E0B]' : 'bg-[#22C55E]') }}">
                 </div>
 
                 {{-- Icon kecil di tengah atas card --}}
@@ -27,7 +27,7 @@
                         @if($isRevoked)
                             {{-- RED X icon for revoked --}}
                             <div
-                                class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#EF4444] to-[#DC2626]">
+                                class="flex h-10 w-10 items-center justify-center rounded-full bg-[#EF4444]">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none">
                                     <circle cx="12" cy="12" r="10" stroke="#FFFFFF" stroke-width="1.8" />
                                     <path d="M15 9L9 15M9 9L15 15" stroke="#FFFFFF" stroke-width="1.8"
@@ -37,7 +37,7 @@
                         @elseif($isExpired)
                             {{-- AMBER clock icon for expired --}}
                             <div
-                                class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#F59E0B] to-[#D97706]">
+                                class="flex h-10 w-10 items-center justify-center rounded-full bg-[#F59E0B]">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none">
                                     <circle cx="12" cy="12" r="10" stroke="#FFFFFF" stroke-width="1.8" />
                                     <path d="M12 6v6l4 2" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"
@@ -47,7 +47,7 @@
                         @else
                             {{-- GREEN checkmark for valid --}}
                             <div
-                                class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#22C55E] to-[#16A34A]">
+                                class="flex h-10 w-10 items-center justify-center rounded-full bg-[#22C55E]">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none">
                                     <circle cx="12" cy="12" r="10" stroke="#FFFFFF" stroke-width="1.8" />
                                     <path d="M8 12.5l2.3 2.3L16 9" stroke="#FFFFFF" stroke-width="1.8"
@@ -321,7 +321,7 @@
                                 <div class="mt-3">
                                     <a href="{{ config('blockchain.explorer_url', 'https://amoy.polygonscan.com') }}/tx/{{ $certificate['blockchain_tx_hash'] }}"
                                         target="_blank"
-                                        class="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 border border-purple-500/40 rounded-lg py-3 px-4 hover:from-purple-600/30 hover:to-indigo-600/30 transition group">
+                                        class="flex items-center justify-center gap-2 bg-purple-500/15 border border-purple-500/30 rounded-lg py-3 px-4 hover:bg-purple-500/25 transition group">
                                         <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -346,7 +346,7 @@
                                 <div class="mt-3">
                                     <a href="{{ config('ipfs.gateway_url', 'https://w3s.link/ipfs') }}/{{ $certificate['ipfs_cid'] }}"
                                         target="_blank"
-                                        class="flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600/20 to-teal-600/20 border border-cyan-500/40 rounded-lg py-3 px-4 hover:from-cyan-600/30 hover:to-teal-600/30 transition group">
+                                        class="flex items-center justify-center gap-2 bg-cyan-500/15 border border-cyan-500/30 rounded-lg py-3 px-4 hover:bg-cyan-500/25 transition group">
                                         <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

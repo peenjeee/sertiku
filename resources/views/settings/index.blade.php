@@ -1,5 +1,5 @@
 <x-layouts.app title="Pengaturan Akun - SertiKu">
-    <main class="min-h-screen bg-gradient-to-b from-[#0F172A] via-[#1E293B] to-[#0F172A] px-4 py-10">
+    <main class="min-h-screen bg-[#0F172A] px-4 py-10">
         <div class="mx-auto max-w-3xl">
             {{-- Header --}}
             <div class="mb-8">
@@ -130,7 +130,7 @@
 
                         <div class="pt-4">
                             <button type="submit"
-                                class="px-6 py-2.5 bg-gradient-to-r from-[#1E3A8F] to-[#3B82F6] text-white text-sm font-medium rounded-lg hover:brightness-110 transition">
+                                class="px-6 py-2.5 bg-[#2563EB] text-white text-sm font-medium rounded-lg shadow-md shadow-blue-500/20 hover:bg-[#3B82F6] transition">
                                 Simpan Perubahan
                             </button>
                         </div>
@@ -184,7 +184,7 @@
 
                             <div class="pt-4">
                                 <button type="submit"
-                                    class="px-6 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-medium rounded-lg hover:brightness-110 transition">
+                                    class="px-6 py-2.5 bg-[#F59E0B] text-white text-sm font-medium rounded-lg shadow-md shadow-amber-500/20 hover:bg-[#D97706] transition">
                                     Ubah Password
                                 </button>
                             </div>

@@ -11,7 +11,7 @@
                 {{-- Header --}}
                 <div class="text-center mb-8">
                     <div
-                        class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-[#6366F1] flex items-center justify-center">
                         <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -46,7 +46,7 @@
                     {{-- OTP Input Fields --}}
                     <div class="flex justify-center gap-2 mb-6" x-data="otpInput()">
                         @for($i = 0; $i < 6; $i++)
-                            <input type="text" maxlength="1" class="w-12 h-14 text-center text-2xl font-bold rounded-xl border-2 
+                            <input type="text" maxlength="1" class="w-12 h-14 text-center text-2xl font-bold rounded-xl border-2
                                                   bg-white/5 text-white
                                                   border-white/20 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50
                                                   transition-all duration-200" x-ref="input{{ $i }}"
@@ -61,9 +61,9 @@
                     @enderror
 
                     {{-- Submit Button --}}
-                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 
-                                   text-white font-semibold hover:from-blue-600 hover:to-purple-700
-                                   transition-all duration-300 shadow-lg shadow-blue-500/25">
+                    <button type="submit" class="w-full py-3 rounded-xl bg-[#6366F1]
+                                   text-white font-semibold hover:bg-[#4F46E5]
+                                   transition-all duration-300 shadow-md shadow-indigo-500/20">
                         Verifikasi
                     </button>
                 </form>

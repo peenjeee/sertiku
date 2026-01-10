@@ -1,12 +1,12 @@
 {{-- resources/views/auth/register.blade.php --}}
 <x-layouts.app title="SertiKu – Daftar Akun Baru" description="Daftar akun SertiKu sekarang. Platform sertifikat digital berbasis blockchain untuk institusi dan profesional.">
 
-    <main class="min-h-screen bg-gradient-to-b from-[#0F172A] via-[#1E293B] to-[#0F172A] px-4 py-10 flex items-center justify-center overflow-x-hidden">
+    <main class="min-h-screen bg-[#0F172A] px-4 py-10 flex items-center justify-center overflow-x-hidden">
 
         <div class="relative w-full max-w-6xl">
             {{-- Glow kiri-kanan (hidden on mobile to prevent overflow) --}}
-            <div class="pointer-events-none absolute -left-32 top-24 h-96 w-96 rounded-full bg-gradient-to-r from-[#2B7FFF4D] to-[#00B8DB4D] blur-3xl opacity-80 hidden md:block"></div>
-            <div class="pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-gradient-to-r from-[#AD46FF33] to-[#F6339A33] blur-3xl opacity-80 hidden md:block"></div>
+            <div class="pointer-events-none absolute -left-32 top-24 h-96 w-96 rounded-full bg-[#2B7FFF]/15 blur-[120px] opacity-50 hidden md:block"></div>
+            <div class="pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-[#8B5CF6]/10 blur-[120px] opacity-50 hidden md:block"></div>
 
             {{-- Kartu utama --}}
             <div class="relative mx-auto max-w-4xl text-white">
@@ -23,7 +23,7 @@
                         {{-- BTN Pengguna --}}
                         <button type="button" id="userTabBtn"
                                 onclick="switchRegisterTab('pengguna')"
-                                class="inline-flex items-center gap-2 rounded-md bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-4 py-1.5 text-xs md:text-sm shadow-sm text-white">
+                                class="inline-flex items-center gap-2 rounded-md bg-[#2563EB] px-4 py-1.5 text-xs md:text-sm shadow-sm text-white">
                             <span class="flex h-4 w-4 items-center justify-center">
                                 <span class="h-[1px] w-3 border border-white/90 border-t-2 border-b-0"></span>
                             </span>
@@ -49,7 +49,7 @@
                             {{-- Info pribadi --}}
                             <div class="flex flex-col items-center w-1/4">
                                 <div id="userStepIcon-1"
-                                     class="flex h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#00C950] to-[#00BC7D] text-white shadow">
+                                     class="flex h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[#10B981] text-white shadow">
                                     <span class="text-xs sm:text-sm font-semibold">1</span>
                                 </div>
                                 <p class="mt-1 sm:mt-2 text-[10px] sm:text-xs font-medium text-center" id="userStepLabel-1">Info Pribadi</p>
@@ -86,7 +86,7 @@
                         {{-- Progress bar --}}
                         <div class="h-2 sm:h-4 rounded-full bg-white/10 overflow-hidden">
                             <div id="userStepProgress"
-                                 class="h-2 sm:h-4 w-1/4 bg-gradient-to-r from-[#155DFC] to-[#0092B8] transition-all duration-300">
+                                 class="h-2 sm:h-4 w-1/4 bg-[#3B82F6] transition-all duration-300">
                             </div>
                         </div>
                     </div>
@@ -97,7 +97,7 @@
                             {{-- Info Lembaga --}}
                             <div class="flex flex-col items-center w-1/4">
                                 <div id="orgStepIcon-1"
-                                     class="flex h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#00C950] to-[#00BC7D] text-white shadow">
+                                     class="flex h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[#10B981] text-white shadow">
                                     <span class="text-xs sm:text-sm font-semibold">1</span>
                                 </div>
                                 <p class="mt-1 sm:mt-2 text-[10px] sm:text-xs font-medium text-center" id="orgStepLabel-1">Info Lembaga</p>
@@ -134,7 +134,7 @@
                         {{-- Progress bar lembaga --}}
                         <div class="h-2 sm:h-4 rounded-full bg-white/10 overflow-hidden">
                             <div id="orgStepProgress"
-                                 class="h-2 sm:h-4 w-1/4 bg-gradient-to-r from-[#155DFC] to-[#0092B8] transition-all duration-300">
+                                 class="h-2 sm:h-4 w-1/4 bg-[#3B82F6] transition-all duration-300">
                             </div>
                         </div>
                     </div>
@@ -228,9 +228,9 @@
                                 {{-- Tombol step 1 --}}
                                 <div class="mt-4 flex items-center justify-end border-t border-white/10 pt-4">
                                     <button type="button"
-                                            class="inline-flex items-center rounded-lg bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6]
-                                                   px-6 py-2.5 text-sm font-medium shadow-[0_10px_15px_-3px_rgba(43,127,255,0.5)]
-                                                   hover:brightness-110 transition"
+                                            class="inline-flex items-center rounded-lg bg-[#2563EB]
+                                                   px-6 py-2.5 text-sm font-medium shadow-md shadow-blue-500/20
+                                                   hover:bg-[#3B82F6] transition"
                                             onclick="goToStep(2)">
                                         Lanjut
                                         <span class="ml-2 inline-flex h-3 w-3 items-center justify-center">
@@ -321,9 +321,9 @@
                                     </button>
 
                                     <button type="button"
-                                            class="inline-flex items-center rounded-lg bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6]
-                                                   px-6 py-2.5 text-sm font-medium shadow-[0_10px_15px_-3px_rgba(43,127,255,0.5)]
-                                                   hover:brightness-110 transition"
+                                            class="inline-flex items-center rounded-lg bg-[#2563EB]
+                                                   px-6 py-2.5 text-sm font-medium shadow-md shadow-blue-500/20
+                                                   hover:bg-[#3B82F6] transition"
                                             onclick="goToStep(3)">
                                         Lanjut
                                         <span class="ml-2 inline-flex h-3 w-3 items-center justify-center">
@@ -409,9 +409,9 @@
                                     </button>
 
                                     <button type="submit"
-                                            class="inline-flex items-center rounded-lg bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6]
-                                                   px-6 py-2.5 text-sm font-medium shadow-[0_10px_15px_-3px_rgba(43,127,255,0.5)]
-                                                   hover:brightness-110 transition">
+                                            class="inline-flex items-center rounded-lg bg-[#2563EB]
+                                                   px-6 py-2.5 text-sm font-medium shadow-md shadow-blue-500/20
+                                                   hover:bg-[#3B82F6] transition">
                                         Daftar
                                     </button>
                                 </div>
@@ -538,9 +538,9 @@
                                         </a>
 
                                         <button type="button"
-                                                class="inline-flex items-center rounded-lg bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6]
-                                                       px-6 py-2.5 text-sm font-medium shadow-[0_10px_15px_-3px_rgba(43,127,255,0.5)]
-                                                       hover:brightness-110 transition ml-auto"
+                                                class="inline-flex items-center rounded-lg bg-[#2563EB]
+                                                       px-6 py-2.5 text-sm font-medium shadow-md shadow-blue-500/20
+                                                       hover:bg-[#3B82F6] transition ml-auto"
                                                 onclick="goToOrgStep(2)">
                                             Lanjut
                                             <span class="ml-2 inline-flex h-3 w-3 items-center justify-center">
@@ -653,9 +653,9 @@
                                         </button>
 
                                         <button type="button"
-                                                class="inline-flex items-center rounded-lg bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6]
-                                                       px-6 py-2.5 text-sm font-medium shadow-[0_10px_15px_-3px_rgba(43,127,255,0.5)]
-                                                       hover:brightness-110 transition"
+                                                class="inline-flex items-center rounded-lg bg-[#2563EB]
+                                                       px-6 py-2.5 text-sm font-medium shadow-md shadow-blue-500/20
+                                                       hover:bg-[#3B82F6] transition"
                                                 onclick="goToOrgStep(3)">
                                             Lanjut
                                             <span class="ml-2 inline-flex h-3 w-3 items-center justify-center">
@@ -761,9 +761,9 @@
                                         </button>
 
                                         <button type="button"
-                                                class="inline-flex items-center rounded-lg bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6]
-                                                       px-6 py-2.5 text-sm font-medium shadow-[0_10px_15px_-3px_rgba(43,127,255,0.5)]
-                                                       hover:brightness-110 transition"
+                                                class="inline-flex items-center rounded-lg bg-[#2563EB]
+                                                       px-6 py-2.5 text-sm font-medium shadow-md shadow-blue-500/20
+                                                       hover:bg-[#3B82F6] transition"
                                                 onclick="goToOrgStep(4)">
                                             Lanjut
                                             <span class="ml-2 inline-flex h-3 w-3 items-center justify-center">
