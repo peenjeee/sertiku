@@ -119,9 +119,10 @@
                             <td class="py-4 px-4">
                                 @if($user->profile_completed)
                                     <span
-                                        class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-full">Aktif</span>
+                                        class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-full whitespace-nowrap">Aktif</span>
                                 @else
-                                    <span class="px-2 py-1 bg-gray-100 text-gray-500 text-xs font-medium rounded-full">Tidak
+                                    <span
+                                        class="px-2 py-1 bg-gray-100 text-gray-500 text-xs font-medium rounded-full whitespace-nowrap">Tidak
                                         Aktif</span>
                                 @endif
                             </td>
