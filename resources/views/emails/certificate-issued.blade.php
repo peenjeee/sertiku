@@ -5,10 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sertifikat Diterbitkan - SertiKu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 </head>
 
 <body
-    style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #050C1F;">
+    style="margin: 0; padding: 0; font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #050C1F;">
     <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #050C1F; padding: 40px 20px;">
         <tr>
             <td align="center">
@@ -19,7 +23,7 @@
                         <td
                             style="padding: 40px 40px 30px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1);">
                             <h1 style="margin: 0; color: #FFFFFF; font-size: 28px; font-weight: 700;">
-                                 SertiKu
+                                SertiKu
                             </h1>
                             <p style="margin: 10px 0 0; color: #94A3B8; font-size: 14px;">
                                 Platform Verifikasi Sertifikat Digital
