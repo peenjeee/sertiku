@@ -45,47 +45,47 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($logs as $log)
-                                                    <tr class="hover:bg-gray-50">
-                                                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-600">
-                                                            <div class="font-medium">{{ $log->created_at->format('d M Y') }}</div>
-                                                            <div class="text-gray-400 text-xs">{{ $log->created_at->format('H:i:s') }}</div>
-                                                        </td>
-                                                        <td class="px-4 py-4 whitespace-nowrap">
-                                                            @php
-                                                                $typeColors = [
-                                                                    'create_certificate' => 'bg-green-100 text-green-800',
-                                                                    'verify_certificate' => 'bg-blue-100 text-blue-800',
-                                                                    'revoke_certificate' => 'bg-red-100 text-red-800',
-                                                                    'reactivate_certificate' => 'bg-purple-100 text-purple-800',
-                                                                    'fraud_report' => 'bg-orange-100 text-orange-800',
-                                                                    'cta_lead' => 'bg-cyan-100 text-cyan-800',
-                                                                ];
-                                                                $colorClass = $typeColors[$log->type] ?? 'bg-gray-100 text-gray-800';
-                                                            @endphp
-                                 <span
-                                                                class="px-2 py-1 text-xs font-medium rounded-full whitespace-nowrap {{ $colorClass }}">
-                                                                {{ ucwords(str_replace('_', ' ', $log->type)) }}
-                                                            </span>
-                                                        </td>
-                                                        <td class="px-4 py-4 text-sm text-gray-700 max-w-xs truncate">
-                                                            {{ $log->description }}
-                                                        </td>
-                                                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-400">
-                                                            @if($log->properties)
-                                                                <button onclick="showDetails('{{ $log->id }}')"
-                                                                    class="text-blue-600 hover:text-blue-800 text-xs underline">
-                                                                    Lihat Detail
-                                                                </button>
-                                                                <div id="details-{{ $log->id }}"
-                                                                    class="hidden mt-2 text-xs bg-gray-50 p-2 rounded max-w-xs overflow-auto">
-                                                                    <pre
-                                                                        class="text-gray-600">{{ json_encode($log->properties, JSON_PRETTY_PRINT) }}</pre>
-                                                                </div>
-                                                            @else
-                                                                <span class="text-gray-300">-</span>
-                                                            @endif
-                                                        </td>
-                                                    </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-600">
+                                        <div class="font-medium">{{ $log->created_at->format('d M Y') }}</div>
+                                        <div class="text-gray-400 text-xs">{{ $log->created_at->format('H:i:s') }}</div>
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap">
+                                        @php
+                                            $typeColors = [
+                                                'create_certificate' => 'bg-green-100 text-green-800',
+                                                'verify_certificate' => 'bg-blue-100 text-blue-800',
+                                                'revoke_certificate' => 'bg-red-100 text-red-800',
+                                                'reactivate_certificate' => 'bg-purple-100 text-purple-800',
+                                                'fraud_report' => 'bg-orange-100 text-orange-800',
+                                                'cta_lead' => 'bg-cyan-100 text-cyan-800',
+                                            ];
+                                            $colorClass = $typeColors[$log->type] ?? 'bg-gray-100 text-gray-800';
+                                        @endphp
+                                        <span
+                                            class="px-2 py-1 text-xs font-medium rounded-full whitespace-nowrap {{ $colorClass }}">
+                                            {{ ucwords(str_replace('_', ' ', $log->type)) }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-4 text-sm text-gray-700 max-w-xs truncate">
+                                        {{ $log->description }}
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-400">
+                                        @if($log->properties)
+                                            <button onclick="showDetails('{{ $log->id }}')"
+                                                class="text-blue-600 hover:text-blue-800 text-xs underline">
+                                                Lihat Detail
+                                            </button>
+                                            <div id="details-{{ $log->id }}"
+                                                class="hidden mt-2 text-xs bg-gray-50 p-2 rounded max-w-xs overflow-auto">
+                                                <pre
+                                                    class="text-gray-600">{{ json_encode($log->properties, JSON_PRETTY_PRINT) }}</pre>
+                                            </div>
+                                        @else
+                                            <span class="text-gray-300">-</span>
+                                        @endif
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>

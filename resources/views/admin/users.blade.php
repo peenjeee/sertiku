@@ -82,7 +82,7 @@
                             <td class="py-4 px-4">
                                 <div class="flex items-center gap-3">
                                     <div
-                                        class="w-10 h-10 rounded-full bg-[#3B82F6] flex items-center justify-center overflow-hidden">
+                                        class="w-10 h-10 rounded-full bg-[#3B82F6] flex items-center justify-center overflow-hidden flex-shrink-0">
                                         @if($user->avatar && (str_starts_with($user->avatar, '/storage/') || str_starts_with($user->avatar, 'http')))
                                             <img src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                                         @else
@@ -104,13 +104,13 @@
                             <td class="py-4 px-4">
                                 @if($user->account_type === 'admin')
                                     <span
-                                        class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">Admin</span>
+                                        class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full whitespace-nowrap">Admin</span>
                                 @elseif(in_array($user->account_type, ['lembaga', 'institution']))
                                     <span
-                                        class="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">Lembaga</span>
+                                        class="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full whitespace-nowrap">Lembaga</span>
                                 @else
                                     <span
-                                        class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">Pengguna</span>
+                                        class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full whitespace-nowrap">Pengguna</span>
                                 @endif
                             </td>
                             <td class="py-4 px-4">
