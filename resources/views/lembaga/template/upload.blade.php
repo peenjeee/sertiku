@@ -257,7 +257,7 @@
 
             <!-- Submit Button -->
             <button type="submit"
-                class="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl text-white text-lg font-bold hover:from-blue-700 hover:to-indigo-700 transition shadow-lg shadow-blue-500/30">
+                class="w-full py-4 bg-[#3B82F6] rounded-xl text-white text-lg font-bold hover:bg-[#2563EB] transition shadow-lg shadow-blue-500/30">
                 Upload & Simpan Template
             </button>
         </form>
@@ -324,7 +324,47 @@
             const inputColorHex = document.getElementById('input_color_hex');
             const rangeQrSize = document.getElementById('range-qr-size');
             const inputQrSize = document.getElementById('input_qr_size');
+
             const coordDisplay = document.getElementById('coordinates-display');
+
+            // --- Drag & Drop File Logic ---
+            const dropZone = document.getElementById('drop-zone');
+            const fileInput = document.getElementById('template-file');
+
+            // Prevent default drag behaviors
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, preventDefaults, false);
+                document.body.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            // Highlight drop zone
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, () => {
+                    dropZone.classList.add('border-blue-500', 'bg-blue-50');
+                }, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, () => {
+                    dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+                }, false);
+            });
+
+            // Handle dropped files
+            dropZone.addEventListener('drop', (e) => {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+
+                if (files && files[0]) {
+                    fileInput.files = files;
+                    handleFileSelect(fileInput);
+                }
+            }, false);
 
             // Hidden Coordinates
             const hiddenNameX = document.getElementById('input_name_x');

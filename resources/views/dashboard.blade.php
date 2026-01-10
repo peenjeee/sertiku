@@ -7,8 +7,7 @@
         <div class="rounded-3xl border border-white/10 bg-[#0F172A] p-8 shadow-2xl">
             <!-- Header -->
             <div class="text-center mb-8">
-                <div
-                    class="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div class="w-20 h-20 bg-[#8B5CF6] rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -72,7 +71,7 @@
                         class="account-card bg-emerald-500/10 border-2 border-emerald-500/30 rounded-2xl p-6 hover:border-emerald-400 transition cursor-pointer group">
                         <div class="flex items-center gap-4 mb-4">
                             <div
-                                class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full flex items-center justify-center group-hover:scale-110 transition">
+                                class="w-14 h-14 bg-[#10B981] rounded-full flex items-center justify-center group-hover:scale-110 transition">
                                 <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -106,7 +105,7 @@
                         class="account-card bg-blue-500/10 border-2 border-blue-500/30 rounded-2xl p-6 hover:border-blue-400 transition cursor-pointer group">
                         <div class="flex items-center gap-4 mb-4">
                             <div
-                                class="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center group-hover:scale-110 transition">
+                                class="w-14 h-14 bg-[#3B82F6] rounded-full flex items-center justify-center group-hover:scale-110 transition">
                                 <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -344,8 +343,8 @@
             const toastId = 'toast-' + Date.now();
 
             const bgColor = type === 'success'
-                ? 'bg-gradient-to-r from-emerald-500 to-green-600'
-                : 'bg-gradient-to-r from-red-500 to-rose-600';
+                ? 'bg-[#10B981]'
+                : 'bg-[#EF4444]';
 
             const icon = type === 'success'
                 ? `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -487,8 +486,8 @@
             // Enable continue button
             const btn = document.getElementById('btn-continue');
             btn.disabled = false;
-            btn.classList.remove('bg-gradient-to-r', 'from-gray-600', 'to-gray-700', 'text-white/50', 'cursor-not-allowed');
-            btn.classList.add('bg-gradient-to-r', 'from-blue-500', 'to-indigo-600', 'hover:from-blue-600', 'hover:to-indigo-700', 'text-white', 'shadow-lg', 'shadow-blue-500/25', 'cursor-pointer');
+            btn.classList.remove('bg-gray-600', 'text-white/50', 'cursor-not-allowed');
+            btn.classList.add('bg-[#3B82F6]', 'hover:bg-[#2563EB]', 'text-white', 'shadow-lg', 'shadow-blue-500/25', 'cursor-pointer');
             btn.innerHTML = `
                 <span class="flex items-center justify-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -18,8 +18,7 @@
             <h1 class="text-[32px] leading-[40px] font-semibold text-white md:text-[40px] md:leading-[50px]">
                 Verifikasi Sertifikat
             </h1>
-            <h2 class="bg-[linear-gradient(90deg,#A855F7_0%,#8B5CF6_100%)]
-                       bg-clip-text text-[32px] leading-[40px] font-semibold text-transparent
+            <h2 class="text-[32px] leading-[40px] font-semibold text-[#A855F7]
                        md:text-[40px] md:leading-[50px]">
                 Blockchain
             </h2>
@@ -45,7 +44,7 @@
                     </svg>
                 </div>
                 <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-[8px]
-                                           bg-[linear-gradient(180deg,#7C3AED_0%,#A855F7_100%)]
+                                           bg-[#7C3AED]
                                            px-6 py-4 text-sm font-medium text-white
                                            shadow-[0_10px_15px_-3px_rgba(168,85,247,0.5)]
                                            hover:brightness-110 transition">

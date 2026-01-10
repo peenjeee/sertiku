@@ -48,10 +48,10 @@
 
             {{-- Menu desktop (hidden on mobile) --}}
             <div class="desktop-only-menu hidden lg:flex items-center gap-8 text-sm font-medium text-[#0F172A]">
-                <a href="{{ url('/') }}#beranda" class="hover:text-white transition">Beranda</a>
-                <a href="{{ url('/') }}#fitur" class="hover:text-white transition">Fitur</a>
-                <a href="{{ url('/') }}#harga" class="hover:text-white transition">Harga</a>
-                <a href="{{ url('/') }}#faq" class="hover:text-white transition">FAQ</a>
+                <a href="{{ url('/') }}#beranda" class="hover:text-[#2563EB] transition">Beranda</a>
+                <a href="{{ url('/') }}#fitur" class="hover:text-[#2563EB] transition">Fitur</a>
+                <a href="{{ url('/') }}#harga" class="hover:text-[#2563EB] transition">Harga</a>
+                <a href="{{ url('/') }}#faq" class="hover:text-[#2563EB] transition">FAQ</a>
             </div>
 
             {{-- Kanan desktop (hidden on mobile) --}}
@@ -122,16 +122,16 @@
                                     Dashboard
                                 </a>
                                 <!-- <a href="{{ route('settings') }}"
-                                            class="flex items-center gap-2 px-4 py-2 text-sm text-[#0F172A] hover:bg-gray-100">
-                                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
-                                                </path>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                            </svg>
-                                            Pengaturan
-                                        </a> -->
+                                                class="flex items-center gap-2 px-4 py-2 text-sm text-[#0F172A] hover:bg-gray-100">
+                                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                                                    </path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                </svg>
+                                                Pengaturan
+                                            </a> -->
                                 <div class="border-t border-gray-100 my-1"></div>
                                 <form method="POST" action="{{ route('logout') }}" id="logout-form-desktop">
                                     @csrf
@@ -151,7 +151,7 @@
                 @else
                     {{-- Tombol Masuk jika belum login --}}
                     <a href="{{ route('login') }}"
-                        class="inline-flex items-center gap-2 rounded-[10px] bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-5 py-2 text-sm font-semibold text-white shadow-[0_15px_30px_-15px_rgba(37,99,235,0.75)] hover:brightness-110 transition">
+                        class="inline-flex items-center gap-2 rounded-[10px] bg-[#3B82F6] px-5 py-2 text-sm font-semibold text-white shadow-[0_15px_30px_-15px_rgba(59,130,246,0.6)] hover:bg-[#2563EB] transition">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M9.99756 1.99951H12.6636C13.0171 1.99951 13.3562 2.13995 13.6062 2.38994C13.8561 2.63993 13.9966 2.97898 13.9966 3.33252V12.6636C13.9966 13.0171 13.8561 13.3562 13.6062 13.6062C13.3562 13.8561 13.0171 13.9966 12.6636 13.9966H9.99756"
@@ -249,7 +249,7 @@
                 @else
                     {{-- Masuk mobile --}}
                     <a href="{{ route('login') }}"
-                        class="inline-flex w-full items-center justify-center gap-2 rounded-[10px] bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-4 py-2 text-center text-sm font-semibold text-white shadow-[0_15px_30px_-15px_rgba(37,99,235,0.75)]">
+                        class="inline-flex w-full items-center justify-center gap-2 rounded-[10px] bg-[#3B82F6] px-4 py-2 text-center text-sm font-semibold text-white shadow-[0_15px_30px_-15px_rgba(59,130,246,0.6)] hover:bg-[#2563EB] transition">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M9.99756 1.99951H12.6636C13.0171 1.99951 13.3562 2.13995 13.6062 2.38994C13.8561 2.63993 13.9966 2.97898 13.9966 3.33252V12.6636C13.9966 13.0171 13.8561 13.3562 13.6062 13.6062C13.3562 13.8561 13.0171 13.9966 12.6636 13.9966H9.99756"

@@ -243,7 +243,7 @@
                                     class="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition duration-300"
                                     alt="Generated Template">
                                 <div
-                                    class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end p-4">
+                                    class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end p-4">
                                     <div class="w-full">
                                         <p class="text-white/80 text-xs mb-3 line-clamp-2" x-text="image.prompt">
                                         </p>

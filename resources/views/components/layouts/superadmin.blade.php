@@ -31,7 +31,7 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            background: #0F172A;
             min-height: 100vh;
         }
 
@@ -49,7 +49,7 @@
         }
 
         .sidebar {
-            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 100%);
+            background: #020617;
             border-right: 1px solid rgba(139, 92, 246, 0.1);
             width: 260px;
         }
@@ -71,7 +71,7 @@
         }
 
         .nav-item.active {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(168, 85, 247, 0.15) 100%);
+            background: rgba(139, 92, 246, 0.2);
             color: #fff;
             border: 1px solid rgba(139, 92, 246, 0.3);
         }
@@ -87,7 +87,7 @@
         }
 
         .superadmin-badge {
-            background: linear-gradient(135deg, #7C3AED 0%, #A855F7 100%);
+            background: #7C3AED;
         }
 
         .glass-card {
@@ -97,22 +97,22 @@
         }
 
         .stat-card-purple {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(168, 85, 247, 0.05) 100%);
+            background: rgba(139, 92, 246, 0.1);
             border: 1px solid rgba(139, 92, 246, 0.2);
         }
 
         .stat-card-blue {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%);
+            background: rgba(59, 130, 246, 0.1);
             border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         .stat-card-green {
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%);
+            background: rgba(34, 197, 94, 0.1);
             border: 1px solid rgba(34, 197, 94, 0.2);
         }
 
         .stat-card-yellow {
-            background: linear-gradient(135deg, rgba(234, 179, 8, 0.15) 0%, rgba(234, 179, 8, 0.05) 100%);
+            background: rgba(234, 179, 8, 0.1);
             border: 1px solid rgba(234, 179, 8, 0.2);
         }
 

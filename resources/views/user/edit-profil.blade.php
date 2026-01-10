@@ -64,7 +64,7 @@
             {{-- Avatar Preview --}}
             <div class="relative group">
                 <div
-                    class="w-24 h-24 lg:w-28 lg:h-28 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+                    class="w-24 h-24 lg:w-28 lg:h-28 rounded-full overflow-hidden bg-[#3B82F6] flex items-center justify-center">
                     @if($user->avatar && (str_starts_with($user->avatar, '/storage/') || str_starts_with($user->avatar, 'http')))
                         <img src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                     @else
@@ -203,7 +203,7 @@
                                 Batal
                             </button>
                             <button type="submit" :disabled="!previewUrl || uploading"
-                                :class="previewUrl && !uploading ? 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:brightness-110' : 'bg-white/10 cursor-not-allowed'"
+                                :class="previewUrl && !uploading ? 'bg-[#3B82F6] hover:bg-[#2563EB]' : 'bg-white/10 cursor-not-allowed'"
                                 class="px-4 py-2 rounded-lg text-white font-medium transition flex items-center gap-2">
                                 <template x-if="uploading">
                                     <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
@@ -294,7 +294,7 @@
 
             <div class="mt-6 flex justify-end">
                 <button type="submit"
-                    class="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium hover:brightness-110 transition">
+                    class="px-6 py-3 rounded-xl bg-[#3B82F6] text-white font-medium hover:bg-[#2563EB] transition">
                     Simpan Perubahan
                 </button>
             </div>
@@ -363,7 +363,7 @@
                         Gunakan kombinasi huruf, angka, dan simbol untuk password yang kuat
                     </div>
                     <button type="submit"
-                        class="px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-500 to-orange-600 text-white font-medium hover:brightness-110 transition">
+                        class="px-6 py-3 rounded-xl bg-[#F59E0B] text-white font-medium hover:bg-[#D97706] transition">
                         Ubah Password
                     </button>
                 </div>

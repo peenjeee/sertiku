@@ -13,8 +13,10 @@
                     <div>
                         <p class="text-white font-medium text-sm mb-1">Kami Menggunakan Cookie</p>
                         <p class="text-[#94A3B8] text-sm">
-                            Website ini menggunakan cookie untuk meningkatkan pengalaman, menyimpan preferensi, dan menganalisis penggunaan.
-                            <a href="{{ route('cookie') }}" class="text-[#3B82F6] hover:underline">Pelajari lebih lanjut</a>
+                            Website ini menggunakan cookie untuk meningkatkan pengalaman, menyimpan preferensi, dan
+                            menganalisis penggunaan.
+                            <a href="{{ route('cookie') }}" class="text-[#3B82F6] hover:underline">Pelajari lebih
+                                lanjut</a>
                         </p>
                     </div>
                 </div>
@@ -22,11 +24,11 @@
                 {{-- Buttons --}}
                 <div class="flex items-center gap-3 w-full sm:w-auto">
                     <button @click="declineCookies()"
-                            class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl border border-white/20 text-white/70 hover:text-white hover:border-white/40 transition-all duration-300 text-sm">
+                        class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl border border-white/20 text-white/70 hover:text-white hover:border-white/40 transition-all duration-300 text-sm">
                         Tolak
                     </button>
                     <button @click="acceptCookies()"
-                            class="flex-1 sm:flex-none px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium hover:from-blue-600 hover:to-purple-700 transition-all duration-300 text-sm whitespace-nowrap">
+                        class="flex-1 sm:flex-none px-6 py-2.5 rounded-xl bg-[#3B82F6] text-white font-medium hover:bg-[#2563EB] transition-all duration-300 text-sm whitespace-nowrap">
                         Terima Semua
                     </button>
                 </div>

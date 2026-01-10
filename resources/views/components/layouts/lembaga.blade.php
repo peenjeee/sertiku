@@ -38,7 +38,7 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #0c1829 0%, #0f1f35 100%);
+            background: #0F172A;
             min-height: 100vh;
         }
 
@@ -56,7 +56,7 @@
         }
 
         .institution-bg {
-            background: linear-gradient(180deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+            background: #0F172A;
             min-height: 100vh;
         }
 
@@ -176,8 +176,8 @@
         }
 
         .nav-item.active {
-            background: linear-gradient(180deg, #1E3A8F 0%, #3B82F6 100%);
-            box-shadow: 0px 10px 15px -3px rgba(43, 127, 255, 0.5);
+            background: #3B82F6;
+            box-shadow: 0px 10px 15px -3px rgba(59, 130, 246, 0.4);
         }
 
         /* Light/White cards for content */
@@ -188,80 +188,80 @@
             border-radius: 16px;
         }
 
-        .gradient-card-blue {
-            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+        /* Solid Cards (Renamed from gradient-card) */
+        .card-solid-blue {
+            background: #EFF6FF;
             border: 1px solid #BFDBFE;
         }
 
-        .gradient-card-green {
-            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+        .card-solid-green {
+            background: #ECFDF5;
             border: 1px solid #A7F3D0;
         }
 
-        .gradient-card-purple {
-            background: linear-gradient(135deg, #FAF5FF 0%, #F3E8FF 100%);
+        .card-solid-purple {
+            background: #FAF5FF;
             border: 1px solid #E9D5FF;
         }
 
         .welcome-banner {
-            background: linear-gradient(90deg, #155DFC 0%, #1447E6 50%, #372AAC 100%);
+            background: #3B82F6;
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
 
         .welcome-banner::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
-            border-radius: 24px;
-            pointer-events: none;
+            display: none;
         }
 
-        .btn-primary-gradient {
-            background: linear-gradient(90deg, #155DFC 0%, #1447E6 100%);
-            box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+        /* Primary Button */
+        .btn-primary-solid {
+            background: #3B82F6;
+            box-shadow: 0px 10px 15px -3px rgba(59, 130, 246, 0.3);
         }
 
-        .btn-primary-gradient:hover {
-            opacity: 0.9;
+        .btn-primary-solid:hover {
+            background: #2563EB;
         }
 
+        /* Icon Circles */
         .icon-circle-blue {
-            background: linear-gradient(135deg, #2B7FFF 0%, #1447E6 100%);
-            box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+            background: #3B82F6;
+            box-shadow: 0px 10px 15px -3px rgba(59, 130, 246, 0.3);
         }
 
         .icon-circle-green {
-            background: linear-gradient(135deg, #00C950 0%, #008236 100%);
-            box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+            background: #22C55E;
+            box-shadow: 0px 10px 15px -3px rgba(34, 197, 94, 0.3);
         }
 
         .icon-circle-purple {
-            background: linear-gradient(135deg, #AD46FF 0%, #8200DB 100%);
-            box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+            background: #8B5CF6;
+            box-shadow: 0px 10px 15px -3px rgba(139, 92, 246, 0.3);
         }
 
+        /* Stat Cards */
         .stat-card-blue {
-            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+            background: #EFF6FF;
             border: 1px solid #BFDBFE;
         }
 
         .stat-card-green {
-            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            background: #ECFDF5;
             border: 1px solid #A7F3D0;
         }
 
         .stat-card-orange {
-            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            background: #FFF7ED;
             border: 1px solid #FED7AA;
         }
 
         .stat-card-purple {
-            background: linear-gradient(135deg, #FAF5FF 0%, #F3E8FF 100%);
+            background: #FAF5FF;
             border: 1px solid #E9D5FF;
         }
 
+        /* Stat Icons (Transparent backgrounds) */
         .stat-icon-blue {
             background: rgba(59, 130, 246, 0.2);
             border: 1px solid rgba(59, 130, 246, 0.4);
@@ -282,19 +282,19 @@
             border: 1px solid rgba(168, 85, 247, 0.4);
         }
 
-        .header-gradient {
-            background: linear-gradient(90deg, rgba(43, 127, 255, 0.08) 0%, rgba(97, 95, 255, 0.08) 100%);
+        .header-solid {
+            background: rgba(59, 130, 246, 0.08);
             border-bottom: 1px solid #E2E8F0;
         }
 
         .info-box {
-            background: linear-gradient(135deg, #1E3A8A 0%, #1E40AF 50%, #3B82F6 100%);
+            background: #1E40AF;
             border: 1px solid rgba(59, 130, 246, 0.3);
             box-shadow: 0px 4px 20px -4px rgba(30, 58, 138, 0.5);
         }
 
         .chat-widget {
-            background: linear-gradient(180deg, #1E3A8A 0%, #3B82F6 100%);
+            background: #3B82F6;
             box-shadow: 0px 20px 25px -5px rgba(0, 0, 0, 0.1);
         }
 
@@ -304,7 +304,7 @@
             height: 384px;
             left: 155px;
             top: 87px;
-            background: linear-gradient(90deg, rgba(0, 184, 219, 0.15) 0%, rgba(43, 127, 255, 0.15) 100%);
+            background: rgba(59, 130, 246, 0.1);
             filter: blur(64px);
             border-radius: 50%;
             pointer-events: none;
@@ -317,7 +317,7 @@
             height: 384px;
             right: 100px;
             bottom: 50px;
-            background: linear-gradient(90deg, rgba(43, 127, 255, 0.1) 0%, rgba(97, 95, 255, 0.1) 100%);
+            background: rgba(139, 92, 246, 0.1);
             filter: blur(64px);
             border-radius: 50%;
             pointer-events: none;
@@ -686,7 +686,7 @@
             <div id="chatPopup"
                 class="hidden absolute bottom-16 right-0 w-80 max-h-[480px] bg-[#0F172A] rounded-2xl shadow-2xl border border-white/10 overflow-hidden flex flex-col">
                 <!-- Chat Header -->
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-3 flex items-center justify-between">
+                <div class="bg-[#3B82F6] px-4 py-3 flex items-center justify-between">
                     <div class="flex items-center gap-2">
                         <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -876,13 +876,15 @@
 
         function toggleChatPopup() {
             const popup = document.getElementById('chatPopup');
-            const chatIcon = document.getElementById('chatIcon');
-            const closeIcon = document.getElementById('closeIcon');
+            const chatButton = document.getElementById('chatButton');
+            // const chatIcon = document.getElementById('chatIcon');
+            // const closeIcon = document.getElementById('closeIcon');
 
             isChatOpen = !isChatOpen;
             popup.classList.toggle('hidden');
-            chatIcon.classList.toggle('hidden');
-            closeIcon.classList.toggle('hidden');
+            chatButton.classList.toggle('hidden'); // Hide the launcher button
+            // chatIcon.classList.toggle('hidden');
+            // closeIcon.classList.toggle('hidden');
         }
 
         function askQuestion(key) {

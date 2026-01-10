@@ -3,8 +3,7 @@
         <div class="max-w-4xl mx-auto px-4">
             {{-- Header --}}
             <div class="text-center mb-12">
-                <div
-                    class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-[#1E3A8F] to-[#3B82F6] mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#3B82F6] mb-6">
                     <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />

@@ -26,8 +26,7 @@
             </div>
 
             {{-- Quick Stats Widget --}}
-            <div
-                class="bg-gradient-to-r from-[#3B82F6]/20 to-[#8B5CF6]/20 border border-[#3B82F6]/30 rounded-xl p-6 mb-8 scroll-animate">
+            <div class="bg-[rgba(59,130,246,0.15)] border border-[#3B82F6]/30 rounded-xl p-6 mb-8 scroll-animate">
                 <h3 class="text-lg font-semibold text-white mb-4">Platform Statistics (Live)</h3>
                 <div id="statsContainer" class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div class="text-center">

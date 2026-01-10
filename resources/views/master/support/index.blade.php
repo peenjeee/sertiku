@@ -48,7 +48,7 @@
                                 <td class="py-4 px-5">
                                     <div class="flex items-center gap-3">
                                         <div
-                                            class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center overflow-hidden">
+                                            class="w-10 h-10 rounded-full bg-[#8B5CF6] flex items-center justify-center overflow-hidden">
                                             @if($ticket->user->avatar && (str_starts_with($ticket->user->avatar, '/storage/') || str_starts_with($ticket->user->avatar, 'http')))
                                                 <img src="{{ $ticket->user->avatar }}" alt="Avatar"
                                                     class="w-full h-full object-cover">

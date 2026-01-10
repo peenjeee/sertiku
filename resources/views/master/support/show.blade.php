@@ -46,7 +46,7 @@
                             <div class="flex items-center gap-2 mb-1 {{ $message->is_from_admin ? 'justify-end' : '' }}">
                                 @if(!$message->is_from_admin)
                                     <div
-                                        class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center overflow-hidden">
+                                        class="w-6 h-6 rounded-full bg-[#3B82F6] flex items-center justify-center overflow-hidden">
                                         @if($message->sender->avatar && (str_starts_with($message->sender->avatar, '/storage/') || str_starts_with($message->sender->avatar, 'http')))
                                             <img src="{{ $message->sender->avatar }}" alt="Avatar"
                                                 class="w-full h-full object-cover">
@@ -61,7 +61,7 @@
                                 </span>
                                 @if($message->is_from_admin)
                                     <div
-                                        class="w-6 h-6 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center overflow-hidden">
+                                        class="w-6 h-6 rounded-full bg-[#8B5CF6] flex items-center justify-center overflow-hidden">
                                         @if($message->sender->avatar && (str_starts_with($message->sender->avatar, '/storage/') || str_starts_with($message->sender->avatar, 'http')))
                                             <img src="{{ $message->sender->avatar }}" alt="Avatar"
                                                 class="w-full h-full object-cover">
@@ -73,7 +73,7 @@
                                 @endif
                             </div>
                             <div
-                                class="rounded-2xl px-4 py-3 {{ $message->is_from_admin ? 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white' : 'bg-white/10 text-white' }}">
+                                class="rounded-2xl px-4 py-3 {{ $message->is_from_admin ? 'bg-[#8B5CF6] text-white' : 'bg-white/10 text-white' }}">
                                 <p class="text-sm">{{ $message->message }}</p>
                             </div>
                             <p class="text-white/30 text-xs mt-1 {{ $message->is_from_admin ? 'text-right' : '' }}">
@@ -93,7 +93,7 @@
                         <input type="text" name="message" placeholder="Ketik balasan..." required
                             class="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-purple-500 transition">
                         <button type="submit"
-                            class="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-medium hover:opacity-90 transition">
+                            class="px-6 py-3 rounded-xl bg-[#8B5CF6] text-white font-medium hover:bg-[#7C3AED] transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

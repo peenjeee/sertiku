@@ -31,12 +31,12 @@
 
         <!-- Upgrade Banner for Starter Plan -->
         @if($isStarterPlan)
-            <div class="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl p-3 lg:p-6">
+            <div class="bg-amber-50 border-2 border-amber-300 rounded-xl p-3 lg:p-6">
                 <div class="flex flex-col gap-3">
                     <!-- Header -->
                     <div class="flex items-start gap-3">
                         <div
-                            class="hidden sm:flex w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-lg lg:rounded-xl items-center justify-center flex-shrink-0">
+                            class="hidden sm:flex w-10 h-10 lg:w-12 lg:h-12 bg-amber-500 rounded-lg lg:rounded-xl items-center justify-center flex-shrink-0">
                             <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -59,8 +59,7 @@
                                 {{ $certificateLimit }} sertifikat</span>
                         </div>
                         <div class="w-full h-2 lg:h-3 bg-amber-200 rounded-full overflow-hidden">
-                            <div class="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full"
-                                style="width: {{ $usagePercentage }}%"></div>
+                            <div class="h-full bg-amber-500 rounded-full" style="width: {{ $usagePercentage }}%"></div>
                         </div>
                         @if($remainingCerts <= 10)
                             <p class="text-red-600 text-xs font-bold mt-1 flex items-center gap-1"><svg class="w-3 h-3"
@@ -73,7 +72,7 @@
 
                     {{-- Upgrade Button --}}
                     <a href="{{ route('checkout', 'professional') }}"
-                        class="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 lg:py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-bold rounded-lg hover:from-amber-600 hover:to-orange-600 transition">
+                        class="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 lg:py-3 bg-amber-500 text-white text-sm font-bold rounded-lg hover:bg-amber-600 transition">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M5 10l7-7m0 0l7 7m-7-7v18" />
@@ -89,7 +88,7 @@
             <!-- Terbitkan Sertifikat -->
             @if($user->canIssueCertificate())
                 <a href="{{ route('lembaga.sertifikat.create') }}"
-                    class="gradient-card-blue rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-1">
+                    class="card-solid-blue rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-1">
                     <div class="flex items-center gap-3 lg:gap-4">
                         <div
                             class="icon-circle-blue w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
@@ -109,7 +108,7 @@
                 </a>
             @else
                 <div
-                    class="relative rounded-xl lg:rounded-2xl p-4 lg:p-6 bg-gradient-to-br from-red-50 to-red-100 border-2 border-red-200 opacity-80 cursor-not-allowed animate-fade-in-up stagger-1">
+                    class="relative rounded-xl lg:rounded-2xl p-4 lg:p-6 bg-red-50 border-2 border-red-200 opacity-80 cursor-not-allowed animate-fade-in-up stagger-1">
                     <div class="flex items-center gap-3 lg:gap-4">
                         <div
                             class="bg-red-400 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
@@ -134,7 +133,7 @@
 
             <!-- Galeri Template -->
             <a href="{{ route('lembaga.template.index') }}"
-                class="gradient-card-green rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-2">
+                class="card-solid-green rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-2">
                 <div class="flex items-center gap-3 lg:gap-4">
                     <div
                         class="icon-circle-green w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
@@ -154,7 +153,7 @@
 
             <!-- Daftar Sertifikat -->
             <a href="{{ route('lembaga.sertifikat.index') }}"
-                class="gradient-card-purple rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-3">
+                class="card-solid-purple rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-3">
                 <div class="flex items-center gap-3 lg:gap-4">
                     <div
                         class="icon-circle-purple w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
@@ -179,10 +178,10 @@
             @if($canAccessApi)
                 <!-- API Tokens - Only for Professional/Enterprise -->
                 <a href="{{ route('lembaga.api-tokens.index') }}"
-                    class="bg-gradient-to-br from-cyan-50 to-sky-100 border border-cyan-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-4">
+                    class="bg-cyan-50 border border-cyan-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-4">
                     <div class="flex items-center gap-3 lg:gap-4">
                         <div
-                            class="bg-gradient-to-br from-cyan-500 to-sky-600 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
+                            class="bg-cyan-500 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
                             <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -200,10 +199,10 @@
             @if($canAccessApi)
                 <!-- AI Template Generator -->
                 <a href="{{ route('lembaga.template.ai') }}"
-                    class="bg-gradient-to-br from-purple-50 to-pink-100 border border-purple-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-5">
+                    class="bg-purple-50 border border-purple-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-5">
                     <div class="flex items-center gap-3 lg:gap-4">
                         <div
-                            class="bg-gradient-to-br from-purple-500 to-pink-600 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
+                            class="bg-purple-500 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
                             <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -219,10 +218,10 @@
 
                 <!-- Import Data (Bulk) -->
                 <a href="{{ route('lembaga.sertifikat.bulk') }}"
-                    class="bg-gradient-to-br from-indigo-50 to-violet-100 border border-indigo-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-6">
+                    class="bg-indigo-50 border border-indigo-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-6">
                     <div class="flex items-center gap-3 lg:gap-4">
                         <div
-                            class="bg-gradient-to-br from-indigo-500 to-violet-600 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
+                            class="bg-indigo-500 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
                             <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -324,7 +323,7 @@
         <!-- Recent Certificates Card -->
         <div class="glass-card rounded-xl lg:rounded-2xl overflow-hidden animate-fade-in">
             <!-- Header -->
-            <div class="header-gradient p-4 lg:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="header-solid p-4 lg:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div class="flex items-center gap-3">
                     <svg class="w-5 h-5 lg:w-6 lg:h-6 text-[#3B82F6]" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
@@ -388,8 +387,8 @@
                         <tbody id="certificate-tbody">
                             @forelse($stats['recent_certificates'] ?? [] as $cert)
                                 @php
-                                    $colors = ['from-blue-500 to-indigo-600', 'from-emerald-500 to-teal-600', 'from-purple-500 to-pink-600', 'from-orange-500 to-red-600', 'from-cyan-500 to-blue-600'];
-                                    $colorIndex = $loop->index % count($colors);
+                                    $solidColors = ['bg-[#3B82F6]', 'bg-[#10B981]', 'bg-[#8B5CF6]', 'bg-[#F97316]', 'bg-[#06B6D4]'];
+                                    $colorIndex = $loop->index % count($solidColors);
                                     $initials = collect(explode(' ', $cert->recipient_name))->map(fn($n) => strtoupper(substr($n, 0, 1)))->take(2)->join('');
 
                                     // Check if recipient is registered in system
@@ -423,7 +422,7 @@
                                     <td class="py-4 px-4">
                                         <div class="flex items-center gap-3">
                                             <div
-                                                class="w-10 h-10 rounded-full bg-gradient-to-br {{ $colors[$colorIndex] }} flex items-center justify-center overflow-hidden">
+                                                class="w-10 h-10 rounded-full {{ $solidColors[$colorIndex] }} flex items-center justify-center overflow-hidden">
                                                 @if($avatarUrl)
                                                     <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover">
                                                 @else

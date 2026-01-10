@@ -13,7 +13,7 @@
         <tr>
             <td align="center">
                 <table width="600" cellpadding="0" cellspacing="0"
-                    style="background: linear-gradient(180deg, #0A1628 0%, #0D1B2A 100%); border-radius: 16px; border: 1px solid rgba(59, 130, 246, 0.2); overflow: hidden;">
+                    style="background: #0F172A; border-radius: 16px; border: 1px solid rgba(59, 130, 246, 0.2); overflow: hidden;">
                     <!-- Header -->
                     <tr>
                         <td
@@ -30,8 +30,7 @@
                     <!-- Celebration Banner -->
                     <tr>
                         <td style="padding: 30px 40px 20px; text-align: center;">
-                            <div
-                                style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%); border-radius: 12px; padding: 20px;">
+                            <div style="background: rgba(16, 185, 129, 0.1); border-radius: 12px; padding: 20px;">
                                 <p style="margin: 0; font-size: 48px;"></p>
                                 <h2 style="margin: 10px 0 0; color: #10B981; font-size: 24px; font-weight: 700;">
                                     Selamat!
@@ -130,7 +129,7 @@
                                 <tr>
                                     <td align="center" style="padding: 5px;">
                                         <a href="{{ $verificationUrl }}"
-                                            style="display: inline-block; padding: 14px 28px; background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%); color: #FFFFFF; text-decoration: none; font-size: 15px; font-weight: 600; border-radius: 8px;">
+                                            style="display: inline-block; padding: 14px 28px; background: #3B82F6; color: #FFFFFF; text-decoration: none; font-size: 15px; font-weight: 600; border-radius: 8px;">
                                             Verifikasi Sertifikat
                                         </a>
                                     </td>

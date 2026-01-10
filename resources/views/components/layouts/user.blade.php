@@ -35,7 +35,7 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #0a1628 0%, #0f1d32 50%, #0a1628 100%);
+            background: #0F172A;
             min-height: 100vh;
         }
 
@@ -52,9 +52,8 @@
             /* Firefox */
         }
 
-        /* Sidebar */
         .sidebar {
-            background: linear-gradient(180deg, #0c1829 0%, #0f1f35 100%);
+            background: #0F172A;
             border-right: 1px solid rgba(255, 255, 255, 0.06);
             width: 240px;
             transition: all 0.3s ease;
@@ -94,7 +93,7 @@
         }
 
         .nav-item.active {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(99, 102, 241, 0.15) 100%);
+            background: rgba(59, 130, 246, 0.15);
             color: #fff;
             border: 1px solid rgba(59, 130, 246, 0.3);
         }
@@ -105,7 +104,7 @@
 
         /* Badge */
         .notification-badge {
-            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            background: #EF4444;
             color: white;
             font-size: 10px;
             font-weight: 600;
@@ -129,7 +128,7 @@
 
         /* Welcome Banner */
         .welcome-banner {
-            background: linear-gradient(135deg, #1a365d 0%, #1e3a8a 50%, #312e81 100%);
+            background: #1E40AF;
             border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
@@ -141,23 +140,28 @@
         }
 
         .stat-card-blue {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%);
+            background: rgba(59, 130, 246, 0.12);
             border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         .stat-card-green {
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%);
+            background: rgba(34, 197, 94, 0.12);
             border: 1px solid rgba(34, 197, 94, 0.2);
         }
 
         .stat-card-yellow {
-            background: linear-gradient(135deg, rgba(234, 179, 8, 0.15) 0%, rgba(234, 179, 8, 0.05) 100%);
+            background: rgba(234, 179, 8, 0.12);
             border: 1px solid rgba(234, 179, 8, 0.2);
         }
 
         .stat-card-red {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%);
+            background: rgba(239, 68, 68, 0.12);
             border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .stat-card-purple {
+            background: rgba(168, 85, 247, 0.12);
+            border: 1px solid rgba(168, 85, 247, 0.2);
         }
 
         /* Glass Card */
@@ -169,7 +173,7 @@
 
         /* Activity Card */
         .activity-card {
-            background: linear-gradient(180deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+            background: rgba(30, 41, 59, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
@@ -326,7 +330,7 @@
         <div class="user-profile-section p-4">
             <div class="flex items-center gap-3 mb-3">
                 <div
-                    class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0 overflow-hidden">
+                    class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0 overflow-hidden">
                     @if(auth()->user()->avatar && (str_starts_with(auth()->user()->avatar, '/storage/') || str_starts_with(auth()->user()->avatar, 'http')))
                         <img src="{{ auth()->user()->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                     @else

@@ -1,15 +1,14 @@
 {{-- resources/views/onboarding/index.blade.php --}}
 <x-layouts.app title="SertiKu – Lengkapi Profil">
 
-    <div
-        class="min-h-[calc(100vh-80px)] bg-gradient-to-b from-[#0F172A] via-[#1E293B] to-[#0F172A] px-4 py-10 flex items-center justify-center overflow-x-hidden">
+    <div class="min-h-[calc(100vh-80px)] bg-[#0F172A] px-4 py-10 flex items-center justify-center overflow-x-hidden">
         <div class="relative w-full max-w-4xl">
             {{-- Glow effects --}}
             <div
-                class="pointer-events-none absolute -left-32 top-24 h-96 w-96 rounded-full bg-gradient-to-r from-[#2B7FFF4D] to-[#00B8DB4D] blur-3xl opacity-80">
+                class="pointer-events-none absolute -left-32 top-24 h-96 w-96 rounded-full bg-[#2B7FFF33] blur-3xl opacity-80">
             </div>
             <div
-                class="pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-gradient-to-r from-[#AD46FF33] to-[#F6339A33] blur-3xl opacity-80">
+                class="pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-[#AD46FF22] blur-3xl opacity-80">
             </div>
 
             <div class="relative mx-auto max-w-3xl text-white">
@@ -24,7 +23,7 @@
                     <div
                         class="mt-6 inline-flex items-center rounded-lg border border-white/10 bg-white/[0.04] px-1 py-1">
                         <button type="button" id="personalTabBtn" onclick="switchAccountType('personal')"
-                            class="inline-flex items-center gap-2 rounded-md bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-4 py-1.5 text-xs md:text-sm shadow-sm text-white transition-all">
+                            class="inline-flex items-center gap-2 rounded-md bg-[#3B82F6] px-4 py-1.5 text-xs md:text-sm shadow-sm text-white transition-all">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -207,7 +206,7 @@
 
                                 <div class="flex justify-end pt-4 border-t border-white/10">
                                     <button type="button" onclick="goToInstStep(2)"
-                                        class="inline-flex items-center rounded-lg bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-6 py-2.5 text-sm font-medium shadow-[0_10px_15px_-3px_rgba(43,127,255,0.5)] hover:brightness-110 transition">
+                                        class="inline-flex items-center rounded-lg bg-[#3B82F6] px-6 py-2.5 text-sm font-medium shadow-[0_10px_15px_-3px_rgba(59,130,246,0.4)] hover:bg-[#2563EB] transition">
                                         Lanjut →
                                     </button>
                                 </div>
@@ -259,7 +258,7 @@
                                         ← Kembali
                                     </button>
                                     <button type="button" onclick="goToInstStep(3)"
-                                        class="inline-flex items-center rounded-lg bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-6 py-2.5 text-sm font-medium shadow-[0_10px_15px_-3px_rgba(43,127,255,0.5)] hover:brightness-110 transition">
+                                        class="inline-flex items-center rounded-lg bg-[#3B82F6] px-6 py-2.5 text-sm font-medium shadow-[0_10px_15px_-3px_rgba(59,130,246,0.4)] hover:bg-[#2563EB] transition">
                                         Lanjut →
                                     </button>
                                 </div>
@@ -301,7 +300,7 @@
                                         ← Kembali
                                     </button>
                                     <button type="submit"
-                                        class="inline-flex items-center rounded-lg bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-6 py-2.5 text-sm font-medium shadow-[0_10px_15px_-3px_rgba(43,127,255,0.5)] hover:brightness-110 transition">
+                                        class="inline-flex items-center rounded-lg bg-[#3B82F6] px-6 py-2.5 text-sm font-medium shadow-[0_10px_15px_-3px_rgba(59,130,246,0.4)] hover:bg-[#2563EB] transition">
                                         Simpan & Lanjutkan
                                     </button>
                                 </div>
@@ -316,7 +315,7 @@
                                 Lewati untuk sekarang →
                             </a>
                             <button type="submit"
-                                class="inline-flex items-center rounded-lg bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-6 py-2.5 text-sm font-medium shadow-[0_10px_15px_-3px_rgba(43,127,255,0.5)] hover:brightness-110 transition">
+                                class="inline-flex items-center rounded-lg bg-[#3B82F6] px-6 py-2.5 text-sm font-medium shadow-[0_10px_15px_-3px_rgba(43,127,255,0.5)] hover:bg-[#2563EB] transition">
                                 Simpan & Lanjutkan
                             </button>
                         </div>
@@ -345,7 +344,7 @@
             const accountTypeInput = document.getElementById('accountTypeInput');
 
             if (type === 'personal') {
-                personalBtn.className = 'inline-flex items-center gap-2 rounded-md bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-4 py-1.5 text-xs md:text-sm shadow-sm text-white transition-all';
+                personalBtn.className = 'inline-flex items-center gap-2 rounded-md bg-[#3B82F6] px-4 py-1.5 text-xs md:text-sm shadow-sm text-white transition-all';
                 institutionBtn.className = 'inline-flex items-center gap-2 rounded-md px-4 py-1.5 text-xs md:text-sm text-white/70 transition-all';
                 personalForm.classList.remove('hidden');
                 institutionForm.classList.add('hidden');
@@ -353,7 +352,7 @@
                 institutionSkip.classList.add('hidden');
                 accountTypeInput.value = 'personal';
             } else {
-                institutionBtn.className = 'inline-flex items-center gap-2 rounded-md bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] px-4 py-1.5 text-xs md:text-sm shadow-sm text-white transition-all';
+                institutionBtn.className = 'inline-flex items-center gap-2 rounded-md bg-[#3B82F6] px-4 py-1.5 text-xs md:text-sm shadow-sm text-white transition-all';
                 personalBtn.className = 'inline-flex items-center gap-2 rounded-md px-4 py-1.5 text-xs md:text-sm text-white/70 transition-all';
                 institutionForm.classList.remove('hidden');
                 personalForm.classList.add('hidden');

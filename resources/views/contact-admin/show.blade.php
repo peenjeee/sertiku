@@ -45,8 +45,8 @@
 
         {{-- Chat Messages --}}
         <div class="rounded-2xl overflow-hidden animate-fade-in-up mb-6"
-            style="background: linear-gradient(180deg, #0F172A 0%, #1E293B 100%); border: 1px solid rgba(255,255,255,0.1);">
-            <div class="p-4 border-b border-white/10 bg-gradient-to-r from-green-600/20 to-emerald-600/20">
+            style="background: #0F172A; border: 1px solid rgba(255,255,255,0.1);">
+            <div class="p-4 border-b border-white/10 bg-[#10B981]/20">
                 <p class="text-white font-medium flex items-center gap-2">
                     <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -65,14 +65,14 @@
                         $senderEmail = $message->sender->email ?? 'admin@sertiku.com';
                         $senderAvatar = $message->sender->avatar ?? null;
                         // Admin: Green, User: Blue
-                        $avatarBg = $message->is_from_admin ? 'bg-gradient-to-br from-green-500 to-emerald-600' : 'bg-gradient-to-br from-blue-500 to-indigo-600';
+                        $avatarBg = $message->is_from_admin ? 'bg-[#10B981]' : 'bg-[#3B82F6]';
                         $bgColor = $message->is_from_admin ? '10B981' : '3B82F6';
                     @endphp
 
                     <div class="flex items-start gap-3 {{ $isUserMessage ? 'flex-row-reverse' : '' }}">
                         {{-- Avatar --}}
                         <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0
-                            {{ $avatarBg }} overflow-hidden">
+                                    {{ $avatarBg }} overflow-hidden">
                             @if($senderAvatar && (str_starts_with($senderAvatar, '/storage/') || str_starts_with($senderAvatar, 'http')))
                                 <img src="{{ $senderAvatar }}" alt="Avatar" class="w-full h-full object-cover">
                             @else
@@ -105,13 +105,13 @@
         {{-- Reply Form --}}
         @if($ticket->status !== 'closed')
             <div class="rounded-2xl p-4 animate-fade-in-up"
-                style="background: linear-gradient(180deg, #0F172A 0%, #1E293B 100%); border: 1px solid rgba(255,255,255,0.1);">
+                style="background: #0F172A; border: 1px solid rgba(255,255,255,0.1);">
                 <form action="{{ route('contact.admin.send', $ticket) }}" method="POST" class="flex gap-3">
                     @csrf
                     <input type="text" name="message" placeholder="Ketik pesan..." required
                         class="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-green-500 transition">
                     <button type="submit"
-                        class="px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium hover:opacity-90 transition flex items-center gap-2">
+                        class="px-6 py-3 rounded-xl bg-[#10B981] text-white font-medium hover:bg-[#059669] transition flex items-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
@@ -122,7 +122,7 @@
             </div>
         @else
             <div class="rounded-2xl p-4 text-center animate-fade-in-up"
-                style="background: linear-gradient(180deg, #0F172A 0%, #1E293B 100%); border: 1px solid rgba(255,255,255,0.1);">
+                style="background: #0F172A; border: 1px solid rgba(255,255,255,0.1);">
                 <p class="text-white/50 text-sm">Tiket ini sudah ditutup. Buat tiket baru jika ada pertanyaan lain.</p>
                 <a href="{{ route('contact.admin') }}"
                     class="inline-block mt-3 px-4 py-2 rounded-lg bg-white/10 text-white text-sm hover:bg-white/20 transition">

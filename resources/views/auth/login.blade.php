@@ -366,7 +366,7 @@
                         <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
                             <div class="flex items-center gap-4">
                                 <div class="flex-shrink-0 w-12 h-12 rounded-[14px] flex items-center justify-center"
-                                    style="background: linear-gradient(135deg, #00C950 0%, #00BC7D 100%);">
+                                    style="background: #00C950;">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -386,7 +386,7 @@
                         <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
                             <div class="flex items-center gap-4">
                                 <div class="flex-shrink-0 w-12 h-12 rounded-[14px] flex items-center justify-center"
-                                    style="background: linear-gradient(135deg, #2B7FFF 0%, #00B8DB 100%);">
+                                    style="background: #3B82F6;">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -417,7 +417,7 @@
                         <div class="bg-white/5 border border-white/10 rounded-lg p-1 mb-8 flex">
                             <button onclick="switchTab('email')" id="emailTabBtn"
                                 class="flex-1 flex items-center justify-center gap-3 px-6 py-2 text-sm rounded-md transition-all"
-                                style="background: linear-gradient(180deg, #1E3A8F 0%, #3B82F6 100%); color: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1);">
+                                style="background: #3B82F6; color: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1);">
                                 <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none">
                                     <rect x="2" y="4" width="12" height="9" rx="1" stroke="currentColor"
                                         stroke-width="1.33" />
@@ -439,8 +439,7 @@
                         <!-- TAB EMAIL -->
                         <div class="space-y-6" id="emailTab">
                             <!-- Quick Guide Box -->
-                            <div
-                                class="bg-gradient-to-r from-[#1E3A8F]/30 to-[#3B82F6]/20 border border-[#3B82F6]/30 rounded-2xl p-5">
+                            <div class="bg-[rgba(59,130,246,0.15)] border border-[#3B82F6]/30 rounded-2xl p-5">
                                 <div class="flex gap-3">
                                     <svg class="w-5 h-5 text-[#8EC5FF] flex-shrink-0 mt-0.5" viewBox="0 0 20 20"
                                         fill="none">
@@ -527,7 +526,7 @@
 
                                 {{-- Tombol Masuk --}}
                                 <button type="submit" class="mt-2 inline-flex w-full items-center justify-center rounded-xl
-                                               bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6]
+                                               bg-[#3B82F6]
                                                px-4 py-3 text-sm font-semibold text-white
                                                shadow-[0_10px_20px_rgba(37,99,235,0.45)]
                                                hover:brightness-110 transition">
@@ -613,7 +612,7 @@
                                     onclick="connectWallet('metamask', event)">
                                     <div class="flex flex-col items-center gap-3">
                                         <div
-                                            class="w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br from-[#F6851B] to-[#E2761B]">
+                                            class="w-14 h-14 rounded-2xl flex items-center justify-center bg-[#F6851B]">
                                             <svg width="32" height="32" viewBox="0 0 318 318" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M274.1 35.5L174.6 109.4L193 65.8L274.1 35.5Z" fill="#E2761B"
@@ -724,7 +723,7 @@
                                     onclick="connectWallet('coinbase', event)">
                                     <div class="flex flex-col items-center gap-3">
                                         <div
-                                            class="w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br from-[#0052FF] to-[#0040CC]">
+                                            class="w-14 h-14 rounded-2xl flex items-center justify-center bg-[#0052FF]">
                                             <svg width="28" height="28" viewBox="0 0 40 40" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg">
                                                 <circle cx="20" cy="20" r="16" fill="white" />
@@ -744,7 +743,7 @@
                                     onclick="connectWallet('trust', event)">
                                     <div class="flex flex-col items-center gap-3">
                                         <div
-                                            class="w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br from-[#3375BB] to-[#1A5C9E]">
+                                            class="w-14 h-14 rounded-2xl flex items-center justify-center bg-[#3375BB]">
                                             <svg width="28" height="28" viewBox="0 0 40 40" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg">
                                                 <path
@@ -768,7 +767,7 @@
                                     onclick="connectWallet('walletconnect', event)">
                                     <div class="flex flex-col items-center gap-3">
                                         <div
-                                            class="w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br from-[#3B99FC] to-[#2B7FE0]">
+                                            class="w-14 h-14 rounded-2xl flex items-center justify-center bg-[#3B99FC]">
                                             <svg width="28" height="28" viewBox="0 0 40 40" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg">
                                                 <path

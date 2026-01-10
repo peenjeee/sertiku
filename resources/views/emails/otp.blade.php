@@ -13,7 +13,7 @@
         <tr>
             <td align="center">
                 <table width="600" cellpadding="0" cellspacing="0"
-                    style="background: linear-gradient(180deg, #0A1628 0%, #0D1B2A 100%); border-radius: 16px; border: 1px solid rgba(59, 130, 246, 0.2); overflow: hidden;">
+                    style="background: #0F172A; border-radius: 16px; border: 1px solid rgba(59, 130, 246, 0.2); overflow: hidden;">
                     <!-- Header -->
                     <tr>
                         <td
@@ -41,7 +41,7 @@
 
                             <!-- OTP Code -->
                             <div
-                                style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%); border: 2px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 30px; text-align: center; margin: 30px 0;">
+                                style="background: rgba(59, 130, 246, 0.1); border: 2px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 30px; text-align: center; margin: 30px 0;">
                                 <p
                                     style="margin: 0 0 10px; color: #94A3B8; font-size: 14px; text-transform: uppercase; letter-spacing: 2px;">
                                     Kode Verifikasi

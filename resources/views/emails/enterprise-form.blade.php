@@ -9,8 +9,7 @@
 
 <body
     style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
-    <div
-        style="background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%); padding: 30px; border-radius: 12px 12px 0 0; text-align: center;">
+    <div style="background: #8B5CF6; padding: 30px; border-radius: 12px 12px 0 0; text-align: center;">
         <h1 style="color: #ffffff; margin: 0; font-size: 24px;">🏢 Lead Enterprise Baru!</h1>
         <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0; font-size: 14px;">Permintaan Paket Enterprise dari
             {{ $data['institution'] }}
@@ -70,7 +69,7 @@
 
         <div style="margin-top: 24px; text-align: center;">
             <a href="mailto:{{ $data['email'] }}?subject=Re: Permintaan Paket Enterprise SertiKu"
-                style="display: inline-block; background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%); color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; margin-right: 12px; margin-bottom: 8px;">
+                style="display: inline-block; background: #8B5CF6; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; margin-right: 12px; margin-bottom: 8px;">
                 ↩️ Balas Email
             </a>
             <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $data['phone']) }}"

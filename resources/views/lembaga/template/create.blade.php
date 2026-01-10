@@ -99,7 +99,7 @@
             <!-- Action Buttons -->
             <div class="flex items-center gap-4 pt-4">
                 <button type="submit"
-                    class="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl text-white text-lg font-bold hover:from-blue-700 hover:to-indigo-700 transition flex items-center gap-2 transform active:scale-95 duration-200">
+                    class="px-8 py-4 bg-[#3B82F6] rounded-xl text-white text-lg font-bold hover:bg-[#2563EB] transition flex items-center gap-2 transform active:scale-95 duration-200">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 6v6m0 0v6m0-6h6m-6 0H6" />

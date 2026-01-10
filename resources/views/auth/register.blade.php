@@ -362,7 +362,7 @@
                                     <div class="mt-2">
                                         <div class="h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
                                             <div id="passwordStrengthBar"
-                                                 class="h-1.5 w-0 rounded-full bg-gradient-to-r from-red-500 via-yellow-400 to-emerald-400 transition-all duration-200"></div>
+                                                 class="h-1.5 w-0 rounded-full bg-[#3B82F6] transition-all duration-200"></div>
                                         </div>
                                         <p id="passwordStrengthLabel" class="mt-1 text-xs text-[#BEDBFF]/80">
                                             Password belum dinilai
@@ -849,7 +849,7 @@
                                         </button>
 
                                         <button type="submit"
-                                                class="inline-flex items-center rounded-lg bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6]
+                                                class="inline-flex items-center rounded-lg bg-[#3B82F6]
                                                        px-6 py-2.5 text-sm font-medium shadow-[0_10px_15px_-3px_rgba(43,127,255,0.5)]
                                                        hover:brightness-110 transition">
                                             Kirim Pendaftaran
@@ -883,10 +883,10 @@
                 stepperUser.classList.remove('hidden');
                 stepperOrg.classList.add('hidden');
 
-                userBtn.classList.add('bg-gradient-to-b', 'from-[#1E3A8F]', 'to-[#3B82F6]', 'text-white', 'shadow-sm');
+                userBtn.classList.add('bg-[#3B82F6]', 'text-white', 'shadow-sm');
                 userBtn.classList.remove('text-white/70');
 
-                orgBtn.classList.remove('bg-gradient-to-b', 'from-[#1E3A8F]', 'to-[#3B82F6]', 'text-white', 'shadow-sm');
+                orgBtn.classList.remove('bg-[#3B82F6]', 'text-white', 'shadow-sm');
                 orgBtn.classList.add('text-white/70');
             } else {
                 userTab.classList.add('hidden');
@@ -894,10 +894,10 @@
                 stepperUser.classList.add('hidden');
                 stepperOrg.classList.remove('hidden');
 
-                orgBtn.classList.add('bg-gradient-to-b', 'from-[#1E3A8F]', 'to-[#3B82F6]', 'text-white', 'shadow-sm');
+                orgBtn.classList.add('bg-[#3B82F6]', 'text-white', 'shadow-sm');
                 orgBtn.classList.remove('text-white/70');
 
-                userBtn.classList.remove('bg-gradient-to-b', 'from-[#1E3A8F]', 'to-[#3B82F6]', 'text-white', 'shadow-sm');
+                userBtn.classList.remove('bg-[#3B82F6]', 'text-white', 'shadow-sm');
                 userBtn.classList.add('text-white/70');
             }
         }
@@ -925,11 +925,11 @@
 
                 if (i < step) {
                     icon.className =
-                        'flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#00C950] to-[#00BC7D] text-white shadow';
+                        'flex h-12 w-12 items-center justify-center rounded-full bg-[#10B981] text-white shadow';
                     label.className = 'mt-2 text-xs font-medium';
                 } else if (i === step) {
                     icon.className =
-                        'flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] text-white shadow';
+                        'flex h-12 w-12 items-center justify-center rounded-full bg-[#3B82F6] text-white shadow';
                     label.className = 'mt-2 text-xs font-medium';
                 } else {
                     icon.className =
@@ -1043,11 +1043,11 @@
 
                 if (i < step) {
                     icon.className =
-                        'flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#00C950] to-[#00BC7D] text-white shadow';
+                        'flex h-12 w-12 items-center justify-center rounded-full bg-[#10B981] text-white shadow';
                     label.className = 'mt-2 text-xs font-medium';
                 } else if (i === step) {
                     icon.className =
-                        'flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-b from-[#1E3A8F] to-[#3B82F6] text-white shadow';
+                        'flex h-12 w-12 items-center justify-center rounded-full bg-[#3B82F6] text-white shadow';
                     label.className = 'mt-2 text-xs font-medium';
                 } else {
                     icon.className =

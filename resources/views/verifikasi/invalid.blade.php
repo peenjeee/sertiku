@@ -8,8 +8,8 @@
         <div
             class="w-full mt-20 max-w-3xl rounded-[24px] border border-[rgba(255,255,255,0.14)] bg-[rgba(15,23,42,0.9)] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] overflow-hidden">
 
-            {{-- Strip gradient atas --}}
-            <div class="h-3 w-full bg-gradient-to-r from-[#FB2C36] via-[#FF6900] to-[#F0B100]"></div>
+
+            <div class="h-3 w-full bg-[#EF4444]"></div>
 
             <div class="px-6 sm:px-10 pt-10 pb-10">
 

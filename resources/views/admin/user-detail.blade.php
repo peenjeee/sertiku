@@ -26,8 +26,7 @@
         <!-- User Info -->
         <div class="glass-card rounded-2xl p-6 animate-fade-in-up">
             <div class="flex items-center gap-4 mb-6">
-                <div
-                    class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center overflow-hidden">
+                <div class="w-16 h-16 rounded-full bg-[#3B82F6] flex items-center justify-center overflow-hidden">
                     @if($user->avatar && (str_starts_with($user->avatar, '/storage/') || str_starts_with($user->avatar, 'http')))
                         <img src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                     @else

@@ -22,7 +22,7 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #1E3A8F 0%, #3B82F6 100%);
+            background: #3B82F6;
             padding: 30px;
             text-align: center;
         }
@@ -45,7 +45,7 @@
 
         .button {
             display: inline-block;
-            background: linear-gradient(135deg, #1E3A8F 0%, #3B82F6 100%);
+            background: #3B82F6;
             color: #fff !important;
             text-decoration: none;
             padding: 14px 32px;

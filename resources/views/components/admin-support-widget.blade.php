@@ -25,11 +25,11 @@
     {{-- Chat Modal --}}
     <div id="adminSupportModal"
         class="hidden mb-4 w-80 sm:w-96 rounded-2xl overflow-hidden shadow-2xl border border-white/10"
-        style="background: linear-gradient(180deg, #0c1829 0%, #0f1f35 100%);">
+        style="background: #0F172A;">
 
         {{-- Header --}}
         <div id="adminSupportHeader"
-            class="flex items-center justify-between p-4 border-b border-white/10 bg-gradient-to-r from-green-600 to-emerald-600">
+            class="flex items-center justify-between p-4 border-b border-white/10 bg-[#10B981]">
             <div class="flex items-center gap-3">
                 <button onclick="backToTicketList()" id="backToListBtn"
                     class="hidden p-1 rounded-lg hover:bg-white/20 transition">
@@ -62,7 +62,7 @@
                     class="block p-4 border-b border-white/5 hover:bg-white/5 transition cursor-pointer">
                     <div class="flex items-start gap-3">
                         <div
-                            class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                            class="w-10 h-10 rounded-full bg-[#3B82F6] flex items-center justify-center flex-shrink-0 overflow-hidden">
                             @if($ticket->user->avatar && (str_starts_with($ticket->user->avatar, '/storage/') || str_starts_with($ticket->user->avatar, 'http')))
                                 <img src="{{ $ticket->user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                             @else
@@ -113,7 +113,7 @@
                         class="flex-1 rounded-xl bg-white/10 border border-white/10 px-4 py-2 text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-green-500/50"
                         placeholder="Ketik balasan..." onkeypress="if(event.key === 'Enter') sendAdminReply()">
                     <button onclick="sendAdminReply()"
-                        class="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white hover:brightness-110 transition flex-shrink-0">
+                        class="w-10 h-10 rounded-xl bg-[#10B981] flex items-center justify-center text-white hover:bg-[#059669] transition flex-shrink-0">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
@@ -126,7 +126,7 @@
 
     {{-- Toggle Button --}}
     <button onclick="toggleAdminSupport()" id="adminSupportToggleBtn"
-        class="w-14 h-14 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300 relative">
+        class="w-14 h-14 rounded-full bg-[#10B981] flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300 relative">
         <svg id="adminSupportIconOpen" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />

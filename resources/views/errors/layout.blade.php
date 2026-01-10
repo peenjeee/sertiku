@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Error') - SertiKu</title>
-     {{-- Favicon --}}
+    {{-- Favicon --}}
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
-    
+
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=poppins:300,400,500,600,700,800" rel="stylesheet" />
     <style>
@@ -19,7 +19,7 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #050C1F 0%, #0A1628 50%, #0D1B2A 100%);
+            background: #0A1628;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -39,10 +39,7 @@
         .error-code {
             font-size: 10rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #2B7FFF 0%, #00B8DB 50%, #8B5CF6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #8B5CF6;
             line-height: 1;
             text-shadow: 0 0 80px rgba(43, 127, 255, 0.4);
             animation: pulse 3s ease-in-out infinite;
@@ -66,7 +63,7 @@
             width: 120px;
             height: 120px;
             margin: 0 auto 1rem;
-            background: linear-gradient(135deg, rgba(43, 127, 255, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+            background: rgba(139, 92, 246, 0.2);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -127,7 +124,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #1E3A8F 0%, #3B82F6 100%);
+            background: #3B82F6;
             color: white;
             box-shadow: 0 20px 40px -20px rgba(37, 99, 235, 0.5);
         }
@@ -159,7 +156,8 @@
             right: -200px;
             width: 500px;
             height: 500px;
-            background: radial-gradient(circle, rgba(43, 127, 255, 0.15) 0%, transparent 70%);
+
+            display: none;
             border-radius: 50%;
         }
 
@@ -168,7 +166,8 @@
             left: -150px;
             width: 400px;
             height: 400px;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+
+            display: none;
             border-radius: 50%;
         }
 
@@ -178,9 +177,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-image:
-                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+
+            background: transparent;
             background-size: 50px 50px;
             pointer-events: none;
         }
@@ -199,7 +197,7 @@
         .logo-icon {
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, #2B7FFF 0%, #00B8DB 100%);
+            background: #3B82F6;
             border-radius: 10px;
             display: flex;
             align-items: center;

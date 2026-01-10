@@ -23,8 +23,7 @@
     <div class="glass-card rounded-2xl p-6 mb-6 animate-fade-in-up">
         <div class="flex flex-col lg:flex-row lg:items-center gap-6">
             {{-- Wallet Icon --}}
-            <div
-                class="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center flex-shrink-0">
+            <div class="w-20 h-20 rounded-2xl bg-[#8B5CF6] flex items-center justify-center flex-shrink-0">
                 <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
@@ -58,8 +57,8 @@
                 </p>
                 @if($walletInfo['balance'])
                     <!-- <p class="text-white/40 text-xs mt-1">
-                        ≈ Rp {{ number_format($walletInfo['balance']['matic'] * 10000, 0, ',', '.') }}
-                    </p> -->
+                            ≈ Rp {{ number_format($walletInfo['balance']['matic'] * 10000, 0, ',', '.') }}
+                        </p> -->
                 @endif
             </div>
         </div>
@@ -225,9 +224,8 @@
                         <p class="text-white/50 text-xs">PolygonScan Explorer</p>
                     </div>
                 </a>
-                <a href="https://faucet.stakepool.dev.br/amoy"
-                   target="_blank"
-                   class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition">
+                <a href="https://faucet.stakepool.dev.br/amoy" target="_blank"
+                    class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition">
                     <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
                         <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

@@ -125,7 +125,7 @@
                             <label class="block text-sm font-bold text-white mb-2">Upload File Data</label>
                             <div class="relative group">
                                 <div
-                                    class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl opacity-20 group-hover:opacity-40 transition duration-200">
+                                    class="absolute -inset-0.5 bg-[#3B82F6] rounded-xl opacity-20 group-hover:opacity-40 transition duration-200">
                                 </div>
                                 <input type="file" name="file" accept=".csv,.xlsx,.xls" required
                                     class="relative w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 transition cursor-pointer">
@@ -335,7 +335,7 @@
 
                         <div class="flex justify-end pt-4">
                             <button type="submit"
-                                class="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl text-white font-bold hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
+                                class="px-8 py-3 bg-[#3B82F6] rounded-xl text-white font-bold hover:bg-[#2563EB] transition-all duration-200">
                                 Proses Bulk Upload
                             </button>
                         </div>
@@ -581,7 +581,7 @@
                     </div>
                     
                     <div class="w-full bg-gray-200 rounded-full h-4 mb-2 overflow-hidden relative">
-                        <div id="swal-progress" class="bg-gradient-to-r from-blue-500 to-indigo-600 h-4 rounded-full transition-all duration-300 relative" style="width: 0%">
+                        <div id="swal-progress" class="bg-[#3B82F6] h-4 rounded-full transition-all duration-300 relative" style="width: 0%">
                             <div class="absolute top-0 left-0 w-full h-full bg-white/30 animate-[shimmer_2s_infinite]"></div>
                         </div>
                     </div>

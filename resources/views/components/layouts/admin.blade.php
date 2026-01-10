@@ -37,7 +37,7 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #0c1829 0%, #0f1f35 100%);
+            background: #0F172A;
             min-height: 100vh;
         }
 
@@ -55,7 +55,7 @@
         }
 
         .admin-bg {
-            background: linear-gradient(180deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+            background: #0F172A;
             min-height: 100vh;
         }
 
@@ -146,7 +146,7 @@
         }
 
         .nav-item.active {
-            background: linear-gradient(180deg, #1E3A8F 0%, #3B82F6 100%);
+            background: #3B82F6;
             box-shadow: 0px 10px 15px -3px rgba(43, 127, 255, 0.5);
         }
 
@@ -160,69 +160,69 @@
 
         /* Stat Cards */
         .stat-card-blue {
-            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+            background: #EFF6FF;
             border: 1px solid #BFDBFE;
         }
 
         .stat-card-green {
-            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            background: #ECFDF5;
             border: 1px solid #A7F3D0;
         }
 
         .stat-card-purple {
-            background: linear-gradient(135deg, #FAF5FF 0%, #F3E8FF 100%);
+            background: #FAF5FF;
             border: 1px solid #E9D5FF;
         }
 
         .stat-card-red {
-            background: linear-gradient(135deg, #FEF2F2 0%, #FECACA 100%);
+            background: #FEF2F2;
             border: 1px solid #FCA5A5;
         }
 
         .stat-card-orange {
-            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            background: #FFF7ED;
             border: 1px solid #FDBA74;
         }
 
         .stat-card-cyan {
-            background: linear-gradient(135deg, #ECFEFF 0%, #CFFAFE 100%);
+            background: #ECFEFF;
             border: 1px solid #67E8F9;
         }
 
         /* Icon Circles */
         .icon-circle-blue {
-            background: linear-gradient(135deg, #2B7FFF 0%, #1447E6 100%);
+            background: #2563EB;
             box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
         .icon-circle-green {
-            background: linear-gradient(135deg, #00C950 0%, #008236 100%);
+            background: #10B981;
             box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
         .icon-circle-purple {
-            background: linear-gradient(135deg, #AD46FF 0%, #8200DB 100%);
+            background: #8B5CF6;
             box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
         .icon-circle-red {
-            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            background: #EF4444;
             box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
         .icon-circle-orange {
-            background: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
+            background: #F97316;
             box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
         .icon-circle-cyan {
-            background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%);
+            background: #06B6D4;
             box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
         /* Chat Widget */
         .chat-widget {
-            background: linear-gradient(135deg, #2B7FFF 0%, #1447E6 100%);
+            background: #3B82F6;
             box-shadow: 0 10px 25px -5px rgba(43, 127, 255, 0.5);
         }
 

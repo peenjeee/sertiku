@@ -68,7 +68,7 @@
                     <input type="text" name="name" placeholder="Nama token (contoh: Production App)" required
                         class="flex-1 bg-[#050C1F] border border-[#1E3A5F] rounded-lg px-3 md:px-4 py-2.5 text-sm md:text-base text-white placeholder-[#8EC5FF]/50 focus:border-[#3B82F6] focus:outline-none">
                     <button type="submit"
-                        class="px-4 md:px-6 py-2.5 bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] text-white font-medium rounded-lg hover:opacity-90 transition whitespace-nowrap text-sm md:text-base">
+                        class="px-4 md:px-6 py-2.5 bg-[#3B82F6] text-white font-medium rounded-lg hover:bg-[#2563EB] transition whitespace-nowrap text-sm md:text-base">
                         Buat Token
                     </button>
                 </form>
@@ -138,8 +138,7 @@
             </div>
 
             {{-- Test API Token --}}
-            <div
-                class="mt-6 md:mt-8 bg-gradient-to-br from-[#3B82F6]/10 to-[#8B5CF6]/10 border border-[#3B82F6]/30 rounded-xl p-4 md:p-6">
+            <div class="mt-6 md:mt-8 bg-[rgba(59,130,246,0.1)] border border-[#3B82F6]/30 rounded-xl p-4 md:p-6">
                 <h3 class="text-base md:text-lg font-semibold text-white mb-4 flex items-center gap-2"><svg
                         class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -294,7 +293,7 @@
 
                     {{-- Test Button --}}
                     <button onclick="testApi()"
-                        class="w-full px-6 py-3 bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] text-white font-medium rounded-lg hover:opacity-90 transition flex items-center justify-center gap-2">
+                        class="w-full px-6 py-3 bg-[#3B82F6] text-white font-medium rounded-lg hover:bg-[#2563EB] transition flex items-center justify-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 10V3L4 14h7v7l9-11h-7z" />

@@ -68,7 +68,7 @@
                                     @if($log->user)
                                         <div class="flex items-center gap-2">
                                             <div
-                                                class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center overflow-hidden">
+                                                class="w-8 h-8 rounded-full bg-[#8B5CF6] flex items-center justify-center overflow-hidden">
                                                 @if($log->user->avatar && (str_starts_with($log->user->avatar, '/storage/') || str_starts_with($log->user->avatar, 'http')))
                                                     <img src="{{ $log->user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                                                 @else

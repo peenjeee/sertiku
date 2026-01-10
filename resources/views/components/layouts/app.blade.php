@@ -238,12 +238,9 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Gradient Text */
-        .gradient-text {
-            background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        /* Brand Text */
+        .text-brand {
+            color: #3B82F6;
         }
 
         /* Hide scrollbar for Chrome, Safari and Opera */
@@ -390,9 +387,8 @@
         }
 
         .shimmer {
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            background-size: 200% 100%;
-            animation: shimmer 2s infinite;
+            background: rgba(255, 255, 255, 0.05);
+
         }
 
         /* Glow Pulse */
@@ -412,25 +408,10 @@
             animation: glow-pulse 2s ease-in-out infinite;
         }
 
-        /* Text Gradient Animate */
-        @keyframes gradient-shift {
 
-            0%,
-            100% {
-                background-position: 0% 50%;
-            }
 
-            50% {
-                background-position: 100% 50%;
-            }
-        }
-
-        .animate-gradient-text {
-            background: linear-gradient(90deg, #3B82F6, #8B5CF6, #EC4899, #3B82F6);
-            background-size: 300% 100%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradient-shift 3s ease infinite;
+        .text-brand-animate {
+            color: #3B82F6;
         }
 
         /* Card 3D Tilt on Hover */

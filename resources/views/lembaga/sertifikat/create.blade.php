@@ -78,7 +78,7 @@
                 <h2 class="text-red-400 text-xl font-bold mb-2">Kuota Sertifikat Habis</h2>
                 <p class="text-red-300/80 mb-6">Upgrade paket Anda untuk melanjutkan menerbitkan sertifikat.</p>
                 <a href="{{ url('/#harga') }}"
-                    class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-xl">
+                    class="inline-flex items-center gap-2 px-6 py-3 bg-[#3B82F6] text-white font-bold rounded-xl">
                     Upgrade ke Professional
                 </a>
             </div>
@@ -137,8 +137,7 @@
                                     <div
                                         class="border-2 border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-50 rounded-xl overflow-hidden transition hover:border-blue-300">
                                         <!-- Template Preview -->
-                                        <div
-                                            class="aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                        <div class="aspect-[4/3] bg-gray-200 flex items-center justify-center">
                                             @if($template->thumbnail_path)
                                                 <img src="{{ asset('storage/' . $template->thumbnail_path) }}"
                                                     alt="{{ $template->name }}" class="w-full h-full object-cover">
@@ -477,8 +476,7 @@
                             <span class="text-white font-bold text-sm">Menerbitkan Sertifikat...</span>
                         </div>
                         <div class="w-full bg-blue-900/50 rounded-full h-3 overflow-hidden">
-                            <div id="progress-bar"
-                                class="bg-gradient-to-r from-blue-400 to-cyan-400 h-3 rounded-full transition-all duration-300"
+                            <div id="progress-bar" class="bg-[#3B82F6] h-3 rounded-full transition-all duration-300"
                                 style="width: 0%"></div>
                         </div>
                         <div class="flex justify-between mt-2">
@@ -491,7 +489,7 @@
                 <!-- Action Buttons -->
                 <div id="action-buttons" class="flex items-center gap-4">
                     <button type="submit" id="submit-btn"
-                        class="flex-1 flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl text-white text-lg font-bold hover:from-blue-700 hover:to-indigo-700 transition">
+                        class="flex-1 flex items-center justify-center gap-2 py-4 bg-[#3B82F6] rounded-xl text-white text-lg font-bold hover:bg-[#2563EB] transition">
                         <svg id="submit-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
                         </svg>
