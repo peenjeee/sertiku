@@ -188,7 +188,7 @@
             border-radius: 16px;
         }
 
-        /* Solid Cards (Renamed from gradient-card) */
+        /* Solid Cards */
         .card-solid-blue {
             background: #EFF6FF;
             border: 1px solid #BFDBFE;
@@ -296,32 +296,6 @@
         .chat-widget {
             background: #3B82F6;
             box-shadow: 0px 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-
-        .blur-circle-1 {
-            position: fixed;
-            width: 384px;
-            height: 384px;
-            left: 155px;
-            top: 87px;
-            background: rgba(59, 130, 246, 0.1);
-            filter: blur(64px);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .blur-circle-2 {
-            position: fixed;
-            width: 384px;
-            height: 384px;
-            right: 100px;
-            bottom: 50px;
-            background: rgba(139, 92, 246, 0.1);
-            filter: blur(64px);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
         }
 
         /* Toggle button styles */
@@ -434,9 +408,9 @@
 
 <body class="antialiased overflow-x-hidden">
     <div class="institution-bg flex relative overflow-x-hidden">
-        <!-- Blur decorations (hidden on mobile to prevent overflow) -->
-        <div class="blur-circle-1 hidden md:block"></div>
-        <div class="blur-circle-2 hidden md:block"></div>
+        <!-- Blur decorations removed -->
+        <div class="hidden md:block"></div>
+        <div class="hidden md:block"></div>
 
         <!-- Mobile Overlay -->
         <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>

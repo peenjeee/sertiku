@@ -363,11 +363,11 @@
                         <button onclick="setFilter('all')" data-filter="all"
                             class="filter-btn active px-3 lg:px-4 py-2 lg:py-3 bg-[#1E3A8F] text-white text-xs lg:text-sm rounded-lg font-medium whitespace-nowrap">Semua</button>
                         <button onclick="setFilter('active')" data-filter="active"
-                            class="filter-btn px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg hover:bg-gray-50 whitespace-nowrap">Aktif</button>
+                            class="filter-btn px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg whitespace-nowrap">Aktif</button>
                         <button onclick="setFilter('expired')" data-filter="expired"
-                            class="filter-btn px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg hover:bg-gray-50 whitespace-nowrap">Kadaluarsa</button>
+                            class="filter-btn px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg whitespace-nowrap">Kadaluarsa</button>
                         <button onclick="setFilter('revoked')" data-filter="revoked"
-                            class="filter-btn px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg hover:bg-gray-50 whitespace-nowrap">Dicabut</button>
+                            class="filter-btn px-3 lg:px-4 py-2 lg:py-3 bg-white border border-[#E2E8F0] text-[#1E293B] text-xs lg:text-sm rounded-lg whitespace-nowrap">Dicabut</button>
                     </div>
                 </div>
 

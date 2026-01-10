@@ -10,7 +10,7 @@
 <body
     style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
     <div style="background: #8B5CF6; padding: 30px; border-radius: 12px 12px 0 0; text-align: center;">
-        <h1 style="color: #ffffff; margin: 0; font-size: 24px;">🏢 Lead Enterprise Baru!</h1>
+        <h1 style="color: #ffffff; margin: 0; font-size: 24px;">Lead Enterprise Baru!</h1>
         <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0; font-size: 14px;">Permintaan Paket Enterprise dari
             {{ $data['institution'] }}
         </p>
@@ -20,7 +20,6 @@
         style="background-color: #ffffff; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
         <div
             style="background-color: #faf5ff; border-left: 4px solid #8B5CF6; padding: 16px; border-radius: 0 8px 8px 0; margin-bottom: 24px;">
-            <p style="margin: 0; color: #6b21a8; font-weight: 600; font-size: 14px;">🔥 Prospek Potensial!</p>
             <p style="margin: 5px 0 0 0; color: #7c3aed; font-size: 13px;">Lead ini memerlukan follow-up dalam 1x24 jam.
             </p>
         </div>
@@ -70,7 +69,7 @@
         <div style="margin-top: 24px; text-align: center;">
             <a href="mailto:{{ $data['email'] }}?subject=Re: Permintaan Paket Enterprise SertiKu"
                 style="display: inline-block; background: #8B5CF6; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; margin-right: 12px; margin-bottom: 8px;">
-                ↩️ Balas Email
+                Balas Email
             </a>
             <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $data['phone']) }}"
                 style="display: inline-block; background: #25D366; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500;">

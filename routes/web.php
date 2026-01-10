@@ -302,6 +302,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/pengaturan/password', [\App\Http\Controllers\LembagaController::class, 'updatePassword'])->name('settings.password');
         Route::post('/pengaturan/document', [\App\Http\Controllers\LembagaController::class, 'updateDocument'])->name('settings.document.update');
         Route::delete('/pengaturan/document', [\App\Http\Controllers\LembagaController::class, 'deleteDocument'])->name('settings.document.delete');
+        Route::delete('/pengaturan/account', [\App\Http\Controllers\LembagaController::class, 'deleteAccount'])->name('settings.delete');
 
         // Activity Log
         Route::get('/activity-log', [\App\Http\Controllers\LembagaController::class, 'activityLog'])->name('activity-log');
@@ -491,6 +492,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/settings', [\App\Http\Controllers\AdminController::class, 'settings'])->name('settings');
     Route::post('/settings', [\App\Http\Controllers\AdminController::class, 'updateSettings'])->name('settings.update');
     Route::post('/settings/clear-cache', [\App\Http\Controllers\AdminController::class, 'clearCache'])->name('settings.clear-cache');
+    Route::delete('/settings/account', [\App\Http\Controllers\AdminController::class, 'deleteAccount'])->name('settings.delete');
 
     // Profile
     Route::get('/profile', [\App\Http\Controllers\AdminController::class, 'profile'])->name('profile');

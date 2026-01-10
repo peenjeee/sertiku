@@ -610,6 +610,30 @@ class BlockchainService
     }
 
     /**
+     * Check if wallet balance is low (<= minBalance)
+     * Returns true if low balance OR if balance cannot be determined (null)
+     */
+    public function isLowBalance(float $minBalance = 0.01): bool
+    {
+        $balance = $this->getWalletBalance();
+
+        \Illuminate\Support\Facades\Log::info('Debug isLowBalance:', [
+            'balance_raw' => $balance,
+            'min_balance' => $minBalance,
+            'is_null' => $balance === null,
+            'matic_val' => $balance['matic'] ?? 'N/A',
+            'result' => ($balance === null || !isset($balance['matic'])) ? true : ($balance['matic'] <= $minBalance)
+        ]);
+
+        // If API fails or returns null, consider it "low/unsafe" to proceed
+        if ($balance === null || !isset($balance['matic'])) {
+            return true;
+        }
+
+        return $balance['matic'] <= $minBalance;
+    }
+
+    /**
      * Get transaction count (nonce) for wallet
      */
     public function getTransactionCount(): ?int

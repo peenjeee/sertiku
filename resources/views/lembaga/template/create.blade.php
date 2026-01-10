@@ -29,7 +29,7 @@
                 <!-- Nama Template -->
                 <div>
                     <label class="block text-gray-800 text-sm font-bold mb-2">Nama Template Baru</label>
-                    <input type="text" name="name" placeholder="Contoh: Sertifikat Webinar 2024"
+                    <input type="text" name="name" placeholder="Contoh: Sertifikat Webinar 2026"
                         class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
 
@@ -67,13 +67,13 @@
                                 class="glass-card rounded-2xl overflow-hidden transition-all duration-300 ring-4 ring-transparent peer-checked:ring-blue-500 peer-checked:scale-[1.02] hover:ring-2 hover:ring-blue-300/50">
                                 <!-- Preview Box -->
                                 <div class="h-48 {{ $preset['color'] }} flex items-center justify-center relative">
-                                    <div class="bg-white/90 backdrop-blur-sm px-6 py-3 rounded-lg shadow-lg">
+                                    <div class="bg-white/90 px-6 py-3 rounded-lg shadow-lg">
                                         <span class="text-gray-900 font-serif text-xl font-bold">Sertifikat</span>
                                     </div>
                                     <!-- Orientation Badge -->
                                     <div class="absolute bottom-2 right-2">
                                         <span
-                                            class="text-[10px] bg-black/20 text-white px-2 py-1 rounded backdrop-blur-sm orientation-badge">Landscape</span>
+                                            class="text-[10px] bg-black/20 text-white px-2 py-1 rounded orientation-badge">Landscape</span>
                                     </div>
                                 </div>
 

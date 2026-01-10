@@ -141,7 +141,7 @@
                     <div class="p-4 rounded-xl bg-white/5 border border-white/10 text-center hover-lift transition group">
                         <div
                             class="w-12 h-12 mx-auto mb-2 rounded-full flex items-center justify-center
-                                                            {{ $achievement['unlocked'] ? 'bg-[#F59E0B]' : 'bg-white/10' }}">
+                                                                    {{ $achievement['unlocked'] ? 'bg-[#F59E0B]' : 'bg-white/10' }}">
                             @if($achievement['unlocked'])
                                 <span class="flex items-center justify-center">{!! $achievement['icon'] !!}</span>
                             @else
@@ -236,8 +236,7 @@
                 @foreach($recentCertificates->take(3) as $cert)
                     <div
                         class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
-                        <div
-                            class="w-10 h-10 rounded-lg bg-[#3B82F6] flex items-center justify-center flex-shrink-0">
+                        <div class="w-10 h-10 rounded-lg bg-[#3B82F6] flex items-center justify-center flex-shrink-0">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
@@ -251,10 +250,10 @@
                             </p>
                         </div>
                         <span class="px-3 py-1 rounded-full text-xs
-                                                            @if($cert->status === 'revoked') bg-red-500/20 text-red-400
-                                                            @elseif($cert->expire_date && $cert->expire_date < now()) bg-amber-500/20 text-amber-400
-                                                            @elseif($cert->status === 'active') bg-green-500/20 text-green-400
-                                                            @else bg-gray-500/20 text-gray-400 @endif">
+                                                                    @if($cert->status === 'revoked') bg-red-500/20 text-red-400
+                                                                    @elseif($cert->expire_date && $cert->expire_date < now()) bg-amber-500/20 text-amber-400
+                                                                    @elseif($cert->status === 'active') bg-green-500/20 text-green-400
+                                                                    @else bg-gray-500/20 text-gray-400 @endif">
                             @if($cert->status === 'revoked') Dicabut
                             @elseif($cert->expire_date && $cert->expire_date < now()) Kadaluarsa
                             @elseif($cert->status === 'active') Aktif
@@ -276,5 +275,70 @@
             </div>
         @endif
     </div>
+
+    {{-- Zona Berbahaya (Hapus Akun) --}}
+    <div class="glass-card rounded-2xl p-5 lg:p-6 border-2 border-red-500/30 animate-fade-in-up">
+        <h3 class="text-lg font-semibold text-red-400 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            Zona Berbahaya
+        </h3>
+
+        <p class="text-red-300/70 text-sm mb-4">
+            Menghapus akun akan menghapus semua data Anda secara permanen. Sertifikat yang sudah diterima tidak akan
+            bisa diakses lagi dari dashboard ini.
+        </p>
+
+        <button type="button" onclick="openDeleteModal()"
+            class="px-4 py-2.5 bg-red-500/20 border border-red-500/50 text-red-400 text-sm font-medium rounded-lg hover:bg-red-500/30 transition">
+            Hapus Akun Saya
+        </button>
+    </div>
+
+    {{-- Delete Account Modal --}}
+    <div id="delete-modal" class="hidden fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+        <div class="bg-[#1E293B] rounded-2xl p-6 max-w-md w-full border border-white/10 shadow-2xl">
+            <h3 class="text-xl font-bold text-white mb-2">Hapus Akun?</h3>
+            <p class="text-white/70 text-sm mb-4">
+                Tindakan ini tidak dapat dibatalkan. Semua data Anda akan dihapus secara permanen.
+            </p>
+
+            <form action="{{ route('settings.delete') }}" method="POST">
+                @csrf
+                @method('DELETE')
+
+                <div class="space-y-2 mb-4">
+                    <label class="text-sm text-white">Ketik <strong class="text-red-400">HAPUS</strong> untuk
+                        konfirmasi</label>
+                    <input type="text" name="confirm_delete" required
+                        class="w-full rounded-lg bg-white/5 border border-white/20 px-4 py-3 text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-red-500"
+                        placeholder="HAPUS">
+                    @error('confirm_delete')<p class="text-xs text-red-400 mt-1">{{ $message }}</p>@enderror
+                </div>
+
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeDeleteModal()"
+                        class="flex-1 px-4 py-2.5 bg-white/10 text-white text-sm font-medium rounded-lg hover:bg-white/20 transition">
+                        Batal
+                    </button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2.5 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition">
+                        Hapus Akun
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openDeleteModal() {
+            document.getElementById('delete-modal').classList.remove('hidden');
+        }
+        function closeDeleteModal() {
+            document.getElementById('delete-modal').classList.add('hidden');
+        }
+    </script>
 
 </x-layouts.user>

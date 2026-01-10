@@ -59,7 +59,7 @@
         </div>
 
         <!-- Search & Filter -->
-        <div class="bg-white/10 border border-white/20 rounded-xl p-4 backdrop-blur-sm">
+        <div class="bg-white/10 border border-white/20 rounded-xl p-4">
             <form action="{{ route('lembaga.template.index') }}" method="GET" class="flex flex-col sm:flex-row gap-4">
                 <div class="flex-1">
                     <div class="relative">

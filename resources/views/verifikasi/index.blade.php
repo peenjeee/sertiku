@@ -4,7 +4,7 @@
 
 
     {{-- KONTEN UTAMA --}}
-    <section class="mx-auto flex max-w-6xl flex-col gap-16 px-4 pb-20 pt-16 lg:flex-row lg:px-0 lg:pt-20">
+    <section class="mx-auto flex max-w-6xl flex-col gap-16 px-4 pb-20 pt-10 lg:flex-row lg:px-0 lg:pt-12">
 
         {{-- KIRI: TEKS + FORM VERIFIKASI --}}
         <div class="relative w-full max-w-xl animate-fade-in-up">
@@ -49,15 +49,12 @@
                 </p>
             </div>
 
-            {{-- CARD FORM VERIFIKASI --}}
-            <div class="mt-10 rounded-[16px] border border-[rgba(255,255,255,0.14)]
-                           bg-[rgba(15,23,42,0.9)]
-                           px-6 pb-3 pt-6 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)]
-                           backdrop-blur-xl sm:px-7 sm:pt-7 hover-lift animate-fade-in-up stagger-2">
+            <div
+                class="mt-10 rounded-[16px] bg-[rgba(15,23,42,0.6)]/90 border border-[rgba(255,255,255,0.1)] rounded-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] px-6 py-8 sm:px-8 sm:py-10 hover-lift animate-fade-in-up stagger-2">
 
 
                 {{-- FORM --}}
-                <form id="verifyForm" class="space-y-5" novalidate>
+                <form id="verifyForm" class="space-y-8" novalidate>
                     @csrf
 
                     {{-- Tab Switcher --}}
@@ -73,8 +70,8 @@
                     </div>
 
                     {{-- Form Hash (Default) --}}
-                    <div id="panel-hash" class="space-y-5 animate-fade-in block">
-                        <label class="block space-y-2">
+                    <div id="panel-hash" class="space-y-6 animate-fade-in block">
+                        <div class="block space-y-2">
                             <div class="relative flex items-center text-[16px] text-white">
                                 <span class="mr-2 inline-flex h-4 w-4 items-center justify-center">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
@@ -87,23 +84,22 @@
                                             stroke-width="1.33333" />
                                     </svg>
                                 </span>
-                                <span>Masukkan Kode Hash Sertifikat</span>
+                                <span>Masukkan Kode Sertifikat</span>
                             </div>
 
-                            <div class="mt-2 flex items-center rounded-[8px]
+                            <div class="mt-6 flex items-center rounded-[12px]
                                        border border-[rgba(255,255,255,0.2)]
                                        bg-[rgba(255,255,255,0.10)]
-                                       px-3 py-2">
+                                       px-5 py-5">
                                 <input type="text" name="hash" id="hashInput" value="{{ old('hash') }}"
                                     class="w-full bg-transparent text-sm text-white placeholder:text-[rgba(255,255,255,0.5)] focus:outline-none"
-                                    placeholder="Contoh: SERT-202412-ABCDEF">
+                                    placeholder="Contoh: SERT-202612-ABCDEF">
                             </div>
-                        </label>
+                        </div>
                     </div>
 
-                    {{-- Form File (Hidden) --}}
                     <div id="panel-file" class="space-y-5 animate-fade-in hidden">
-                        <label class="block space-y-2">
+                        <div class="block space-y-2">
                             <div class="relative flex items-center text-[16px] text-white">
                                 <span class="mr-2 inline-flex h-4 w-4 items-center justify-center">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,11 +129,11 @@
                                     </div>
                                 </label>
                             </div>
-                        </label>
+                        </div>
                     </div>
 
                     {{-- Tombol Verifikasi & Scan QR --}}
-                    <div class="relative mt-2 flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <div class="relative mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
                         {{-- Tombol VERIFIKASI --}}
                         <button type="submit" id="verifyBtn" class="inline-flex flex-1 items-center justify-center gap-2 rounded-[8px]
                                            bg-[#2563EB]
@@ -196,7 +192,7 @@
                     </div>
 
                     {{-- Helper text --}}
-                    <div class="relative mt-3 flex items-center justify-center text-center">
+                    <div class="relative mt-6 flex items-center justify-center text-center">
                         <span class="mr-2 inline-flex h-4 w-4 items-center justify-center">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -210,18 +206,18 @@
 
                         </span>
                         <p class="text-[13px] leading-[20px] text-[#BEDBFF]">
-                            Kode hash terdapat pada sertifikat digital Anda
+                            Kode terdapat pada sertifikat digital Anda
                         </p>
                     </div>
 
                     {{-- Blockchain Verification Link --}}
                     @if(config('blockchain.enabled'))
-                        <div class="mt-4 pt-4 border-t border-white/10">
+                        <div class="mt-8 pt-6 border-t border-white/10">
                             <a href="{{ route('blockchain.verify') }}"
                                 class="flex items-center justify-center gap-2 w-full py-3 rounded-[8px]
-                                                                                                   border border-purple-500/30 bg-purple-500/10
-                                                                                                   text-purple-300 text-sm font-medium
-                                                                                                   hover:bg-purple-500/20 transition">
+                                                                                                                                                                               border border-purple-500/30 bg-purple-500/10
+                                                                                                                                                                               text-purple-300 text-sm font-medium
+                                                                                                                                                                               hover:bg-purple-500/20 transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
@@ -238,44 +234,21 @@
 
         {{-- KANAN: KARTU SERTIFIKAT DIGITAL --}}
         <div class="relative flex flex-1 justify-center lg:justify-end animate-slide-in-right">
-            {{-- glow belakang --}}
-            <div class="pointer-events-none absolute top-16 h-[320px] w-[320px] rounded-full
-                           bg-[#2B7FFF]/15
-                           blur-[100px]">
-            </div>
-
             <div class="relative w-full max-w-sm space-y-4">
                 {{-- Card utama sertifikat --}}
                 <div class="rounded-[24px] border border-[rgba(255,255,255,0.2)]
-                               bg-[rgba(255,255,255,0.1)]
-                               px-7 pb-6 pt-8 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)]
-                               backdrop-blur-xl">
+                           bg-[rgba(255,255,255,0.05)]
+                           p-6 shadow-2xl relative overflow-hidden group">
                     {{-- Icon besar --}}
-                    <div class="mx-auto mb-6 flex h-24 w-24 items-center justify-center">
-                        <div class="relative h-24 w-24">
-                            <div class="absolute inset-0 rounded-[16px]
-                                           bg-[#2B7FFF]/30
-                                           blur-[24px]">
-                            </div>
-                            <div class="absolute inset-0 rounded-[16px]
-                                           bg-[#2563EB]
-                                           px-4 pt-4">
-                                <div class="relative h-full w-full">
-                                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M41.2679 34.37L45.3075 57.1038C45.3528 57.3715 45.3152 57.6466 45.1999 57.8924C45.0845 58.1382 44.8969 58.3429 44.6621 58.4791C44.4272 58.6154 44.1564 58.6767 43.8858 58.6549C43.6152 58.633 43.3577 58.5291 43.1477 58.357L33.602 51.1924C33.1412 50.8481 32.5814 50.6621 32.0061 50.6621C31.4309 50.6621 30.8711 50.8481 30.4103 51.1924L20.8486 58.3543C20.6388 58.5261 20.3816 58.6299 20.1113 58.6518C19.841 58.6736 19.5705 58.6125 19.3358 58.4766C19.1012 58.3408 18.9135 58.1366 18.7979 57.8913C18.6823 57.646 18.6442 57.3713 18.6888 57.1038L22.7257 34.37"
-                                            stroke="white" stroke-width="5.33281" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <path
-                                            d="M31.997 37.3297C40.8327 37.3297 47.9954 30.1669 47.9954 21.3312C47.9954 12.4956 40.8327 5.33281 31.997 5.33281C23.1613 5.33281 15.9985 12.4956 15.9985 21.3312C15.9985 30.1669 23.1613 37.3297 31.997 37.3297Z"
-                                            stroke="white" stroke-width="5.33281" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                    </svg>
-
-                                </div>
-                            </div>
-                        </div>
+                    <div class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-[16px] bg-[#1e3a5f]">
+                        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M41.2679 34.37L45.3075 57.1038C45.3528 57.3715 45.3152 57.6466 45.1999 57.8924C45.0845 58.1382 44.8969 58.3429 44.6621 58.4791C44.4272 58.6154 44.1564 58.6767 43.8858 58.6549C43.6152 58.633 43.3577 58.5291 43.1477 58.357L33.602 51.1924C33.1412 50.8481 32.5814 50.6621 32.0061 50.6621C31.4309 50.6621 30.8711 50.8481 30.4103 51.1924L20.8486 58.3543C20.6388 58.5261 20.3816 58.6299 20.1113 58.6518C19.841 58.6736 19.5705 58.6125 19.3358 58.4766C19.1012 58.3408 18.9135 58.1366 18.7979 57.8913C18.6823 57.646 18.6442 57.3713 18.6888 57.1038L22.7257 34.37"
+                                stroke="white" stroke-width="5.33281" stroke-linecap="round" stroke-linejoin="round" />
+                            <path
+                                d="M31.997 37.3297C40.8327 37.3297 47.9954 30.1669 47.9954 21.3312C47.9954 12.4956 40.8327 5.33281 31.997 5.33281C23.1613 5.33281 15.9985 12.4956 15.9985 21.3312C15.9985 30.1669 23.1613 37.3297 31.997 37.3297Z"
+                                stroke="white" stroke-width="5.33281" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
                     </div>
 
                     {{-- Judul kartu --}}
@@ -303,48 +276,47 @@
                             <span class="text-[14px] text-[#05DF72]">Verified</span>
                         </div>
                     </div>
-                </div>
 
-                {{-- Stats 500+ / 50K+ / 99.9% --}}
-                <div class="grid grid-cols-3 gap-4">
-                    <div class="rounded-[14px] border border-[rgba(255,255,255,0.2)]
+                    {{-- Stats 500+ / 50K+ / 99.9% --}}
+                    <div class="mt-8 grid grid-cols-3 gap-4">
+                        <div class="rounded-[14px] border border-[rgba(255,255,255,0.2)]
                                    bg-[rgba(255,255,255,0.05)] px-4 py-4 text-center">
-                        <div class="text-[24px] leading-[32px] text-white">{{ $totalLembaga }}</div>
-                        <div class="mt-1 text-[12px] leading-[16px] text-[#BEDBFF]">Lembaga</div>
-                    </div>
-                    <div class="rounded-[14px] border border-[rgba(255,255,255,0.2)]
+                            <div class="text-[24px] leading-[32px] text-white">{{ $totalLembaga }}</div>
+                            <div class="mt-1 text-[12px] leading-[16px] text-[#BEDBFF]">Lembaga</div>
+                        </div>
+                        <div class="rounded-[14px] border border-[rgba(255,255,255,0.2)]
                                    bg-[rgba(255,255,255,0.05)] px-4 py-4 text-center">
-                        <div class="text-[24px] leading-[32px] text-white">{{ $totalCertificates }}</div>
-                        <div class="mt-1 text-[12px] leading-[16px] text-[#BEDBFF]">Sertifikat</div>
-                    </div>
-                    <div class="rounded-[14px] border border-[rgba(255,255,255,0.2)]
+                            <div class="text-[24px] leading-[32px] text-white">{{ $totalCertificates }}</div>
+                            <div class="mt-1 text-[12px] leading-[16px] text-[#BEDBFF]">Sertifikat</div>
+                        </div>
+                        <div class="rounded-[14px] border border-[rgba(255,255,255,0.2)]
                                    bg-[rgba(255,255,255,0.05)] px-4 py-4 text-center">
-                        <div class="text-[24px] leading-[32px] text-white">96%</div>
-                        <div class="mt-1 text-[12px] leading-[16px] text-[#BEDBFF]">Akurasi</div>
+                            <div class="text-[24px] leading-[32px] text-white">96%</div>
+                            <div class="mt-1 text-[12px] leading-[16px] text-[#BEDBFF]">Akurasi</div>
+                        </div>
                     </div>
-                </div>
 
-                {{-- Fitur kecil di bawah card: Terenkripsi / Real-time / 100% Aman --}}
-                <div class="mt-20 flex flex-wrap gap-6 justify-between text-sm">
-                    <div class="flex items-center gap-2">
-                        <span class="h-2 w-2 rounded-full bg-[#05DF72]"></span>
-                        <span class="text-[14px] text-[rgba(255,255,255,0.9)]">Terenkripsi</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="h-2 w-2 rounded-full bg-[#05DF72]"></span>
-                        <span class="text-[14px] text-[rgba(255,255,255,0.9)]">Verifikasi Real-time</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="h-2 w-2 rounded-full bg-[#05DF72]"></span>
-                        <span class="text-[14px] text-[rgba(255,255,255,0.9)]">100% Aman</span>
+                    {{-- Fitur kecil di bawah card: Terenkripsi / Real-time / 100% Aman --}}
+                    <div class="mt-8 flex flex-wrap gap-6 justify-between text-sm">
+                        <div class="flex items-center gap-2">
+                            <span class="h-2 w-2 rounded-full bg-[#05DF72]"></span>
+                            <span class="text-[14px] text-[rgba(255,255,255,0.9)]">Terenkripsi</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="h-2 w-2 rounded-full bg-[#05DF72]"></span>
+                            <span class="text-[14px] text-[rgba(255,255,255,0.9)]">Verifikasi Real-time</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="h-2 w-2 rounded-full bg-[#05DF72]"></span>
+                            <span class="text-[14px] text-[rgba(255,255,255,0.9)]">100% Aman</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
     </section>
 
     {{-- Modal QR Scanner --}}
-    <div id="qrScannerModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm">
+    <div id="qrScannerModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80">
         <div class="relative w-full max-w-md mx-4">
             {{-- Card Scanner --}}
             <div class="rounded-[20px] border border-[rgba(255,255,255,0.2)] bg-[#0a1628] p-6 shadow-2xl">

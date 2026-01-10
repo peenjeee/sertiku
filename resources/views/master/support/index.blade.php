@@ -74,12 +74,11 @@
                                 </td>
                                 <td class="py-4 px-5">
                                     @if($ticket->status === 'open')
-                                        <span class="px-2 py-1 rounded-full bg-green-500/20 text-green-400 text-xs">Open</span>
+                                        <span class="inline-block whitespace-nowrap px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs">Open</span>
                                     @elseif($ticket->status === 'in_progress')
-                                        <span class="px-2 py-1 rounded-full bg-yellow-500/20 text-yellow-400 text-xs">In
-                                            Progress</span>
+                                        <span class="inline-block whitespace-nowrap px-3 py-1 rounded-full bg-yellow-500/20 text-yellow-400 text-xs">In Progress</span>
                                     @else
-                                        <span class="px-2 py-1 rounded-full bg-gray-500/20 text-gray-400 text-xs">Closed</span>
+                                        <span class="inline-block whitespace-nowrap px-3 py-1 rounded-full bg-gray-500/20 text-gray-400 text-xs">Closed</span>
                                     @endif
                                 </td>
                                 <td class="py-4 px-5">
@@ -91,7 +90,7 @@
                                 </td>
                                 <td class="py-4 px-5">
                                     <a href="{{ route('master.support.show', $ticket) }}"
-                                        class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-purple-500/20 text-purple-400 text-sm hover:bg-purple-500/30 transition">
+                                        class="inline-flex items-center gap-1.5 whitespace-nowrap px-4 py-2 rounded-lg bg-purple-500/20 text-purple-400 text-sm hover:bg-purple-500/30 transition">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />

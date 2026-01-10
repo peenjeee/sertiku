@@ -141,7 +141,8 @@ class AdminController extends Controller
     public function showUser(User $user)
     {
         $user->load('certificates', 'orders');
-        return view('admin.user-detail', compact('user'));
+        $receivedCertificates = Certificate::where('recipient_email', $user->email)->latest()->get();
+        return view('admin.user-detail', compact('user', 'receivedCertificates'));
     }
 
     /**
@@ -510,5 +511,26 @@ class AdminController extends Controller
             ->get();
 
         return view('admin.blockchain', compact('walletInfo', 'blockchainStats', 'recentBlockchainTx'));
+    }
+
+    /**
+     * Delete account (for admin users).
+     */
+    public function deleteAccount(Request $request)
+    {
+        $request->validate([
+            'confirm_delete' => 'required|in:HAPUS',
+        ]);
+
+        $user = \Illuminate\Support\Facades\Auth::user();
+
+        \Illuminate\Support\Facades\Auth::logout();
+        $user->update(['is_admin' => false]); // Remove admin status, then delete
+        $user->delete();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/')->with('success', 'Akun admin Anda telah dihapus.');
     }
 }

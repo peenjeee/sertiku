@@ -22,7 +22,6 @@
 
         .login-card {
             background: rgba(20, 20, 30, 0.95);
-            backdrop-filter: blur(20px);
             border: 1px solid rgba(139, 92, 246, 0.2);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
@@ -30,18 +29,6 @@
         .superadmin-badge {
             background: #8B5CF6;
             box-shadow: 0 0 20px rgba(139, 92, 246, 0.25);
-        }
-
-        @keyframes pulse-glow {
-
-            0%,
-            100% {
-                box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
-            }
-
-            50% {
-                box-shadow: 0 0 25px rgba(139, 92, 246, 0.35);
-            }
         }
 
         .input-field {

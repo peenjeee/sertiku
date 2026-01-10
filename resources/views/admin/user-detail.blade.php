@@ -83,49 +83,105 @@
         </div>
 
         <!-- Certificates -->
-        <div class="lg:col-span-2 glass-card rounded-2xl p-6 animate-fade-in-up stagger-2">
-            <h3 class="text-gray-800 font-bold text-lg mb-4">Sertifikat Diterbitkan</h3>
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Issued Certificates -->
+            <div class="glass-card rounded-2xl p-6 animate-fade-in-up stagger-2">
+                <h3 class="text-gray-800 font-bold text-lg mb-4">Sertifikat Diterbitkan</h3>
 
-            @if($user->certificates && $user->certificates->count() > 0)
-                <div class="space-y-3 max-h-96 overflow-y-auto">
-                    @foreach($user->certificates as $cert)
-                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                    </svg>
+                @if($user->certificates && $user->certificates->count() > 0)
+                    <div class="space-y-3 max-h-96 overflow-y-auto">
+                        @foreach($user->certificates as $cert)
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-800 text-sm font-medium">{{ $cert->recipient_name }}</p>
+                                        <p class="text-gray-500 text-xs font-mono">{{ $cert->certificate_number }}</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p class="text-gray-800 text-sm font-medium">{{ $cert->recipient_name }}</p>
-                                    <p class="text-gray-500 text-xs font-mono">{{ $cert->certificate_number }}</p>
+                                <div class="text-right">
+                                    <p class="text-gray-500 text-xs">{{ $cert->created_at->format('d M Y') }}</p>
+                                    @if($cert->status === 'revoked')
+                                        <span class="text-red-600 text-xs font-medium">Dicabut</span>
+                                    @elseif($cert->expire_date && $cert->expire_date < now())
+                                        <span class="text-yellow-600 text-xs font-medium">Kadaluarsa</span>
+                                    @elseif($cert->status === 'active')
+                                        <span class="text-emerald-600 text-xs font-medium">Aktif</span>
+                                    @else
+                                        <span class="text-gray-600 text-xs font-medium">{{ ucfirst($cert->status) }}</span>
+                                    @endif
                                 </div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-gray-500 text-xs">{{ $cert->created_at->format('d M Y') }}</p>
-                                @if($cert->status === 'revoked')
-                                    <span class="text-red-600 text-xs font-medium">Dicabut</span>
-                                @elseif($cert->expire_date && $cert->expire_date < now())
-                                    <span class="text-yellow-600 text-xs font-medium">Kadaluarsa</span>
-                                @elseif($cert->status === 'active')
-                                    <span class="text-emerald-600 text-xs font-medium">Aktif</span>
-                                @else
-                                    <span class="text-gray-600 text-xs font-medium">{{ ucfirst($cert->status) }}</span>
-                                @endif
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-12">
+                        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <p class="text-gray-400">Belum ada sertifikat diterbitkan</p>
+                    </div>
+                @endif
+            </div>
+
+            <!-- Received Certificates -->
+            <div class="glass-card rounded-2xl p-6 animate-fade-in-up stagger-3">
+                <h3 class="text-gray-800 font-bold text-lg mb-4">Sertifikat Diterima</h3>
+
+                @if(isset($receivedCertificates) && $receivedCertificates->count() > 0)
+                    <div class="space-y-3 max-h-96 overflow-y-auto">
+                        @foreach($receivedCertificates as $cert)
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        {{-- Show Issuer Name --}}
+                                        <p class="text-gray-800 text-sm font-medium">
+                                            {{ $cert->user->institution_name ?? $cert->user->name ?? 'Unknown Issuer' }}
+                                        </p>
+                                        <p class="text-gray-500 text-xs font-mono">{{ $cert->certificate_number }}</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-gray-500 text-xs">{{ $cert->created_at->format('d M Y') }}</p>
+                                    @if($cert->status === 'revoked')
+                                        <span class="text-red-600 text-xs font-medium">Dicabut</span>
+                                    @elseif($cert->expire_date && $cert->expire_date < now())
+                                        <span class="text-yellow-600 text-xs font-medium">Kadaluarsa</span>
+                                    @elseif($cert->status === 'active')
+                                        <span class="text-emerald-600 text-xs font-medium">Aktif</span>
+                                    @else
+                                        <span class="text-gray-600 text-xs font-medium">{{ ucfirst($cert->status) }}</span>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
-                    @endforeach
-                </div>
-            @else
-                <div class="text-center py-12">
-                    <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    <p class="text-gray-400">Belum ada sertifikat</p>
-                </div>
-            @endif
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-12">
+                        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <p class="text-gray-400">Belum ada sertifikat diterima</p>
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
 </x-layouts.admin>

@@ -152,12 +152,10 @@
 
     function toggleAdminSupport() {
         const modal = document.getElementById('adminSupportModal');
-        const iconOpen = document.getElementById('adminSupportIconOpen');
-        const iconClose = document.getElementById('adminSupportIconClose');
+        const toggleBtn = document.getElementById('adminSupportToggleBtn');
 
         modal.classList.toggle('hidden');
-        iconOpen.classList.toggle('hidden');
-        iconClose.classList.toggle('hidden');
+        toggleBtn.classList.toggle('hidden');
 
         // Reset to list view when closing
         if (modal.classList.contains('hidden')) {

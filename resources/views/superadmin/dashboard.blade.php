@@ -7,7 +7,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <h1 class="text-2xl font-bold text-white mb-2">
-                    Selamat Datang, Super Admin! 👑
+                    Selamat Datang, Super Admin!
                 </h1>
                 <p class="text-white/70">Akses penuh ke seluruh sistem SertiKu</p>
             </div>

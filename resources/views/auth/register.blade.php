@@ -4,9 +4,7 @@
     <main class="min-h-screen bg-[#0F172A] px-4 py-10 flex items-center justify-center overflow-x-hidden">
 
         <div class="relative w-full max-w-6xl">
-            {{-- Glow kiri-kanan (hidden on mobile to prevent overflow) --}}
-            <div class="pointer-events-none absolute -left-32 top-24 h-96 w-96 rounded-full bg-[#2B7FFF]/15 blur-[120px] opacity-50 hidden md:block"></div>
-            <div class="pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-[#8B5CF6]/10 blur-[120px] opacity-50 hidden md:block"></div>
+
 
             {{-- Kartu utama --}}
             <div class="relative mx-auto max-w-4xl text-white">
@@ -23,7 +21,7 @@
                         {{-- BTN Pengguna --}}
                         <button type="button" id="userTabBtn"
                                 onclick="switchRegisterTab('pengguna')"
-                                class="inline-flex items-center gap-2 rounded-md bg-[#2563EB] px-4 py-1.5 text-xs md:text-sm shadow-sm text-white">
+                                class="inline-flex items-center gap-2 rounded-md bg-[#3B82F6] px-4 py-1.5 text-xs md:text-sm shadow-sm text-white">
                             <span class="flex h-4 w-4 items-center justify-center">
                                 <span class="h-[1px] w-3 border border-white/90 border-t-2 border-b-0"></span>
                             </span>
@@ -159,7 +157,7 @@
                 @endif
 
                 {{-- CARD TAB PENGGUNA / LEMBAGA --}}
-                <div class="rounded-3xl border border-white/20 bg-white/10 backdrop-blur-xl px-6 py-8 md:px-10 md:py-10">
+                <div class="rounded-3xl border border-white/20 bg-white/10 px-6 py-8 md:px-10 md:py-10">
 
                     {{-- ==================== TAB PENGGUNA ==================== --}}
                     <div id="tab-pengguna">

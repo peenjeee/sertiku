@@ -3,9 +3,7 @@
 
     {{-- Hero --}}
     <section class="overflow-hidden py-16 md:py-20 px-4">
-        <div
-            class="pointer-events-none absolute -left-32 top-0 h-96 w-96 rounded-full bg-[#10B981]/15 blur-[120px] opacity-60 hidden md:block">
-        </div>
+
         <div class="mx-auto max-w-4xl px-4 text-center relative z-10">
             {{-- Status Badge --}}
             @if($overallStatus === 'operational')

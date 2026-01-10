@@ -101,7 +101,7 @@
                                     <tr>
                                         <td class="py-2"><code>hash</code></td>
                                         <td>string</td>
-                                        <td>UUID hash atau nomor sertifikat (e.g. SERT-202512-XXXXXX)</td>
+                                        <td>UUID hash atau nomor sertifikat (e.g. SERT-202612-XXXXXX)</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -130,10 +130,10 @@
   "data": {
     "valid": true,
     "certificate": {
-      "certificate_number": "SERT-202512-ABCDEF",
+      "certificate_number": "SERT-202612-ABCDEF",
       "recipient_name": "John Doe",
       "course_name": "Web Development Bootcamp",
-      "issue_date": "2024-12-27",
+      "issue_date": "2026-12-27",
       "status": "active",
       "issuer": {
         "name": "Tech Academy",
@@ -145,7 +145,7 @@
         "tx_hash": "0x123...",
         "explorer_url": "https://polygonscan.com/tx/0x123..."
       },
-      "verification_url": "https://sertiku.web.id/verifikasi/SERT-202512-ABCDEF"
+      "verification_url": "https://sertiku.web.id/verifikasi/SERT-202612-ABCDEF"
     }
   }
 }</pre>
@@ -166,11 +166,11 @@
                                     class="px-3 py-1 rounded text-sm transition">JavaScript</button>
                             </div>
                             <div class="bg-[#050C1F] rounded-lg p-4 font-mono text-sm overflow-x-auto">
-                                <pre x-show="tab === 'curl'" class="text-[#10B981]">curl -X GET "{{ url('/api/v1/verify') }}/SERT-202512-ABCDEF" \
+                                <pre x-show="tab === 'curl'" class="text-[#10B981]">curl -X GET "{{ url('/api/v1/verify') }}/SERT-202612-ABCDEF" \
   -H "Accept: application/json"</pre>
-                                <pre x-show="tab === 'php'" class="text-[#10B981]">$response = Http::get('{{ url('/api/v1/verify') }}/SERT-202512-ABCDEF');
+                                <pre x-show="tab === 'php'" class="text-[#10B981]">$response = Http::get('{{ url('/api/v1/verify') }}/SERT-202612-ABCDEF');
 $data = $response->json();</pre>
-                                <pre x-show="tab === 'js'" class="text-[#10B981]">const response = await fetch('{{ url('/api/v1/verify') }}/SERT-202512-ABCDEF');
+                                <pre x-show="tab === 'js'" class="text-[#10B981]">const response = await fetch('{{ url('/api/v1/verify') }}/SERT-202612-ABCDEF');
 const data = await response.json();</pre>
                             </div>
                         </div>
@@ -246,11 +246,11 @@ const data = await response.json();</pre>
     "data": [
       {
         "id": 1,
-        "certificate_number": "SERT-202512-ABCDEF",
+        "certificate_number": "SERT-202612-ABCDEF",
         "recipient_name": "John Doe",
         "course_name": "Web Development",
         "status": "active",
-        "created_at": "2024-12-27T10:00:00.000000Z"
+        "created_at": "2026-12-27T10:00:00.000000Z"
       }
     ],
     "per_page": 20,
@@ -383,8 +383,8 @@ const data = await response.json();</pre>
   "course_name": "Web Development Bootcamp",
   "category": "Bootcamp",
   "description": "Telah menyelesaikan pelatihan Web Development",
-  "issue_date": "2024-12-27",
-  "expire_date": "2025-12-27",
+  "issue_date": "2026-12-27",
+  "expire_date": "2027-12-27",
   "blockchain_enabled": true,
   "ipfs_enabled": true,
   "send_email": true
@@ -399,19 +399,19 @@ const data = await response.json();</pre>
   "message": "Sertifikat berhasil dibuat",
   "data": {
     "id": 123,
-    "certificate_number": "SERT-202512-ABCDEF",
+    "certificate_number": "SERT-202612-ABCDEF",
     "recipient_name": "John Doe",
     "recipient_email": "john@example.com",
     "course_name": "Web Development Bootcamp",
     "category": "Bootcamp",
-    "issue_date": "2024-12-27",
-    "expire_date": "2025-12-27",
+    "issue_date": "2026-12-27",
+    "expire_date": "2027-12-27",
     "status": "active",
     "blockchain_enabled": true,
     "blockchain_status": "pending",
-    "verification_url": "https://sertiku.web.id/verifikasi/SERT-202512-ABCDEF",
+    "verification_url": "https://sertiku.web.id/verifikasi/SERT-202612-ABCDEF",
     "pdf_url": "https://sertiku.web.id/storage/certificates/...",
-    "created_at": "2024-12-27T10:00:00.000000Z"
+    "created_at": "2026-12-27T10:00:00.000000Z"
   }
 }</pre>
                         </div>
@@ -425,7 +425,7 @@ const data = await response.json();</pre>
     "recipient_name": "John Doe",
     "recipient_email": "john@example.com",
     "course_name": "Web Development Bootcamp",
-    "issue_date": "2024-12-27",
+    "issue_date": "2026-12-27",
     "blockchain_enabled": true,
     "send_email": true
   }'</pre>
@@ -483,9 +483,9 @@ const data = await response.json();</pre>
   "message": "Sertifikat berhasil dicabut",
   "data": {
     "id": 123,
-    "certificate_number": "SERT-202512-ABCDEF",
+    "certificate_number": "SERT-202612-ABCDEF",
     "status": "revoked",
-    "revoked_at": "2024-12-27T15:00:00.000000Z",
+    "revoked_at": "2026-12-27T15:00:00.000000Z",
     "revoke_reason": "Data penerima salah"
   }
 }</pre>
@@ -529,10 +529,10 @@ const data = await response.json();</pre>
   "message": "Sertifikat berhasil diaktifkan kembali",
   "data": {
     "id": 123,
-    "certificate_number": "SERT-202512-ABCDEF",
+    "certificate_number": "SERT-202612-ABCDEF",
     "recipient_name": "John Doe",
     "status": "active",
-    "reactivated_at": "2024-12-27T16:00:00.000000Z"
+    "reactivated_at": "2026-12-27T16:00:00.000000Z"
   }
 }</pre>
                         </div>

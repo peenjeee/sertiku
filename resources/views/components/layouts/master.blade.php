@@ -92,7 +92,6 @@
 
         .glass-card {
             background: rgba(20, 20, 30, 0.8);
-            backdrop-filter: blur(20px);
             border: 1px solid rgba(139, 92, 246, 0.15);
         }
 
@@ -278,7 +277,7 @@
             <form method="POST" action="{{ route('master.logout') }}">
                 @csrf
                 <button type="submit"
-                    class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-white/50 text-sm hover:text-red-400 hover:bg-red-500/10 transition">
+                    class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-red-500/30 text-red-400 text-sm hover:text-red-400 hover:bg-red-500/10 transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

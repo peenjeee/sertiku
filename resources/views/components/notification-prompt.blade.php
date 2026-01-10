@@ -1,6 +1,6 @@
 {{-- Notification Permission Prompt Component - Minimalist Top Right --}}
 <div id="notification-prompt" class="fixed top-20 right-4 z-50 hidden">
-    <div class="bg-[#0A1628]/95 backdrop-blur-xl rounded-xl border border-amber-500/30 shadow-xl p-3 max-w-xs">
+    <div class="bg-[#0A1628]/95 rounded-xl border border-amber-500/30 shadow-xl p-3 max-w-xs">
         <div class="flex items-center gap-3">
             {{-- Bell Icon --}}
             <div class="flex-shrink-0 w-10 h-10 bg-[#F59E0B] rounded-lg flex items-center justify-center">

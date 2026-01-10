@@ -96,7 +96,7 @@
 
                                             <!-- Overlay & Checkmark -->
                                             <div
-                                                class="absolute inset-0 bg-black/40 hidden peer-checked:flex items-center justify-center backdrop-blur-[1px]">
+                                                class="absolute inset-0 bg-black/40 hidden peer-checked:flex items-center justify-center">
                                                 <div
                                                     class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center shadow-lg animate-bounce">
                                                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
@@ -206,7 +206,7 @@
                             <div class="space-y-4">
                                 <!-- Blockchain -->
                                 <div
-                                    class="p-5 rounded-2xl bg-gray-800 border {{ !$canUseBlockchain ? 'border-red-500/30 opacity-75' : 'border-gray-700 hover:border-purple-500/30' }} transition duration-300">
+                                    class="p-5 rounded-2xl bg-gray-800 border {{ (isset($isLowBalance) && $isLowBalance) || !$canUseBlockchain ? 'border-red-500/30 opacity-75' : 'border-gray-700 hover:border-purple-500/30' }} transition duration-300">
                                     <div class="flex items-center justify-between mb-2">
                                         <div class="flex items-center gap-2">
                                             <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor"
@@ -226,16 +226,20 @@
                                                 </span>
                                             @endif
                                         </div>
-                                        <label class="relative inline-flex items-center {{ $canUseBlockchain ? 'cursor-pointer' : 'cursor-not-allowed' }}">
+                                        <label class="relative inline-flex items-center {{ (!$canUseBlockchain || (isset($isLowBalance) && $isLowBalance)) ? 'cursor-not-allowed' : 'cursor-pointer' }}">
                                             <input type="checkbox" name="blockchain_enabled" value="1"
-                                                class="peer sr-only" {{ !$canUseBlockchain ? 'disabled' : '' }}>
+                                                class="peer sr-only" {{ (!$canUseBlockchain || (isset($isLowBalance) && $isLowBalance)) ? 'disabled' : '' }}>
                                             <div
-                                                class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600">
+                                                class="w-11 h-6 {{ (isset($isLowBalance) && $isLowBalance) ? 'bg-gray-200' : 'bg-gray-600' }} peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600">
                                             </div>
                                         </label>
                                     </div>
                                     
-                                    @if(!$canUseBlockchain)
+                                    @if(isset($isLowBalance) && $isLowBalance)
+                                        <div class="mb-3 p-2 bg-red-900/30 border border-red-500/30 rounded text-red-300 text-xs">
+                                            Saldo Blockchain System tidak cukup. <a href="{{ url('/contact-admin') }}" class="underline hover:text-white">Hubungi Admin</a>
+                                        </div>
+                                    @elseif(!$canUseBlockchain)
                                         <div class="mb-3 p-2 bg-red-900/30 border border-red-500/30 rounded text-red-300 text-xs">
                                             @if($blockchainLimit == 0)
                                                 Fitur Blockchain tidak tersedia di paket ini. <a href="{{ url('/#harga') }}" class="underline hover:text-white">Upgrade</a>
@@ -389,7 +393,7 @@
                                     <td class="p-2">Web Dev</td>
                                     <td class="p-2">Seminar</td>
                                     <td class="p-2">Atas partisipasinya...</td>
-                                    <td class="p-2">2024-12-01</td>
+                                    <td class="p-2">2026-12-01</td>
                                 </tr>
                             </tbody>
                         </table>

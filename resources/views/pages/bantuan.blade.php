@@ -3,10 +3,7 @@
 
 
     {{-- Hero --}}
-    <section class=" verflow-hidden py-16 md:py-24">
-        <div
-            class="pointer-events-none absolute -left-32 top-0 h-96 w-96 rounded-full bg-[#2B7FFF]/15 blur-[120px] opacity-60">
-        </div>
+    <section class="overflow-hidden py-16 md:py-24">
         <div class="mx-auto max-w-4xl px-4 text-center relative z-10">
             <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 animate-fade-in-up">Pusat Bantuan</h1>
             <p class="text-lg text-[#BEDBFF]/80 max-w-2xl mx-auto animate-fade-in-up stagger-1">
@@ -181,8 +178,7 @@
     {{-- Contact CTA --}}
     <section class="py-12 px-4">
         <div class="mx-auto max-w-3xl text-center">
-            <div
-                class="rounded-2xl bg-[#1E3A8F]/20 border border-[#3B82F6]/30 p-8 animate-fade-in-up hover-glow">
+            <div class="rounded-2xl bg-[#1E3A8F]/20 border border-[#3B82F6]/30 p-8 animate-fade-in-up">
                 <h3 class="text-xl font-semibold text-white mb-2">Masih butuh bantuan?</h3>
                 <p class="text-[#BEDBFF]/80 mb-6">Tim support kami siap membantu Anda 24/7</p>
                 <div class="flex flex-col sm:flex-row gap-3 justify-center">

@@ -19,7 +19,7 @@
                         <td
                             style="padding: 40px 40px 30px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1);">
                             <h1 style="margin: 0; color: #FFFFFF; font-size: 28px; font-weight: 700;">
-                                🎓 SertiKu
+                                 SertiKu
                             </h1>
                             <p style="margin: 10px 0 0; color: #94A3B8; font-size: 14px;">
                                 Platform Verifikasi Sertifikat Digital
@@ -139,7 +139,7 @@
                                         <td align="center" style="padding: 10px 5px 5px;">
                                             <a href="{{ $downloadUrl }}"
                                                 style="display: inline-block; padding: 12px 24px; background: transparent; border: 2px solid #3B82F6; color: #3B82F6; text-decoration: none; font-size: 14px; font-weight: 600; border-radius: 8px;">
-                                                📥 Download PDF
+                                                Download PDF
                                             </a>
                                         </td>
                                     </tr>

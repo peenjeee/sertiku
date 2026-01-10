@@ -109,7 +109,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Sidebar Controls -->
             <div class="md:col-span-1">
-                <div class="bg-slate-800/50 backdrop-blur-sm border border-white/10 rounded-2xl p-6 overflow-hidden">
+                <div class="bg-slate-800/50 border border-white/10 rounded-2xl p-6 overflow-hidden">
                     <form @submit.prevent="generateTemplates" class="space-y-6">
                         <!-- Description -->
                         <div class="mb-6">
@@ -207,7 +207,7 @@
 
             <!-- Preview Area -->
             <div class="md:col-span-2">
-                <div class="bg-slate-800/50 backdrop-blur-sm border border-white/10 rounded-2xl p-6 min-h-[600px]">
+                <div class="bg-slate-800/50 border border-white/10 rounded-2xl p-6 min-h-[600px]">
                     <template x-if="generatedImages.length === 0 && !loading">
                         <div class="h-full flex flex-col items-center justify-center text-white/30">
                             <svg class="w-20 h-20 mb-4 opacity-50" fill="none" stroke="currentColor"
@@ -264,8 +264,7 @@
 
         <!-- Save Modal -->
         <div x-show="showSaveModal" x-transition.opacity
-            class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-            style="display: none;">
+            class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80" style="display: none;">
             <div
                 class="bg-slate-800 border border-white/10 rounded-2xl w-full max-w-md overflow-hidden transform transition-all shadow-2xl">
                 <div class="p-6 border-b border-white/10 flex justify-between items-center">

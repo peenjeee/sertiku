@@ -31,7 +31,7 @@
         <div class="rounded-[16px] border border-[rgba(255,255,255,0.14)]
                    bg-[rgba(15,23,42,0.9)]
                    px-6 py-6 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)]
-                   backdrop-blur-xl animate-fade-in-up stagger-2">
+                   animate-fade-in-up stagger-2">
             <form action="{{ route('blockchain.verify') }}" method="GET" class="flex flex-col sm:flex-row gap-3">
                 <div class="flex-1 relative">
                     <input type="text" name="q" value="{{ $query ?? '' }}"
@@ -68,7 +68,7 @@
                 @if($isRevoked)
                     {{-- REVOKED Certificate Warning --}}
                     <div
-                        class="rounded-[16px] overflow-hidden border-2 border-red-500/50 bg-[rgba(15,23,42,0.9)] backdrop-blur-xl">
+                        class="rounded-[16px] overflow-hidden border-2 border-red-500/50 bg-[rgba(15,23,42,0.9)]">
                         <div class="p-4 bg-red-500/20 border-b border-red-500/30 flex items-center gap-3">
                             <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -96,7 +96,7 @@
                 @elseif($isExpired && ($result ?? '') === 'found' && ($onChainData ?? false))
                     {{-- EXPIRED Certificate Warning --}}
                     <div
-                        class="rounded-[16px] overflow-hidden border-2 border-amber-500/50 bg-[rgba(15,23,42,0.9)] backdrop-blur-xl">
+                        class="rounded-[16px] overflow-hidden border-2 border-amber-500/50 bg-[rgba(15,23,42,0.9)]">
                         <div class="p-4 bg-amber-500/20 border-b border-amber-500/30 flex items-center gap-3">
                             <div class="w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -141,7 +141,7 @@
                 @elseif(($result ?? '') === 'found' && ($onChainData ?? false))
                     {{-- Success: Found on Blockchain --}}
                     <div
-                        class="rounded-[16px] overflow-hidden border-2 border-green-500/50 bg-[rgba(15,23,42,0.9)] backdrop-blur-xl">
+                        class="rounded-[16px] overflow-hidden border-2 border-green-500/50 bg-[rgba(15,23,42,0.9)]">
                         <div class="p-4 bg-green-500/20 border-b border-green-500/30 flex items-center gap-3">
                             <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -389,7 +389,7 @@
                 @elseif(($result ?? '') === 'not_on_chain' && ($certificate ?? false))
                     {{-- Certificate exists but not on blockchain --}}
                     <div
-                        class="rounded-[16px] overflow-hidden border-2 border-yellow-500/50 bg-[rgba(15,23,42,0.9)] backdrop-blur-xl">
+                        class="rounded-[16px] overflow-hidden border-2 border-yellow-500/50 bg-[rgba(15,23,42,0.9)]">
                         <div class="p-4 bg-yellow-500/20 border-b border-yellow-500/30 flex items-center gap-3">
                             <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -453,7 +453,7 @@
                 @elseif(($result ?? '') === 'no_blockchain' && ($certificate ?? false))
                     {{-- Certificate without blockchain --}}
                     <div
-                        class="rounded-[16px] overflow-hidden border-2 border-gray-500/50 bg-[rgba(15,23,42,0.9)] backdrop-blur-xl">
+                        class="rounded-[16px] overflow-hidden border-2 border-gray-500/50 bg-[rgba(15,23,42,0.9)]">
                         <div class="p-4 bg-gray-500/20 border-b border-gray-500/30 flex items-center gap-3">
                             <div class="w-10 h-10 bg-gray-500 rounded-full flex items-center justify-center">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -475,7 +475,7 @@
                 @else
                     {{-- Not Found --}}
                     <div
-                        class="rounded-[16px] overflow-hidden border-2 border-red-500/50 bg-[rgba(15,23,42,0.9)] backdrop-blur-xl">
+                        class="rounded-[16px] overflow-hidden border-2 border-red-500/50 bg-[rgba(15,23,42,0.9)]">
                         <div class="p-4 bg-red-500/20 border-b border-red-500/30 flex items-center gap-3">
                             <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -501,7 +501,7 @@
         @if(isset($walletInfo) && $walletInfo)
             <div class="rounded-[16px] border border-[rgba(255,255,255,0.14)]
                                    bg-[rgba(15,23,42,0.9)]
-                                   p-6 backdrop-blur-xl animate-fade-in-up stagger-4">
+                                   p-6 animate-fade-in-up stagger-2">
                 <h3 class="text-white font-bold mb-4 flex items-center gap-2">
                     <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

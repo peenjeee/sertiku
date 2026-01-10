@@ -3,13 +3,7 @@
 
     <div class="min-h-[calc(100vh-80px)] bg-[#0F172A] px-4 py-10 flex items-center justify-center overflow-x-hidden">
         <div class="relative w-full max-w-4xl">
-            {{-- Glow effects --}}
-            <div
-                class="pointer-events-none absolute -left-32 top-24 h-96 w-96 rounded-full bg-[#2B7FFF33] blur-3xl opacity-80">
-            </div>
-            <div
-                class="pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-[#AD46FF22] blur-3xl opacity-80">
-            </div>
+
 
             <div class="relative mx-auto max-w-3xl text-white">
                 {{-- Header --}}
@@ -82,8 +76,7 @@
                 @endif
 
                 {{-- Main card --}}
-                <div
-                    class="rounded-3xl border border-white/20 bg-white/10 backdrop-blur-xl px-4 py-6 md:px-10 md:py-10">
+                <div class="rounded-3xl border border-white/20 bg-white/10 px-4 py-6 md:px-10 md:py-10">
                     <form action="{{ route('onboarding.store') }}" method="POST" id="onboardingForm">
                         @csrf
                         <input type="hidden" name="account_type" id="accountTypeInput" value="personal">

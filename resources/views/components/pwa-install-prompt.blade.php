@@ -3,7 +3,7 @@
 <div id="pwa-install-prompt"
     style="position: fixed; bottom: 16px; left: 16px; right: 16px; z-index: 9999; display: none;">
     <div
-        style="background: rgba(10, 22, 40, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); padding: 20px;">
+        style="background: rgba(10, 22, 40, 0.95); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); padding: 20px;">
         {{-- Close Button --}}
         <button onclick="dismissPwaPrompt()"
             class="absolute top-3 right-3 text-white/50 hover:text-white transition-colors">
@@ -67,8 +67,7 @@
 </div>
 
 {{-- iOS Install Instructions Modal --}}
-<div id="ios-install-modal"
-    class="fixed inset-0 z-[60] hidden items-center justify-center bg-black/60 backdrop-blur-sm">
+<div id="ios-install-modal" class="fixed inset-0 z-[60] hidden items-center justify-center bg-black/60">
     <div class="bg-[#0A1628] border border-white/10 rounded-2xl p-6 max-w-sm mx-4 shadow-2xl">
         <div class="text-center mb-4">
             <div class="w-16 h-16 bg-[#3B82F6] rounded-2xl flex items-center justify-center mx-auto mb-4">

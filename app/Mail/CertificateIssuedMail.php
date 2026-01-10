@@ -49,7 +49,7 @@ class CertificateIssuedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '🎉 Sertifikat Anda Telah Diterbitkan - ' . $this->courseName,
+            subject: 'Sertifikat Anda Telah Diterbitkan - ' . $this->courseName,
         );
     }
 

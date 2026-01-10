@@ -41,8 +41,7 @@
                     </div>
                     <div class="flex items-center gap-2">
                         @if($admin->is_master)
-                            <span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-sm font-medium">👑
-                                Master</span>
+                            <span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-sm font-medium">Master</span>
                         @else
                             <span class="px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 text-sm">Admin</span>
                             <form action="{{ route('master.admins.demote', $admin) }}" method="POST" class="inline"

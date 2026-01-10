@@ -59,9 +59,14 @@ class BulkCertificateController extends Controller
                 ->where('expire_date', '<', now())->count(),
         ];
 
+        // Check for low wallet balance
+        $blockchainService = app(\App\Services\BlockchainService::class);
+        $isLowBalance = $blockchainService->isLowBalance(0.01);
+
         return view('lembaga.sertifikat.bulk', compact(
             'templates',
             'canUseBlockchain',
+            'isLowBalance', // Pass low balance status
             'blockchainLimit',
             'blockchainUsed',
             'remainingBlockchain',
@@ -93,9 +98,9 @@ class BulkCertificateController extends Controller
         // Fallback: generate on-the-fly if file doesn't exist
         $headers = ['recipient_name', 'recipient_email', 'course_name', 'category', 'description', 'issue_date'];
         $sampleData = [
-            ['John Doe', 'john@example.com', 'Web Development', 'Seminar', 'Atas partisipasinya dalam kegiatan', '2025-01-15'],
-            ['Jane Smith', 'jane@example.com', 'Data Science', 'Workshop', 'Sebagai peserta workshop', '2025-01-16'],
-            ['Ahmad Fauzi', 'ahmad@example.com', 'UI/UX Design', 'Sertifikasi', 'Telah menyelesaikan sertifikasi', '2025-01-17'],
+            ['John Doe', 'john@example.com', 'Web Development', 'Seminar', 'Atas partisipasinya dalam kegiatan', '2026-01-15'],
+            ['Jane Smith', 'jane@example.com', 'Data Science', 'Workshop', 'Sebagai peserta workshop', '2026-01-16'],
+            ['Ahmad Fauzi', 'ahmad@example.com', 'UI/UX Design', 'Sertifikasi', 'Telah menyelesaikan sertifikasi', '2026-01-17'],
         ];
 
         $csvContent = implode(',', $headers) . "\n";
@@ -115,9 +120,9 @@ class BulkCertificateController extends Controller
     {
         $headers = ['recipient_name', 'recipient_email', 'course_name', 'category', 'description', 'issue_date'];
         $sampleData = [
-            ['John Doe', 'john@example.com', 'Web Development', 'Seminar', 'Atas partisipasinya dalam kegiatan', '2025-01-15'],
-            ['Jane Smith', 'jane@example.com', 'Data Science', 'Workshop', 'Sebagai peserta workshop', '2025-01-16'],
-            ['Ahmad Fauzi', 'ahmad@example.com', 'UI/UX Design', 'Sertifikasi', 'Telah menyelesaikan sertifikasi', '2025-01-17'],
+            ['John Doe', 'john@example.com', 'Web Development', 'Seminar', 'Atas partisipasinya dalam kegiatan', '2026-01-15'],
+            ['Jane Smith', 'jane@example.com', 'Data Science', 'Workshop', 'Sebagai peserta workshop', '2026-01-16'],
+            ['Ahmad Fauzi', 'ahmad@example.com', 'UI/UX Design', 'Sertifikasi', 'Telah menyelesaikan sertifikasi', '2026-01-17'],
         ];
 
         // Create XLSX file using ZipArchive

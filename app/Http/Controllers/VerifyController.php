@@ -308,7 +308,7 @@ class VerifyController extends Controller
         // Send email notification to admin
         try {
             \Illuminate\Support\Facades\Mail::raw(
-                "📢 Laporan Pemalsuan Sertifikat Baru\n\n" .
+                "Laporan Pemalsuan Sertifikat Baru\n\n" .
                 "ID Laporan: #{$report->id}\n" .
                 "Hash yang Dilaporkan: {$validated['reported_hash']}\n" .
                 "Nama Pelapor: {$validated['reporter_name']}\n" .

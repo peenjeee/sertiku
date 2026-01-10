@@ -218,13 +218,6 @@
             transform: scale(1.03);
         }
 
-        .hover-glow {
-            transition: box-shadow 0.3s ease;
-        }
-
-        .hover-glow:hover {
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-        }
 
         /* Smooth Transitions */
         .transition-smooth {
@@ -234,7 +227,6 @@
         /* Glass Card Effect */
         .glass-card {
             background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -243,45 +235,35 @@
             color: #3B82F6;
         }
 
-        /* Hide scrollbar for Chrome, Safari and Opera */
-        ::-webkit-scrollbar {
+        /* Scrollbar Hide */
+        .scrollbar-hide::-webkit-scrollbar {
             display: none;
         }
 
-        /* Hide scrollbar for IE, Edge and Firefox */
-        html {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #0f172a;
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
 
-<body class="bg-[#050C1F] text-[#DBEAFE] antialiased font-['Poppins',sans-serif] overflow-x-hidden">
+<body class="antialiased font-sans bg-[#0F172A] text-white overflow-x-hidden selection:bg-blue-500/30 selection:text-blue-200">
+    <div class="relative min-h-screen flex flex-col">
+        <!-- Background Elements (Clean Solid) -->
+        <div class="fixed inset-0 z-0 bg-[#0F172A]"></div>
 
-    {{-- Background glow sesuai Figma --}}
-    <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        {{-- kiri atas biru --}}
-        <div class="absolute -left-40 top-0 h-80 w-80 rounded-full bg-[#2B7FFF]/15 blur-[120px]"></div>
-        {{-- kanan tengah biru --}}
-        <div class="absolute -right-32 top-1/3 h-80 w-80 rounded-full bg-[#00B8DB]/12 blur-[120px]"></div>
-        {{-- kanan bawah ungu --}}
-        <div class="absolute right-0 bottom-0 h-80 w-80 rounded-full bg-[#8B5CF6]/10 blur-[120px]"></div>
+        <!-- Content -->
+        <div class="relative z-10 flex-1 flex flex-col">
+            <x-navbar />
+
+            <main class="flex-grow pt-20 lg:pt-24">
+                {{ $slot }}
+            </main>
+
+            <x-footer />
+        </div>
     </div>
 
-    <x-navbar />
-
-    <main class="pt-[80px]">
-        {{ $slot }}
-    </main>
-
-    <x-footer />
-
-    {{-- SweetAlert untuk session messages --}}
     {{-- SweetAlert untuk session messages --}}
     <x-sweetalert-session />
 
@@ -389,23 +371,6 @@
         .shimmer {
             background: rgba(255, 255, 255, 0.05);
 
-        }
-
-        /* Glow Pulse */
-        @keyframes glow-pulse {
-
-            0%,
-            100% {
-                box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
-            }
-
-            50% {
-                box-shadow: 0 0 25px rgba(59, 130, 246, 0.3);
-            }
-        }
-
-        .animate-glow-pulse {
-            animation: glow-pulse 2s ease-in-out infinite;
         }
 
 

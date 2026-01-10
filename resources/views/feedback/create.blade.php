@@ -6,13 +6,14 @@
     <div class="max-w-4xl mx-auto">
         <div class="mb-8">
             <h1 class="text-2xl font-bold text-white mb-2">
-                {{ isset($existingFeedback) ? 'Feedback Anda' : 'Beri Masukan' }}</h1>
+                {{ isset($existingFeedback) ? 'Feedback Anda' : 'Beri Masukan' }}
+            </h1>
             <p class="text-white/60">
                 {{ isset($existingFeedback) ? 'Berikut adalah masukan yang telah Anda kirimkan.' : 'Pendapat Anda sangat berharga untuk kemajuan SertiKu.' }}
             </p>
         </div>
 
-        <div class="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 backdrop-blur-xl">
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8">
             @if(isset($existingFeedback))
                 <div
                     class="mb-6 bg-blue-500/10 border border-blue-500/20 text-blue-200 px-4 py-3 rounded-xl flex items-center gap-3">

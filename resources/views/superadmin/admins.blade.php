@@ -43,7 +43,7 @@
                     </div>
                     <div class="flex items-center gap-2">
                         @if($admin->is_superadmin)
-                            <span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-sm font-medium">👑 Super
+                            <span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-sm font-medium">Super
                                 Admin</span>
                         @else
                             <span class="px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 text-sm">Admin</span>

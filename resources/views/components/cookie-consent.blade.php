@@ -4,7 +4,7 @@
     x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 translate-y-0"
     x-transition:leave-end="opacity-0 translate-y-full" x-cloak class="fixed bottom-0 left-0 right-0 z-50 p-4">
     <div class="max-w-4xl mx-auto">
-        <div class="rounded-2xl p-5 shadow-2xl border border-blue-500/20 bg-[#0A1628]/95 backdrop-blur-xl">
+        <div class="rounded-2xl p-5 shadow-2xl border border-blue-500/20 bg-[#0A1628]/95">
             <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
 
                 {{-- Cookie Icon & Text --}}

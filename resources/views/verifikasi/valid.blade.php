@@ -224,7 +224,7 @@
                                         <p>
                                             <span class="font-semibold text-[#8EC5FF]">Tanggal Diterbitkan:</span>
                                             <span class="ml-1">
-                                                {{ $certificate['tanggal'] ?? '06 Juli 2025' }}
+                                                {{ $certificate['tanggal'] ?? '06 Juli 2026' }}
                                             </span>
                                         </p>
                                     </div>

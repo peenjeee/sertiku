@@ -43,7 +43,11 @@ class LembagaController extends Controller
         $user = Auth::user();
         $templates = $user->templates()->where('is_active', true)->latest()->get();
 
-        return view('lembaga.sertifikat.create', compact('templates'));
+        $blockchainService = app(\App\Services\BlockchainService::class);
+        $isLowBalance = $blockchainService->isLowBalance(0.01);
+        $blockchainDisabled = $isLowBalance || !$user->canUseBlockchain();
+
+        return view('lembaga.sertifikat.create', compact('templates', 'isLowBalance', 'blockchainDisabled'));
     }
 
     /**
@@ -1076,5 +1080,69 @@ class LembagaController extends Controller
         ];
 
         return back()->with('success', 'Dokumen ' . $documentNames[$documentType] . ' berhasil dihapus!');
+    }
+
+    /**
+     * Delete account (for lembaga users).
+     */
+    public function deleteAccount(Request $request)
+    {
+        $request->validate([
+            'confirm_delete' => 'required|in:HAPUS',
+        ]);
+
+        $user = Auth::user();
+
+        // Log the account deletion before deleting
+        ActivityLog::log(
+            'account_deleted',
+            'Akun lembaga "' . ($user->institution_name ?? $user->name) . '" telah dihapus oleh pemilik akun',
+            null,
+            ['user_id' => $user->id]
+        );
+
+        // Delete all related data
+        // 1. Delete certificates and their files
+        foreach ($user->certificates as $certificate) {
+            if ($certificate->pdf_path) {
+                Storage::disk('public')->delete($certificate->pdf_path);
+            }
+            if ($certificate->qr_path) {
+                Storage::disk('public')->delete($certificate->qr_path);
+            }
+            $certificate->delete();
+        }
+
+        // 2. Delete templates and their files
+        foreach ($user->templates as $template) {
+            if ($template->image_path) {
+                Storage::disk('public')->delete($template->image_path);
+            }
+            $template->delete();
+        }
+
+        // 3. Delete document files
+        if ($user->doc_npwp_path) {
+            Storage::disk('public')->delete($user->doc_npwp_path);
+        }
+        if ($user->doc_akta_path) {
+            Storage::disk('public')->delete($user->doc_akta_path);
+        }
+        if ($user->doc_siup_path) {
+            Storage::disk('public')->delete($user->doc_siup_path);
+        }
+
+        // 4. Delete avatar if exists
+        if ($user->avatar && str_starts_with($user->avatar, '/storage/')) {
+            Storage::disk('public')->delete(str_replace('/storage/', '', $user->avatar));
+        }
+
+        Auth::logout();
+        $user->delete();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/')->with('success', 'Akun lembaga Anda telah dihapus.');
     }
 }

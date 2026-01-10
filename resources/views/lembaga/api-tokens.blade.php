@@ -193,7 +193,7 @@
                             <div>
                                 <label class="text-[#8EC5FF] text-sm mb-1 block">Nama Kursus/Program <span
                                         class="text-red-400">*</span></label>
-                                <input type="text" id="testCourseName" placeholder="Web Development Bootcamp 2024"
+                                <input type="text" id="testCourseName" placeholder="Web Development Bootcamp 2026"
                                     class="w-full bg-[#050C1F] border border-[#1E3A5F] rounded-lg px-3 py-2 text-white placeholder-[#8EC5FF]/50 focus:border-[#3B82F6] focus:outline-none text-sm">
                             </div>
 

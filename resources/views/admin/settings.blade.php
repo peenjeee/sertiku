@@ -37,11 +37,12 @@
                     <input type="email" name="admin_email" value="{{ $settings['admin_email'] }}" readonly
                         class="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm bg-gray-50 text-gray-500">
                 </div>
-                <button disabled type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition">
+                <button disabled type="submit"
+                    class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition">
                     Simpan Pengaturan
                 </button>
             </form>
-        </div>  
+        </div>
 
         <!-- System Info -->
         <div class="glass-card rounded-2xl p-6 animate-fade-in-up stagger-2">
@@ -102,10 +103,46 @@
                         Clear Cache
                     </button>
                 </form>
-                <!-- <button onclick="alert('Fitur ini dalam pengembangan')" class="px-6 py-3 bg-red-100 hover:bg-red-200 text-red-700 font-medium rounded-lg transition">
-                    Reset Statistics
-                </button> -->
+                <button type="button" onclick="openDeleteModal()"
+                    class="px-6 py-3 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition">
+                    Hapus Akun Admin
+                </button>
             </div>
+        </div>
+    </div>
+
+    {{-- Delete Account Modal --}}
+    <div id="delete-modal" class="hidden fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Hapus Akun Admin?</h3>
+            <p class="text-gray-600 text-sm mb-4">
+                Tindakan ini tidak dapat dibatalkan. Akun admin Anda akan dihapus secara permanen.
+            </p>
+
+            <form action="{{ route('admin.settings.delete') }}" method="POST">
+                @csrf
+                @method('DELETE')
+
+                <div class="space-y-2 mb-4">
+                    <label class="text-sm text-gray-700">Ketik <strong class="text-red-600">HAPUS</strong> untuk
+                        konfirmasi</label>
+                    <input type="text" name="confirm_delete" required
+                        class="w-full rounded-lg bg-gray-50 border border-gray-300 px-4 py-3 text-gray-800 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500"
+                        placeholder="HAPUS">
+                    @error('confirm_delete')<p class="text-xs text-red-500 mt-1">{{ $message }}</p>@enderror
+                </div>
+
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeDeleteModal()"
+                        class="flex-1 px-4 py-2.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition">
+                        Batal
+                    </button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2.5 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition">
+                        Hapus Akun
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -115,4 +152,13 @@
             {{ session('success') }}
         </div>
     @endif
+
+    <script>
+        function openDeleteModal() {
+            document.getElementById('delete-modal').classList.remove('hidden');
+        }
+        function closeDeleteModal() {
+            document.getElementById('delete-modal').classList.add('hidden');
+        }
+    </script>
 </x-layouts.admin>

@@ -1,15 +1,8 @@
 <x-layouts.app title="SertiKu – Reset Password Akun Anda dengan Aman"
     description="Reset password akun SertiKu Anda dengan mudah dan aman. Masukkan email untuk mendapatkan link pemulihan.">
-    <main
-        class="min-h-screen bg-[#0F172A] px-4 py-10 flex items-center justify-center">
+    <main class="min-h-screen bg-[#0F172A] px-4 py-10 flex items-center justify-center">
         <div class="relative w-full max-w-md">
-            {{-- Glow effects --}}
-            <div
-                class="pointer-events-none absolute -left-32 top-0 h-64 w-64 rounded-full bg-[#2B7FFF]/20 blur-[100px] opacity-40">
-            </div>
-            <div
-                class="pointer-events-none absolute -right-32 bottom-0 h-64 w-64 rounded-full bg-[#8B5CF6]/15 blur-[100px] opacity-40">
-            </div>
+
 
             <div class="relative rounded-2xl bg-white/5 border border-white/10 p-6 md:p-8">
                 {{-- Header --}}

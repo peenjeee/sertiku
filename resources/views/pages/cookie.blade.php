@@ -10,12 +10,11 @@
                     </svg>
                 </div>
                 <h1 class="text-4xl font-bold text-white mb-4">Kebijakan Cookie</h1>
-                <p class="text-[#BEDBFF]">Terakhir diperbarui: 29 Desember 2025</p>
+                <p class="text-[#BEDBFF]">Terakhir diperbarui: 10 Januari 2026</p>
             </div>
 
             {{-- Content Card --}}
-            <div
-                class="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 p-8 md:p-12 text-[#DBEAFE] space-y-8">
+            <div class="bg-white/10 rounded-2xl border border-white/20 p-8 md:p-12 text-[#DBEAFE] space-y-8">
 
                 <section>
                     <h2 class="text-xl font-semibold text-white mb-4">Apa itu Cookie?</h2>

@@ -53,7 +53,7 @@
                             </div>
 
                             <p style="margin: 0 0 20px; color: #94A3B8; font-size: 14px; line-height: 1.6;">
-                                ⏱️ Kode ini berlaku selama <strong style="color: #FBBF24;">10 menit</strong>.
+                                Kode ini berlaku selama <strong style="color: #FBBF24;">10 menit</strong>.
                             </p>
 
                             <div

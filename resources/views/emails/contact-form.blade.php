@@ -10,7 +10,7 @@
 <body
     style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
     <div style="background: #3B82F6; padding: 30px; border-radius: 12px 12px 0 0; text-align: center;">
-        <h1 style="color: #ffffff; margin: 0; font-size: 24px;">📬 Pesan Baru dari SertiKu</h1>
+        <h1 style="color: #ffffff; margin: 0; font-size: 24px;">Pesan Baru dari SertiKu</h1>
         <p style="color: rgba(255,255,255,0.8); margin: 10px 0 0 0; font-size: 14px;">Ada pengunjung yang menghubungi
             melalui halaman Kontak</p>
     </div>
@@ -53,7 +53,7 @@
         <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #e5e7eb; text-align: center;">
             <a href="mailto:{{ $data['email'] }}?subject=Re: {{ $data['subject'] }}"
                 style="display: inline-block; background: #3B82F6; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500;">
-                ↩️ Balas Email Ini
+                Balas Email Ini
             </a>
         </div>
 

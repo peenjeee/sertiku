@@ -200,7 +200,7 @@
                                 Nama Kursus/Program<span class="text-red-500">*</span>
                             </label>
                             <input type="text" name="course_name" value="{{ old('course_name') }}" required
-                                placeholder="Contoh: Web Development Bootcamp 2024"
+                                placeholder="Contoh: Web Development Bootcamp 2026"
                                 class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
 
@@ -293,7 +293,8 @@
 
                 <!-- Blockchain Option -->
                 @if(config('blockchain.enabled'))
-                    <div class="glass-card rounded-2xl p-6 {{ !$canUseBlockchain ? 'opacity-60' : '' }}">
+                    <div
+                        class="glass-card rounded-2xl p-6 {{ (isset($blockchainDisabled) && $blockchainDisabled) ? 'opacity-60' : '' }}">
                         <div class="flex items-center pb-3 border-b border-gray-200 mb-4">
                             <svg class="w-5 h-5 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -312,7 +313,20 @@
                             @endif
                         </div>
 
-                        @if(!$canUseBlockchain)
+                        @if(isset($isLowBalance) && $isLowBalance)
+                            <div class="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                    <p class="text-red-700 text-sm font-medium">
+                                        Saldo Blockchain System tidak cukup. <a href="{{ url('/contact-admin') }}"
+                                            class="underline hover:text-red-900">Hubungi Admin</a>
+                                    </p>
+                                </div>
+                            </div>
+                        @elseif(!$canUseBlockchain)
                             <div class="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
                                 <div class="flex items-center gap-2">
                                     <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -334,10 +348,10 @@
 
                         <div class="flex items-start gap-4">
                             <label
-                                class="relative inline-flex items-center {{ $canUseBlockchain ? 'cursor-pointer' : 'cursor-not-allowed' }}">
-                                <input type="checkbox" name="blockchain_enabled" value="1" class="sr-only peer" {{ old('blockchain_enabled') ? 'checked' : '' }} {{ !$canUseBlockchain ? 'disabled' : '' }}>
+                                class="relative inline-flex items-center {{ (isset($blockchainDisabled) && $blockchainDisabled) ? 'cursor-not-allowed' : 'cursor-pointer' }}">
+                                <input type="checkbox" name="blockchain_enabled" value="1" class="sr-only peer" {{ old('blockchain_enabled') ? 'checked' : '' }} {{ (isset($blockchainDisabled) && $blockchainDisabled) ? 'disabled' : '' }}>
                                 <div
-                                    class="w-11 h-6 {{ $canUseBlockchain ? 'bg-gray-300 peer-checked:bg-purple-600' : 'bg-gray-200' }} peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all">
+                                    class="w-11 h-6 {{ (isset($blockchainDisabled) && $blockchainDisabled) ? 'bg-gray-200' : 'bg-gray-300 peer-checked:bg-purple-600' }} peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all">
                                 </div>
                             </label>
                             <div class="flex-1">
