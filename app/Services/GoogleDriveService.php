@@ -136,6 +136,9 @@ class GoogleDriveService
     /**
      * Upload file to Google Drive
      */
+    /**
+     * Upload file to Google Drive (Resumable Upload)
+     */
     public function uploadFile(string $filePath, string $fileName, string $mimeType = 'application/octet-stream'): ?array
     {
         if (!$this->isConfigured()) {
@@ -144,37 +147,53 @@ class GoogleDriveService
 
         $accessToken = $this->getAccessToken();
         $folderId = $this->getBackupFolderId();
-        $fileContent = file_get_contents($filePath);
+        $fileSize = filesize($filePath);
 
-        // Create file metadata
-        $metadata = [
-            'name' => $fileName,
-            'parents' => [$folderId],
-        ];
-
-        // Multipart upload
-        $boundary = 'backup_boundary_' . time();
-
-        $body = "--{$boundary}\r\n";
-        $body .= "Content-Type: application/json; charset=UTF-8\r\n\r\n";
-        $body .= json_encode($metadata) . "\r\n";
-        $body .= "--{$boundary}\r\n";
-        $body .= "Content-Type: {$mimeType}\r\n\r\n";
-        $body .= $fileContent . "\r\n";
-        $body .= "--{$boundary}--";
-
+        // 1. Initiate Resumable Upload Session
         $response = Http::withToken($accessToken)
             ->withHeaders([
-                'Content-Type' => "multipart/related; boundary={$boundary}",
+                'X-Upload-Content-Type' => $mimeType,
+                'Content-Type' => 'application/json',
             ])
-            ->withBody($body, "multipart/related; boundary={$boundary}")
-            ->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart');
+            ->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable', [
+                'name' => $fileName,
+                'parents' => [$folderId],
+            ]);
 
         if ($response->failed()) {
-            throw new \Exception('Failed to upload to Google Drive: ' . $response->body());
+            throw new \Exception('Failed to initiate Google Drive upload session: ' . $response->body());
         }
 
-        return $response->json();
+        // Get the upload URL from the Location header
+        $uploadUrl = $response->header('Location');
+
+        if (empty($uploadUrl)) {
+            throw new \Exception('Google Drive upload session URL not found in headers.');
+        }
+
+        // 2. Upload the file content using stream
+        $fileStream = fopen($filePath, 'r');
+
+        try {
+            $uploadResponse = Http::withHeaders([
+                'Content-Length' => $fileSize,
+                'Content-Type' => $mimeType,
+            ])->withBody(
+                    new \GuzzleHttp\Psr7\Stream($fileStream),
+                    $mimeType
+                )->put($uploadUrl);
+
+        } finally {
+            if (is_resource($fileStream)) {
+                fclose($fileStream);
+            }
+        }
+
+        if ($uploadResponse->failed()) {
+            throw new \Exception('Failed to upload file content to Google Drive: ' . $uploadResponse->body());
+        }
+
+        return $uploadResponse->json();
     }
 
     /**
@@ -215,16 +234,19 @@ class GoogleDriveService
 
         $accessToken = $this->getAccessToken();
 
+        // Save to temp file
+        $tempPath = storage_path('app/temp_drive_download_' . time());
+
         $response = Http::withToken($accessToken)
+            ->sink($tempPath)
             ->get("https://www.googleapis.com/drive/v3/files/{$fileId}?alt=media");
 
         if ($response->failed()) {
+            if (file_exists($tempPath)) {
+                @unlink($tempPath);
+            }
             throw new \Exception('Failed to download from Google Drive: ' . $response->body());
         }
-
-        // Save to temp file
-        $tempPath = storage_path('app/temp_drive_download_' . time());
-        file_put_contents($tempPath, $response->body());
 
         return $tempPath;
     }
