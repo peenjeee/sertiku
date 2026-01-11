@@ -420,14 +420,15 @@
             <!-- Logo Section -->
             <div class="p-4 border-b border-white/10">
                 <div class="flex items-center justify-between logo-section">
-                    <a href="{{ route('home') }}" class="flex items-center gap-3 hover:opacity-80 transition group">
-                        <!-- SertiKu Logo - hidden on mobile -->
+                    <a href="{{ route('home') }}"
+                        class="flex items-center gap-3 hover:opacity-80 transition group flex-1 min-w-0">
+                        <!-- SertiKu Logo -->
                         <img src="{{ asset('favicon.ico') }}" alt="SertiKu"
-                            class="w-10 h-10 flex-shrink-0 group-hover:scale-105 transition hidden lg:block"
+                            class="w-10 h-10 flex-shrink-0 group-hover:scale-105 transition"
                             style="filter: brightness(0) invert(1);">
-                        <div class="logo-text">
-                            <h1 class="text-white font-bold text-xl tracking-tight drop-shadow-lg">SertiKu</h1>
-                            <p class="text-[#BEDBFF] text-xs">Dashboard Lembaga</p>
+                        <div class="logo-text min-w-0">
+                            <h1 class="text-white font-bold text-xl tracking-tight drop-shadow-lg truncate">SertiKu</h1>
+                            <p class="text-[#BEDBFF] text-xs truncate">Dashboard Lembaga</p>
                         </div>
                     </a>
                     <!-- Desktop collapse button -->
@@ -784,11 +785,16 @@
             const mainContent = document.getElementById('mainContent');
             const overlay = document.getElementById('sidebarOverlay');
             const toggleBtn = document.getElementById('toggleBtn');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 
             if (isMobile) {
                 // Mobile: slide in/out
                 sidebar.classList.toggle('open');
                 overlay.classList.toggle('active');
+                // Hide/show hamburger menu
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.classList.toggle('hidden');
+                }
             } else {
                 // Desktop: collapse/expand
                 isCollapsed = !isCollapsed;
