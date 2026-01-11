@@ -58,7 +58,7 @@
             <div class="desktop-only-menu hidden lg:flex items-center gap-3">
                 {{-- Tombol Verifikasi --}}
                 <a href="{{ route('verifikasi') }}"
-                    class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#0F172A] hover:bg-[#E5E7EB] transition">
+                    class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#0F172A] hover:bg-gray-100     rounded-lg transition">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M1.99951 4.66553V3.33252C1.99951 2.97898 2.13995 2.63993 2.38994 2.38994C2.63993 2.13995 2.97898 1.99951 3.33252 1.99951H4.66553"

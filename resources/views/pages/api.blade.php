@@ -73,7 +73,7 @@
                         <div class="flex flex-wrap items-center gap-2 md:gap-4">
                             <span
                                 class="px-2 md:px-3 py-1 bg-[#10B981]/20 text-[#10B981] text-xs md:text-sm font-mono rounded">GET</span>
-                            <code class="text-white font-mono text-sm md:text-base">/verify/{hash}</code>
+                            <code class="text-white font-mono text-sm md:text-base">/verify/{hash|code}</code>
                             <span class="text-[#8EC5FF]/60 text-xs md:text-sm hidden sm:inline">Verifikasi
                                 Sertifikat</span>
                         </div>
@@ -268,6 +268,52 @@ const data = await response.json();</pre>
                     </div>
                 </div>
 
+                {{-- GET Detail Certificate Endpoint --}}
+                <div class="bg-[#0A1929]/80 border border-[#1E3A5F] rounded-xl overflow-hidden scroll-animate"
+                    x-data="{ open: false }">
+                    <button @click="open = !open" class="w-full flex items-center justify-between p-4 md:p-6 text-left">
+                        <div class="flex flex-wrap items-center gap-2 md:gap-4">
+                            <span
+                                class="px-2 md:px-3 py-1 bg-[#10B981]/20 text-[#10B981] text-xs md:text-sm font-mono rounded">GET</span>
+                            <code class="text-white font-mono text-sm md:text-base">/certificates/{id|hash|code}</code>
+                            <span class="text-[#8EC5FF]/60 text-xs md:text-sm hidden sm:inline">Detail Sertifikat</span>
+                            <span class="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] text-xs rounded">Auth</span>
+                        </div>
+                        <svg class="w-5 h-5 text-[#8EC5FF] transition-transform flex-shrink-0"
+                            :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div x-show="open" x-collapse class="border-t border-[#1E3A5F] p-6 space-y-4">
+                        <p class="text-[#BEDBFF]">Dapatkan detail sertifikat spesifik menggunakan ID, Hash, atau Nomor
+                            Sertifikat.</p>
+
+                        {{-- Response Example --}}
+                        <div>
+                            <h4 class="text-white font-medium mb-2">Response Example</h4>
+                            <pre class="bg-[#050C1F] rounded-lg p-4 text-xs text-[#10B981] overflow-x-auto">{
+  "success": true,
+  "data": {
+    "id": 123,
+    "certificate_number": "SERT-202612-ABCDEF",
+    "recipient_name": "John Doe",
+    "course_name": "Web Development Bootcamp",
+    "status": "active",
+    "hash": "b2f6h8...",
+    "created_at": "2026-12-27T10:00:00.000000Z"
+  }
+}</pre>
+                        </div>
+
+                        {{-- Code Example --}}
+                        <div class="bg-[#050C1F] rounded-lg p-4 font-mono text-sm overflow-x-auto">
+                            <pre class="text-[#10B981]">curl -X GET "{{ url('/api/v1/certificates') }}/SERT-202612-ABCDEF" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Accept: application/json"</pre>
+                        </div>
+                    </div>
+                </div>
+
                 {{-- POST Certificates Endpoint --}}
                 <div class="bg-[#0A1929]/80 border border-[#1E3A5F] rounded-xl overflow-hidden scroll-animate"
                     x-data="{ open: false }">
@@ -441,7 +487,7 @@ const data = await response.json();</pre>
                             <span
                                 class="px-2 md:px-3 py-1 bg-[#EF4444]/20 text-[#EF4444] text-xs md:text-sm font-mono rounded">PUT</span>
                             <code
-                                class="text-white font-mono text-xs md:text-base break-all">/certificates/{id}/revoke</code>
+                                class="text-white font-mono text-xs md:text-base break-all">/certificates/{id|hash|code}/revoke</code>
                             <span class="text-[#8EC5FF]/60 text-xs md:text-sm hidden sm:inline">Cabut Sertifikat</span>
                             <span class="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] text-xs rounded">Auth</span>
                         </div>
@@ -451,8 +497,8 @@ const data = await response.json();</pre>
                         </svg>
                     </button>
                     <div x-show="open" x-collapse class="border-t border-[#1E3A5F] p-6 space-y-4">
-                        <p class="text-[#BEDBFF]">Cabut sertifikat yang sudah diterbitkan. Sertifikat yang dicabut tidak
-                            dapat digunakan lagi namun bisa diaktifkan kembali.</p>
+                        <p class="text-[#BEDBFF]">Cabut sertifikat yang sudah diterbitkan. Parameter bisa berupa ID,
+                            Hash, atau Nomor Sertifikat.</p>
 
                         {{-- Request Body --}}
                         <div>
@@ -509,7 +555,7 @@ const data = await response.json();</pre>
                             <span
                                 class="px-2 md:px-3 py-1 bg-[#10B981]/20 text-[#10B981] text-xs md:text-sm font-mono rounded">PUT</span>
                             <code
-                                class="text-white font-mono text-xs md:text-base break-all">/certificates/{id}/reactivate</code>
+                                class="text-white font-mono text-xs md:text-base break-all">/certificates/{id|hash|code}/reactivate</code>
                             <span class="text-[#8EC5FF]/60 text-xs md:text-sm hidden sm:inline">Aktifkan Kembali</span>
                             <span class="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] text-xs rounded">Auth</span>
                         </div>
@@ -519,7 +565,8 @@ const data = await response.json();</pre>
                         </svg>
                     </button>
                     <div x-show="open" x-collapse class="border-t border-[#1E3A5F] p-6 space-y-4">
-                        <p class="text-[#BEDBFF]">Aktifkan kembali sertifikat yang sebelumnya dicabut (revoked).</p>
+                        <p class="text-[#BEDBFF]">Aktifkan kembali sertifikat yang sebelumnya dicabut. Parameter bisa
+                            berupa ID, Hash, atau Nomor Sertifikat.</p>
 
                         {{-- Response Example --}}
                         <div>
@@ -593,6 +640,36 @@ const data = await response.json();</pre>
                                 <td class="py-3 px-4"><span
                                         class="px-2 py-0.5 bg-[#EF4444]/20 text-[#EF4444] rounded">422</span></td>
                                 <td>Validation Error - Data tidak valid</td>
+                            </tr>
+                            <tr class="border-t border-[#1E3A5F]">
+                                <td class="py-3 px-4"><span
+                                        class="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] rounded">405</span></td>
+                                <td>Method Not Allowed - Metode HTTP salah</td>
+                            </tr>
+                            <tr class="border-t border-[#1E3A5F]">
+                                <td class="py-3 px-4"><span
+                                        class="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] rounded">413</span></td>
+                                <td>Payload Too Large - Ukuran file terlalu besar</td>
+                            </tr>
+                            <tr class="border-t border-[#1E3A5F]">
+                                <td class="py-3 px-4"><span
+                                        class="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] rounded">419</span></td>
+                                <td>Page Expired - Token CSRF kadaluwarsa (Session timeout)</td>
+                            </tr>
+                            <tr class="border-t border-[#1E3A5F]">
+                                <td class="py-3 px-4"><span
+                                        class="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] rounded">429</span></td>
+                                <td>Too Many Requests - Rate limit terlampaui</td>
+                            </tr>
+                            <tr class="border-t border-[#1E3A5F]">
+                                <td class="py-3 px-4"><span
+                                        class="px-2 py-0.5 bg-[#EF4444]/20 text-[#EF4444] rounded">500</span></td>
+                                <td>Internal Server Error - Kesalahan server</td>
+                            </tr>
+                            <tr class="border-t border-[#1E3A5F]">
+                                <td class="py-3 px-4"><span
+                                        class="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] rounded">503</span></td>
+                                <td>Service Unavailable - Sedang dalam maintenance</td>
                             </tr>
                         </tbody>
                     </table>

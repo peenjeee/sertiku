@@ -159,12 +159,13 @@
                         <label class="text-[#8EC5FF] text-sm mb-2 block">Endpoint</label>
                         <select id="testEndpoint" onchange="updateTestUI()"
                             class="w-full bg-[#050C1F] border border-[#1E3A5F] rounded-lg px-4 py-2.5 text-white focus:border-[#3B82F6] focus:outline-none text-sm">
-                            <option value="verify">GET /verify/{hash} - Verifikasi (Public)</option>
+                            <option value="verify">GET /verify/{hash|code} - Verifikasi (Public)</option>
                             <option value="stats">GET /stats - Statistik (Public)</option>
                             <option value="certificates">GET /certificates - List (Auth)</option>
+                            <option value="detail">GET /certificates/{id|hash|code} - Detail (Auth)</option>
                             <option value="create">POST /certificates - Buat Baru (Auth)</option>
-                            <option value="revoke">PUT /certificates/{id}/revoke (Auth)</option>
-                            <option value="reactivate">PUT /certificates/{id}/reactivate (Auth)</option>
+                            <option value="revoke">PUT /certificates/{id|hash|code}/revoke (Auth)</option>
+                            <option value="reactivate">PUT /certificates/{id|hash|code}/reactivate (Auth)</option>
                         </select>
                     </div>
 
@@ -343,12 +344,12 @@
                 hashContainer.classList.add('hidden');
                 createContainer.classList.add('hidden');
 
-                if (endpoint === 'verify' || endpoint === 'revoke' || endpoint === 'reactivate') {
+                if (endpoint === 'verify' || endpoint === 'revoke' || endpoint === 'reactivate' || endpoint === 'detail') {
                     hashContainer.classList.remove('hidden');
                     if (endpoint === 'verify') {
                         hashInput.placeholder = 'Masukkan hash atau nomor sertifikat...';
                     } else {
-                        hashInput.placeholder = 'Masukkan ID atau nomor sertifikat...';
+                        hashInput.placeholder = 'Masukkan ID, Hash, atau Nomor Sertifikat...';
                     }
                     testButton.textContent = 'Test API';
                 } else if (endpoint === 'create') {
@@ -376,7 +377,7 @@
                 statusEl.className = 'absolute top-2 right-2 px-2 py-0.5 rounded text-xs font-medium';
 
                 // Check if token is required for authenticated endpoints
-                const authRequiredEndpoints = ['certificates', 'create', 'revoke', 'reactivate'];
+                const authRequiredEndpoints = ['certificates', 'create', 'revoke', 'reactivate', 'detail'];
                 if (authRequiredEndpoints.includes(endpoint) && !token.trim()) {
                     resultEl.textContent = 'Error: API Token wajib diisi untuk endpoint yang memerlukan autentikasi.\n\nBuat token baru di form di atas, lalu paste token-nya di sini.';
                     statusEl.textContent = '✗ 401 Unauthorized';
@@ -401,6 +402,15 @@
                         break;
                     case 'certificates':
                         url = '{{ url('/api/v1/certificates') }}';
+                        break;
+                    case 'detail':
+                        if (!hashValue) {
+                            resultEl.textContent = 'Error: Masukkan ID, Hash, atau Nomor Sertifikat';
+                            statusEl.textContent = '✗ Error';
+                            statusEl.classList.add('bg-red-500/20', 'text-red-400');
+                            return;
+                        }
+                        url = `{{ url('/api/v1/certificates') }}/${hashValue}`;
                         break;
                     case 'create':
                         // Get form values

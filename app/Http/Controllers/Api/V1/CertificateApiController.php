@@ -17,10 +17,11 @@ class CertificateApiController extends Controller
      */
     public function verify(string $hash): JsonResponse
     {
+        // Try finding by hash (UUID)
         $certificate = Certificate::with('user')->where('hash', $hash)->first();
 
+        // If not found, try finding by certificate number
         if (!$certificate) {
-            // Try finding by certificate number
             $certificate = Certificate::with('user')->where('certificate_number', $hash)->first();
         }
 
@@ -127,7 +128,7 @@ class CertificateApiController extends Controller
      * Get single certificate
      * GET /api/v1/certificates/{id}
      */
-    public function show(Request $request, int $id): JsonResponse
+    public function show(Request $request, $id): JsonResponse
     {
         $user = $request->user();
 
@@ -138,7 +139,16 @@ class CertificateApiController extends Controller
             ], 401);
         }
 
+        // Try to find by ID or certificate_number or hash
         $certificate = $user->certificates()->find($id);
+
+        if (!$certificate) {
+            $certificate = $user->certificates()->where('hash', $id)->first();
+        }
+
+        if (!$certificate) {
+            $certificate = $user->certificates()->where('certificate_number', $id)->first();
+        }
 
         if (!$certificate) {
             return response()->json([
@@ -295,7 +305,7 @@ class CertificateApiController extends Controller
                 'blockchain_status' => $certificate->blockchain_status,
                 'verification_url' => $certificate->verification_url,
                 'pdf_url' => $certificate->pdf_url,
-                'created_at' => $certificate->created_at->toISOString(),
+                'created_at' => $certificate->created_at->setTimezone('Asia/Jakarta')->toIso8601String(),
             ]
         ], 201);
     }
@@ -315,8 +325,12 @@ class CertificateApiController extends Controller
             ], 401);
         }
 
-        // Try to find by ID or certificate_number
+        // Try to find by ID or certificate_number or hash
         $certificate = $user->certificates()->find($id);
+
+        if (!$certificate) {
+            $certificate = $user->certificates()->where('hash', $id)->first();
+        }
 
         if (!$certificate) {
             $certificate = $user->certificates()->where('certificate_number', $id)->first();
@@ -349,8 +363,8 @@ class CertificateApiController extends Controller
                 'id' => $certificate->id,
                 'certificate_number' => $certificate->certificate_number,
                 'status' => $certificate->fresh()->status,
-                'revoked_at' => $certificate->revoked_at?->toISOString(),
-                'revoke_reason' => $certificate->revoke_reason,
+                'revoked_at' => $certificate->revoked_at?->setTimezone('Asia/Jakarta')->toIso8601String(),
+                'revoke_reason' => $certificate->revoked_reason,
             ]
         ]);
     }
@@ -370,8 +384,12 @@ class CertificateApiController extends Controller
             ], 401);
         }
 
-        // Try to find by ID or certificate_number
+        // Try to find by ID or certificate_number or hash
         $certificate = $user->certificates()->find($id);
+
+        if (!$certificate) {
+            $certificate = $user->certificates()->where('hash', $id)->first();
+        }
 
         if (!$certificate) {
             $certificate = $user->certificates()->where('certificate_number', $id)->first();
@@ -395,7 +413,7 @@ class CertificateApiController extends Controller
         $certificate->update([
             'status' => 'active',
             'revoked_at' => null,
-            'revoke_reason' => null,
+            'revoked_reason' => null,
         ]);
 
         return response()->json([
@@ -406,7 +424,7 @@ class CertificateApiController extends Controller
                 'certificate_number' => $certificate->certificate_number,
                 'recipient_name' => $certificate->recipient_name,
                 'status' => $certificate->fresh()->status,
-                'reactivated_at' => now()->toISOString(),
+                'reactivated_at' => now()->setTimezone('Asia/Jakarta')->toIso8601String(),
             ]
         ]);
     }
