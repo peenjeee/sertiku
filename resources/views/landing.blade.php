@@ -630,10 +630,25 @@
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg> Dashboard dasar</li>
                 </ul>
-                <a href="{{ route('register') }}"
-                    class="mt-6 inline-block text-center rounded-[12px] border border-[rgba(255,255,255,0.2)] px-4 py-2 text-sm font-semibold text-[#F9FAFB] hover:bg-[rgba(15,23,42,1)] transition">
-                    Mulai Gratis
-                </a>
+                @auth
+                    @if(Auth::user()->isStarterPlan())
+                        <button disabled
+                            class="mt-6 inline-block w-full rounded-[12px] bg-white/10 px-4 py-2 text-sm font-semibold text-white/50 cursor-not-allowed">
+                            Dipilih
+                        </button>
+                    @else
+                        {{-- Already on paid plan --}}
+                        <button disabled
+                            class="mt-6 inline-block w-full rounded-[12px] bg-white/5 px-4 py-2 text-sm font-semibold text-white/30 cursor-not-allowed">
+                            Gratis
+                        </button>
+                    @endif
+                @else
+                    <a href="{{ route('register') }}"
+                        class="mt-6 inline-block text-center rounded-[12px] border border-[rgba(255,255,255,0.2)] px-4 py-2 text-sm font-semibold text-[#F9FAFB] hover:bg-[rgba(15,23,42,1)] transition">
+                        Mulai Gratis
+                    </a>
+                @endauth
             </div>
 
             {{-- Professional (highlight) --}}
@@ -721,10 +736,29 @@
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg> Priority support</li>
                 </ul>
-                <a href="{{ route('checkout', 'professional') }}"
-                    class="mt-6 inline-block text-center rounded-[12px] bg-[#3B82F6] px-4 py-2 text-sm font-semibold text-white hover:bg-[#2563EB] transition">
-                    Mulai Sekarang
-                </a>
+                @auth
+                    @if(Auth::user()->isStarterPlan())
+                        <a href="{{ route('checkout', 'professional') }}"
+                            class="mt-6 inline-block w-full text-center rounded-[12px] bg-[#3B82F6] px-4 py-2 text-sm font-semibold text-white hover:bg-[#2563EB] transition">
+                            Upgrade
+                        </a>
+                    @elseif(Auth::user()->isProfessionalPlan())
+                        <button disabled
+                            class="mt-6 inline-block w-full rounded-[12px] bg-white/10 px-4 py-2 text-sm font-semibold text-white/50 cursor-not-allowed">
+                            Dipilih
+                        </button>
+                    @elseif(Auth::user()->isEnterprisePlan())
+                        <button disabled
+                            class="mt-6 inline-block w-full rounded-[12px] bg-white/5 px-4 py-2 text-sm font-semibold text-white/30 cursor-not-allowed">
+                            Professional
+                        </button>
+                    @endif
+                @else
+                    <a href="{{ route('checkout', 'professional') }}"
+                        class="mt-6 inline-block text-center rounded-[12px] bg-[#3B82F6] px-4 py-2 text-sm font-semibold text-white hover:bg-[#2563EB] transition">
+                        Mulai Sekarang
+                    </a>
+                @endauth
             </div>
 
             {{-- Enterprise --}}
@@ -808,10 +842,25 @@
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg> SLA guarantee</li>
                 </ul>
-                <a href="{{ route('checkout', 'enterprise') }}"
-                    class="mt-6 inline-block text-center rounded-[12px] bg-[#3B82F6] px-4 py-2 text-sm font-semibold text-white hover:bg-[#2563EB] transition">
-                    Mulai Sekarang
-                </a>
+                @auth
+                    @if(Auth::user()->isEnterprisePlan())
+                        <button disabled
+                            class="mt-6 inline-block w-full rounded-[12px] bg-white/10 px-4 py-2 text-sm font-semibold text-white/50 cursor-not-allowed">
+                            Dipilih
+                        </button>
+                    @else
+                        {{-- Starter or Professional can upgrade to Enterprise --}}
+                        <a href="{{ route('checkout', 'enterprise') }}"
+                            class="mt-6 inline-block w-full text-center rounded-[12px] bg-[#3B82F6] px-4 py-2 text-sm font-semibold text-white hover:bg-[#2563EB] transition">
+                            Upgrade
+                        </a>
+                    @endif
+                @else
+                    <a href="{{ route('checkout', 'enterprise') }}"
+                        class="mt-6 inline-block text-center rounded-[12px] bg-[#3B82F6] px-4 py-2 text-sm font-semibold text-white hover:bg-[#2563EB] transition">
+                        Mulai Sekarang
+                    </a>
+                @endauth
             </div>
         </div>
     </section>
@@ -927,12 +976,26 @@
     <script>
         document.getElementById('ctaEmailForm').addEventListener('submit', async function (e) {
             e.preventDefault();
+            e.stopImmediatePropagation();
 
-            const email = document.getElementById('ctaEmail').value;
+            const emailInput = document.getElementById('ctaEmail');
+            const email = emailInput.value.trim();
             const btn = document.getElementById('ctaSubmitBtn');
             const arrowIcon = document.getElementById('ctaArrowIcon');
             const spinner = document.getElementById('ctaSpinner');
             const btnText = document.getElementById('ctaBtnText');
+
+            if (!email) {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'warning',
+                    title: 'Harap masukkan email!',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                return;
+            }
 
             // Disable button and show loading
             btn.disabled = true;
@@ -969,7 +1032,7 @@
 
                     // Redirect to register with email
                     setTimeout(() => {
-                        window.location.href = '{{ route("register") }}?email=' + encodeURIComponent(email);
+                        window.location.href = '{{ route("register") }}';
                     }, 1000);
                 } else {
                     throw new Error(data.message || 'Gagal mendaftar');
@@ -977,22 +1040,23 @@
             } catch (error) {
                 console.error('CTA Error:', error);
 
-                // Show error but still redirect (don't block user)
+                // Reset button state
+                btn.disabled = false;
+                arrowIcon.classList.remove('hidden');
+                spinner.classList.add('hidden');
+                btnText.textContent = 'Mulai';
+
+                // Show error alert
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
                         toast: true,
                         position: 'top-end',
-                        icon: 'info',
-                        title: 'Mengarahkan ke registrasi...',
+                        icon: 'error',
+                        title: error.message || 'Terjadi kesalahan, coba lagi nanti.',
                         showConfirmButton: false,
-                        timer: 1500
+                        timer: 3000
                     });
                 }
-
-                // Still redirect to register
-                setTimeout(() => {
-                    window.location.href = '{{ route("register") }}?email=' + encodeURIComponent(email);
-                }, 1000);
             }
         });
     </script>
