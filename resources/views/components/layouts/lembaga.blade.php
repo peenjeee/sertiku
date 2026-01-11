@@ -430,11 +430,19 @@
                             <p class="text-[#BEDBFF] text-xs">Dashboard Lembaga</p>
                         </div>
                     </a>
-                    <button onclick="toggleSidebar()" class="text-white/70 hover:text-white p-2 toggle-btn"
-                        id="toggleBtn">
+                    <!-- Desktop collapse button -->
+                    <button onclick="toggleSidebar()"
+                        class="hidden lg:flex text-white/70 hover:text-white p-2 toggle-btn" id="toggleBtn">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    <!-- Mobile close button -->
+                    <button onclick="toggleSidebar()" class="lg:hidden text-white/70 hover:text-white p-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>

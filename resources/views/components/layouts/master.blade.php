@@ -165,10 +165,29 @@
                 margin-left: 0;
             }
         }
+
+        /* Sidebar Overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 45;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
     </style>
 </head>
 
 <body class="antialiased text-white">
+    {{-- Sidebar Overlay --}}
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     {{-- Sidebar --}}
     <aside class="sidebar fixed left-0 top-0 h-screen flex flex-col z-50" id="sidebar">
         {{-- Logo --}}
@@ -316,6 +335,29 @@
     @stack('scripts')
     {{-- SweetAlert Session --}}
     <x-sweetalert-session />
+
+    {{-- Sidebar Toggle Script --}}
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+
+            if (sidebar) {
+                sidebar.classList.toggle('open');
+            }
+            if (overlay) {
+                overlay.classList.toggle('active');
+            }
+        }
+
+        // Close sidebar when clicking overlay
+        document.addEventListener('DOMContentLoaded', function () {
+            const overlay = document.getElementById('sidebarOverlay');
+            if (overlay) {
+                overlay.addEventListener('click', toggleSidebar);
+            }
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
