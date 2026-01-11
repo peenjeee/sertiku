@@ -215,6 +215,9 @@
                 left: -240px;
                 z-index: 50;
                 height: 100vh;
+                height: 100dvh;
+                /* Dynamic viewport height for mobile */
+                overflow: hidden;
             }
 
             .sidebar.open {

@@ -155,6 +155,9 @@
                 left: -260px;
                 z-index: 50;
                 height: 100vh;
+                height: 100dvh;
+                /* Dynamic viewport height for mobile */
+                overflow: hidden;
             }
 
             .sidebar.open {
@@ -317,7 +320,7 @@
     </aside>
 
     {{-- Mobile Menu Button --}}
-    <button onclick="document.getElementById('sidebar').classList.toggle('open')"
+    <button onclick="toggleSidebar()" id="mobileMenuBtn"
         class="fixed top-4 left-4 z-40 lg:hidden p-2 rounded-lg bg-purple-500/20 text-white">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -341,12 +344,17 @@
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 
             if (sidebar) {
                 sidebar.classList.toggle('open');
             }
             if (overlay) {
                 overlay.classList.toggle('active');
+            }
+            // Hide/show hamburger menu
+            if (mobileMenuBtn) {
+                mobileMenuBtn.classList.toggle('hidden');
             }
         }
 
