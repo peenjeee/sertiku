@@ -341,7 +341,7 @@
         <!-- Sidebar -->
         <aside id="sidebar" class="sidebar fixed left-0 top-0 h-screen flex flex-col z-40">
             <!-- Logo Section -->
-            <div class="logo-section flex items-center gap-3 px-6 py-6 border-b border-white/10">
+            <div class="logo-section flex items-center justify-between gap-3 px-6 py-6 border-b border-white/10">
                 <a href="{{ route('home') }}" class="flex items-center gap-3 hover:opacity-80 transition group">
                     <img src="{{ asset('favicon.ico') }}" alt="SertiKu"
                         class="w-10 h-10 flex-shrink-0 group-hover:scale-105 transition"
@@ -351,11 +351,20 @@
                         <p class="text-white/50 text-xs">Admin Dashboard</p>
                     </div>
                 </a>
+                <!-- Desktop collapse button -->
                 <button id="toggleBtn" onclick="toggleSidebar()"
-                    class="ml-auto w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition hidden md:flex">
+                    class="w-8 h-8 rounded-lg bg-white/10 items-center justify-center text-white hover:bg-white/20 transition hidden md:flex">
                     <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                    </svg>
+                </button>
+                <!-- Mobile close button -->
+                <button onclick="toggleSidebar()"
+                    class="md:hidden w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
@@ -446,7 +455,7 @@
             </nav>
 
             <!-- Logout Button -->
-            <div class="mt-auto p-4 border-t border-white/10">
+            <div class="mt-auto flex-shrink-0 p-4 border-t border-white/10">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit"

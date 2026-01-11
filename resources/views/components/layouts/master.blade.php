@@ -172,21 +172,28 @@
     {{-- Sidebar --}}
     <aside class="sidebar fixed left-0 top-0 h-screen flex flex-col z-50" id="sidebar">
         {{-- Logo --}}
-        {{-- Logo --}}
-        <a href="{{ route('home') }}"
-            class="flex items-center gap-3 px-5 py-5 border-b border-purple-500/20 hover:bg-white/5 transition group">
-            <div
-                class="master-badge w-10 h-10 rounded-xl flex items-center justify-center group-hover:scale-105 transition">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        <div class="flex items-center justify-between px-5 py-5 border-b border-purple-500/20">
+            <a href="{{ route('home') }}" class="flex items-center gap-3 hover:bg-white/5 transition group">
+                <div
+                    class="master-badge w-10 h-10 rounded-xl flex items-center justify-center group-hover:scale-105 transition">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-white font-bold">SertiKu</p>
+                    <p class="text-purple-400 text-xs">Master</p>
+                </div>
+            </a>
+            <!-- Close button for mobile -->
+            <button onclick="toggleSidebar()"
+                class="lg:hidden text-white/70 hover:text-white p-2 rounded-lg hover:bg-white/10 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
-            </div>
-            <div>
-                <p class="text-white font-bold">SertiKu</p>
-                <p class="text-purple-400 text-xs">Master</p>
-            </div>
-        </a>
+            </button>
+        </div>
 
         {{-- Navigation --}}
         <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
@@ -260,7 +267,7 @@
         </nav>
 
         {{-- User Profile --}}
-        <div class="mt-auto p-4 border-t border-purple-500/20">
+        <div class="mt-auto flex-shrink-0 p-4 border-t border-purple-500/20">
             <div class="flex items-center gap-3 mb-3">
                 <div
                     class="master-badge w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm overflow-hidden">

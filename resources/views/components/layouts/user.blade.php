@@ -325,7 +325,7 @@
         </nav>
 
         {{-- User Profile Section --}}
-        <div class="user-profile-section mt-auto p-4">
+        <div class="user-profile-section mt-auto flex-shrink-0 p-4">
             <div class="flex items-center gap-3 mb-3">
                 <div
                     class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0 overflow-hidden">

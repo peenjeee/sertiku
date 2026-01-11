@@ -72,7 +72,7 @@
                     <div class="flex items-start gap-3 {{ $isUserMessage ? 'flex-row-reverse' : '' }}">
                         {{-- Avatar --}}
                         <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0
-                                        {{ $avatarBg }} overflow-hidden">
+                                                {{ $avatarBg }} overflow-hidden">
                             @if($senderAvatar && (str_starts_with($senderAvatar, '/storage/') || str_starts_with($senderAvatar, 'http')))
                                 <img src="{{ $senderAvatar }}" alt="Avatar" class="w-full h-full object-cover">
                             @else
@@ -109,9 +109,9 @@
                 <form action="{{ route('contact.admin.send', $ticket) }}" method="POST" class="flex gap-3">
                     @csrf
                     <input type="text" name="message" placeholder="Ketik pesan..." required
-                        class="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-green-500 transition">
+                        class="flex-1 min-w-0 px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-green-500 transition">
                     <button type="submit"
-                        class="px-6 py-3 rounded-xl bg-[#10B981] text-white font-medium hover:bg-[#059669] transition flex items-center gap-2 flex-shrink-0">
+                        class="px-4 sm:px-6 py-3 rounded-xl bg-[#10B981] text-white font-medium hover:bg-[#059669] transition flex items-center gap-2 flex-shrink-0 min-w-[48px]">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

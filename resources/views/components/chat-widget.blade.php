@@ -101,10 +101,10 @@
         </div>
 
         {{-- Input Area --}}
-        <div class="p-3 border-t border-white/10">
-            <div class="flex gap-2">
+        <div class="p-3 border-t border-white/10 flex-shrink-0">
+            <div class="flex gap-2 items-center">
                 <input type="text" id="chatInput"
-                    class="flex-1 rounded-xl bg-white/10 border border-white/10 px-4 py-2 text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                    class="flex-1 min-w-0 rounded-xl bg-white/10 border border-white/10 px-4 py-2 text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                     placeholder="Ketik pesan..." onkeypress="if(event.key === 'Enter') sendChatMessage()">
                 <button onclick="sendChatMessage()"
                     class="w-10 h-10 rounded-xl bg-[#3B82F6] flex items-center justify-center text-white hover:bg-[#2563EB] transition flex-shrink-0">
