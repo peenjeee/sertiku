@@ -574,7 +574,7 @@
             </nav>
 
             <!-- Profile Section -->
-            <div class="p-4 border-t border-white/10">
+            <div class="mt-auto p-4 border-t border-white/10">
                 <div class="flex items-center gap-3 mb-4 profile-section">
                     @if(Auth::user()->avatar && (str_starts_with(Auth::user()->avatar, '/storage/') || str_starts_with(Auth::user()->avatar, 'http')))
                         <img src="{{ Auth::user()->avatar }}" alt="Avatar"
@@ -737,7 +737,7 @@
                             onkeypress="if(event.key==='Enter')sendCustomMessage()"
                             class="flex-1 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm placeholder:text-white/40 focus:outline-none focus:border-blue-500">
                         <button onclick="sendCustomMessage()"
-                            class="bg-blue-600 hover:bg-blue-700 rounded-lg px-3 py-2 text-white transition">
+                            class="bg-blue-600 hover:bg-blue-700 rounded-lg px-3 py-2 text-white transition flex-shrink-0">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

@@ -446,7 +446,7 @@
             </nav>
 
             <!-- Logout Button -->
-            <div class="p-4 border-t border-white/10">
+            <div class="mt-auto p-4 border-t border-white/10">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit"

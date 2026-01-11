@@ -290,7 +290,7 @@ class SupportController extends Controller
             ->get();
 
         // Determine layout based on user type
-        $layout = Auth::user()->account_type === 'lembaga' ? 'lembaga' : 'user';
+        $layout = in_array(Auth::user()->account_type, ['lembaga', 'institution']) ? 'lembaga' : 'user';
 
         return view('contact-admin.index', compact('tickets', 'layout'));
     }
@@ -341,7 +341,7 @@ class SupportController extends Controller
 
         $ticket->load(['messages.sender', 'assignedAdmin']);
 
-        $layout = Auth::user()->account_type === 'lembaga' ? 'lembaga' : 'user';
+        $layout = in_array(Auth::user()->account_type, ['lembaga', 'institution']) ? 'lembaga' : 'user';
 
         return view('contact-admin.show', compact('ticket', 'layout'));
     }

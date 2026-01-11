@@ -21,7 +21,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
@@ -260,7 +260,7 @@
         </nav>
 
         {{-- User Profile --}}
-        <div class="p-4 border-t border-purple-500/20">
+        <div class="mt-auto p-4 border-t border-purple-500/20">
             <div class="flex items-center gap-3 mb-3">
                 <div
                     class="master-badge w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm overflow-hidden">
