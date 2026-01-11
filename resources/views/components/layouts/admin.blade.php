@@ -329,7 +329,7 @@
     <div class="flex min-h-screen">
         <!-- Mobile Menu Button -->
         <button id="mobileMenuBtn" onclick="toggleSidebar()"
-            class="md:hidden fixed top-4 left-4 z-30 w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition">
+            class="md:hidden fixed top-4 left-4 z-50 w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
