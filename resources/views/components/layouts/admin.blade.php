@@ -487,10 +487,12 @@
             const mainContent = document.getElementById('mainContent');
             const overlay = document.getElementById('sidebarOverlay');
             const toggleBtn = document.getElementById('toggleBtn');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn'); // Add this
 
             if (isMobile) {
                 sidebar.classList.toggle('open');
                 overlay.classList.toggle('active');
+                if (mobileMenuBtn) mobileMenuBtn.classList.toggle('hidden'); // Add this for toggle visibility
             } else {
                 isCollapsed = !isCollapsed;
                 sidebar.classList.toggle('collapsed');
