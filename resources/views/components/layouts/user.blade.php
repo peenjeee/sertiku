@@ -362,7 +362,8 @@
                 </svg>
                 <span class="nav-text">Hubungi Admin</span>
             </a>
-            <form method="POST" action="{{ route('logout') }}">
+            <form method="POST" action="{{ route('logout') }}"
+                onsubmit="return confirmAction(event, 'Apakah Anda yakin ingin keluar?')">
                 @csrf
                 <button type="submit"
                     class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-red-500/30 text-red-400 text-sm hover:text-red-400 hover:bg-red-500/10 transition">

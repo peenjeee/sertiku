@@ -13,6 +13,11 @@
         rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    {{-- Turnstile Script --}}
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    {{-- SweetAlert2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -95,32 +100,47 @@
                     <p class="text-white/50 text-sm">Akses penuh ke sistem SertiKu</p>
                 </div>
 
-                {{-- Error Messages --}}
+                {{-- Error Messages (Hidden, handled by JS below) --}}
                 @if($errors->any())
-                    <div class="mb-6 p-4 rounded-xl bg-red-500/20 border border-red-500/30">
-                        @foreach($errors->all() as $error)
-                            <p class="text-red-400 text-sm flex items-center gap-2">
-                                <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                {{ $error }}
-                            </p>
-                        @endforeach
-                    </div>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal Login',
+                                html: '{!! implode("<br>", $errors->all()) !!}',
+                                confirmButtonColor: '#8B5CF6'
+                            });
+                        });
+                    </script>
                 @endif
 
-                {{-- Success Messages --}}
+                {{-- Session Messages (Manual Handler to ensure visibility) --}}
+                @if(session('error'))
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal Login',
+                                text: {!! json_encode(session('error')) !!},
+                                confirmButtonColor: '#8B5CF6'
+                            });
+                        });
+                    </script>
+                @endif
+
                 @if(session('success'))
-                    <div class="mb-6 p-4 rounded-xl bg-green-500/20 border border-green-500/30">
-                        <p class="text-green-400 text-sm flex items-center gap-2">
-                            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            {{ session('success') }}
-                        </p>
-                    </div>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: {!! json_encode(session('success')) !!},
+                                confirmButtonColor: '#8B5CF6',
+                                timer: 3000,
+                                timerProgressBar: true
+                            });
+                        });
+                    </script>
                 @endif
 
                 {{-- Login Form --}}
@@ -159,23 +179,50 @@
                         </div>
                     </div>
 
-                    {{-- Remember Me --}}
-                    <div class="flex items-center gap-2">
-                        <input type="checkbox" name="remember" id="remember"
-                            class="w-4 h-4 rounded border-white/20 bg-white/5 text-purple-600 focus:ring-purple-500/50">
-                        <label for="remember" class="text-white/50 text-sm">Ingat saya</label>
+                    {{-- Turnstile CAPTCHA --}}
+                    <div class="flex justify-center">
+                        <div class="cf-turnstile" data-sitekey="{{ env('TURNSTILE_SITE_KEY') }}" data-theme="dark">
+                        </div>
                     </div>
 
                     {{-- Submit Button --}}
-                    <button type="submit"
-                        class="btn-master w-full py-4 rounded-xl text-white font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-3">
+                    {{-- Submit Button --}}
+                    <button type="submit" id="masterLoginBtn"
+                        class="btn-master w-full py-4 rounded-xl text-white font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                         </svg>
-                        Masuk sebagai Master
+                        <span id="btnText">Masuk sebagai Master</span>
                     </button>
                 </form>
+
+                @if(session('rate_limit'))
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const btn = document.getElementById('masterLoginBtn');
+                            const btnText = document.getElementById('btnText');
+                            let seconds = {{ session('rate_limit') }};
+
+                            // Disable button
+                            btn.disabled = true;
+                            btn.classList.add('opacity-50', 'cursor-not-allowed');
+                            const originalText = "Masuk sebagai Master";
+
+                            const timer = setInterval(() => {
+                                btnText.textContent = `Tunggu ${seconds} detik...`;
+                                seconds--;
+
+                                if (seconds < 0) {
+                                    clearInterval(timer);
+                                    btn.disabled = false;
+                                    btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                                    btnText.textContent = originalText;
+                                }
+                            }, 1000);
+                        });
+                    </script>
+                @endif
 
                 {{-- Back Link --}}
                 <div class="mt-6 text-center">

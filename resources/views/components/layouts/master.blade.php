@@ -305,7 +305,8 @@
                     <p class="text-purple-400 text-xs">Master</p>
                 </div>
             </div>
-            <form method="POST" action="{{ route('master.logout') }}">
+            <form method="POST" action="{{ route('master.logout') }}"
+                onsubmit="return confirmAction(event, 'Apakah Anda yakin ingin keluar?')">
                 @csrf
                 <button type="submit"
                     class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-red-500/30 text-red-400 text-sm hover:text-red-400 hover:bg-red-500/10 transition">

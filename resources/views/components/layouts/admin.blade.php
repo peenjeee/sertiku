@@ -456,7 +456,8 @@
 
             <!-- Logout Button -->
             <div class="mt-auto flex-shrink-0 p-4 border-t border-white/10">
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('logout') }}"
+                    onsubmit="return confirmAction(event, 'Apakah Anda yakin ingin keluar?')">
                     @csrf
                     <button type="submit"
                         class="logout-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 transition text-white/70">
