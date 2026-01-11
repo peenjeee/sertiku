@@ -5,10 +5,11 @@
 
     {{-- KONTEN UTAMA --}}
     <section
-        class="mx-auto flex max-w-6xl flex-col gap-16 px-4 pb-20 pt-10 lg:flex-row lg:px-0 lg:pt-12 overflow-x-hidden">
+        class="mx-auto flex max-w-6xl flex-col items-center lg:items-start gap-16 px-4 pb-20 pt-10 lg:flex-row lg:px-0 lg:pt-12 overflow-x-hidden">
 
         {{-- KIRI: TEKS + FORM VERIFIKASI --}}
-        <div class="relative w-full max-w-xl animate-fade-in-up">
+        <div
+            class="relative w-full max-w-xl animate-fade-in-up flex flex-col items-center lg:items-start text-center lg:text-left">
             {{-- Badge "Verifikasi instan & aman" --}}
             <div class="inline-flex h-[34px] items-center gap-2 rounded-[8px]
                            border border-[rgba(255,255,255,0.2)]
@@ -51,7 +52,7 @@
             </div>
 
             <div
-                class="mt-10 rounded-[16px] bg-[rgba(15,23,42,0.6)]/90 border border-[rgba(255,255,255,0.1)] rounded-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] px-6 py-8 sm:px-8 sm:py-10 hover-lift animate-fade-in-up stagger-2">
+                class="mt-10 rounded-[16px] bg-[rgba(15,23,42,0.6)]/90 border border-[rgba(255,255,255,0.1)] rounded-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] px-6 py-8 sm:px-8 sm:py-10 hover-lift animate-fade-in-up stagger-2 w-full">
 
 
                 {{-- FORM --}}
@@ -59,7 +60,7 @@
                     @csrf
 
                     {{-- Tab Switcher --}}
-                    <div class="flex gap-4 border-b border-white/10 pb-4">
+                    <div class="flex gap-4 border-b border-white/10 pb-4 justify-center lg:justify-start">
                         <button type="button" onclick="switchTab('hash')" id="tab-hash"
                             class="text-white border-b-2 border-blue-500 pb-2 font-medium transition">
                             Kode Hash
@@ -216,9 +217,9 @@
                         <div class="mt-8 pt-6 border-t border-white/10">
                             <a href="{{ route('blockchain.verify') }}"
                                 class="flex items-center justify-center gap-2 w-full py-3 rounded-[8px]
-                                                                                                                                                                                   border border-purple-500/30 bg-purple-500/10
-                                                                                                                                                                                   text-purple-300 text-sm font-medium
-                                                                                                                                                                                   hover:bg-purple-500/20 transition">
+                                                                                                                                                                                       border border-purple-500/30 bg-purple-500/10
+                                                                                                                                                                                       text-purple-300 text-sm font-medium
+                                                                                                                                                                                       hover:bg-purple-500/20 transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
