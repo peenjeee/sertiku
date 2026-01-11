@@ -421,9 +421,9 @@
             <div class="p-4 border-b border-white/10">
                 <div class="flex items-center justify-between logo-section">
                     <a href="{{ route('home') }}" class="flex items-center gap-3 hover:opacity-80 transition group">
-                        <!-- SertiKu Logo -->
+                        <!-- SertiKu Logo - hidden on mobile -->
                         <img src="{{ asset('favicon.ico') }}" alt="SertiKu"
-                            class="w-10 h-10 flex-shrink-0 group-hover:scale-105 transition"
+                            class="w-10 h-10 flex-shrink-0 group-hover:scale-105 transition hidden lg:block"
                             style="filter: brightness(0) invert(1);">
                         <div class="logo-text">
                             <h1 class="text-white font-bold text-xl tracking-tight drop-shadow-lg">SertiKu</h1>
