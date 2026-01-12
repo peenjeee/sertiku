@@ -187,12 +187,21 @@
 
                                 @if(isset($onChainData['issuerName']) && $onChainData['issuerName'])
                                     @php
-                                        // Extract issuer name only (before the hash separator | )
-                                        $issuerDisplay = explode(' | ', $onChainData['issuerName'])[0];
+                                        // Try to parse as JSON, fallback to raw string
+                                        $issuerRaw = $onChainData['issuerName'];
+                                        $parsedData = json_decode($issuerRaw, true);
+                                        $isJson = json_last_error() === JSON_ERROR_NONE && is_array($parsedData);
                                     @endphp
                                     <div class="bg-white/5 rounded-xl p-4">
-                                        <p class="text-white/50 text-xs mb-1">Penerbit</p>
-                                        <p class="text-white font-bold">{{ $issuerDisplay }}</p>
+                                        <p class="text-white/50 text-xs mb-1">Data</p>
+                                        @if($isJson)
+                                            <pre class="text-white text-xs font-mono whitespace-pre-wrap break-all overflow-x-auto max-h-64 overflow-y-auto scrollbar-hide" style="-ms-overflow-style: none; scrollbar-width: none;">{{ json_encode($parsedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) }}</pre>
+                                            <style>.scrollbar-hide::-webkit-scrollbar { display: none; }</style>
+                                        @else
+                                            {{-- Fallback: extract issuer name only (before the hash separator | ) --}}
+                                            @php $issuerDisplay = explode(' | ', $issuerRaw)[0]; @endphp
+                                            <p class="text-white font-bold">{{ $issuerDisplay }}</p>
+                                        @endif
                                     </div>
                                 @endif
 
