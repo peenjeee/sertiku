@@ -391,8 +391,8 @@ Route::post('/payment/callback', [PaymentController::class, 'callback'])->name('
 Route::post('/payment/crypto', [PaymentController::class, 'processCrypto'])->middleware(['auth', 'lembaga.only'])->name('payment.crypto');
 Route::post('/payment/nowpayments/callback', [PaymentController::class, 'nowpaymentsCallback'])->name('payment.nowpayments.callback');
 
-Route::get('/contact-enterprise', [PaymentController::class, 'contactEnterprise'])->name('contact.enterprise');
-Route::post('/contact-enterprise', [PaymentController::class, 'sendContactEnterprise'])->name('contact.enterprise.send.legacy');
+Route::get('/contact-enterprise', [PaymentController::class, 'contactEnterprise'])->middleware(['auth', 'lembaga.only'])->name('contact.enterprise');
+Route::post('/contact-enterprise', [PaymentController::class, 'sendContactEnterprise'])->middleware(['auth', 'lembaga.only'])->name('contact.enterprise.send.legacy');
 
 /*
 |--------------------------------------------------------------------------

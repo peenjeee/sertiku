@@ -5,8 +5,7 @@
 
             {{-- Header --}}
             <div class="text-center">
-                <div
-                    class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#8B5CF6]">
+                <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#8B5CF6]">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -49,9 +48,9 @@
                     <label for="email" class="mb-2 block text-sm font-medium text-[rgba(219,234,254,0.9)]">
                         Email <span class="text-red-400">*</span>
                     </label>
-                    <input type="email" id="email" name="email" required value="{{ old('email') }}"
-                        class="w-full rounded-[12px] border border-[rgba(255,255,255,0.12)] bg-[rgba(15,23,42,0.6)] px-4 py-3 text-sm text-white placeholder:text-[rgba(190,219,255,0.5)] focus:border-[#3B82F6] focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/30"
-                        placeholder="email@institusi.ac.id">
+                    <input type="email" id="email" value="{{ Auth::user()->email }}" disabled
+                        class="w-full rounded-[12px] border border-[rgba(255,255,255,0.12)] bg-[rgba(15,23,42,0.4)] px-4 py-3 text-sm text-white/70 cursor-not-allowed">
+                    <input type="hidden" name="email" value="{{ Auth::user()->email }}">
                     @error('email')
                         <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
                     @enderror
