@@ -165,48 +165,71 @@
         </div>
     </div>
 
-    <!-- Real-time Verifikasi -->
-    <div class="glass-card rounded-2xl p-6 animate-fade-in">
-        <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3">
-                <h3 class="text-gray-800 font-bold text-lg">Real-time Verifikasi</h3>
-                <span
-                    class="flex items-center gap-1 px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-full">
-                    <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full live-dot"></span>
-                    Live
-                </span>
+    <!-- Row 2: Package Distribution & Real-time Log -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Distribusi Paket -->
+        <div class="glass-card rounded-2xl p-6 animate-fade-in lg:col-span-1">
+            <h3 class="text-gray-800 font-bold text-lg mb-4">Distribusi Paket Lembaga</h3>
+            <div class="h-64 relative">
+                <canvas id="packageChart"></canvas>
+            </div>
+            <div class="mt-4 space-y-2">
+                @foreach($packageDistribution as $pkg)
+                    <div class="flex items-center justify-between text-sm">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full" style="background-color: {{ $pkg['color'] }}"></span>
+                            <span class="text-gray-600">{{ $pkg['label'] }}</span>
+                        </div>
+                        <span class="font-medium text-gray-900">{{ $pkg['count'] }}</span>
+                    </div>
+                @endforeach
             </div>
         </div>
 
-        <div class="space-y-3 max-h-64 overflow-y-auto" id="realtimeLog">
-            @foreach($recentVerifications as $index => $item)
-                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg animate-slide-in-left"
-                    style="animation-delay: {{ $index * 0.1 }}s">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-gray-800 text-sm font-medium">Sertifikat Diverifikasi</p>
-                            <p class="text-gray-500 text-xs font-mono">{{ $item->certificate_number }}</p>
-                        </div>
-                    </div>
-                    <span class="text-gray-400 text-xs">{{ $item->updated_at->diffForHumans() }}</span>
+        <!-- Real-time Verifikasi -->
+        <div class="glass-card rounded-2xl p-6 animate-fade-in lg:col-span-2">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                    <h3 class="text-gray-800 font-bold text-lg">Real-time Verifikasi</h3>
+                    <span
+                        class="flex items-center gap-1 px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-full">
+                        <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full live-dot"></span>
+                        Live
+                    </span>
                 </div>
-            @endforeach
+            </div>
 
-            @if($recentVerifications->count() === 0)
-                <div class="text-center py-8">
-                    <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
-                    <p class="text-gray-400 text-sm">Belum ada aktivitas verifikasi</p>
-                </div>
-            @endif
+            <div class="space-y-3 max-h-[340px] overflow-y-auto" id="realtimeLog">
+                @foreach($recentVerifications as $index => $item)
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg animate-slide-in-left"
+                        style="animation-delay: {{ $index * 0.1 }}s">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-gray-800 text-sm font-medium">Sertifikat Diverifikasi</p>
+                                <p class="text-gray-500 text-xs font-mono">{{ $item->certificate_number }}</p>
+                            </div>
+                        </div>
+                        <span class="text-gray-400 text-xs">{{ $item->updated_at->diffForHumans() }}</span>
+                    </div>
+                @endforeach
+
+                @if($recentVerifications->count() === 0)
+                    <div class="text-center py-8">
+                        <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                        <p class="text-gray-400 text-sm">Belum ada aktivitas verifikasi</p>
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
 
@@ -275,6 +298,29 @@
                             grid: { display: false }
                         }
                     }
+                }
+            });
+
+            // Package Distribution Chart
+            const packageCtx = document.getElementById('packageChart').getContext('2d');
+            new Chart(packageCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: {!! json_encode($packageDistribution->pluck('label')) !!},
+                    datasets: [{
+                        data: {!! json_encode($packageDistribution->pluck('count')) !!},
+                        backgroundColor: {!! json_encode($packageDistribution->pluck('color')) !!},
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false } // Custom legend implemented below
+                    },
+                    cutout: '70%'
                 }
             });
         });

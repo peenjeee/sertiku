@@ -83,7 +83,7 @@
                             </svg>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <h3 class="text-yellow-700 font-bold text-sm lg:text-lg">Langganan Berakhir Pada</h3>
+                            <h3 class="text-yellow-700 font-bold text-sm lg:text-lg">Info</h3>
                             <p class="text-yellow-600 text-xs lg:text-sm">
                                 Langganan <strong>{{ $activePackage->name }}</strong> Anda akan berakhir pada
                                 <strong>{{ $user->subscription_expires_at->format('d M Y') }}</strong>

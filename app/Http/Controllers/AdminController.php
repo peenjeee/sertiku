@@ -35,32 +35,7 @@ class AdminController extends Controller
     /**
      * Analytics Page
      */
-    public function analytics(Request $request)
-    {
-        $period = $request->get('period', '30'); // days
-        $year = $request->get('year', now()->year); // year filter
 
-        // Stats with percentage change (filtered by period and year)
-        $stats = $this->getAnalyticsStats($period, $year);
-
-        // Get available years for filter (from earliest certificate to current year)
-        $earliestYear = Certificate::min('created_at');
-        $earliestYear = $earliestYear ? \Carbon\Carbon::parse($earliestYear)->year : now()->year;
-        $availableYears = range(now()->year, $earliestYear);
-
-        // Chart data - Certificates per month (all 12 months for selected year)
-        $certificatesTrend = $this->getCertificatesTrend($year);
-
-        // Verification activity (all 12 months for selected year)
-        $verificationActivity = $this->getVerificationActivity($year);
-
-        // Real-time verifications (last 10)
-        $recentVerifications = Certificate::latest('updated_at')
-            ->take(10)
-            ->get(['certificate_number', 'updated_at']);
-
-        return view('admin.analytics', compact('stats', 'certificatesTrend', 'verificationActivity', 'recentVerifications', 'availableYears', 'year', 'period'));
-    }
 
     /**
      * Kelola Pengguna Page
@@ -331,6 +306,50 @@ class AdminController extends Controller
     }
 
     /**
+     * Analytics Page
+     */
+    public function analytics(Request $request)
+    {
+        $period = $request->get('period', '30'); // days
+        $year = $request->get('year', now()->year); // year filter
+
+        // Stats with percentage change (filtered by period ONLY, relative to now)
+        $stats = $this->getAnalyticsStats($period);
+
+        // Get available years for filter (from earliest certificate to current year)
+        $earliestYear = Certificate::min('created_at');
+        $earliestYear = $earliestYear ? \Carbon\Carbon::parse($earliestYear)->year : now()->year;
+        $availableYears = range(now()->year, $earliestYear);
+
+        // Chart data - Certificates per month (all 12 months for selected year)
+        $certificatesTrend = $this->getCertificatesTrend($year);
+
+        // Verification activity (all 12 months for selected year)
+        $verificationActivity = $this->getVerificationActivity($year);
+
+        // Package Distribution
+        $packageDistribution = User::whereIn('account_type', ['lembaga', 'institution'])
+            ->select('package_id', \Illuminate\Support\Facades\DB::raw('count(*) as count'))
+            ->groupBy('package_id')
+            ->get()
+            ->map(function ($item) {
+                $pkg = \App\Models\Package::find($item->package_id);
+                return [
+                    'label' => $pkg ? $pkg->name : 'Starter (Free)',
+                    'count' => $item->count,
+                    'color' => $pkg ? ($pkg->slug == 'professional' ? '#8B5CF6' : ($pkg->slug == 'enterprise' ? '#F59E0B' : '#3B82F6')) : '#10B981'
+                ];
+            });
+
+        // Real-time verifications (last 10)
+        $recentVerifications = Certificate::latest('updated_at')
+            ->take(10)
+            ->get(['certificate_number', 'updated_at']);
+
+        return view('admin.analytics', compact('stats', 'certificatesTrend', 'verificationActivity', 'packageDistribution', 'recentVerifications', 'availableYears', 'year', 'period'));
+    }
+
+    /**
      * Update Admin Password
      */
     public function updatePassword(Request $request)
@@ -356,72 +375,65 @@ class AdminController extends Controller
     /**
      * Helper: Get analytics stats with percentage change
      */
-    private function getAnalyticsStats($days, $year = null)
+    private function getAnalyticsStats($days)
     {
-        $year = $year ?? now()->year;
+        // $year parameter removed to strictly follow "Last X Days" logic from today
         $now = now();
         $periodStart = $now->copy()->subDays($days);
         $prevPeriodStart = $periodStart->copy()->subDays($days);
 
-        // Current period counts (within selected period AND year)
-        $currentVerifications = Certificate::where('updated_at', '>=', $periodStart)
-            ->whereYear('created_at', $year)
-            ->count();
+        // Current period counts (Last X Days from NOW)
+        $currentVerifications = Certificate::where('updated_at', '>=', $periodStart)->count();
         $currentCertificates = Certificate::where('status', 'active')
             ->where('created_at', '>=', $periodStart)
-            ->whereYear('created_at', $year)
             ->count();
         $currentLembaga = User::where('account_type', 'lembaga')
             ->where('created_at', '>=', $periodStart)
-            ->whereYear('created_at', $year)
             ->count();
         $currentUsers = User::where('profile_completed', true)
             ->where('created_at', '>=', $periodStart)
-            ->whereYear('created_at', $year)
             ->count();
 
-        // Previous period counts (for comparison)
-        $prevVerifications = Certificate::whereBetween('updated_at', [$prevPeriodStart, $periodStart])
-            ->whereYear('created_at', $year)
-            ->count();
+        // Previous period counts (The X Days before that)
+        $prevVerifications = Certificate::whereBetween('updated_at', [$prevPeriodStart, $periodStart])->count();
         $prevCertificates = Certificate::where('status', 'active')
             ->whereBetween('created_at', [$prevPeriodStart, $periodStart])
-            ->whereYear('created_at', $year)
             ->count();
         $prevLembaga = User::where('account_type', 'lembaga')
             ->whereBetween('created_at', [$prevPeriodStart, $periodStart])
-            ->whereYear('created_at', $year)
             ->count();
         $prevUsers = User::where('profile_completed', true)
             ->whereBetween('created_at', [$prevPeriodStart, $periodStart])
-            ->whereYear('created_at', $year)
             ->count();
 
-        // Total counts for the selected year
-        $totalVerifikasi = Certificate::whereYear('created_at', $year)->count();
-        $totalSertifikatAktif = Certificate::where('status', 'active')->whereYear('created_at', $year)->count();
-        $totalLembaga = User::where('account_type', 'lembaga')->whereYear('created_at', $year)->count();
-        $totalPenggunaAktif = User::where('profile_completed', true)->whereYear('created_at', $year)->count();
+        // Total counts (All time, or we can keep it strictly period related? Usually top cards show totals or specific period stats. 
+        // Based on user request "persen nan itu sesuai filter yang dipilih", the BIG number should probably be the Total in Period? 
+        // Or Total All Time? Usually Dashboard cards show Total All Time, and small text shows change in period.
+        // BUT, if the filter says "Last 7 Days", showing Total All Time might be confusing if the user expects to see count for 7 days.
+        // However, the variable is named $totalVerifikasi. Let's stick to Total All Time for the Big Number, and Period Change for the percentage.
+        // Wait, the previous code filtered Total by Year. That was definitely wrong if the label is "Total". 
+        // Let's make the Big Value = Total All Time (Cumulative) to match standard dashboards, OR make it Period Value?
+        // User said: "benarkan persen nan itu sesuai filter yang dipilih". This implies the PERCENTAGE calculation was wrong (likely because of year filter or empty interaction).
+        // Let's set the Big Value to be the PERIOD value so it matches the filter "Last 7 Days". 
+        // If I select "Last 7 Days", seeing "8" (Total) when I only did 1 this week is fine, but if the label is just "Total Verifikasi", it usually implies cumulative.
+        // However, standard analytics (GA4) with a time filter shows data for THAT period.
+        // Let's set the 'value' to '$currentVerifications' to be fully responsive to the filter. 
 
         return [
             'total_verifikasi' => [
-                'value' => $totalVerifikasi,
-                'period_value' => $currentVerifications,
+                'value' => $currentVerifications, // Changed to show count in period
                 'change' => $this->calculatePercentChange($prevVerifications, $currentVerifications),
             ],
             'sertifikat_aktif' => [
-                'value' => $totalSertifikatAktif,
-                'period_value' => $currentCertificates,
+                'value' => $currentCertificates,
                 'change' => $this->calculatePercentChange($prevCertificates, $currentCertificates),
             ],
             'lembaga_terdaftar' => [
-                'value' => $totalLembaga,
-                'period_value' => $currentLembaga,
+                'value' => $currentLembaga,
                 'change' => $this->calculatePercentChange($prevLembaga, $currentLembaga),
             ],
             'pengguna_aktif' => [
-                'value' => $totalPenggunaAktif,
-                'period_value' => $currentUsers,
+                'value' => $currentUsers,
                 'change' => $this->calculatePercentChange($prevUsers, $currentUsers),
             ],
         ];

@@ -159,7 +159,7 @@
                                 Sertifikat Terverifikasi
                             </p>
                             <p class="mt-1 text-[11px] sm:text-xs text-[rgba(190,219,255,0.9)]">
-                                Universitas Negeri Ngawi
+                                Lorem, ipsum dolor.
                             </p>
                         </div>
                     </div>
@@ -169,29 +169,29 @@
                         {{-- Nama Penerima --}}
                         <div class="flex items-center justify-between gap-3 rounded-[16px] bg-[rgba(15,23,42,0.35)] px-5 py-3
                            border border-[rgba(255,255,255,0.05)]">
-                            <span class="text-[rgba(226,232,240,0.9)]">Nama Penerima</span>
-                            <span class="text-right font-medium text-white">Mr. Ambatukam</span>
+                            <span class="text-[rgba(226,232,240,0.9)]">Lorem, ipsum.</span>
+                            <span class="text-right font-medium text-white">Lorem ipsum dolor sit amet.</span>
                         </div>
 
                         {{-- Program Studi --}}
                         <div class="flex items-center justify-between gap-3 rounded-[16px] bg-[rgba(15,23,42,0.35)] px-5 py-3
                            border border-[rgba(255,255,255,0.05)]">
-                            <span class="text-[rgba(226,232,240,0.9)]">Program Studi</span>
-                            <span class="text-right font-medium text-white">Seni</span>
+                            <span class="text-[rgba(226,232,240,0.9)]">Lorem, ipsum.</span>
+                            <span class="text-right font-medium text-white">Lorem ipsum dolor sit amet.</span>
                         </div>
 
                         {{-- Serti --}}
                         <div class="flex items-center justify-between gap-3 rounded-[16px] bg-[rgba(15,23,42,0.35)] px-5 py-3
                            border border-[rgba(255,255,255,0.05)]">
-                            <span class="text-[rgba(226,232,240,0.9)]">Jenis Sertifikat</span>
-                            <span class="text-right font-medium text-white">Penghargaan</span>
+                            <span class="text-[rgba(226,232,240,0.9)]">Lorem, ipsum.</span>
+                            <span class="text-right font-medium text-white">Lorem ipsum dolor sit amet.</span>
                         </div>
 
                         {{-- Tanggal Terbit (dengan flare putih) --}}
                         <div class="flex items-center justify-between gap-3 rounded-[16px] bg-[rgba(15,23,42,0.35)] px-5 py-3
                            border border-[rgba(255,255,255,0.05)]">
-                            <span class="text-[rgba(226,232,240,0.9)]">Tanggal Terbit</span>
-                            <span class="text-right font-medium text-white">06 Juli 2026</span>
+                            <span class="text-[rgba(226,232,240,0.9)]">Lorem, ipsum.</span>
+                            <span class="text-right font-medium text-white">Lorem ipsum dolor sit amet.</span>
                         </div>
                     </div>
 
