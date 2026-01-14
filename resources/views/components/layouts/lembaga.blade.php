@@ -494,7 +494,7 @@
                         <!-- Tooltip -->
                         <div class="absolute left-full ml-2 hidden group-hover:block z-50">
                             <div class="bg-gray-900 text-white text-xs rounded-lg px-3 py-2 whitespace-nowrap shadow-lg">
-                                Kuota sertifikat bulan ini habis
+                                Kuota melebihi limit, perpanjang langganan
                                 <a href="{{ url('/#harga') }}" class="text-blue-400 underline ml-1">Upgrade</a>
                             </div>
                         </div>
@@ -516,7 +516,7 @@
 
                 <!-- AI Template Generator - Professional Only -->
                 @if(Auth::user()->isProfessionalPlan() || Auth::user()->isEnterprisePlan())
-                    <a href="{{ route('lembaga.template.ai') }}"
+                    <!-- <a href="{{ route('lembaga.template.ai') }}"
                         class="nav-item flex items-center gap-3 px-4 py-4 rounded-xl {{ request()->routeIs('lembaga.template.ai') ? 'active' : '' }}"
                         title="AI Template">
                         <div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
@@ -526,7 +526,7 @@
                             </svg>
                         </div>
                         <span class="text-white/70 text-base nav-text">AI Template</span>
-                    </a>
+                    </a> -->
                 @endif
 
                 <!-- Upload Template (User) -->
@@ -544,17 +544,37 @@
 
                 <!-- Import Data (Bulk) - Professional Only -->
                 @if(Auth::user()->isProfessionalPlan() || Auth::user()->isEnterprisePlan())
-                    <a href="{{ route('lembaga.sertifikat.bulk') }}"
-                        class="nav-item flex items-center gap-3 px-4 py-4 rounded-xl {{ request()->routeIs('lembaga.sertifikat.bulk') ? 'active' : '' }}"
-                        title="Import Data (Bulk)">
-                        <div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
-                            <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67"
-                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                            </svg>
+                    @if(Auth::user()->canIssueCertificate())
+                        <a href="{{ route('lembaga.sertifikat.bulk') }}"
+                            class="nav-item flex items-center gap-3 px-4 py-4 rounded-xl {{ request()->routeIs('lembaga.sertifikat.bulk') ? 'active' : '' }}"
+                            title="Import Data (Bulk)">
+                            <div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67"
+                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                </svg>
+                            </div>
+                            <span class="text-white/70 text-base nav-text">Import Data (Bulk)</span>
+                        </a>
+                    @else
+                        <div class="nav-item flex items-center gap-3 px-4 py-4 rounded-xl opacity-50 cursor-not-allowed group relative"
+                            title="Kuota sertifikat habis">
+                            <div class="w-9 h-9 rounded-lg bg-red-500/20 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67"
+                                        d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                </svg>
+                            </div>
+                            <span class="text-red-400/70 text-base nav-text">Kuota Habis</span>
+                            <!-- Tooltip -->
+                            <div class="absolute left-full ml-2 hidden group-hover:block z-50">
+                                <div class="bg-gray-900 text-white text-xs rounded-lg px-3 py-2 whitespace-nowrap shadow-lg">
+                                    Kuota sertifikat bulan ini habis
+                                    <a href="{{ url('/#harga') }}" class="text-blue-400 underline ml-1">Upgrade</a>
+                                </div>
+                            </div>
                         </div>
-                        <span class="text-white/70 text-base nav-text">Import Data (Bulk)</span>
-                    </a>
+                    @endif
                 @endif
 
                 <!-- Galeri Sertifikat -->

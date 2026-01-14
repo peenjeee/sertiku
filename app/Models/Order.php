@@ -79,10 +79,19 @@ class Order extends Model
         // Refresh to get updated paid_at value
         $this->refresh();
 
-        // Update user's package to the purchased package
+        // Update user's package and subscription expiration
         if ($this->user && $this->package_id) {
+            // Calculate new expiration: 1 month from now or extend existing
+            $currentExpires = $this->user->subscription_expires_at;
+            $newExpires = ($currentExpires && $currentExpires->isFuture())
+                ? $currentExpires->addMonth()  // Extend existing subscription
+                : now()->addMonth();           // New subscription
+
             $this->user->update([
                 'package_id' => $this->package_id,
+                'subscription_expires_at' => $newExpires,
+                // Reset billing cycle anchor to now for fresh limit counting
+                'email_verified_at' => now(),
             ]);
         }
 

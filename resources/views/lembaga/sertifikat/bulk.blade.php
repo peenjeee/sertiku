@@ -70,14 +70,31 @@
             </script>
         @endif
 
-        <!-- Main Form -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Upload Form -->
-            <div class="lg:col-span-2 space-y-6">
-                <!-- Enforce dark background for glass-card -->
-                <div class="bg-gray-900 p-6 rounded-2xl border border-gray-700 shadow-xl">
-                    <form action="{{ route('lembaga.sertifikat.bulk.store') }}" method="POST"
-                        enctype="multipart/form-data" class="space-y-6" id="bulkForm" novalidate>
+        <!-- Limit Reached Block -->
+        @if($remainingCertificates <= 0)
+            <div class="bg-red-500/20 border-2 border-red-500/50 rounded-2xl p-8 text-center">
+                <div class="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <h2 class="text-red-400 text-xl font-bold mb-2">Kuota Sertifikat Habis</h2>
+                <p class="text-red-300/80 mb-6">Upgrade paket Anda untuk melanjutkan menerbitkan sertifikat.</p>
+                <a href="{{ url('/#harga') }}"
+                    class="inline-flex items-center gap-2 px-6 py-3 bg-[#3B82F6] text-white font-bold rounded-xl">
+                    Upgrade ke Professional
+                </a>
+            </div>
+        @else
+            <!-- Main Form -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Upload Form -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Enforce dark background for glass-card -->
+                    <div class="bg-gray-900 p-6 rounded-2xl border border-gray-700 shadow-xl">
+                        <form action="{{ route('lembaga.sertifikat.bulk.store') }}" method="POST"
+                            enctype="multipart/form-data" class="space-y-6" id="bulkForm" novalidate>
                         @csrf
 
                         <!-- Template Selection -->
@@ -244,7 +261,7 @@
                                             @if($blockchainLimit == 0)
                                                 Fitur Blockchain tidak tersedia di paket ini. <a href="{{ url('/#harga') }}" class="underline hover:text-white">Upgrade</a>
                                             @else
-                                                Kuota Blockchain habis. <a href="{{ url('/#harga') }}" class="underline hover:text-white">Upgrade</a>
+                                                Kuota Blockchain habis ({{ $blockchainUsed }}/{{ $blockchainLimit }}). <a href="{{ url('/#harga') }}" class="underline hover:text-white">Upgrade</a>
                                             @endif
                                         </div>
                                     @endif
@@ -303,7 +320,8 @@
                                     
                                     @if(!$canUseIpfs)
                                         <div class="mb-3 p-2 bg-red-900/30 border border-red-500/30 rounded text-red-300 text-xs">
-                                            Kuota IPFS habis. <a href="{{ url('/#harga') }}" class="underline hover:text-white">Upgrade</a>
+                                           Kuota IPFS habis ({{ $ipfsUsed }}/{{ $ipfsLimit }}). 
+                                            <a href="{{ url('/#harga') }}" class="underline hover:text-white">Upgrade</a>
                                         </div>
                                     @endif
 
@@ -401,6 +419,7 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
 
     <!-- SweetAlert2 -->

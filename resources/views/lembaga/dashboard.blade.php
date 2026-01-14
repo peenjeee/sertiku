@@ -27,7 +27,115 @@
             $certificatesUsed = $user->getCertificatesUsedThisMonth();
             $usagePercentage = $user->getUsagePercentage();
             $remainingCerts = $user->getRemainingCertificates();
+            $activePackage = $user->getActivePackage();
+            $isSubscriptionExpired = $user->isSubscriptionExpired();
+            $isSubscriptionExpiringSoon = $user->isSubscriptionExpiringSoon();
+            $daysRemaining = $user->getSubscriptionDaysRemaining();
+            $previousPackageSlug = $user->package_id ? \App\Models\Package::find($user->package_id)?->slug : null;
+            $billingCycleDaysRemaining = $user->getDaysRemainingInCycle();
+            $billingCycleStart = $user->getBillingCycleStart();
         @endphp
+
+        {{-- Subscription Expired Alert --}}
+        @if($isSubscriptionExpired && $previousPackageSlug && $previousPackageSlug !== 'starter')
+            <div class="bg-red-50 border-2 border-red-300 rounded-xl p-3 lg:p-6 animate-fade-in">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="flex items-start gap-3">
+                        <div
+                            class="hidden sm:flex w-10 h-10 lg:w-12 lg:h-12 bg-red-500 rounded-lg lg:rounded-xl items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-red-700 font-bold text-sm lg:text-lg">Langganan Telah Berakhir</h3>
+                            <p class="text-red-600 text-xs lg:text-sm">
+                                Langganan Anda telah berakhir. Anda kembali ke paket <strong>Normal</strong> dengan limit 50
+                                sertifikat/bulan.
+                            </p>
+                        </div>
+                    </div>
+                    <a href="{{ route('checkout', $previousPackageSlug) }}"
+                        class="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 lg:py-3 bg-red-500 text-white text-sm font-bold rounded-lg hover:bg-red-600 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Upgrade
+                    </a>
+                </div>
+            </div>
+        @endif
+
+        {{-- Subscription Expiring Soon Warning --}}
+        @if($isSubscriptionExpiringSoon && !$isStarterPlan)
+            <div class="bg-yellow-50 border-2 border-yellow-300 rounded-xl p-3 lg:p-6 animate-fade-in">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="flex items-start gap-3">
+                        <div
+                            class="hidden sm:flex w-10 h-10 lg:w-12 lg:h-12 bg-yellow-500 rounded-lg lg:rounded-xl items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-yellow-700 font-bold text-sm lg:text-lg">Langganan Berakhir Pada</h3>
+                            <p class="text-yellow-600 text-xs lg:text-sm">
+                                Langganan <strong>{{ $activePackage->name }}</strong> Anda akan berakhir pada
+                                <strong>{{ $user->subscription_expires_at->format('d M Y') }}</strong>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- <a href="{{ route('checkout', $activePackage->slug) }}"
+                        class="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 lg:py-3 bg-yellow-500 text-white text-sm font-bold rounded-lg hover:bg-yellow-600 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Perpanjang Sekarang
+                    </a> -->
+                </div>
+            </div>
+        @endif
+
+        {{-- Active Subscription Status (for paid plans) --}}
+        @if(!$isStarterPlan && !$isSubscriptionExpired && !$isSubscriptionExpiringSoon && $user->subscription_expires_at)
+            <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 lg:p-4 animate-fade-in">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-8 h-8 lg:w-10 lg:h-10 bg-emerald-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 lg:w-5 lg:h-5 text-white" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-emerald-800 font-semibold text-sm lg:text-base">
+                                Paket {{ $activePackage->name }}
+                            </p>
+                            <p class="text-emerald-600 text-xs lg:text-sm">
+                                Berakhir {{ $user->subscription_expires_at->format('d M Y') }} ({{ $daysRemaining }} hari
+                                lagi)
+                            </p>
+                        </div>
+                    </div>
+                    <a href="{{ route('checkout', $activePackage->slug) }}"
+                        class="flex items-center justify-center gap-2 px-3 py-2 bg-emerald-500 text-white text-xs lg:text-sm font-medium rounded-lg hover:bg-emerald-600 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Perpanjang
+                    </a>
+                </div>
+            </div>
+        @endif
 
         <!-- Upgrade Banner for Starter Plan -->
         @if($isStarterPlan)
@@ -61,7 +169,15 @@
                         <div class="w-full h-2 lg:h-3 bg-amber-200 rounded-full overflow-hidden">
                             <div class="h-full bg-amber-500 rounded-full" style="width: {{ $usagePercentage }}%"></div>
                         </div>
-                        @if($remainingCerts <= 10)
+                        @if($certificatesUsed > $certificateLimit)
+                            <p class="text-red-600 text-xs font-bold mt-1 flex items-center gap-1">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                                Kuota melebihi limit! Reset dalam {{ $billingCycleDaysRemaining }} hari.
+                            </p>
+                        @elseif($remainingCerts <= 10)
                             <p class="text-red-600 text-xs font-bold mt-1 flex items-center gap-1"><svg class="w-3 h-3"
                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -177,7 +293,7 @@
 
             @if($canAccessApi)
                 <!-- API Tokens - Only for Professional/Enterprise -->
-                <a href="{{ route('lembaga.api-tokens.index') }}"
+                <!-- <a href="{{ route('lembaga.api-tokens.index') }}"
                     class="bg-cyan-50 border border-cyan-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-4">
                     <div class="flex items-center gap-3 lg:gap-4">
                         <div
@@ -193,47 +309,72 @@
                             <p class="text-[#0891B2] text-xs lg:text-sm">Integrasi API</p>
                         </div>
                     </div>
-                </a>
+                </a> -->
             @endif
 
             @if($canAccessApi)
                 <!-- AI Template Generator -->
-                <a href="{{ route('lembaga.template.ai') }}"
-                    class="bg-purple-50 border border-purple-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-5">
-                    <div class="flex items-center gap-3 lg:gap-4">
-                        <div
-                            class="bg-purple-500 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
-                            <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="text-[#7C3AED] font-bold text-sm lg:text-lg">AI Template</h3>
-                            <p class="text-[#9333EA] text-xs lg:text-sm">Generate dengan AI</p>
-                        </div>
-                    </div>
-                </a>
+                <!-- <a href="{{ route('lembaga.template.ai') }}"
+                                class="bg-purple-50 border border-purple-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-5">
+                                <div class="flex items-center gap-3 lg:gap-4">
+                                    <div
+                                        class="bg-purple-500 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-[#7C3AED] font-bold text-sm lg:text-lg">AI Template</h3>
+                                        <p class="text-[#9333EA] text-xs lg:text-sm">Generate dengan AI</p>
+                                    </div>
+                                </div>
+                            </a> -->
 
                 <!-- Import Data (Bulk) -->
-                <a href="{{ route('lembaga.sertifikat.bulk') }}"
-                    class="bg-indigo-50 border border-indigo-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-6">
-                    <div class="flex items-center gap-3 lg:gap-4">
-                        <div
-                            class="bg-indigo-500 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
-                            <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                            </svg>
+                @if($user->canIssueCertificate())
+                    <a href="{{ route('lembaga.sertifikat.bulk') }}"
+                        class="bg-indigo-50 border border-indigo-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-6">
+                        <div class="flex items-center gap-3 lg:gap-4">
+                            <div
+                                class="bg-indigo-500 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-[#4338CA] font-bold text-sm lg:text-lg">Import Data</h3>
+                                <p class="text-[#6366F1] text-xs lg:text-sm">Upload Excel/CSV</p>
+                            </div>
                         </div>
-                        <div>
-                            <h3 class="text-[#4338CA] font-bold text-sm lg:text-lg">Import Data</h3>
-                            <p class="text-[#6366F1] text-xs lg:text-sm">Upload Excel/CSV</p>
+                    </a>
+                @else
+                    <div
+                        class="relative rounded-xl lg:rounded-2xl p-4 lg:p-6 bg-red-50 border-2 border-red-200 opacity-80 cursor-not-allowed animate-fade-in-up stagger-6">
+                        <div class="flex items-center gap-3 lg:gap-4">
+                            <div
+                                class="bg-red-400 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-red-700 font-bold text-sm lg:text-lg">Kuota Habis</h3>
+                                <p class="text-red-500 text-xs lg:text-sm">{{ $certificatesUsed }}/{{ $certificateLimit }}
+                                    terpakai</p>
+                            </div>
                         </div>
+                        <a href="{{ url('/#harga') }}"
+                            class="absolute inset-0 flex items-center justify-center bg-red-900/80 rounded-xl lg:rounded-2xl opacity-0 hover:opacity-100 transition-opacity">
+                            <span class="text-white font-bold text-sm">Upgrade Paket →</span>
+                        </a>
                     </div>
-                </a>
+                @endif
             @endif
         </div>
 

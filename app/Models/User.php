@@ -39,6 +39,7 @@ class User extends Authenticatable
         'wallet_address',
         'profile_completed',
         'package_id',
+        'subscription_expires_at',
         'is_admin',
         'is_master',
         'email_verified_at',
@@ -64,6 +65,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'profile_completed' => 'boolean',
+            'subscription_expires_at' => 'datetime',
         ];
     }
 
@@ -93,10 +95,15 @@ class User extends Authenticatable
 
     /**
      * Get the active package for this user
-     * Returns Starter package if no paid subscription
+     * Returns Starter package if subscription expired or no paid subscription
      */
     public function getActivePackage()
     {
+        // If subscription has expired, return Starter package
+        if ($this->isSubscriptionExpired()) {
+            return Package::where('slug', 'starter')->first();
+        }
+
         // Check for active paid order
         $activeOrder = $this->orders()
             ->where('status', 'paid')
@@ -115,6 +122,47 @@ class User extends Authenticatable
     }
 
     /**
+     * Check if user's subscription has expired
+     */
+    public function isSubscriptionExpired(): bool
+    {
+        // If no expiration date set or user is on starter, not expired
+        if (!$this->subscription_expires_at) {
+            return false;
+        }
+
+        return $this->subscription_expires_at->isPast();
+    }
+
+    /**
+     * Check if subscription is expiring within 7 days
+     */
+    public function isSubscriptionExpiringSoon(): bool
+    {
+        if (!$this->subscription_expires_at || $this->isSubscriptionExpired()) {
+            return false;
+        }
+
+        return $this->subscription_expires_at->diffInDays(now()) <= 7;
+    }
+
+    /**
+     * Get remaining days until subscription expires
+     */
+    public function getSubscriptionDaysRemaining(): ?int
+    {
+        if (!$this->subscription_expires_at) {
+            return null;
+        }
+
+        if ($this->isSubscriptionExpired()) {
+            return 0;
+        }
+
+        return (int) now()->diffInDays($this->subscription_expires_at);
+    }
+
+    /**
      * Get certificate limit for current package
      */
     public function getCertificateLimit(): int
@@ -124,18 +172,67 @@ class User extends Authenticatable
     }
 
     /**
-     * Get certificates issued this month (dummy for now)
+     * Get the start date of the current 30-day billing cycle
+     * Based on email_verified_at, cycles every 30 days
+     */
+    public function getBillingCycleStart(): ?\Carbon\Carbon
+    {
+        $verifiedAt = $this->email_verified_at;
+        if (!$verifiedAt) {
+            // If not verified, use created_at as fallback
+            $verifiedAt = $this->created_at;
+        }
+        if (!$verifiedAt)
+            return null;
+
+        $daysSinceVerification = $verifiedAt->diffInDays(now());
+        $completedCycles = floor($daysSinceVerification / 30);
+
+        return $verifiedAt->copy()->addDays($completedCycles * 30);
+    }
+
+    /**
+     * Get days remaining in current billing cycle
+     */
+    public function getDaysRemainingInCycle(): int
+    {
+        $cycleStart = $this->getBillingCycleStart();
+        if (!$cycleStart)
+            return 30;
+
+        $cycleEnd = $cycleStart->copy()->addDays(30);
+        return max(0, (int) now()->diffInDays($cycleEnd, false));
+    }
+
+    /**
+     * Get certificates issued in current billing cycle
+     * If subscription expired, reset counter (only count from expiration date)
      */
     public function getCertificatesUsedThisMonth(): int
     {
+        // If subscription has expired, reset counter - only count certificates created AFTER expiration
+        if ($this->isSubscriptionExpired() && $this->subscription_expires_at) {
+            return $this->certificates()
+                ->where('created_at', '>=', $this->subscription_expires_at)
+                ->count();
+        }
+
+        $cycleStart = $this->getBillingCycleStart();
+        if (!$cycleStart) {
+            // Fallback to calendar month if no cycle start
+            return $this->certificates()
+                ->whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->count();
+        }
+
         return $this->certificates()
-            ->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
+            ->where('created_at', '>=', $cycleStart)
             ->count();
     }
 
     /**
-     * Get remaining certificates this month
+     * Get remaining certificates in current billing cycle
      */
     public function getRemainingCertificates(): int
     {
@@ -216,25 +313,59 @@ class User extends Authenticatable
     }
 
     /**
-     * Get blockchain usage this month
+     * Get blockchain usage in current billing cycle
+     * Resets when subscription expires
      */
     public function getBlockchainUsedThisMonth(): int
     {
+        // If subscription has expired, reset counter - only count after expiration
+        if ($this->isSubscriptionExpired() && $this->subscription_expires_at) {
+            return $this->certificates()
+                ->where('created_at', '>=', $this->subscription_expires_at)
+                ->whereIn('blockchain_status', ['confirmed', 'pending', 'processing'])
+                ->count();
+        }
+
+        $cycleStart = $this->getBillingCycleStart();
+        if (!$cycleStart) {
+            return $this->certificates()
+                ->whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->whereIn('blockchain_status', ['confirmed', 'pending', 'processing'])
+                ->count();
+        }
+
         return $this->certificates()
-            ->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
+            ->where('created_at', '>=', $cycleStart)
             ->whereIn('blockchain_status', ['confirmed', 'pending', 'processing'])
             ->count();
     }
 
     /**
-     * Get IPFS usage this month
+     * Get IPFS usage in current billing cycle
+     * Resets when subscription expires
      */
     public function getIpfsUsedThisMonth(): int
     {
+        // If subscription has expired, reset counter - only count after expiration
+        if ($this->isSubscriptionExpired() && $this->subscription_expires_at) {
+            return $this->certificates()
+                ->where('created_at', '>=', $this->subscription_expires_at)
+                ->whereIn('ipfs_status', ['pending', 'processing', 'success'])
+                ->count();
+        }
+
+        $cycleStart = $this->getBillingCycleStart();
+        if (!$cycleStart) {
+            return $this->certificates()
+                ->whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->whereIn('ipfs_status', ['pending', 'processing', 'success'])
+                ->count();
+        }
+
         return $this->certificates()
-            ->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
+            ->where('created_at', '>=', $cycleStart)
             ->whereIn('ipfs_status', ['pending', 'processing', 'success'])
             ->count();
     }

@@ -45,19 +45,25 @@ class PaymentController extends Controller
 
         if ($user && $user->package_id) {
             $currentPackage = Package::find($user->package_id);
+            $isSubscriptionExpired = $user->isSubscriptionExpired();
 
-            // If user already has same or higher package, redirect to dashboard
-            if ($currentPackage && $currentPackage->slug === $package->slug) {
-                \Log::info('Checkout Redirect: User already has package');
-                return redirect()->route('lembaga.dashboard')
-                    ->with('info', 'Anda sudah memiliki paket ' . $package->name);
-            }
+            // If subscription is expired, allow purchase (renewal)
+            if ($isSubscriptionExpired) {
+                \Log::info('Checkout: Subscription expired, allowing renewal');
+            } else {
+                // If user already has same package and subscription is active, redirect to dashboard
+                if ($currentPackage && $currentPackage->slug === $package->slug) {
+                    \Log::info('Checkout Redirect: User already has active package');
+                    return redirect()->route('lembaga.dashboard')
+                        ->with('info', 'Anda sudah memiliki paket ' . $package->name . ' yang masih aktif');
+                }
 
-            // If user has professional and trying to buy starter, redirect
-            if ($currentPackage && $currentPackage->slug === 'professional' && $package->slug === 'starter') {
-                \Log::info('Checkout Redirect: Downgrade attempt');
-                return redirect()->route('lembaga.dashboard')
-                    ->with('info', 'Anda sudah memiliki paket Professional');
+                // If user has professional and trying to buy starter while subscription active, redirect
+                if ($currentPackage && $currentPackage->slug === 'professional' && $package->slug === 'starter') {
+                    \Log::info('Checkout Redirect: Downgrade attempt');
+                    return redirect()->route('lembaga.dashboard')
+                        ->with('info', 'Anda sudah memiliki paket Professional yang masih aktif');
+                }
             }
         } else {
             \Log::info('Checkout: User has no package or logic skipped');
