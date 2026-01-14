@@ -612,7 +612,7 @@
                                         @endif
                                     </td>
                                     <td class="py-4 px-4 text-right">
-                                        <a href="{{ route('verifikasi.show', $cert->hash) }}" target="_blank"
+                                        <a href="{{ route('lembaga.sertifikat.show', $cert->id) }}" target="_blank"
                                             class="text-[#3B82F6] hover:text-[#1D4ED8] text-sm font-medium">Lihat</a>
                                     </td>
                                 </tr>

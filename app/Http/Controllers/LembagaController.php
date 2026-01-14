@@ -276,7 +276,7 @@ class LembagaController extends Controller
     public function showSertifikat(Certificate $certificate)
     {
         // Ensure user owns this certificate
-        if ($certificate->user_id !== Auth::id()) {
+        if ((int) $certificate->user_id !== (int) Auth::id()) {
             abort(403);
         }
 
