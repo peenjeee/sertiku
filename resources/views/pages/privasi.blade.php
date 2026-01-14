@@ -29,6 +29,22 @@
                 </section>
 
                 <section>
+                    <h2 class="text-xl font-semibold text-white mb-4">1.1 Penggunaan Data Google</h2>
+                    <p class="leading-relaxed">Jika Anda memilih untuk masuk menggunakan akun Google, kami mengakses
+                        informasi berikut:</p>
+                    <ul class="list-disc list-inside mt-3 space-y-2 text-[#BEDBFF]">
+                        <li><strong>Nama Lengkap:</strong> Digunakan untuk menampilkan identitas pengguna di dashboard.
+                        </li>
+                        <li><strong>Alamat Email:</strong> Digunakan sebagai pengenal unik akun dan untuk mengirim
+                            notifikasi sertifikat.</li>
+                        <li><strong>Foto Profil:</strong> Digunakan untuk menampilkan avatar pengguna.</li>
+                    </ul>
+                    <p class="leading-relaxed mt-3">Data ini hanya digunakan untuk autentikasi dan fungsionalitas
+                        aplikasi. Kami tidak menggunakan data ini untuk tujuan periklanan atau membagikannya ke pihak
+                        ketiga tanpa izin Anda.</p>
+                </section>
+
+                <section>
                     <h2 class="text-xl font-semibold text-white mb-4">2. Penggunaan Informasi</h2>
                     <p class="leading-relaxed">Informasi yang kami kumpulkan digunakan untuk:</p>
                     <ul class="list-disc list-inside mt-3 space-y-2 text-[#BEDBFF]">

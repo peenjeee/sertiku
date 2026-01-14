@@ -87,7 +87,7 @@
                                 </label>
 
                                 {{-- Crypto --}}
-                                <label
+                                <!-- <label
                                     class="relative flex cursor-pointer rounded-[12px] border border-[rgba(255,255,255,0.12)] bg-[rgba(15,23,42,0.6)] p-4 focus:outline-none focus:ring-2 focus:ring-[#3B82F6] hover:bg-[rgba(15,23,42,0.8)] transition">
                                     <input type="radio" name="payment_method" value="crypto" class="peer sr-only">
                                     <span class="flex flex-1">
@@ -107,7 +107,7 @@
                                     <span
                                         class="pointer-events-none absolute -inset-px rounded-[12px] border-2 border-transparent peer-checked:border-blue-500"
                                         aria-hidden="true"></span>
-                                </label>
+                                </label> -->
                             </div>
                         </div>
 

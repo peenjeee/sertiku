@@ -148,7 +148,7 @@
             class="mt-10 flex flex-col gap-4 border-t border-[rgba(15,23,42,0.9)] pt-6 text-xs text-[rgba(148,163,184,0.9)] md:flex-row md:items-center md:justify-between">
             <p>&copy; {{ date('Y') }} SertiKu. Semua hak dilindungi.</p>
             <div class="flex flex-wrap gap-x-6 gap-y-2">
-                <a href="{{ route('privasi') }}" class="hover:text-white transition">Privasi</a>
+                <a href="{{ route('privasi') }}" class="hover:text-white transition">Kebijakan Privasi</a>
                 <a href="{{ route('syarat') }}" class="hover:text-white transition">Syarat &amp; Ketentuan</a>
                 <a href="{{ route('cookie') }}" class="hover:text-white transition">Kebijakan Cookie</a>
             </div>
