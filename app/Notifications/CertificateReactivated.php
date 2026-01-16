@@ -36,7 +36,7 @@ class CertificateReactivated extends Notification
     {
         return (new MailMessage)
             ->subject('KABAR BAIK: Sertifikat Aktif Kembali - ' . $this->certificate->certificate_number)
-            ->greeting('Halo, ' . $notifiable->name)
+            ->greeting('Halo, ' . ($notifiable->name ?? $this->certificate->recipient_name))
             ->line('Kami ingin memberitahukan bahwa sertifikat Anda yang sebelumnya dicabut, kini telah DIAKTIFKAN KEMBALI.')
             ->line('Detail Sertifikat:')
             ->line('Nama: ' . $this->certificate->recipient_name)

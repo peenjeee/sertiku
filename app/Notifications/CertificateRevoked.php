@@ -36,7 +36,7 @@ class CertificateRevoked extends Notification
     {
         return (new MailMessage)
             ->subject('PENTING: Sertifikat Dicabut - ' . $this->certificate->certificate_number)
-            ->greeting('Halo, ' . $notifiable->name)
+            ->greeting('Halo, ' . ($notifiable->name ?? $this->certificate->recipient_name))
             ->line('Kami ingin memberitahukan bahwa sertifikat Anda dengan detail berikut telah DICABUT oleh penerbit:')
             ->line('Nama: ' . $this->certificate->recipient_name)
             ->line('Nomor Sertifikat: ' . $this->certificate->certificate_number)
