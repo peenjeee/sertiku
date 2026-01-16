@@ -137,7 +137,16 @@
         {{-- Background (Base64 Encoded for Reliability) --}}
         @if($certificate->template && $certificate->template->file_path)
             @php
-                $bgPath = storage_path('app/public/' . $certificate->template->file_path);
+                // Templates are stored in 'templates/' directory in 'local' disk (storage/app/templates)
+                // The file_path in DB is like 'templates/filename.jpg'
+                // So full path is storage_path('app/' . $certificate->template->file_path)
+                $bgPath = storage_path('app/' . $certificate->template->file_path);
+
+                // Fallback for legacy public paths if needed (though we moved them)
+                if (!file_exists($bgPath) && str_starts_with($certificate->template->file_path, 'public/')) {
+                    $bgPath = storage_path('app/' . $certificate->template->file_path);
+                }
+
                 $bgType = pathinfo($bgPath, PATHINFO_EXTENSION);
                 $bgData = file_exists($bgPath) ? base64_encode(file_get_contents($bgPath)) : '';
             @endphp
@@ -159,10 +168,10 @@
             {{-- QR Code (offset -1% left for DOMPDF adjustment) --}}
             <div class="qr-code-anchor" style="left: {{ $qrX - 1 }}%; top: {{ $qrY }}%;">
                 <div class="qr-code-box" style="
-                                        width: {{ $scaledQrSize }}pt; 
-                                        height: {{ $scaledQrSize }}pt; 
-                                        margin-left: -{{ $scaledQrHalfSize }}pt; 
-                                        margin-top: -{{ $scaledQrHalfSize }}pt;">
+                                            width: {{ $scaledQrSize }}pt; 
+                                            height: {{ $scaledQrSize }}pt; 
+                                            margin-left: -{{ $scaledQrHalfSize }}pt; 
+                                            margin-top: -{{ $scaledQrHalfSize }}pt;">
                     <img src="{{ storage_path('app/public/' . $certificate->qr_code_path) }}"
                         style="width: 100%; height: 100%;">
                 </div>
