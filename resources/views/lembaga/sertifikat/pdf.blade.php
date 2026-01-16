@@ -137,14 +137,13 @@
         {{-- Background (Base64 Encoded for Reliability) --}}
         @if($certificate->template && $certificate->template->file_path)
             @php
-                // Templates are stored in 'templates/' directory in 'local' disk (storage/app/templates)
-                // The file_path in DB is like 'templates/filename.jpg'
-                // So full path is storage_path('app/' . $certificate->template->file_path)
-                $bgPath = storage_path('app/' . $certificate->template->file_path);
+                // Use Storage facade to respect the 'local' disk configuration (which points to storage/app/private)
+                $bgPath = \Illuminate\Support\Facades\Storage::disk('local')->path($certificate->template->file_path);
 
-                // Fallback for legacy public paths if needed (though we moved them)
+                // Fallback for legacy public paths if the file is not found in private storage
                 if (!file_exists($bgPath) && str_starts_with($certificate->template->file_path, 'public/')) {
-                    $bgPath = storage_path('app/' . $certificate->template->file_path);
+                    // Try to find it in the public disk path
+                    $bgPath = \Illuminate\Support\Facades\Storage::disk('public')->path(str_replace('public/', '', $certificate->template->file_path));
                 }
 
                 $bgType = pathinfo($bgPath, PATHINFO_EXTENSION);
@@ -168,10 +167,10 @@
             {{-- QR Code (offset -1% left for DOMPDF adjustment) --}}
             <div class="qr-code-anchor" style="left: {{ $qrX - 1 }}%; top: {{ $qrY }}%;">
                 <div class="qr-code-box" style="
-                                            width: {{ $scaledQrSize }}pt; 
-                                            height: {{ $scaledQrSize }}pt; 
-                                            margin-left: -{{ $scaledQrHalfSize }}pt; 
-                                            margin-top: -{{ $scaledQrHalfSize }}pt;">
+                                                width: {{ $scaledQrSize }}pt; 
+                                                height: {{ $scaledQrSize }}pt; 
+                                                margin-left: -{{ $scaledQrHalfSize }}pt; 
+                                                margin-top: -{{ $scaledQrHalfSize }}pt;">
                     <img src="{{ storage_path('app/public/' . $certificate->qr_code_path) }}"
                         style="width: 100%; height: 100%;">
                 </div>

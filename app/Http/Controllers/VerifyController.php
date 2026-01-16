@@ -276,9 +276,7 @@ class VerifyController extends Controller
         }
 
         // Check if PDF exists in PRIVATE storage, if not generate it
-        // FORCE REGENERATE: If 'stream' (preview) or 'regenerate' param is present, recreate PDF
-        // This ensures the Template Image fix is applied to existing cached PDFs
-        if (($request->has('stream') || $request->has('regenerate')) || !$certificate->pdf_path || !\Illuminate\Support\Facades\Storage::disk('local')->exists($certificate->pdf_path)) {
+        if (!$certificate->pdf_path || !\Illuminate\Support\Facades\Storage::disk('local')->exists($certificate->pdf_path)) {
             $certificate->generatePdf();
         }
 
