@@ -114,7 +114,7 @@
                         <!-- Template Grid -->
                         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                             <!-- No Template Option -->
-                            <label class="cursor-pointer">
+                            <!-- <label class="cursor-pointer">
                                 <input type="radio" name="template_id" value="" class="hidden peer" checked>
                                 <div
                                     class="border-2 border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-50 rounded-xl p-4 text-center transition hover:border-blue-300">
@@ -128,7 +128,7 @@
                                     <p class="text-gray-700 text-sm font-medium">Tanpa Template</p>
                                     <p class="text-gray-400 text-xs">Default</p>
                                 </div>
-                            </label>
+                            </label> -->
 
                             <!-- Template Cards -->
                             @foreach($templates as $template)

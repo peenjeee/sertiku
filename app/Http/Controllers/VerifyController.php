@@ -266,7 +266,7 @@ class VerifyController extends Controller
                 $isOwner = true;
             }
             // Check if user is the issuing institution
-            if ($certificate->user_id && $certificate->user_id === $user->id) {
+            if ($certificate->user_id && $certificate->user_id == $user->id) {
                 $isIssuer = true;
             }
         }
