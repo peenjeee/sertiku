@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class CertificateReactivated extends Notification
+class CertificateReactivated extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -26,7 +26,7 @@ class CertificateReactivated extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail', 'database'];
+        return $notifiable instanceof \App\Models\User ? ['mail', 'database'] : ['mail'];
     }
 
     /**
