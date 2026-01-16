@@ -94,7 +94,7 @@
                         <div
                             class="relative aspect-[4/3] bg-[#475569] flex items-center justify-center">
                             @if($template->thumbnail_path)
-                                <img src="{{ asset('storage/' . $template->thumbnail_path) }}" alt="{{ $template->name }}"
+                                <img src="{{ $template->thumbnail_url }}" alt="{{ $template->name }}"
                                     class="w-full h-full object-cover">
                             @else
                                 <div class="text-center p-4">
@@ -120,7 +120,7 @@
                             <!-- Hover Actions -->
                             <div
                                 class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-3">
-                                <a href="{{ asset('storage/' . $template->file_path) }}" target="_blank"
+                                <a href="{{ $template->file_url }}" target="_blank"
                                     class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-800 hover:bg-gray-100 transition"
                                     title="Lihat Template">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

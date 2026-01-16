@@ -108,7 +108,7 @@
 
                                         <div
                                             class="aspect-video rounded-xl overflow-hidden relative ring-2 ring-transparent peer-checked:ring-blue-500 transition-all duration-300 group-hover:scale-[1.02]">
-                                            <img src="{{ asset('storage/' . $template->file_path) }}"
+                                            <img src="{{ $template->thumbnail_url }}"
                                                 class="w-full h-full object-cover">
 
                                             <!-- Overlay & Checkmark -->

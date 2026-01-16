@@ -16,14 +16,16 @@
             </div>
             <div class="flex flex-wrap gap-3">
                 @if($certificate->pdf_path)
-                    <a href="{{ asset('storage/' . $certificate->pdf_path) }}" target="_blank"
-                        class="px-4 py-2 bg-blue-600 rounded-lg text-white font-medium hover:bg-blue-700 transition flex items-center gap-2 text-sm sm:text-base">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                        Download PDF
-                    </a>
+                    <div class="flex flex-wrap gap-4 mt-4">
+                        <a href="{{ route('verifikasi.pdf', $certificate->hash) }}" target="_blank"
+                            class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                            Download PDF
+                        </a>
+                    </div>
                 @endif
 
                 <a href="{{ route('verifikasi.show', $certificate->hash) }}" target="_blank"

@@ -48,7 +48,7 @@
                     <div class="relative w-full rounded-lg overflow-hidden border border-gray-300 bg-gray-50 preview-container"
                         id="preview-area">
                         {{-- Background Image --}}
-                        <img src="{{ asset('storage/' . $template->file_path) }}" alt="Preview"
+                        <img src="{{ $template->file_url }}" alt="Preview"
                             class="w-full h-auto block pointer-events-none select-none">
 
                         {{-- Draggable Name --}}

@@ -139,7 +139,7 @@
                                         <!-- Template Preview -->
                                         <div class="aspect-[4/3] bg-gray-200 flex items-center justify-center">
                                             @if($template->thumbnail_path)
-                                                <img src="{{ asset('storage/' . $template->thumbnail_path) }}"
+                                                <img src="{{ $template->thumbnail_url }}"
                                                     alt="{{ $template->name }}" class="w-full h-full object-cover">
                                             @else
                                                 <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
