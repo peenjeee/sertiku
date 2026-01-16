@@ -217,32 +217,46 @@ class BackupController extends Controller
         $filename = "storage_{$timestamp}.zip";
         $zipPath = $this->backupPath . '/' . $filename;
 
-        // Use the actual storage path (where files are stored by Laravel)
-        $storagePath = storage_path('app/public');
-
-        if (!File::exists($storagePath)) {
-            return null;
-        }
+        // Directories to backup (relative to storage/app)
+        // Explicitly list them to avoid backing up 'backups' folder or system files
+        $dirsToBackup = ['public', 'certificates', 'templates', 'invoices'];
+        $basePath = storage_path('app');
 
         $zip = new ZipArchive();
         if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
             throw new \Exception('Cannot create zip file');
         }
 
-        $files = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($storagePath),
-            \RecursiveIteratorIterator::LEAVES_ONLY
-        );
+        $fileCount = 0;
 
-        foreach ($files as $file) {
-            if (!$file->isDir()) {
-                $filePath = $file->getRealPath();
-                $relativePath = substr($filePath, strlen($storagePath) + 1);
-                $zip->addFile($filePath, $relativePath);
+        foreach ($dirsToBackup as $dir) {
+            $fullPath = $basePath . '/' . $dir;
+
+            if (File::exists($fullPath)) {
+                $files = new \RecursiveIteratorIterator(
+                    new \RecursiveDirectoryIterator($fullPath),
+                    \RecursiveIteratorIterator::LEAVES_ONLY
+                );
+
+                foreach ($files as $file) {
+                    if (!$file->isDir()) {
+                        $filePath = $file->getRealPath();
+                        // Relative path should include the directory name (e.g., 'public/avatar.jpg')
+                        $relativePath = substr($filePath, strlen($basePath) + 1);
+                        // Convert backslashes to forward slashes for zip compatibility across OS
+                        $relativePath = str_replace('\\', '/', $relativePath);
+                        $zip->addFile($filePath, $relativePath);
+                        $fileCount++;
+                    }
+                }
             }
         }
 
         $zip->close();
+
+        if ($fileCount === 0) {
+            return null;
+        }
 
         return $filename;
     }
@@ -327,16 +341,41 @@ class BackupController extends Controller
 
         // Check if this is a storage backup (by filename)
         if (str_contains($filename, 'storage_')) {
-            // Use the actual storage path (where files are stored by Laravel)
-            $storagePath = storage_path('app/public');
+            // Determine if this is a legacy backup (rooted in public/) or new backup (rooted in app/)
+            $isLegacy = true;
 
-            // Create directory if not exists
-            if (!File::exists($storagePath)) {
-                File::makeDirectory($storagePath, 0755, true);
+            // Check first few files to guess structure
+            for ($i = 0; $i < min($zip->numFiles, 10); $i++) {
+                $stat = $zip->statIndex($i);
+                $name = $stat['name'];
+
+                // If we see top-level folders like 'public/', 'certificates/', etc., it's the NEW format
+                if (
+                    str_starts_with($name, 'public/') ||
+                    str_starts_with($name, 'certificates/') ||
+                    str_starts_with($name, 'templates/') ||
+                    str_starts_with($name, 'invoices/')
+                ) {
+                    $isLegacy = false;
+                    break;
+                }
             }
 
-            // Extract directly to storage/app/public folder
-            $zip->extractTo($storagePath);
+            if ($isLegacy) {
+                // Legacy: Extract to storage/app/public
+                $targetPath = storage_path('app/public');
+            } else {
+                // New: Extract to storage/app (preserves folder structure)
+                $targetPath = storage_path('app');
+            }
+
+            // Create directory if not exists
+            if (!File::exists($targetPath)) {
+                File::makeDirectory($targetPath, 0755, true);
+            }
+
+            // Extract
+            $zip->extractTo($targetPath);
             $restoredFiles = $zip->numFiles;
             $zip->close();
 
@@ -524,20 +563,24 @@ class BackupController extends Controller
     protected function getStorageStats()
     {
         // Use the actual storage path (consistent with backup/restore)
-        $storagePath = storage_path('app/public');
+        $basePath = storage_path('app');
+        $dirsToCheck = ['public', 'certificates', 'templates', 'invoices'];
 
         $totalSize = 0;
         $fileCount = 0;
 
-        if (File::exists($storagePath)) {
-            $files = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($storagePath)
-            );
+        foreach ($dirsToCheck as $dir) {
+            $fullPath = $basePath . '/' . $dir;
+            if (File::exists($fullPath)) {
+                $files = new \RecursiveIteratorIterator(
+                    new \RecursiveDirectoryIterator($fullPath)
+                );
 
-            foreach ($files as $file) {
-                if ($file->isFile()) {
-                    $totalSize += $file->getSize();
-                    $fileCount++;
+                foreach ($files as $file) {
+                    if ($file->isFile()) {
+                        $totalSize += $file->getSize();
+                        $fileCount++;
+                    }
                 }
             }
         }
@@ -654,16 +697,42 @@ class BackupController extends Controller
 
         // Check if this is a storage backup (by filename)
         if (str_contains($filename, 'storage_')) {
-            // Use the actual storage path (where files are stored by Laravel)
-            $storagePath = storage_path('app/public');
+            // Determine if this is a legacy backup (rooted in public/) or new backup (rooted in app/)
+            $isLegacy = true;
 
-            // Create directory if not exists
-            if (!File::exists($storagePath)) {
-                File::makeDirectory($storagePath, 0755, true);
+            // Check first few files to guess structure
+            for ($i = 0; $i < min($zip->numFiles, 10); $i++) {
+                $stat = $zip->statIndex($i);
+                // Handle different array keys in zip versions if needed, but 'name' is standard
+                $name = $stat['name'];
+
+                // If we see top-level folders like 'public/', 'certificates/', etc., it's the NEW format
+                if (
+                    str_starts_with($name, 'public/') ||
+                    str_starts_with($name, 'certificates/') ||
+                    str_starts_with($name, 'templates/') ||
+                    str_starts_with($name, 'invoices/')
+                ) {
+                    $isLegacy = false;
+                    break;
+                }
             }
 
-            // Extract directly to storage/app/public folder
-            $zip->extractTo($storagePath);
+            if ($isLegacy) {
+                // Legacy: Extract to storage/app/public
+                $targetPath = storage_path('app/public');
+            } else {
+                // New: Extract to storage/app (preserves folder structure)
+                $targetPath = storage_path('app');
+            }
+
+            // Create directory if not exists
+            if (!File::exists($targetPath)) {
+                File::makeDirectory($targetPath, 0755, true);
+            }
+
+            // Extract
+            $zip->extractTo($targetPath);
             $restoredFiles = $zip->numFiles;
             $zip->close();
 
