@@ -987,7 +987,9 @@ class LembagaController extends Controller
             abort(404);
         }
 
-        return Storage::disk('local')->response($template->file_path);
+        return Storage::disk('local')->response($template->file_path, null, [
+            'Cache-Control' => 'public, max-age=86400',
+        ]);
     }
 
     /**
@@ -1006,7 +1008,9 @@ class LembagaController extends Controller
             abort(404);
         }
 
-        return Storage::disk('local')->response($path);
+        return Storage::disk('local')->response($path, null, [
+            'Cache-Control' => 'public, max-age=86400',
+        ]);
     }
 
     /**
@@ -1192,7 +1196,7 @@ class LembagaController extends Controller
         ]);
 
         // Ensure user owns the certificate (via template/institution relation)
-        if ($certificate->user_id !== Auth::id()) {
+        if ($certificate->user_id != Auth::id()) {
             abort(403);
         }
 
@@ -1222,7 +1226,7 @@ class LembagaController extends Controller
     public function reactivateCertificate(Request $request, Certificate $certificate)
     {
         // Ensure user owns the certificate
-        if ($certificate->user_id !== Auth::id()) {
+        if ($certificate->user_id != Auth::id()) {
             abort(403);
         }
 
