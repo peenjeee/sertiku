@@ -56,7 +56,6 @@ class BackupController extends Controller
     public function createBackup(Request $request)
     {
         $type = $request->get('type', 'full'); // full, database, storage
-        $timestamp = now()->setTimezone('Asia/Jakarta')->format('Y-m-d_His');
 
         // Check if Google Drive is configured
         if (!$this->googleDrive->isConfigured()) {
@@ -64,50 +63,13 @@ class BackupController extends Controller
         }
 
         try {
-            $uploaded = [];
+            // Dispatch Job
+            \App\Jobs\ProcessBackup::dispatch($type, auth()->user());
 
-            if ($type === 'full' || $type === 'database') {
-                $dbFile = $this->backupDatabase($timestamp);
-                if ($dbFile) {
-                    $filePath = $this->backupPath . '/' . $dbFile;
-                    $this->googleDrive->uploadFile($filePath, $dbFile, 'application/zip');
-                    // Delete local file after upload
-                    if (File::exists($filePath)) {
-                        File::delete($filePath);
-                    }
-                    $uploaded[] = $dbFile;
-                }
-            }
-
-            if ($type === 'full' || $type === 'storage') {
-                $storageFile = $this->backupStorage($timestamp);
-                if ($storageFile) {
-                    $filePath = $this->backupPath . '/' . $storageFile;
-                    $this->googleDrive->uploadFile($filePath, $storageFile, 'application/zip');
-                    // Delete local file after upload
-                    if (File::exists($filePath)) {
-                        File::delete($filePath);
-                    }
-                    $uploaded[] = $storageFile;
-                }
-            }
-
-            // Clean up any manifest files
-            $manifests = File::glob($this->backupPath . '/*_manifest.json');
-            foreach ($manifests as $manifest) {
-                File::delete($manifest);
-            }
-
-            // Log activity
-            ActivityLog::log('backup', 'Backup ' . $type . ' berhasil: ' . implode(', ', $uploaded), null, [
-                'type' => $type,
-                'files' => $uploaded,
-            ]);
-
-            return back()->with('success', 'Backup berhasil diupload ke Google Drive! File: ' . implode(', ', $uploaded));
+            return back()->with('success', 'Proses backup sedang berjalan di latar belakang (Background). Anda akan menerima notifikasi atau bisa cek di Google Drive beberapa saat lagi.');
 
         } catch (\Exception $e) {
-            return back()->with('error', 'Gagal membuat backup: ' . $e->getMessage());
+            return back()->with('error', 'Gagal memulai backup: ' . $e->getMessage());
         }
     }
 
