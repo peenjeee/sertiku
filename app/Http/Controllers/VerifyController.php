@@ -117,9 +117,26 @@ class VerifyController extends Controller
                 return response()->json($response);
             }
 
+            // Check if current user is the certificate owner or issuer
+            $isOwner = false;
+            $isIssuer = false;
+            if (auth()->check()) {
+                $user = auth()->user();
+                // Check if user is the certificate recipient
+                if ($certificate->recipient_email && strtolower($user->email) === strtolower($certificate->recipient_email)) {
+                    $isOwner = true;
+                }
+                // Check if user is the issuing institution
+                if ($certificate->user_id && $certificate->user_id === $user->id) {
+                    $isIssuer = true;
+                }
+            }
+
             return view('verifikasi.valid', [
                 'hash' => $certificate->hash,
                 'certificate' => $certificateData,
+                'isOwner' => $isOwner,
+                'isIssuer' => $isIssuer,
             ]);
         }
 
@@ -201,9 +218,26 @@ class VerifyController extends Controller
                 'qr_size' => $certificate->template->qr_size ?? 80,
             ];
 
+            // Check if current user is the certificate owner or issuer
+            $isOwner = false;
+            $isIssuer = false;
+            if (auth()->check()) {
+                $user = auth()->user();
+                // Check if user is the certificate recipient
+                if ($certificate->recipient_email && strtolower($user->email) === strtolower($certificate->recipient_email)) {
+                    $isOwner = true;
+                }
+                // Check if user is the issuing institution
+                if ($certificate->user_id && $certificate->user_id === $user->id) {
+                    $isIssuer = true;
+                }
+            }
+
             return view('verifikasi.valid', [
                 'hash' => $certificate->hash,
                 'certificate' => $certificateData,
+                'isOwner' => $isOwner,
+                'isIssuer' => $isIssuer,
             ]);
         }
 
@@ -213,6 +247,7 @@ class VerifyController extends Controller
 
     /**
      * Download certificate PDF.
+     * Only accessible by certificate owner (recipient) or issuing institution.
      */
     public function downloadPdf(Request $request, $hash)
     {
@@ -220,20 +255,66 @@ class VerifyController extends Controller
             ->orWhere('certificate_number', $hash)
             ->firstOrFail();
 
-        // Check if PDF exists, if not generate it
-        if (!$certificate->pdf_path || !\Illuminate\Support\Facades\Storage::disk('public')->exists($certificate->pdf_path)) {
+        // Check authorization: must be certificate owner OR issuing institution
+        $isOwner = false;
+        $isIssuer = false;
+
+        if (auth()->check()) {
+            $user = auth()->user();
+            // Check if user is the certificate recipient
+            if ($certificate->recipient_email && strtolower($user->email) === strtolower($certificate->recipient_email)) {
+                $isOwner = true;
+            }
+            // Check if user is the issuing institution
+            if ($certificate->user_id && $certificate->user_id === $user->id) {
+                $isIssuer = true;
+            }
+        }
+
+        if (!$isOwner && !$isIssuer) {
+            abort(403, 'Anda tidak memiliki akses untuk melihat sertifikat ini.');
+        }
+
+        // Check if PDF exists in PRIVATE storage, if not generate it
+        if (!$certificate->pdf_path || !\Illuminate\Support\Facades\Storage::disk('local')->exists($certificate->pdf_path)) {
             $certificate->generatePdf();
         }
 
-        // Support inline streaming
+        // Support inline streaming - serve from PRIVATE storage
         if ($request->has('stream')) {
-            return \Illuminate\Support\Facades\Storage::disk('public')->response($certificate->pdf_path);
+            return \Illuminate\Support\Facades\Storage::disk('local')->response($certificate->pdf_path);
         }
 
-        return \Illuminate\Support\Facades\Storage::disk('public')->download(
+        return \Illuminate\Support\Facades\Storage::disk('local')->download(
             $certificate->pdf_path,
             'Sertifikat-' . $certificate->certificate_number . '.pdf'
         );
+    }
+
+    /**
+     * Handle legacy storage URLs /storage/certificates/pdf/{filename}
+     * Proxies to secure download if user is authorized.
+     */
+    public function downloadPublicPdf(Request $request, $filename)
+    {
+        // Extract certificate number from filename (assuming format SERT-XXXXXX-XXXXXX.pdf)
+        // Or simply find by PDF path match, since we store the relative path in DB
+
+        // Try to find by explicit pdf_path logic
+        // pdf_path in DB is 'certificates/pdf/FILENAME.pdf'
+        $dbPath = 'certificates/pdf/' . $filename;
+
+        $certificate = Certificate::where('pdf_path', $dbPath)->first();
+
+        // If not found by path, try by exact filename match query
+        if (!$certificate) {
+            // Fallback: try finding by certificate number derived from filename
+            $certNum = str_replace('.pdf', '', $filename);
+            $certificate = Certificate::where('certificate_number', $certNum)->firstOrFail();
+        }
+
+        // Reuse the downloadPdf logic/checks
+        return $this->downloadPdf($request, $certificate->hash);
     }
 
     /**

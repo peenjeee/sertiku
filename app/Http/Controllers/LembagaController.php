@@ -412,7 +412,7 @@ class LembagaController extends Controller
             return back()->withErrors(['template_file' => 'File upload gagal: ' . $file->getErrorMessage()])->withInput();
         }
 
-        $path = $file->store('templates/' . $user->id, 'public');
+        $path = $file->store('templates/' . $user->id, 'local');
 
         // Check if file upload failed
         if ($path === false || empty($path)) {
@@ -595,10 +595,10 @@ class LembagaController extends Controller
         $borderColor = imagecolorallocate($img, $color['r'], $color['g'], $color['b']);
         imagerectangle($img, 70, 70, $width - 70, $height - 70, $borderColor);
 
-        // Save to storage
+        // Save to storage (PRIVATE)
         $filename = 'templates/' . $user->id . '/' . uniqid() . '.jpg';
-        Storage::disk('public')->makeDirectory('templates/' . $user->id);
-        $fullPath = Storage::disk('public')->path($filename);
+        Storage::disk('local')->makeDirectory('templates/' . $user->id);
+        $fullPath = Storage::disk('local')->path($filename);
         imagejpeg($img, $fullPath);
         imagedestroy($img);
 
@@ -628,10 +628,10 @@ class LembagaController extends Controller
 
         // Delete file from storage
         if ($template->file_path) {
-            Storage::disk('public')->delete($template->file_path);
+            Storage::disk('local')->delete($template->file_path);
         }
         if ($template->thumbnail_path && $template->thumbnail_path !== $template->file_path) {
-            Storage::disk('public')->delete($template->thumbnail_path);
+            Storage::disk('local')->delete($template->thumbnail_path);
         }
 
         $template->delete();
@@ -868,10 +868,10 @@ class LembagaController extends Controller
             // Existing code hardcoded .jpg. Let's keep it but ideally we should convert.
             // For now, simpler is better.
 
-            Storage::disk('public')->makeDirectory('templates/' . $user->id);
+            Storage::disk('local')->makeDirectory('templates/' . $user->id);
 
             // Save image
-            Storage::disk('public')->put($filename, $imageContent);
+            Storage::disk('local')->put($filename, $imageContent);
 
             // Calculate hashes
             $md5 = md5($imageContent);
@@ -971,6 +971,42 @@ class LembagaController extends Controller
         $user->update(['avatar' => null]);
 
         return back()->with('success', 'Foto profil berhasil dihapus!');
+    }
+
+    /**
+     * Download template image (Secure).
+     */
+    public function downloadTemplateImage(Template $template)
+    {
+        // Ensure user owns this template
+        if ($template->user_id != Auth::id()) {
+            abort(403);
+        }
+
+        if (!Storage::disk('local')->exists($template->file_path)) {
+            abort(404);
+        }
+
+        return Storage::disk('local')->response($template->file_path);
+    }
+
+    /**
+     * Download template thumbnail (Secure).
+     */
+    public function downloadTemplateThumbnail(Template $template)
+    {
+        // Ensure user owns this template
+        if ($template->user_id != Auth::id()) {
+            abort(403);
+        }
+
+        $path = $template->thumbnail_path ?? $template->file_path;
+
+        if (!Storage::disk('local')->exists($path)) {
+            abort(404);
+        }
+
+        return Storage::disk('local')->response($path);
     }
 
     /**

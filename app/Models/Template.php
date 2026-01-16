@@ -71,7 +71,10 @@ class Template extends Model
      */
     public function getFileUrlAttribute(): string
     {
-        return asset('storage/' . $this->file_path);
+        if (\Illuminate\Support\Facades\Route::has('lembaga.template.image')) {
+            return route('lembaga.template.image', $this->id);
+        }
+        return '';
     }
 
     /**
@@ -79,7 +82,12 @@ class Template extends Model
      */
     public function getThumbnailUrlAttribute(): ?string
     {
-        return $this->thumbnail_path ? asset('storage/' . $this->thumbnail_path) : null;
+        if ($this->thumbnail_path) {
+            if (\Illuminate\Support\Facades\Route::has('lembaga.template.thumbnail')) {
+                return route('lembaga.template.thumbnail', $this->id);
+            }
+        }
+        return null;
     }
 
     /**
@@ -91,8 +99,8 @@ class Template extends Model
             return $value;
         }
 
-        if ($this->file_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($this->file_path)) {
-            $path = \Illuminate\Support\Facades\Storage::disk('public')->path($this->file_path);
+        if ($this->file_path && \Illuminate\Support\Facades\Storage::disk('local')->exists($this->file_path)) {
+            $path = \Illuminate\Support\Facades\Storage::disk('local')->path($this->file_path);
             $hash = hash_file('sha256', $path);
 
             // Save to DB to avoid re-calculating
@@ -114,8 +122,8 @@ class Template extends Model
             return $value;
         }
 
-        if ($this->file_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($this->file_path)) {
-            $path = \Illuminate\Support\Facades\Storage::disk('public')->path($this->file_path);
+        if ($this->file_path && \Illuminate\Support\Facades\Storage::disk('local')->exists($this->file_path)) {
+            $path = \Illuminate\Support\Facades\Storage::disk('local')->path($this->file_path);
             $hash = md5_file($path);
 
             // Save to DB to avoid re-calculating

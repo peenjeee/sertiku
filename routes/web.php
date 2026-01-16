@@ -361,6 +361,9 @@ Route::post('/verifikasi/file', [\App\Http\Controllers\VerifyController::class, 
 Route::get('/verifikasi/{hash}', [\App\Http\Controllers\VerifyController::class, 'show'])->name('verifikasi.show');
 Route::get('/verifikasi/{hash}/pdf', [\App\Http\Controllers\VerifyController::class, 'downloadPdf'])->name('verifikasi.pdf');
 
+// Legacy/Direct Storage URL Handler (for Owner/Issuer access to private files)
+Route::get('/storage/certificates/pdf/{filename}', [\App\Http\Controllers\VerifyController::class, 'downloadPublicPdf'])->name('verifikasi.pdf.public');
+
 // Fraud Report - Laporan Pemalsuan Sertifikat
 Route::post('/lapor-pemalsuan', [VerifyController::class, 'storeFraudReport'])->name('fraud.report.store');
 
@@ -450,6 +453,14 @@ Route::middleware(['auth'])->prefix('lembaga')->name('lembaga.')->group(function
     Route::post('/template', [\App\Http\Controllers\LembagaController::class, 'storeTemplate'])->name('template.store');
     Route::get('/template/{template}/edit-position', [\App\Http\Controllers\LembagaController::class, 'editTemplatePosition'])->name('template.editPosition');
     Route::put('/template/{template}/position', [\App\Http\Controllers\LembagaController::class, 'updateTemplatePosition'])->name('template.updatePosition');
+
+    // Secure Template Images (Owner Only)
+    Route::get('/template/{template}/image', [\App\Http\Controllers\LembagaController::class, 'downloadTemplateImage'])->name('template.image');
+    Route::get('/template/{template}/thumbnail', [\App\Http\Controllers\LembagaController::class, 'downloadTemplateThumbnail'])->name('template.thumbnail');
+
+    // Secure Invoices (Owner Only)
+    Route::get('/payment/invoice/{order}', [\App\Http\Controllers\PaymentController::class, 'downloadInvoice'])->name('payment.invoice');
+
 
     // API Tokens (Professional & Enterprise only)
     Route::get('/api-tokens', [\App\Http\Controllers\ApiTokenController::class, 'index'])->name('api-tokens.index');

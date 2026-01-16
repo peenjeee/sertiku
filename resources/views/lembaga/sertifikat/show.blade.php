@@ -137,7 +137,8 @@
                 @if($certificate->status === 'active')
                     <div class="glass-card rounded-2xl p-6">
                         <h3 class="text-gray-900 font-bold mb-4">Tidakan</h3>
-                        <form id="form-revoke" action="{{ route('lembaga.sertifikat.revoke', $certificate->id) }}" method="POST">
+                        <form id="form-revoke" action="{{ route('lembaga.sertifikat.revoke', $certificate->id) }}"
+                            method="POST">
                             @csrf
                             <div class="mb-3">
                                 <label class="block text-gray-600 text-xs mb-1">Alasan Pencabutan</label>
@@ -155,7 +156,8 @@
                     <div class="glass-card rounded-2xl p-6">
                         <h3 class="text-gray-900 font-bold mb-4">Tidakan</h3>
                         <div class="mb-4">
-                            <span class="text-xs font-semibold text-red-500 bg-red-50 px-2 py-1 rounded border border-red-100">
+                            <span
+                                class="text-xs font-semibold text-red-500 bg-red-50 px-2 py-1 rounded border border-red-100">
                                 Sertifikat Dicabut
                             </span>
                             @if($certificate->revoked_reason)
@@ -164,7 +166,8 @@
                                 </p>
                             @endif
                         </div>
-                        <form id="form-reactivate" action="{{ route('lembaga.sertifikat.reactivate', $certificate->id) }}" method="POST">
+                        <form id="form-reactivate" action="{{ route('lembaga.sertifikat.reactivate', $certificate->id) }}"
+                            method="POST">
                             @csrf
                             <button type="button" onclick="confirmReactivate()"
                                 class="w-full py-2 bg-green-50 text-green-600 border border-green-200 rounded-lg hover:bg-green-100 transition font-medium">
@@ -218,11 +221,72 @@
                 @if($certificate->pdf_path)
                     <div class="glass-card rounded-2xl p-6">
                         <h3 class="text-gray-900 font-bold mb-4">Preview Sertifikat</h3>
-                        <div class="w-full bg-gray-800 rounded-lg overflow-hidden" style="height: 600px;">
-                            <iframe src="{{ asset('storage/' . $certificate->pdf_path) }}"
+
+                        @php
+                            $isPortrait = ($certificate->template && ($certificate->template->orientation ?? 'landscape') === 'portrait');
+                            $aspectRatio = $isPortrait ? 'aspect-[794/1123]' : 'aspect-[1123/794]';
+                        @endphp
+
+                        {{-- Desktop: PDF Iframe --}}
+                        <div class="hidden md:block w-full bg-gray-800 rounded-lg overflow-hidden {{ $aspectRatio }}">
+                            <iframe
+                                src="{{ route('verifikasi.pdf', ['hash' => $certificate->hash, 'stream' => 1]) }}#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
                                 class="w-full h-full border-0"></iframe>
                         </div>
+
+                        {{-- Mobile: PDF.js Canvas Renderer --}}
+                        <div
+                            class="md:hidden relative w-full rounded-xl overflow-hidden border border-[rgba(255,255,255,0.2)] bg-gray-800 shadow-2xl">
+                            <div id="pdf-container" class="relative {{ $aspectRatio }} flex items-center justify-center">
+                                <div id="pdf-loading" class="absolute inset-0 flex items-center justify-center bg-gray-800">
+                                    <div class="text-center">
+                                        <div
+                                            class="animate-spin rounded-full h-12 w-12 border-4 border-white/20 border-t-blue-500 mx-auto mb-3">
+                                        </div>
+                                        <p class="text-white/70 text-sm">Memuat sertifikat...</p>
+                                    </div>
+                                </div>
+                                <canvas id="pdf-canvas" class="w-full h-full object-contain hidden"></canvas>
+                            </div>
+                        </div>
                     </div>
+
+                    @push('scripts')
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+                        <script>
+                            if (window.innerWidth < 768) {
+                                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                                const pdfUrl = "{{ route('verifikasi.pdf', ['hash' => $certificate->hash, 'stream' => 1]) }}";
+                                const canvas = document.getElementById('pdf-canvas');
+                                const container = document.getElementById('pdf-container');
+                                const loading = document.getElementById('pdf-loading');
+                                const ctx = canvas.getContext('2d');
+
+                                pdfjsLib.getDocument(pdfUrl).promise.then(function (pdf) {
+                                    pdf.getPage(1).then(function (page) {
+                                        const containerWidth = container.clientWidth;
+                                        const viewport = page.getViewport({ scale: 1 });
+                                        const scale = containerWidth / viewport.width;
+                                        const scaledViewport = page.getViewport({ scale: scale * 2 }); // Retina ready
+                                        canvas.height = scaledViewport.height;
+                                        canvas.width = scaledViewport.width;
+                                        canvas.style.width = '100%';
+                                        canvas.style.height = 'auto';
+                                        page.render({
+                                            canvasContext: ctx,
+                                            viewport: scaledViewport
+                                        }).promise.then(function () {
+                                            loading.classList.add('hidden');
+                                            canvas.classList.remove('hidden');
+                                        });
+                                    });
+                                }).catch(function (error) {
+                                    console.error('PDF error:', error);
+                                    loading.innerHTML = '<p class="text-white/70 text-sm p-4">Preview gagal dimuat.</p>';
+                                });
+                            }
+                        </script>
+                    @endpush
                 @else
                     <div class="glass-card rounded-2xl p-12 text-center">
                         <div class="w-16 h-16 bg-gray-700/50 rounded-full flex items-center justify-center mx-auto mb-4">

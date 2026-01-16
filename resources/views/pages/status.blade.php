@@ -71,7 +71,7 @@
     </section>
 
     {{-- Uptime Chart (Visual) --}}
-    <section class="py-12 px-4">
+    <!-- <section class="py-12 px-4">
         <div class="mx-auto max-w-3xl">
             <h2 class="text-xl font-bold text-white mb-6">Uptime 30 Hari Terakhir</h2>
             <div class="rounded-xl bg-white/5 border border-white/10 p-6">
@@ -90,10 +90,10 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
     {{-- Recent Incidents --}}
-    <section class="py-12 px-4">
+    <!-- <section class="py-12 px-4">
         <div class="mx-auto max-w-3xl">
             <h2 class="text-xl font-bold text-white mb-6">Insiden Terbaru</h2>
             <div class="rounded-xl bg-white/5 border border-white/10 p-6">
@@ -145,10 +145,10 @@
                 @endif
             </div>
         </div>
-    </section>
+    </section> -->
 
     {{-- Subscribe --}}
-    <section class="py-12 px-4">
+    <!-- <section class="py-12 px-4">
         <div class="mx-auto max-w-3xl text-center">
             <div class="rounded-2xl bg-[#1E3A8F]/20 border border-[#3B82F6]/30 p-8">
                 <h3 class="text-xl font-semibold text-white mb-2">Dapatkan Notifikasi Status</h3>
@@ -172,7 +172,7 @@
                 </form>
             </div>
         </div>
-    </section>
+    </section> -->
 
     <script>
         document.getElementById('statusSubscribeForm').addEventListener('submit', async function (e) {

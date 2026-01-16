@@ -393,18 +393,17 @@ class Certificate extends Model
     {
         $hashes = [];
 
-        // Generate hashes for certificate PDF/image if exists
-        // Generate hashes for certificate PDF/image if exists
+        // Generate hashes for certificate PDF (PRIVATE storage)
         $certificatePath = $this->pdf_path ?? $this->image_path;
 
-        if ($certificatePath && Storage::disk('public')->exists($certificatePath)) {
-            $fullPath = Storage::disk('public')->path($certificatePath);
+        if ($certificatePath && Storage::disk('local')->exists($certificatePath)) {
+            $fullPath = Storage::disk('local')->path($certificatePath);
             $hashes['certificate_sha256'] = hash_file('sha256', $fullPath);
             $hashes['certificate_md5'] = hash_file('md5', $fullPath);
         }
         // Note: We do NOT fall back to template hashes - we only store hashes of the generated PDF
 
-        // Generate hashes for QR code if exists
+        // Generate hashes for QR code (PUBLIC storage - accessible for verification)
         if ($this->qr_code_path && Storage::disk('public')->exists($this->qr_code_path)) {
             $qrFullPath = Storage::disk('public')->path($this->qr_code_path);
             $hashes['qr_sha256'] = hash_file('sha256', $qrFullPath);
@@ -441,12 +440,13 @@ class Certificate extends Model
 
     /**
      * Generate PDF for the certificate.
+     * PDFs are stored in PRIVATE storage to prevent direct URL access.
      */
     public function generatePdf()
     {
-        // Ensure PDF directory exists
-        if (!Storage::disk('public')->exists('certificates/pdf')) {
-            Storage::disk('public')->makeDirectory('certificates/pdf');
+        // Ensure PDF directory exists in PRIVATE storage
+        if (!Storage::disk('local')->exists('certificates/pdf')) {
+            Storage::disk('local')->makeDirectory('certificates/pdf');
         }
 
         // Load view and generate PDF
@@ -454,11 +454,11 @@ class Certificate extends Model
         $pdf->setPaper('a4', $this->template->orientation ?? 'landscape');
         $pdf->setOption(['isRemoteEnabled' => true]);
 
-        // Save to storage
+        // Save to PRIVATE storage (not accessible via URL)
         $filename = 'certificates/pdf/' . $this->certificate_number . '.pdf';
-        Storage::disk('public')->put($filename, $pdf->output());
+        Storage::disk('local')->put($filename, $pdf->output());
 
-        // Update model
+        // Update model with private path
         $this->update(['pdf_path' => $filename]);
 
         // Generate and save file hashes for verification

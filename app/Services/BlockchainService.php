@@ -260,17 +260,12 @@ class BlockchainService
                 }
             }
 
-            // Encode as pretty-printed JSON to match the user's visual requirement (Image 3)
-            // Note: This increases gas usage due to extra whitespace
-            $issuerName = json_encode($jsonPayload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+            // Encode as pretty-printed JSON for better readability on blockchain explorer
+            $certificateData = json_encode($jsonPayload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
-
-
-            // Encode the smart contract function call
-            // Function: storeCertificate(bytes32 _dataHash, string _certificateNumber, string _recipientName, string _courseName, string _issueDate, string _issuerName)
-            // Note: Contract REQUIRES certificate number (validation error: 'Certificate number required').
-            // We pass $certNumber, but keep others empty to minimize raw view noise.
-            $functionData = $this->encodeStoreCertificate($certHash, $certNumber, "", "", "", $issuerName);
+            // Encode the smart contract function call (HYBRID CONTRACT - 2 params only)
+            // Function: storeCertificate(bytes32 _dataHash, string _certificateData)
+            $functionData = $this->encodeStoreCertificateHybrid($certHash, $certificateData);
 
             Log::info('BlockchainService signWithContract: Encoded function data length = ' . strlen($functionData));
 
@@ -294,7 +289,7 @@ class BlockchainService
             $transaction = new \kornrunner\Ethereum\Transaction(
                 $nonce,
                 $gasPrice,
-                '0xF4240', // Gas limit ~1000000 for contract call with large hash data
+                '0x30D40', // Gas limit ~200000 for hybrid contract (reduced from 1M)
                 $this->contractAddress, // To: Smart Contract
                 '0x0', // Value: 0
                 $functionData // Data: encoded function call
@@ -349,8 +344,49 @@ class BlockchainService
     }
 
     /**
-     * ABI-encode the storeCertificate function call
+     * ABI-encode the storeCertificate function call for HYBRID contract
+     * Function signature: storeCertificate(bytes32,string)
+     * Gas optimized: ~150,000 gas (vs ~721,000 with old contract)
+     */
+    protected function encodeStoreCertificateHybrid(
+        string $dataHash,
+        string $certificateData
+    ): string {
+        // Function selector: keccak256("storeCertificate(bytes32,string)")[:4]
+        $functionSelector = $this->getFunctionSelector('storeCertificate(bytes32,string)');
+
+        // Remove 0x prefix from hash and pad to 32 bytes
+        $hashBytes = str_pad(substr($dataHash, 2), 64, '0', STR_PAD_LEFT);
+
+        $staticPart = '';
+        $dynamicPart = '';
+
+        // Param 0: bytes32 dataHash (static, inline)
+        $staticPart .= $hashBytes;
+
+        // Param 1: string certificateData (dynamic)
+        // Offset = 2 * 32 = 64 bytes = 0x40 (2 params: bytes32 + string offset)
+        $staticPart .= str_pad(dechex(64), 64, '0', STR_PAD_LEFT);
+
+        // Encode the string
+        $strHex = bin2hex($certificateData);
+        $strLen = strlen($certificateData);
+        $paddedLen = ceil($strLen / 32) * 32;
+        if ($paddedLen == 0)
+            $paddedLen = 32;
+
+        // Length (32 bytes)
+        $dynamicPart .= str_pad(dechex($strLen), 64, '0', STR_PAD_LEFT);
+        // String data (padded to 32 bytes)
+        $dynamicPart .= str_pad($strHex, $paddedLen * 2, '0', STR_PAD_RIGHT);
+
+        return '0x' . $functionSelector . $staticPart . $dynamicPart;
+    }
+
+    /**
+     * Legacy ABI-encode for old contract (kept for backward compatibility)
      * Function signature: storeCertificate(bytes32,string,string,string,string,string)
+     * @deprecated Use encodeStoreCertificateHybrid instead
      */
     protected function encodeStoreCertificate(
         string $dataHash,
@@ -360,63 +396,38 @@ class BlockchainService
         string $issueDate,
         string $issuerName
     ): string {
-        // Function selector: keccak256("storeCertificate(bytes32,string,string,string,string,string)")[:4]
-        // = 0x2e64cec1 (pre-computed)
         $functionSelector = $this->getFunctionSelector('storeCertificate(bytes32,string,string,string,string,string)');
-
-        // ABI encode parameters
-        // bytes32 is static (32 bytes)
-        // strings are dynamic (offset + length + data)
-
-        // Remove 0x prefix from hash and pad to 32 bytes
         $hashBytes = str_pad(substr($dataHash, 2), 64, '0', STR_PAD_LEFT);
-
-        // Dynamic data offsets (each is 32 bytes = 64 hex chars)
-        // We have 6 parameters, first is static (bytes32), rest are dynamic (string)
-        // Offset for param 1 (bytes32): inline at position 0
-        // Offset for param 2 (string certNumber): 6 * 32 = 192 = 0xC0
-        // Then we add each string's size dynamically
 
         $staticPart = '';
         $dynamicPart = '';
-
-        // Param 0: bytes32 dataHash (static, inline)
         $staticPart .= $hashBytes;
 
-        // Calculate offsets for dynamic strings (5 strings)
-        // Start offset = 6 * 32 = 192 bytes = 0xC0
         $baseOffset = 6 * 32;
         $strings = [$certNumber, $recipientName, $courseName, $issueDate, $issuerName];
-        $encodedStrings = [];
         $currentOffset = $baseOffset;
-
-        // First pass: calculate offsets
         $offsets = [];
+
         foreach ($strings as $str) {
             $offsets[] = $currentOffset;
             $strLen = strlen($str);
             $paddedLen = ceil($strLen / 32) * 32;
             if ($paddedLen == 0)
                 $paddedLen = 32;
-            $currentOffset += 32 + $paddedLen; // 32 for length + padded string
+            $currentOffset += 32 + $paddedLen;
         }
 
-        // Add offsets to static part
         foreach ($offsets as $offset) {
             $staticPart .= str_pad(dechex($offset), 64, '0', STR_PAD_LEFT);
         }
 
-        // Second pass: encode strings
         foreach ($strings as $str) {
             $strHex = bin2hex($str);
             $strLen = strlen($str);
             $paddedLen = ceil($strLen / 32) * 32;
             if ($paddedLen == 0)
                 $paddedLen = 32;
-
-            // Length (32 bytes)
             $dynamicPart .= str_pad(dechex($strLen), 64, '0', STR_PAD_LEFT);
-            // String data (padded to 32 bytes)
             $dynamicPart .= str_pad($strHex, $paddedLen * 2, '0', STR_PAD_RIGHT);
         }
 

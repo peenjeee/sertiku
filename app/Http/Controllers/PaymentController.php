@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Midtrans\Config;
 use Midtrans\Notification;
 use Midtrans\Snap;
+use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
 {
@@ -597,5 +598,27 @@ class PaymentController extends Controller
         }
 
         return response()->json(['success' => true]);
+    }
+    /**
+     * Download Invoice (Secure).
+     */
+    public function downloadInvoice(Order $order)
+    {
+        // Ensure user owns this order
+        if ($order->user_id != auth()->id()) {
+            abort(403);
+        }
+
+        // Try different filename patterns if necessary (e.g. from Order model or standard pattern)
+        // Standard pattern seen in storage listing: invoice-ORD202601070E3AB.pdf
+        $filename = 'invoice-' . $order->order_number . '.pdf';
+        $path = 'invoices/' . $filename;
+
+        if (!Storage::disk('local')->exists($path)) {
+            abort(404, 'Invoice belum tersedia.');
+        }
+
+        // Use same download method as Certificate
+        return Storage::disk('local')->download($path, $filename);
     }
 }

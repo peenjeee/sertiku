@@ -33,20 +33,26 @@ function loadEnv() {
 
 // Load ABI from file or use inline
 function getContractABI() {
-    const abiPath = path.join(__dirname, 'CertificateRegistry.abi.json');
-    if (fs.existsSync(abiPath)) {
-        return JSON.parse(fs.readFileSync(abiPath, 'utf8'));
+    // Try hybrid ABI first, fallback to legacy
+    const hybridAbiPath = path.join(__dirname, 'CertificateRegistryHybrid.abi.json');
+    const legacyAbiPath = path.join(__dirname, 'CertificateRegistry.abi.json');
+
+    if (fs.existsSync(hybridAbiPath)) {
+        return JSON.parse(fs.readFileSync(hybridAbiPath, 'utf8'));
+    }
+    if (fs.existsSync(legacyAbiPath)) {
+        return JSON.parse(fs.readFileSync(legacyAbiPath, 'utf8'));
     }
 
-    // Fallback inline ABI
+    // Fallback inline ABI for HYBRID contract
     return [
-        "function storeCertificate(bytes32 _dataHash, string _certificateNumber, string _recipientName, string _courseName, string _issueDate, string _issuerName) external returns (bool)",
-        "function verifyCertificate(bytes32 _dataHash) external view returns (bool exists, bool revoked, string certificateNumber, string recipientName, string courseName, string issueDate, string issuerName, address issuerAddress, uint256 timestamp)",
-        "function verifyCertificateByNumber(string _certNumber) external view returns (bool exists, bool revoked, string recipientName, string courseName, string issueDate, bytes32 dataHash, uint256 timestamp)",
+        "function storeCertificate(bytes32 _dataHash, string _certificateData) external returns (bool)",
+        "function verifyCertificate(bytes32 _dataHash) external view returns (bool exists, bool revoked, address issuer)",
         "function certificateExists(bytes32 _dataHash) external view returns (bool)",
+        "function isRevoked(bytes32 _dataHash) external view returns (bool)",
+        "function revokeCertificate(bytes32 _dataHash) external returns (bool)",
         "function getTotalCertificates() external view returns (uint256)",
-        "function getCertificateInfo(bytes32 _dataHash) external view returns (string certificateNumber, string recipientName, string courseName, uint256 timestamp)",
-        "event CertificateStored(bytes32 indexed dataHash, string certificateNumber, string recipientName, string courseName, address indexed issuer, uint256 timestamp)"
+        "event CertificateStored(bytes32 indexed dataHash, string certificateData, address indexed issuer, uint256 timestamp)"
     ];
 }
 
@@ -206,14 +212,7 @@ async function main() {
                     success: true,
                     exists: true,
                     revoked: result[1],
-                    certificateNumber: result[2],
-                    recipientName: result[3],
-                    courseName: result[4],
-                    issueDate: result[5],
-                    issuerName: result[6],
-                    issuerAddress: result[7],
-                    timestamp: Number(result[8]),
-                    date: new Date(Number(result[8]) * 1000).toISOString(),
+                    issuerAddress: result[2],
                     hash: certHash
                 }));
             } else {
@@ -230,45 +229,6 @@ async function main() {
             }));
         }
 
-    } else if (action === 'verify-number') {
-        // Verify by certificate number
-        const certNumber = args[1];
-        if (!certNumber) {
-            console.log(JSON.stringify({ success: false, error: 'Certificate number required' }));
-            process.exit(1);
-        }
-
-        const contract = new ethers.Contract(contractAddress, abi, provider);
-
-        try {
-            const result = await contract.verifyCertificateByNumber(certNumber);
-
-            if (result[0]) { // exists
-                console.log(JSON.stringify({
-                    success: true,
-                    exists: true,
-                    revoked: result[1],
-                    certificateNumber: certNumber,
-                    recipientName: result[2],
-                    courseName: result[3],
-                    issueDate: result[4],
-                    dataHash: result[5],
-                    timestamp: Number(result[6]),
-                    date: new Date(Number(result[6]) * 1000).toISOString()
-                }));
-            } else {
-                console.log(JSON.stringify({
-                    success: true,
-                    exists: false,
-                    certificateNumber: certNumber
-                }));
-            }
-        } catch (error) {
-            console.log(JSON.stringify({
-                success: false,
-                error: error.message
-            }));
-        }
 
     } else if (action === 'stats') {
         const contract = new ethers.Contract(contractAddress, abi, provider);

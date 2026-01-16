@@ -26,8 +26,7 @@
                         class="flex h-20 w-20 items-center justify-center rounded-full border-4 border-[rgba(15,23,42,0.9)] bg-[rgba(15,23,42,0.9)] shadow-lg">
                         @if($isRevoked)
                             {{-- RED X icon for revoked --}}
-                            <div
-                                class="flex h-10 w-10 items-center justify-center rounded-full bg-[#EF4444]">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-[#EF4444]">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none">
                                     <circle cx="12" cy="12" r="10" stroke="#FFFFFF" stroke-width="1.8" />
                                     <path d="M15 9L9 15M9 9L15 15" stroke="#FFFFFF" stroke-width="1.8"
@@ -36,8 +35,7 @@
                             </div>
                         @elseif($isExpired)
                             {{-- AMBER clock icon for expired --}}
-                            <div
-                                class="flex h-10 w-10 items-center justify-center rounded-full bg-[#F59E0B]">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-[#F59E0B]">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none">
                                     <circle cx="12" cy="12" r="10" stroke="#FFFFFF" stroke-width="1.8" />
                                     <path d="M12 6v6l4 2" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"
@@ -46,8 +44,7 @@
                             </div>
                         @else
                             {{-- GREEN checkmark for valid --}}
-                            <div
-                                class="flex h-10 w-10 items-center justify-center rounded-full bg-[#22C55E]">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-[#22C55E]">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none">
                                     <circle cx="12" cy="12" r="10" stroke="#FFFFFF" stroke-width="1.8" />
                                     <path d="M8 12.5l2.3 2.3L16 9" stroke="#FFFFFF" stroke-width="1.8"
@@ -101,8 +98,8 @@
                     {{-- Garis pemisah --}}
                     <div class="mb-6 h-px w-full bg-[rgba(255,255,255,0.1)] no-print"></div>
 
-                    {{-- GAMBAR SERTIFIKAT (jika ada template) --}}
-                    @if($certificate['template_image'] ?? null)
+                    {{-- GAMBAR SERTIFIKAT (jika ada template) - hanya untuk pemilik atau penerbit --}}
+                    @if((($isOwner ?? false) || ($isIssuer ?? false)) && ($certificate['template_image'] ?? null))
                         {{-- PDF Preview --}}
                         @php
                             $isPortrait = ($certificate['template_orientation'] ?? 'landscape') === 'portrait';
@@ -257,7 +254,7 @@
                                                 </span>
                                             @elseif($isExpired)
                                                 <span class="ml-1 text-[#F59E0B] font-bold">
-                                                     Kadaluarsa
+                                                    Kadaluarsa
                                                 </span>
                                             @else
                                                 <span class="ml-1 text-[#15803D]">
@@ -465,105 +462,107 @@
                         </div>
                     </div>
 
-                    {{-- LANGKAH SELANJUTNYA (layout mirip invalid) --}}
-                    <div class="space-y-4">
-                        <p class="text-sm font-normal text-white">
-                            Langkah Selanjutnya:
-                        </p>
+                    {{-- LANGKAH SELANJUTNYA - hanya tampil jika user adalah pemilik atau penerbit sertifikat --}}
+                    @if(($isOwner ?? false) || ($isIssuer ?? false))
+                        <div class="space-y-4">
+                            <p class="text-sm font-normal text-white">
+                                Langkah Selanjutnya:
+                            </p>
 
-                        {{-- Button 1: Unduh Sertifikat --}}
-                        <a href="{{ route('verifikasi.pdf', $hash) }}"
-                            class="group relative flex w-full items-center gap-3 rounded-lg border border-[#22C55E]/30 bg-[rgba(15,23,42,0.5)] px-6 py-4 text-left hover:bg-[rgba(34,197,94,0.1)] transition">
-                            <div class="flex h-11 w-11 items-center justify-center rounded-[14px] bg-[#22C55E]/20">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none">
-                                    <path d="M12 4v10" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round" />
-                                    <path d="M8.5 10.5L12 14l3.5-3.5" stroke="#22C55E" stroke-width="1.8"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                    <path d="M6 18h12" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round" />
-                                </svg>
-                            </div>
+                            {{-- Button 1: Unduh Sertifikat --}}
+                            <a href="{{ route('verifikasi.pdf', $hash) }}"
+                                class="group relative flex w-full items-center gap-3 rounded-lg border border-[#22C55E]/30 bg-[rgba(15,23,42,0.5)] px-6 py-4 text-left hover:bg-[rgba(34,197,94,0.1)] transition">
+                                <div class="flex h-11 w-11 items-center justify-center rounded-[14px] bg-[#22C55E]/20">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none">
+                                        <path d="M12 4v10" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round" />
+                                        <path d="M8.5 10.5L12 14l3.5-3.5" stroke="#22C55E" stroke-width="1.8"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M6 18h12" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round" />
+                                    </svg>
+                                </div>
 
-                            <div class="flex flex-col">
-                                <p class="text-sm font-normal text-white">
-                                    Unduh Sertifikat (PDF)
-                                </p>
-                                <p class="text-sm font-normal text-[#22C55E]">
-                                    Simpan dokumen resmi sertifikat Anda.
-                                </p>
-                            </div>
-                        </a>
+                                <div class="flex flex-col">
+                                    <p class="text-sm font-normal text-white">
+                                        Unduh Sertifikat (PDF)
+                                    </p>
+                                    <p class="text-sm font-normal text-[#22C55E]">
+                                        Simpan dokumen resmi sertifikat Anda.
+                                    </p>
+                                </div>
+                            </a>
 
-                        {{-- Button 2: Bagikan Sertifikat --}}
-                        <button type="button" onclick="shareCertificate()"
-                            class="group relative flex w-full items-center gap-3 rounded-lg border border-[rgba(255,255,255,0.14)] bg-[rgba(15,23,42,0.5)] px-6 py-4 text-left hover:bg-[rgba(59,130,246,0.1)] transition">
-                            <div class="flex h-11 w-11 items-center justify-center rounded-[14px] bg-[#3B82F6]/20">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none">
-                                    <path d="M15 6.5a2.5 2.5 0 11-4.9.7" stroke="#3B82F6" stroke-width="1.7"
-                                        stroke-linecap="round" />
-                                    <path d="M9 13.5a2.5 2.5 0 10-1.9 2.4" stroke="#3B82F6" stroke-width="1.7"
-                                        stroke-linecap="round" />
-                                    <path d="M15 17.5a2.5 2.5 0 10.5-4.9" stroke="#3B82F6" stroke-width="1.7"
-                                        stroke-linecap="round" />
-                                    <path d="M10.5 9L9 11" stroke="#3B82F6" stroke-width="1.7" stroke-linecap="round" />
-                                    <path d="M10.5 15L14 16" stroke="#3B82F6" stroke-width="1.7"
-                                        stroke-linecap="round" />
-                                </svg>
-                            </div>
+                            {{-- Button 2: Bagikan Sertifikat --}}
+                            <button type="button" onclick="shareCertificate()"
+                                class="group relative flex w-full items-center gap-3 rounded-lg border border-[rgba(255,255,255,0.14)] bg-[rgba(15,23,42,0.5)] px-6 py-4 text-left hover:bg-[rgba(59,130,246,0.1)] transition">
+                                <div class="flex h-11 w-11 items-center justify-center rounded-[14px] bg-[#3B82F6]/20">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none">
+                                        <path d="M15 6.5a2.5 2.5 0 11-4.9.7" stroke="#3B82F6" stroke-width="1.7"
+                                            stroke-linecap="round" />
+                                        <path d="M9 13.5a2.5 2.5 0 10-1.9 2.4" stroke="#3B82F6" stroke-width="1.7"
+                                            stroke-linecap="round" />
+                                        <path d="M15 17.5a2.5 2.5 0 10.5-4.9" stroke="#3B82F6" stroke-width="1.7"
+                                            stroke-linecap="round" />
+                                        <path d="M10.5 9L9 11" stroke="#3B82F6" stroke-width="1.7" stroke-linecap="round" />
+                                        <path d="M10.5 15L14 16" stroke="#3B82F6" stroke-width="1.7"
+                                            stroke-linecap="round" />
+                                    </svg>
+                                </div>
 
-                            <div class="flex flex-col">
-                                <p class="text-sm font-normal text-white">
-                                    Bagikan Sertifikat
-                                </p>
-                                <p class="text-sm font-normal text-[#3B82F6]" id="share-text">
-                                    Tunjukkan pencapaianmu! Buat yang lain tahu SertiKu
-                                </p>
-                            </div>
-                        </button>
+                                <div class="flex flex-col">
+                                    <p class="text-sm font-normal text-white">
+                                        Bagikan Sertifikat
+                                    </p>
+                                    <p class="text-sm font-normal text-[#3B82F6]" id="share-text">
+                                        Tunjukkan pencapaianmu! Buat yang lain tahu SertiKu
+                                    </p>
+                                </div>
+                            </button>
 
-                        <script>
-                            function shareCertificate() {
-                                const url = window.location.href;
-                                const shareText = document.getElementById('share-text');
+                            <script>
+                                function shareCertificate() {
+                                    const url = window.location.href;
+                                    const shareText = document.getElementById('share-text');
 
-                                if (navigator.share) {
-                                    navigator.share({
-                                        title: 'Sertifikat Terverifikasi - SertiKu',
-                                        text: 'Lihat sertifikat asli saya yang terverifikasi di SertiKu! Platform sertifikat digital terpercaya dengan teknologi blockchain. Yuk cobain SertiKu untuk sertifikatmu!',
-                                        url: url
-                                    });
-                                } else {
-                                    navigator.clipboard.writeText(url).then(() => {
-                                        // Use SweetAlert2 Toast
-                                        Swal.fire({
-                                            toast: true,
-                                            position: 'top-end',
-                                            icon: 'success',
-                                            title: 'Link berhasil disalin!',
-                                            showConfirmButton: false,
-                                            timer: 3000,
-                                            timerProgressBar: true,
-                                            background: '#151f32',
-                                            color: '#fff'
+                                    if (navigator.share) {
+                                        navigator.share({
+                                            title: 'Sertifikat Terverifikasi - SertiKu',
+                                            text: 'Lihat sertifikat asli saya yang terverifikasi di SertiKu! Platform sertifikat digital terpercaya dengan teknologi blockchain. Yuk cobain SertiKu untuk sertifikatmu!',
+                                            url: url
                                         });
+                                    } else {
+                                        navigator.clipboard.writeText(url).then(() => {
+                                            // Use SweetAlert2 Toast
+                                            Swal.fire({
+                                                toast: true,
+                                                position: 'top-end',
+                                                icon: 'success',
+                                                title: 'Link berhasil disalin!',
+                                                showConfirmButton: false,
+                                                timer: 3000,
+                                                timerProgressBar: true,
+                                                background: '#151f32',
+                                                color: '#fff'
+                                            });
 
-                                        shareText.textContent = 'Link berhasil disalin! Share sekarang!';
-                                        setTimeout(() => {
-                                            shareText.textContent = 'Tunjukkan pencapaianmu! Buat yang lain tahu SertiKu';
-                                        }, 2000);
-                                    });
+                                            shareText.textContent = 'Link berhasil disalin! Share sekarang!';
+                                            setTimeout(() => {
+                                                shareText.textContent = 'Tunjukkan pencapaianmu! Buat yang lain tahu SertiKu';
+                                            }, 2000);
+                                        });
+                                    }
                                 }
-                            }
-                        </script>
+                            </script>
 
-                        {{-- Catatan kecil di bawah --}}
-                        <!-- <div class="mt-2 flex items-center justify-center gap-2 text-xs text-[#64748B]">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
-                                <circle cx="12" cy="12" r="10" stroke="#155DFC" stroke-width="1.5"/>
-                                <path d="M12 8v1.5M12 11v5" stroke="#155DFC" stroke-width="1.5" stroke-linecap="round"/>
-                            </svg>
-                            <span>Kode hash terdapat pada sertifikat digital Anda.</span>
-                        </div> -->
-                    </div>
+                            {{-- Catatan kecil di bawah --}}
+                            <!-- <div class="mt-2 flex items-center justify-center gap-2 text-xs text-[#64748B]">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                                    <circle cx="12" cy="12" r="10" stroke="#155DFC" stroke-width="1.5"/>
+                                    <path d="M12 8v1.5M12 11v5" stroke="#155DFC" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
+                                <span>Kode hash terdapat pada sertifikat digital Anda.</span>
+                            </div> -->
+                        </div>
+                    @endif
                 </div>
             </section>
         </div>
