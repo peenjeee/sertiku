@@ -143,6 +143,7 @@
                         <form id="form-revoke" action="{{ route('lembaga.sertifikat.revoke', $certificate->id) }}"
                             method="POST">
                             @csrf
+                            @method('PUT')
                             <div class="mb-3">
                                 <label class="block text-gray-600 text-xs mb-1">Alasan Pencabutan</label>
                                 <textarea name="reason" rows="2"
@@ -172,6 +173,7 @@
                         <form id="form-reactivate" action="{{ route('lembaga.sertifikat.reactivate', $certificate->id) }}"
                             method="POST">
                             @csrf
+                            @method('PUT')
                             <button type="button" onclick="confirmReactivate()"
                                 class="w-full py-2 bg-green-50 text-green-600 border border-green-200 rounded-lg hover:bg-green-100 transition font-medium">
                                 Aktifkan Sertifikat
