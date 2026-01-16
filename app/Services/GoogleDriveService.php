@@ -178,7 +178,7 @@ class GoogleDriveService
             $uploadResponse = Http::withHeaders([
                 'Content-Length' => $fileSize,
                 'Content-Type' => $mimeType,
-            ])->withBody(
+            ])->timeout(3600)->withBody(
                     new \GuzzleHttp\Psr7\Stream($fileStream),
                     $mimeType
                 )->put($uploadUrl);
