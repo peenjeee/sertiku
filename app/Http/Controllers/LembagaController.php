@@ -1206,14 +1206,15 @@ class LembagaController extends Controller
         ]);
 
         // Notify Recipient
+        // Notify Recipient
         // Try to find registered user by email
-        $recipientUser = \App\Models\User::where('email', $certificate->user_email)->first();
+        $recipientUser = \App\Models\User::where('email', $certificate->recipient_email)->first();
 
         if ($recipientUser) {
             $recipientUser->notify(new \App\Notifications\CertificateRevoked($certificate, $validated['reason']));
         } else {
             // Fallback for non-registered users (Email Only)
-            \Illuminate\Support\Facades\Notification::route('mail', $certificate->user_email)
+            \Illuminate\Support\Facades\Notification::route('mail', $certificate->recipient_email)
                 ->notify(new \App\Notifications\CertificateRevoked($certificate, $validated['reason']));
         }
 
@@ -1236,13 +1237,14 @@ class LembagaController extends Controller
         ]);
 
         // Notify Recipient
-        $recipientUser = \App\Models\User::where('email', $certificate->user_email)->first();
+        // Try to find registered user by email
+        $recipientUser = \App\Models\User::where('email', $certificate->recipient_email)->first();
 
         if ($recipientUser) {
             $recipientUser->notify(new \App\Notifications\CertificateReactivated($certificate));
         } else {
             // Fallback for non-registered users (Email Only)
-            \Illuminate\Support\Facades\Notification::route('mail', $certificate->user_email)
+            \Illuminate\Support\Facades\Notification::route('mail', $certificate->recipient_email)
                 ->notify(new \App\Notifications\CertificateReactivated($certificate));
         }
 
