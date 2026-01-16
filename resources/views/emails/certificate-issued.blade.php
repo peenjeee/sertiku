@@ -138,16 +138,6 @@
                                         </a>
                                     </td>
                                 </tr>
-                                @if($downloadUrl)
-                                    <tr>
-                                        <td align="center" style="padding: 10px 5px 5px;">
-                                            <a href="{{ $downloadUrl }}"
-                                                style="display: inline-block; padding: 12px 24px; background: transparent; border: 2px solid #3B82F6; color: #3B82F6; text-decoration: none; font-size: 14px; font-weight: 600; border-radius: 8px;">
-                                                Download PDF
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endif
                             </table>
 
                             <!-- Info Box -->
@@ -156,6 +146,10 @@
                                 <p style="margin: 0; color: #6EE7B7; font-size: 13px; line-height: 1.6;">
                                     <strong>Sertifikat ini dapat diverifikasi</strong> oleh siapa saja melalui
                                     link verifikasi atau dengan memindai QR code pada sertifikat.
+                                    <br><br>
+                                    Silahkan <a href="{{ route('register') }}"
+                                        style="color: #3B82F6; text-decoration: underline;">buat akun</a> dengan email
+                                    ini untuk mengakses dashboard dan mengelola sertifikat Anda.
                                 </p>
                             </div>
 

@@ -1181,4 +1181,67 @@ class LembagaController extends Controller
 
         return redirect('/')->with('success', 'Akun lembaga Anda telah dihapus.');
     }
+
+    /**
+     * Revoke a certificate.
+     */
+    public function revokeCertificate(Request $request, Certificate $certificate)
+    {
+        $validated = $request->validate([
+            'reason' => 'required|string|max:255',
+        ]);
+
+        // Ensure user owns the certificate (via template/institution relation)
+        if ($certificate->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $certificate->update([
+            'status' => 'revoked',
+            'revocation_reason' => $validated['reason'],
+        ]);
+
+        // Notify Recipient
+        // Try to find registered user by email
+        $recipientUser = \App\Models\User::where('email', $certificate->user_email)->first();
+
+        if ($recipientUser) {
+            $recipientUser->notify(new \App\Notifications\CertificateRevoked($certificate, $validated['reason']));
+        } else {
+            // Fallback for non-registered users (Email Only)
+            \Illuminate\Support\Facades\Notification::route('mail', $certificate->user_email)
+                ->notify(new \App\Notifications\CertificateRevoked($certificate, $validated['reason']));
+        }
+
+        return back()->with('success', 'Sertifikat berhasil dicabut dan penerima telah diberitahu.');
+    }
+
+    /**
+     * Reactivate a revoked certificate.
+     */
+    public function reactivateCertificate(Request $request, Certificate $certificate)
+    {
+        // Ensure user owns the certificate
+        if ($certificate->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $certificate->update([
+            'status' => 'active',
+            'revocation_reason' => null,
+        ]);
+
+        // Notify Recipient
+        $recipientUser = \App\Models\User::where('email', $certificate->user_email)->first();
+
+        if ($recipientUser) {
+            $recipientUser->notify(new \App\Notifications\CertificateReactivated($certificate));
+        } else {
+            // Fallback for non-registered users (Email Only)
+            \Illuminate\Support\Facades\Notification::route('mail', $certificate->user_email)
+                ->notify(new \App\Notifications\CertificateReactivated($certificate));
+        }
+
+        return back()->with('success', 'Sertifikat berhasil diaktifkan kembali.');
+    }
 }

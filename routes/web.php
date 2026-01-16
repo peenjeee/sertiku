@@ -428,6 +428,10 @@ Route::middleware(['auth'])->prefix('lembaga')->name('lembaga.')->group(function
     Route::get('/sertifikat/create', [\App\Http\Controllers\LembagaController::class, 'createSertifikat'])->name('sertifikat.create');
     Route::post('/sertifikat', [\App\Http\Controllers\LembagaController::class, 'storeSertifikat'])->name('sertifikat.store');
 
+    // Certificate Actions (Revoke/Reactivate)
+    Route::put('/sertifikat/{certificate}/revoke', [\App\Http\Controllers\LembagaController::class, 'revokeCertificate'])->name('sertifikat.revoke');
+    Route::put('/sertifikat/{certificate}/reactivate', [\App\Http\Controllers\LembagaController::class, 'reactivateCertificate'])->name('sertifikat.reactivate');
+
 
 
     // Bulk Upload (Professional & Enterprise Only)

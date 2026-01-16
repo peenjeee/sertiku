@@ -27,17 +27,18 @@
                         </a>
                     </div>
                 @endif
-
-                <a href="{{ route('verifikasi.show', $certificate->hash) }}" target="_blank"
-                    class="px-4 py-2 bg-gray-700 rounded-lg text-white font-medium hover:bg-gray-600 transition flex items-center gap-2 text-sm sm:text-base">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                    Halaman Publik
-                </a>
+                <div class="flex flex-wrap gap-4 mt-4">
+                    <a href="{{ route('verifikasi.show', $certificate->hash) }}" target="_blank"
+                        class="px-4 py-2 bg-gray-700 rounded-lg text-white font-medium hover:bg-gray-600 transition flex items-center gap-2 text-sm sm:text-base">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        Halaman Publik
+                    </a>
+                </div>
             </div>
         </div>
 

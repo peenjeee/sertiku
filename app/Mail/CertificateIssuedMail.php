@@ -70,11 +70,12 @@ class CertificateIssuedMail extends Mailable
     {
         $attachments = [];
 
-        if ($this->certificate->pdf_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($this->certificate->pdf_path)) {
+        // Use 'local' disk (private) as PDFs are now secured
+        if ($this->certificate->pdf_path && \Illuminate\Support\Facades\Storage::disk('local')->exists($this->certificate->pdf_path)) {
             $attachments[] = \Illuminate\Mail\Mailables\Attachment::fromStorageDisk(
-                'public',
+                'local',
                 $this->certificate->pdf_path
-            )->as('Sertifikat-' . $this->certificateNumber . '.pdf')
+            )->as('Sertifikat-' . $this->certificate->certificate_number . '.pdf')
                 ->withMime('application/pdf');
         }
 
