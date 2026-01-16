@@ -284,8 +284,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/sertifikat/create', [\App\Http\Controllers\LembagaController::class, 'createSertifikat'])->name('sertifikat.create');
         Route::post('/sertifikat', [\App\Http\Controllers\LembagaController::class, 'storeSertifikat'])->name('sertifikat.store');
         Route::get('/sertifikat/{certificate}', [\App\Http\Controllers\LembagaController::class, 'showSertifikat'])->name('sertifikat.show');
-        Route::post('/sertifikat/{certificate}/revoke', [\App\Http\Controllers\LembagaController::class, 'revokeSertifikat'])->name('sertifikat.revoke');
-        Route::post('/sertifikat/{certificate}/reactivate', [\App\Http\Controllers\LembagaController::class, 'reactivateSertifikat'])->name('sertifikat.reactivate');
+
 
         // Templates
         Route::get('/template', [\App\Http\Controllers\LembagaController::class, 'indexTemplate'])->name('template.index');
