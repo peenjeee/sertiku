@@ -12,7 +12,6 @@ export default defineConfig({
     ],
     server: {
         watch: {
-            // Mengabaikan direktori besar yang jarang diubah
             ignored: [
                 '**/vendor/**',
                 '**/node_modules/**'

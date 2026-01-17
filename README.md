@@ -233,9 +233,9 @@ Buka: http://127.0.0.1:8000/
 
 | Role | Email | Password |
 |------|-------|----------|
-| User | `user@sertiku.web.id` | `User1234` |
-| Lembaga | `lembaga@sertiku.web.id` | `Lembaga1234` |
-| Admin | `admin@sertiku.web.id` | `Admin1234` |
+| User | `user@sertiku.web.id` | `user123` |
+| Lembaga | `lembaga@sertiku.web.id` | `lembaga123` |
+| Admin | `admin@sertiku.web.id` | `Admin123` |
 | Master | `master@sertiku.web.id` | `Master123` |
 
 > **Note:** Akun dengan domain `@sertiku.web.id` tidak memerlukan verifikasi OTP.
@@ -277,22 +277,27 @@ sertiku/
 
 ### Register
 ```
-Form Register --> Kirim OTP --> Verifikasi OTP --> Dashboard
+Form Register --> Kirim OTP --> Verifikasi OTP --> Onboarding (Lengkapi Profil) --> Dashboard
 ```
 
 ### Login (Email belum terverifikasi)
 ```
-Login --> Kirim OTP --> Verifikasi OTP --> Dashboard
+Login --> Kirim OTP --> Verifikasi OTP --> Onboarding (jika belum) --> Dashboard
 ```
 
 ### Login (Email sudah terverifikasi)
 ```
-Login --> Dashboard
+Login --> Onboarding (jika belum) --> Dashboard
 ```
 
 ### Wallet Login
 ```
-Connect Wallet --> Input Email --> Kirim OTP --> Verifikasi --> Dashboard
+Connect Wallet --> Input Email --> Kirim OTP --> Verifikasi --> Onboarding --> Dashboard
+```
+
+### Wallet Login (Sudah Terverifikasi)
+```
+Connect Wallet --> IOnboarding (jika belum) --> Dashboard
 ```
 
 ### Reset Password
