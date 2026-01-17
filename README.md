@@ -79,9 +79,23 @@ php artisan key:generate
 # Buat database dan jalankan migration
 php artisan migrate
 
+# Jalankan seeder untuk membuat data awal
+php artisan db:seed
+
 # Clear cache
 php artisan optimize:clear
 ```
+
+### Akun Demo (dari Seeder)
+
+Setelah menjalankan `php artisan db:seed`, akun-akun berikut akan tersedia:
+
+| Role | Email | Password |
+|------|-------|----------|
+| Master Admin | master@sertiku.web.id | Master123 |
+| Admin | admin@sertiku.web.id | Admin123 |
+| Lembaga | lembaga@sertiku.web.id | lembaga123 |
+| User | user@sertiku.web.id | user123 |
 
 ## Konfigurasi
 
@@ -297,7 +311,7 @@ Connect Wallet --> Input Email --> Kirim OTP --> Verifikasi --> Onboarding --> D
 
 ### Wallet Login (Sudah Terverifikasi)
 ```
-Connect Wallet --> IOnboarding (jika belum) --> Dashboard
+Connect Wallet --> Onboarding (jika belum) --> Dashboard
 ```
 
 ### Reset Password
