@@ -53,7 +53,7 @@ class RegisterController extends Controller
             'phone' => $validated['phone'],
             'country' => $validated['country'],
             'occupation' => $validated['occupation'] ?? null,
-            'institution' => $validated['institution'] ?? null,
+            'user_institution' => $validated['institution'] ?? null,
             'account_type' => 'pengguna',
             'profile_completed' => true, // User fills data during registration
             'interests' => isset($validated['interests'])
@@ -91,6 +91,8 @@ class RegisterController extends Controller
             // ========== STEP 2: ALAMAT ==========
             'address_line' => ['required', 'string', 'max:255'],
             'city' => ['required', 'string', 'max:100'],
+            'district' => ['required', 'string', 'max:100'],
+            'village' => ['required', 'string', 'max:100'],
             'province' => ['required', 'string', 'max:100'],
             'postal_code' => ['required', 'string', 'max:20'],
             'country' => ['required', 'string', 'max:100'],
@@ -161,6 +163,8 @@ class RegisterController extends Controller
             'description' => $validated['description'] ?? null,
             'address' => $validated['address_line'],
             'city' => $validated['city'],
+            'district' => $validated['district'],
+            'village' => $validated['village'],
             'province' => $validated['province'],
             'postal_code' => $validated['postal_code'],
             'admin_position' => $validated['admin_position'],

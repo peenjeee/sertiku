@@ -41,6 +41,8 @@ class User extends Authenticatable
         'description',
         'address_line',
         'city',
+        'district',
+        'village',
         'province',
         'postal_code',
         'country',

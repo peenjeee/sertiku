@@ -72,13 +72,13 @@
                             </div>
 
                             {{-- Minat (placeholder) --}}
-                            <div class="flex flex-col items-center w-1/4">
+                            <!-- <div class="flex flex-col items-center w-1/4">
                                 <div id="userStepIcon-4"
                                      class="flex h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white/60">
                                     <span class="text-xs sm:text-sm font-semibold">4</span>
                                 </div>
                                 <p class="mt-1 sm:mt-2 text-[10px] sm:text-xs text-white/60 text-center" id="userStepLabel-4">Minat</p>
-                            </div>
+                            </div> -->
                         </div>
 
                         {{-- Progress bar --}}
@@ -116,7 +116,7 @@
                                      class="flex h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white/60">
                                     <span class="text-xs sm:text-sm font-semibold">3</span>
                                 </div>
-                                <p class="mt-1 sm:mt-2 text-[10px] sm:text-xs text-white/60 text-center" id="orgStepLabel-3">Admin</p>
+                                <p class="mt-1 sm:mt-2 text-[10px] sm:text-xs text-white/60 text-center" id="orgStepLabel-3">Lembaga</p>
                             </div>
 
                             {{-- Dokumen --}}
@@ -231,10 +231,10 @@
                                                    hover:bg-[#3B82F6] transition"
                                             onclick="goToStep(2)">
                                         Lanjut
-                                        <span class="ml-2 inline-flex h-3 w-3 items-center justify-center">
+                                        <!-- <span class="ml-2 inline-flex h-3 w-3 items-center justify-center">
                                             <span class="block h-[1px] w-2 bg-white rotate-45 origin-left"></span>
                                             <span class="block h-[1px] w-2 bg-white -rotate-45 origin-left -mt-[1px]"></span>
-                                        </span>
+                                        </span> -->
                                     </button>
                                 </div>
                             </section>
@@ -287,19 +287,15 @@
                                     <label class="text-sm">Negara <span class="text-red-400">*</span></label>
                                     <select
                                         name="country"
+                                        id="user_select_country"
+                                        data-old="{{ old('country') }}"
                                         data-step="2" data-required="true"
                                         class="w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white
                                                focus:outline-none focus:ring-2 focus:ring-[#2563EB]/70
                                                @error('country') border-red-400/80 focus:ring-red-400/80 @else border-white/20 @enderror">
                                         <option value="" class="bg-[#1E293B]">Pilih negara</option>
-                                        <option value="Indonesia" class="bg-[#1E293B]" {{ old('country') == 'Indonesia' ? 'selected' : '' }}>Indonesia</option>
-                                        <option value="Malaysia" class="bg-[#1E293B]" {{ old('country') == 'Malaysia' ? 'selected' : '' }}>Malaysia</option>
-                                        <option value="Singapore" class="bg-[#1E293B]" {{ old('country') == 'Singapore' ? 'selected' : '' }}>Singapore</option>
-                                        <option value="Thailand" class="bg-[#1E293B]" {{ old('country') == 'Thailand' ? 'selected' : '' }}>Thailand</option>
-                                        <option value="Vietnam" class="bg-[#1E293B]" {{ old('country') == 'Vietnam' ? 'selected' : '' }}>Vietnam</option>
-                                        <option value="Philippines" class="bg-[#1E293B]" {{ old('country') == 'Philippines' ? 'selected' : '' }}>Philippines</option>
-                                        <option value="Brunei" class="bg-[#1E293B]" {{ old('country') == 'Brunei' ? 'selected' : '' }}>Brunei</option>
-                                        <option value="Other" class="bg-[#1E293B]" {{ old('country') == 'Other' ? 'selected' : '' }}>Lainnya</option>
+                                        <option value="Indonesia" class="bg-[#1E293B]">Indonesia</option>
+                                        <option value="" class="bg-[#1E293B]" disabled>Loading other countries...</option>
                                     </select>
                                     <p class="mt-1 text-xs text-red-300 hidden" data-error-for="country"></p>
                                     @error('country')
@@ -311,10 +307,10 @@
                                     <button type="button"
                                             class="inline-flex items-center rounded-lg border border-white/30 bg-white/5 px-5 py-2 text-sm hover:bg-white/10"
                                             onclick="goToStep(1, false)">
-                                        <span class="mr-2 inline-flex h-3 w-3 items-center justify-center">
+                                        <!-- <span class="mr-2 inline-flex h-3 w-3 items-center justify-center">
                                             <span class="block h-[1px] w-2 bg-white -rotate-45 origin-right"></span>
                                             <span class="block h-[1px] w-2 bg-white rotate-45 origin-right -mt-[1px]"></span>
-                                        </span>
+                                        </span> -->
                                         Kembali
                                     </button>
 
@@ -324,10 +320,10 @@
                                                    hover:bg-[#3B82F6] transition"
                                             onclick="goToStep(3)">
                                         Lanjut
-                                        <span class="ml-2 inline-flex h-3 w-3 items-center justify-center">
+                                        <!-- <span class="ml-2 inline-flex h-3 w-3 items-center justify-center">
                                             <span class="block h-[1px] w-2 bg-white rotate-45 origin-left"></span>
                                             <span class="block h-[1px] w-2 bg-white -rotate-45 origin-left -mt-[1px]"></span>
-                                        </span>
+                                        </span> -->
                                     </button>
                                 </div>
                             </section>
@@ -399,10 +395,10 @@
                                     <button type="button"
                                             class="inline-flex items-center rounded-lg border border-white/30 bg-white/5 px-5 py-2 text-sm hover:bg-white/10"
                                             onclick="goToStep(2, false)">
-                                        <span class="mr-2 inline-flex h-3 w-3 items-center justify-center">
+                                        <!-- <span class="mr-2 inline-flex h-3 w-3 items-center justify-center">
                                             <span class="block h-[1px] w-2 bg-white -rotate-45 origin-right"></span>
                                             <span class="block h-[1px] w-2 bg-white rotate-45 origin-right -mt-[1px]"></span>
-                                        </span>
+                                        </span> -->
                                         Kembali
                                     </button>
 
@@ -424,7 +420,7 @@
                             <a href="{{ route('login') }}"
                                class="inline-flex items-center rounded-lg border border-white/30 bg-white/5 px-4 py-2 text-xs md:text-sm
                                       text-white hover:bg-white/10 transition">
-                                ← Kembali ke Login
+                                Kembali ke Login
                             </a>
                         </div>
                     </div>
@@ -432,7 +428,7 @@
                     {{-- ==================== TAB LEMBAGA (4 STEP) ==================== --}}
                     <div id="tab-lembaga" class="hidden">
 
-                        <div class="rounded-3xl border border-white/10 bg-white/5 px-4 py-6 md:px-6 md:py-8">
+                        <div class="">
                             <form id="orgWizard"
                                   action="{{ route('register.lembaga.store') }}"
                                   method="POST"
@@ -453,7 +449,7 @@
                                         <a href="{{ route('login') }}"
                                            class="hidden md:inline-flex items-center rounded-lg border border-white/30 bg-white/5 px-3 py-1.5 text-xs
                                                   text-white hover:bg-white/10 transition">
-                                            ← Kembali ke Login
+                                            Kembali ke Login
                                         </a>
                                     </div>
 
@@ -532,7 +528,7 @@
                                         <a href="{{ route('login') }}"
                                            class="inline-flex items-center rounded-lg border border-white/30 bg-white/5 px-4 py-2 text-xs md:text-sm
                                                   text-white hover:bg-white/10 transition md:hidden">
-                                            ← Kembali ke Login
+                                            Kembali ke Login
                                         </a>
 
                                         <button type="button"
@@ -541,10 +537,10 @@
                                                        hover:bg-[#3B82F6] transition ml-auto"
                                                 onclick="goToOrgStep(2)">
                                             Lanjut
-                                            <span class="ml-2 inline-flex h-3 w-3 items-center justify-center">
+                                            <!-- <span class="ml-2 inline-flex h-3 w-3 items-center justify-center">
                                                 <span class="block h-[1px] w-2 bg-white rotate-45 origin-left"></span>
                                                 <span class="block h-[1px] w-2 bg-white -rotate-45 origin-left -mt-[1px]"></span>
-                                            </span>
+                                            </span> -->
                                         </button>
                                     </div>
                                 </section>
@@ -573,12 +569,22 @@
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div class="space-y-2">
                                             <label class="text-sm">Kota / Kabupaten <span class="text-red-400">*</span></label>
-                                            <input type="text" name="city" value="{{ old('city') }}"
+                                            
+                                            <input type="text" name="city" id="org_input_city" value="{{ old('city') }}"
                                                    data-org-step="2" data-required="true"
                                                    class="w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40
                                                           focus:outline-none focus:ring-2 focus:ring-[#2563EB]/70
                                                           @error('city') border-red-400/80 focus:ring-red-400/80 @else border-white/20 @enderror"
                                                    placeholder="Kota">
+
+                                            <select name="city" id="org_select_city" disabled
+                                                   data-org-step="2" data-required="true"
+                                                   class="hidden w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white
+                                                          focus:outline-none focus:ring-2 focus:ring-[#2563EB]/70
+                                                          @error('city') border-red-400/80 focus:ring-red-400/80 @else border-white/20 @enderror">
+                                                <option value="" class="bg-[#1E293B]">Pilih Kota/Kabupaten</option>
+                                            </select>
+
                                             <p class="mt-1 text-xs text-red-300 hidden" data-org-error-for="city"></p>
                                             @error('city')
                                             <p class="mt-1 text-xs text-red-300">{{ $message }}</p>
@@ -587,12 +593,22 @@
 
                                         <div class="space-y-2">
                                             <label class="text-sm">Provinsi <span class="text-red-400">*</span></label>
-                                            <input type="text" name="province" value="{{ old('province') }}"
+                                            
+                                            <input type="text" name="province" id="org_input_province" value="{{ old('province') }}"
                                                    data-org-step="2" data-required="true"
                                                    class="w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40
                                                           focus:outline-none focus:ring-2 focus:ring-[#2563EB]/70
                                                           @error('province') border-red-400/80 focus:ring-red-400/80 @else border-white/20 @enderror"
                                                    placeholder="Provinsi">
+
+                                            <select name="province" id="org_select_province" disabled
+                                                   data-org-step="2" data-required="true"
+                                                   class="hidden w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white
+                                                          focus:outline-none focus:ring-2 focus:ring-[#2563EB]/70
+                                                          @error('province') border-red-400/80 focus:ring-red-400/80 @else border-white/20 @enderror">
+                                                <option value="" class="bg-[#1E293B]">Pilih Provinsi</option>
+                                            </select>
+
                                             <p class="mt-1 text-xs text-red-300 hidden" data-org-error-for="province"></p>
                                             @error('province')
                                             <p class="mt-1 text-xs text-red-300">{{ $message }}</p>
@@ -602,13 +618,73 @@
 
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div class="space-y-2">
+                                            <label class="text-sm">Kecamatan <span class="text-red-400">*</span></label>
+                                            
+                                            <input type="text" name="district" id="org_input_district" value="{{ old('district') }}"
+                                                   data-org-step="2" data-required="true"
+                                                   class="w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40
+                                                          focus:outline-none focus:ring-2 focus:ring-[#2563EB]/70
+                                                          @error('district') border-red-400/80 focus:ring-red-400/80 @else border-white/20 @enderror"
+                                                   placeholder="Kecamatan">
+
+                                            <select name="district" id="org_select_district" disabled
+                                                   data-org-step="2" data-required="true"
+                                                   class="hidden w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white
+                                                          focus:outline-none focus:ring-2 focus:ring-[#2563EB]/70
+                                                          @error('district') border-red-400/80 focus:ring-red-400/80 @else border-white/20 @enderror">
+                                                <option value="" class="bg-[#1E293B]">Pilih Kecamatan</option>
+                                            </select>
+
+                                            <p class="mt-1 text-xs text-red-300 hidden" data-org-error-for="district"></p>
+                                            @error('district')
+                                            <p class="mt-1 text-xs text-red-300">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+
+                                        <div class="space-y-2">
+                                            <label class="text-sm">Kelurahan / Desa <span class="text-red-400">*</span></label>
+                                            
+                                            <input type="text" name="village" id="org_input_village" value="{{ old('village') }}"
+                                                   data-org-step="2" data-required="true"
+                                                   class="w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40
+                                                          focus:outline-none focus:ring-2 focus:ring-[#2563EB]/70
+                                                          @error('village') border-red-400/80 focus:ring-red-400/80 @else border-white/20 @enderror"
+                                                   placeholder="Kelurahan">
+
+                                            <select name="village" id="org_select_village" disabled
+                                                   data-org-step="2" data-required="true"
+                                                   class="hidden w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white
+                                                          focus:outline-none focus:ring-2 focus:ring-[#2563EB]/70
+                                                          @error('village') border-red-400/80 focus:ring-red-400/80 @else border-white/20 @enderror">
+                                                <option value="" class="bg-[#1E293B]">Pilih Kelurahan</option>
+                                            </select>
+
+                                            <p class="mt-1 text-xs text-red-300 hidden" data-org-error-for="village"></p>
+                                            @error('village')
+                                            <p class="mt-1 text-xs text-red-300">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div class="space-y-2">
                                             <label class="text-sm">Kode Pos <span class="text-red-400">*</span></label>
-                                            <input type="text" name="postal_code" value="{{ old('postal_code') }}"
+                                            
+                                            <input type="text" name="postal_code" id="org_input_postal_code" value="{{ old('postal_code') }}"
                                                    data-org-step="2" data-required="true"
                                                    class="w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40
                                                           focus:outline-none focus:ring-2 focus:ring-[#2563EB]/70
                                                           @error('postal_code') border-red-400/80 focus:ring-red-400/80 @else border-white/20 @enderror"
                                                    placeholder="Kode pos">
+
+                                            <select name="postal_code" id="org_select_postal_code" disabled
+                                                   data-org-step="2" data-required="true"
+                                                   class="hidden w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white
+                                                          focus:outline-none focus:ring-2 focus:ring-[#2563EB]/70
+                                                          @error('postal_code') border-red-400/80 focus:ring-red-400/80 @else border-white/20 @enderror">
+                                                <option value="" class="bg-[#1E293B]">Pilih Kode Pos</option>
+                                            </select>
+
                                             <p class="mt-1 text-xs text-red-300 hidden" data-org-error-for="postal_code"></p>
                                             @error('postal_code')
                                             <p class="mt-1 text-xs text-red-300">{{ $message }}</p>
@@ -618,19 +694,14 @@
                                         <div class="space-y-2">
                                             <label class="text-sm">Negara <span class="text-red-400">*</span></label>
                                             <select name="country"
+                                                   id="org_select_country"
+                                                   data-old="{{ old('country', 'Indonesia') }}"
                                                    data-org-step="2" data-required="true"
                                                    class="w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white
                                                           focus:outline-none focus:ring-2 focus:ring-[#2563EB]/70
                                                           @error('country') border-red-400/80 focus:ring-red-400/80 @else border-white/20 @enderror">
-                                                <option value="" class="bg-[#1E293B]">Pilih negara</option>
-                                                <option value="Indonesia" class="bg-[#1E293B]" {{ old('country', 'Indonesia') == 'Indonesia' ? 'selected' : '' }}>Indonesia</option>
-                                                <option value="Malaysia" class="bg-[#1E293B]" {{ old('country') == 'Malaysia' ? 'selected' : '' }}>Malaysia</option>
-                                                <option value="Singapore" class="bg-[#1E293B]" {{ old('country') == 'Singapore' ? 'selected' : '' }}>Singapore</option>
-                                                <option value="Thailand" class="bg-[#1E293B]" {{ old('country') == 'Thailand' ? 'selected' : '' }}>Thailand</option>
-                                                <option value="Vietnam" class="bg-[#1E293B]" {{ old('country') == 'Vietnam' ? 'selected' : '' }}>Vietnam</option>
-                                                <option value="Philippines" class="bg-[#1E293B]" {{ old('country') == 'Philippines' ? 'selected' : '' }}>Philippines</option>
-                                                <option value="Brunei" class="bg-[#1E293B]" {{ old('country') == 'Brunei' ? 'selected' : '' }}>Brunei</option>
-                                                <option value="Other" class="bg-[#1E293B]" {{ old('country') == 'Other' ? 'selected' : '' }}>Lainnya</option>
+                                                <option value="Indonesia" class="bg-[#1E293B]" selected>Indonesia</option>
+                                                <option value="" class="bg-[#1E293B]">Loading other countries...</option>
                                             </select>
                                             <p class="mt-1 text-xs text-red-300 hidden" data-org-error-for="country"></p>
                                             @error('country')
@@ -643,10 +714,10 @@
                                         <button type="button"
                                                 class="inline-flex items-center rounded-lg border border-white/30 bg-white/5 px-5 py-2 text-sm hover:bg-white/10"
                                                 onclick="goToOrgStep(1, false)">
-                                            <span class="mr-2 inline-flex h-3 w-3 items-center justify-center">
+                                            <!-- <span class="mr-2 inline-flex h-3 w-3 items-center justify-center">
                                                 <span class="block h-[1px] w-2 bg-white -rotate-45 origin-right"></span>
                                                 <span class="block h-[1px] w-2 bg-white rotate-45 origin-right -mt-[1px]"></span>
-                                            </span>
+                                            </span> -->
                                             Kembali
                                         </button>
 
@@ -656,10 +727,10 @@
                                                        hover:bg-[#3B82F6] transition"
                                                 onclick="goToOrgStep(3)">
                                             Lanjut
-                                            <span class="ml-2 inline-flex h-3 w-3 items-center justify-center">
+                                            <!-- <span class="ml-2 inline-flex h-3 w-3 items-center justify-center">
                                                 <span class="block h-[1px] w-2 bg-white rotate-45 origin-left"></span>
                                                 <span class="block h-[1px] w-2 bg-white -rotate-45 origin-left -mt-[1px]"></span>
-                                            </span>
+                                            </span> -->
                                         </button>
                                     </div>
                                 </section>
@@ -667,12 +738,12 @@
                                 {{-- ========== STEP 3: ADMIN / PIC ========== --}}
                                 <section id="org-step-3" class="org-step space-y-6 hidden">
                                     <div>
-                                        <h2 class="text-2xl font-normal">Admin / PIC Lembaga</h2>
+                                        <h2 class="text-2xl font-normal">Lembaga</h2>
                                         <p class="mt-1 text-sm text-[#BEDBFF]/80">Kontak utama yang akan mengelola SertiKu</p>
                                     </div>
 
                                     <div class="space-y-2">
-                                        <label class="text-sm">Nama Lengkap Admin <span class="text-red-400">*</span></label>
+                                        <label class="text-sm">Nama Lengkap Lembaga <span class="text-red-400">*</span></label>
                                         <input type="text" name="admin_name" value="{{ old('admin_name') }}"
                                                data-org-step="3" data-required="true"
                                                class="w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40
@@ -685,7 +756,7 @@
                                     </div>
 
                                     <div class="space-y-2">
-                                        <label class="text-sm">Email Admin <span class="text-red-400">*</span></label>
+                                        <label class="text-sm">Email Lembaga <span class="text-red-400">*</span></label>
                                         <input type="email" name="admin_email" value="{{ old('admin_email') }}"
                                                data-org-step="3" data-required="true"
                                                class="w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40
@@ -698,7 +769,7 @@
                                     </div>
 
                                     <div class="space-y-2">
-                                        <label class="text-sm">Nomor Telepon Admin <span class="text-red-400">*</span></label>
+                                        <label class="text-sm">Nomor Telepon Lembaga <span class="text-red-400">*</span></label>
                                         <input type="text" name="admin_phone" value="{{ old('admin_phone') }}"
                                                data-org-step="3" data-required="true"
                                                class="w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40
@@ -724,37 +795,62 @@
                                     </div>
 
                                     <div class="space-y-2">
-                                        <label class="text-sm">Password <span class="text-red-400">*</span></label>
+                                        <label class="text-sm">Password Lembaga <span class="text-red-400">*</span></label>
                                         <input type="password" name="admin_password"
                                                data-org-step="3" data-required="true"
+                                               oninput="updateOrgStrength(this.value)"
                                                class="w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40
                                                       focus:outline-none focus:ring-2 focus:ring-[#2563EB]/70
                                                       @error('admin_password') border-red-400/80 focus:ring-red-400/80 @else border-white/20 @enderror"
                                                placeholder="Minimal 8 karakter">
+                                        
                                         <p class="mt-1 text-xs text-red-300 hidden" data-org-error-for="admin_password"></p>
                                         @error('admin_password')
                                         <p class="mt-1 text-xs text-red-300">{{ $message }}</p>
                                         @enderror
+
+                                        {{-- Strength bar --}}
+                                        <div class="mt-2">
+                                            <div class="h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
+                                                <div id="orgPasswordStrengthBar"
+                                                     class="h-1.5 w-0 rounded-full bg-[#3B82F6] transition-all duration-200"></div>
+                                            </div>
+                                            <p id="orgPasswordStrengthLabel" class="mt-1 text-xs text-[#BEDBFF]/80">
+                                                Password belum dinilai
+                                            </p>
+                                        </div>
                                     </div>
 
                                     <div class="space-y-2">
-                                        <label class="text-sm">Konfirmasi Password <span class="text-red-400">*</span></label>
+                                        <label class="text-sm">Konfirmasi Password Lembaga <span class="text-red-400">*</span></label>
                                         <input type="password" name="admin_password_confirmation"
                                                data-org-step="3" data-required="true"
                                                class="w-full rounded-lg border bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40
                                                       focus:outline-none focus:ring-2 focus:ring-[#2563EB]/70
-                                                      border-white/20"
+                                                      @error('admin_password_confirmation') border-red-400/80 focus:ring-red-400/80 @else border-white/20 @enderror"
                                                placeholder="Ulangi password">
+                                        <p class="mt-1 text-xs text-red-300 hidden" data-org-error-for="admin_password_confirmation"></p>
+                                        @error('admin_password_confirmation')
+                                        <p class="mt-1 text-xs text-red-300">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    <div
+                                        class="mt-2 flex items-start gap-3 rounded-xl border border-[#2B7FFF33] bg-[#2B7FFF1A] px-4 py-3 text-xs text-[#BEDBFF]">
+                                        <span class="mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full border border-[#1E293B]">!</span>
+                                        <span>
+                                            Password sebaiknya minimal 8 karakter dan kombinasi huruf besar, huruf kecil, angka, serta simbol.
+                                        </span>
                                     </div>
 
                                     <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-4">
                                         <button type="button"
                                                 class="inline-flex items-center rounded-lg border border-white/30 bg-white/5 px-5 py-2 text-sm hover:bg-white/10"
                                                 onclick="goToOrgStep(2, false)">
-                                            <span class="mr-2 inline-flex h-3 w-3 items-center justify-center">
+                                            <!-- <span class="mr-2 inline-flex h-3 w-3 items-center justify-center">
                                                 <span class="block h-[1px] w-2 bg-white -rotate-45 origin-right"></span>
                                                 <span class="block h-[1px] w-2 bg-white rotate-45 origin-right -mt-[1px]"></span>
-                                            </span>
+                                            </span> -->
                                             Kembali
                                         </button>
 
@@ -764,10 +860,10 @@
                                                        hover:bg-[#3B82F6] transition"
                                                 onclick="goToOrgStep(4)">
                                             Lanjut
-                                            <span class="ml-2 inline-flex h-3 w-3 items-center justify-center">
+                                            <!-- <span class="ml-2 inline-flex h-3 w-3 items-center justify-center">
                                                 <span class="block h-[1px] w-2 bg-white rotate-45 origin-left"></span>
                                                 <span class="block h-[1px] w-2 bg-white -rotate-45 origin-left -mt-[1px]"></span>
-                                            </span>
+                                            </span> -->
                                         </button>
                                     </div>
                                 </section>
@@ -839,10 +935,10 @@
                                         <button type="button"
                                                 class="inline-flex items-center rounded-lg border border-white/30 bg-white/5 px-5 py-2 text-sm hover:bg-white/10"
                                                 onclick="goToOrgStep(3, false)">
-                                            <span class="mr-2 inline-flex h-3 w-3 items-center justify-center">
+                                            <!-- <span class="mr-2 inline-flex h-3 w-3 items-center justify-center">
                                                 <span class="block h-[1px] w-2 bg-white -rotate-45 origin-right"></span>
                                                 <span class="block h-[1px] w-2 bg-white rotate-45 origin-right -mt-[1px]"></span>
-                                            </span>
+                                            </span> -->
                                             Kembali
                                         </button>
 
@@ -906,32 +1002,23 @@
         function setStepUI(step) {
             currentStep = step;
             document.getElementById('userStepInput').value = step;
-
-            // tampil/hidden section
             document.querySelectorAll('.wizard-step').forEach((el, idx) => {
                 el.classList.toggle('hidden', idx + 1 !== step);
             });
-
-            // progress bar (4 slot, step 4 nanti utk "Minat")
             const progress = document.getElementById('userStepProgress');
-            progress.style.width = (step / 4 * 100) + '%';
-
-            // icon & label
+            if(progress) progress.style.width = (step / 4 * 100) + '%';
             for (let i = 1; i <= 4; i++) {
                 const icon = document.getElementById('userStepIcon-' + i);
                 const label = document.getElementById('userStepLabel-' + i);
-
+                if (!icon || !label) continue;
                 if (i < step) {
-                    icon.className =
-                        'flex h-12 w-12 items-center justify-center rounded-full bg-[#10B981] text-white shadow';
+                    icon.className = 'flex h-12 w-12 items-center justify-center rounded-full bg-[#10B981] text-white shadow';
                     label.className = 'mt-2 text-xs font-medium';
                 } else if (i === step) {
-                    icon.className =
-                        'flex h-12 w-12 items-center justify-center rounded-full bg-[#3B82F6] text-white shadow';
+                    icon.className = 'flex h-12 w-12 items-center justify-center rounded-full bg-[#3B82F6] text-white shadow';
                     label.className = 'mt-2 text-xs font-medium';
                 } else {
-                    icon.className =
-                        'flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white/60';
+                    icon.className = 'flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white/60';
                     label.className = 'mt-2 text-xs text-white/60';
                 }
             }
@@ -939,44 +1026,29 @@
 
         function validateStep(step) {
             let valid = true;
-
-            // bersihkan pesan error front-end
             document.querySelectorAll('[data-step="' + step + '"][data-required="true"]').forEach((input) => {
                 const errEl = document.querySelector('[data-error-for="' + input.name + '"]');
-                if (errEl) {
-                    errEl.classList.add('hidden');
-                    errEl.textContent = '';
-                }
+                if (errEl) { errEl.classList.add('hidden'); errEl.textContent = ''; }
                 input.classList.remove('border-red-400', 'focus:ring-red-400/80');
             });
-
             document.querySelectorAll('[data-step="' + step + '"][data-required="true"]').forEach((input) => {
                 if (!input.value.trim()) {
                     valid = false;
                     const errEl = document.querySelector('[data-error-for="' + input.name + '"]');
-                    if (errEl) {
-                        errEl.textContent = 'Field ini wajib diisi.';
-                        errEl.classList.remove('hidden');
-                    }
+                    if (errEl) { errEl.textContent = 'Field ini wajib diisi.'; errEl.classList.remove('hidden'); }
                     input.classList.add('border-red-400', 'focus:ring-red-400/80');
                 }
             });
-
-            // validasi khusus password konfirmasi
             if (step === 3) {
                 const pwd = document.querySelector('input[name="password"]');
                 const conf = document.querySelector('input[name="password_confirmation"]');
                 if (pwd && conf && pwd.value && conf.value && pwd.value !== conf.value) {
                     valid = false;
                     const errEl = document.querySelector('[data-error-for="password_confirmation"]');
-                    if (errEl) {
-                        errEl.textContent = 'Konfirmasi password tidak sama.';
-                        errEl.classList.remove('hidden');
-                    }
+                    if (errEl) { errEl.textContent = 'Konfirmasi password tidak sama.'; errEl.classList.remove('hidden'); }
                     conf.classList.add('border-red-400', 'focus:ring-red-400/80');
                 }
             }
-
             return valid;
         }
 
@@ -987,10 +1059,91 @@
             setStepUI(step);
         }
 
-        // Password strength sederhana
         function updateStrength(value) {
             const bar = document.getElementById('passwordStrengthBar');
             const label = document.getElementById('passwordStrengthLabel');
+            if (!bar || !label) return;
+            if (!value) {
+                bar.style.width = '0%';
+                label.textContent = 'Password belum dinilai';
+                return;
+            }
+            let score = 0;
+            if (value.length >= 8) score++;
+            if (/[A-Z]/.test(value)) score++;
+            if (/[a-z]/.test(value)) score++;
+            if (/[0-9]/.test(value)) score++;
+            if (/[^A-Za-z0-9]/.test(value)) score++;
+            const percent = (score / 5) * 100;
+            bar.style.width = percent + '%';
+            if (score <= 2) label.textContent = 'Keamanan password: Lemah';
+            else if (score === 3 || score === 4) label.textContent = 'Keamanan password: Cukup';
+            else label.textContent = 'Keamanan password: Kuat';
+        }
+
+        // ===== WIZARD LEMBAGA =====
+        let orgCurrentStep = parseInt(document.getElementById('orgStepInput')?.value || '1');
+
+        function setOrgStepUI(step) {
+            orgCurrentStep = step;
+            const input = document.getElementById('orgStepInput');
+            if (input) input.value = step;
+            document.querySelectorAll('.org-step').forEach((el, idx) => {
+                el.classList.toggle('hidden', idx + 1 !== step);
+            });
+            const progress = document.getElementById('orgStepProgress');
+            if (progress) progress.style.width = (step / 4 * 100) + '%';
+            for (let i = 1; i <= 4; i++) {
+                const icon = document.getElementById('orgStepIcon-' + i);
+                const label = document.getElementById('orgStepLabel-' + i);
+                if (!icon || !label) continue;
+                if (i < step) {
+                    icon.className = 'flex h-12 w-12 items-center justify-center rounded-full bg-[#10B981] text-white shadow';
+                    label.className = 'mt-2 text-xs font-medium';
+                } else if (i === step) {
+                    icon.className = 'flex h-12 w-12 items-center justify-center rounded-full bg-[#3B82F6] text-white shadow';
+                    label.className = 'mt-2 text-xs font-medium';
+                } else {
+                    icon.className = 'flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white/60';
+                    label.className = 'mt-2 text-xs text-white/60';
+                }
+            }
+        }
+
+        function validateOrgStep(step) {
+            let valid = true;
+            document.querySelectorAll('[data-org-step="' + step + '"][data-required="true"]').forEach((input) => {
+                const errEl = document.querySelector('[data-org-error-for="' + input.name + '"]');
+                if (errEl) { errEl.classList.add('hidden'); errEl.textContent = ''; }
+                input.classList.remove('border-red-400', 'focus:ring-red-400/80');
+            });
+            document.querySelectorAll('[data-org-step="' + step + '"][data-required="true"]').forEach((input) => {
+                // SKIP validation if input is disabled (standard HTML behavior)
+                if (input.disabled) return;
+
+                if (!input.value.trim()) {
+                    valid = false;
+                    const errEl = document.querySelector('[data-org-error-for="' + input.name + '"]');
+                    if (errEl) { errEl.textContent = 'Field ini wajib diisi.'; errEl.classList.remove('hidden'); }
+                    input.classList.add('border-red-400', 'focus:ring-red-400/80');
+                }
+            });
+            return valid;
+        }
+
+        function goToOrgStep(step, needValidate = true) {
+            if (needValidate && step > orgCurrentStep) {
+                if (!validateOrgStep(orgCurrentStep)) return;
+            }
+            setOrgStepUI(step);
+        }
+
+        // ===== PASSWORD STRENGTH (Lembaga) =====
+        function updateOrgStrength(value) {
+            const bar = document.getElementById('orgPasswordStrengthBar');
+            const label = document.getElementById('orgPasswordStrengthLabel');
+            if (!bar || !label) return;
+            
             if (!value) {
                 bar.style.width = '0%';
                 label.textContent = 'Password belum dinilai';
@@ -1007,97 +1160,339 @@
             const percent = (score / 5) * 100;
             bar.style.width = percent + '%';
 
-            if (score <= 2) {
-                label.textContent = 'Keamanan password: Lemah';
-            } else if (score === 3 || score === 4) {
-                label.textContent = 'Keamanan password: Cukup';
-            } else {
-                label.textContent = 'Keamanan password: Kuat';
-            }
+            if (score <= 2) label.textContent = 'Keamanan password: Lemah';
+            else if (score === 3 || score === 4) label.textContent = 'Keamanan password: Cukup';
+            else label.textContent = 'Keamanan password: Kuat';
         }
 
-        // ===== WIZARD LEMBAGA =====
-        let orgCurrentStep = parseInt(document.getElementById('orgStepInput')?.value || '1');
-
-        function setOrgStepUI(step) {
-            orgCurrentStep = step;
-            const input = document.getElementById('orgStepInput');
-            if (input) input.value = step;
-
-            // show/hide section
-            document.querySelectorAll('.org-step').forEach((el, idx) => {
-                el.classList.toggle('hidden', idx + 1 !== step);
-            });
-
-            // progress bar (4 step)
-            const progress = document.getElementById('orgStepProgress');
-            if (progress) progress.style.width = (step / 4 * 100) + '%';
-
-            // icon & label
-            for (let i = 1; i <= 4; i++) {
-                const icon = document.getElementById('orgStepIcon-' + i);
-                const label = document.getElementById('orgStepLabel-' + i);
-                if (!icon || !label) continue;
-
-                if (i < step) {
-                    icon.className =
-                        'flex h-12 w-12 items-center justify-center rounded-full bg-[#10B981] text-white shadow';
-                    label.className = 'mt-2 text-xs font-medium';
-                } else if (i === step) {
-                    icon.className =
-                        'flex h-12 w-12 items-center justify-center rounded-full bg-[#3B82F6] text-white shadow';
-                    label.className = 'mt-2 text-xs font-medium';
-                } else {
-                    icon.className =
-                        'flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white/60';
-                    label.className = 'mt-2 text-xs text-white/60';
-                }
-            }
-        }
-
-        function validateOrgStep(step) {
-            let valid = true;
-
-            document.querySelectorAll('[data-org-step="' + step + '"][data-required="true"]').forEach((input) => {
-                const errEl = document.querySelector('[data-org-error-for="' + input.name + '"]');
-                if (errEl) {
-                    errEl.classList.add('hidden');
-                    errEl.textContent = '';
-                }
-                input.classList.remove('border-red-400', 'focus:ring-red-400/80');
-            });
-
-            document.querySelectorAll('[data-org-step="' + step + '"][data-required="true"]').forEach((input) => {
-                if (!input.value.trim()) {
-                    valid = false;
-                    const errEl = document.querySelector('[data-org-error-for="' + input.name + '"]');
-                    if (errEl) {
-                        errEl.textContent = 'Field ini wajib diisi.';
-                        errEl.classList.remove('hidden');
-                    }
-                    input.classList.add('border-red-400', 'focus:ring-red-400/80');
-                }
-            });
-
-            return valid;
-        }
-
-        function goToOrgStep(step, needValidate = true) {
-            if (needValidate && step > orgCurrentStep) {
-                if (!validateOrgStep(orgCurrentStep)) return;
-                }
-            setOrgStepUI(step);
-        }
-
-        // init
+        // ===== LISTENER FOR INIT =====
         document.addEventListener('DOMContentLoaded', () => {
-            // default: tab Pengguna
             switchRegisterTab('pengguna');
             setStepUI(currentStep);
-
-            if (document.getElementById('orgStepInput')) {
-                setOrgStepUI(orgCurrentStep);
-            }
+            if (document.getElementById('orgStepInput')) setOrgStepUI(orgCurrentStep);
         });
+
+        // ===== LOCATION API HANDLING (Scoped IIFE) =====
+        (function() {
+            const apiBaseUrl = 'https://www.emsifa.com/api-wilayah-indonesia/api';
+
+            async function fetchWithTimeout(resource, options = {}) {
+                const { timeout = 5000 } = options;
+                const controller = new AbortController();
+                const id = setTimeout(() => controller.abort(), timeout);
+                try {
+                    const response = await fetch(resource, { ...options, signal: controller.signal });
+                    clearTimeout(id);
+                    return response;
+                } catch (error) {
+                    clearTimeout(id);
+                    throw error;
+                }
+            }
+
+            function toTitleCase(str) {
+                return str.replace(/\w\S*/g, function(txt){
+                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                });
+            }
+
+            function resetSelect(field) {
+                const select = document.getElementById(`org_select_${field}`);
+                if (select) {
+                    select.innerHTML = `<option value="" class="bg-[#1E293B]">Pilih ${toTitleCase(field.replace('_', ' '))}</option>`;
+                }
+            }
+
+            async function loadCountries() {
+                const userSelect = document.getElementById('user_select_country');
+                const orgSelect = document.getElementById('org_select_country');
+                
+                try {
+                    const response = await fetchWithTimeout('https://restcountries.com/v3.1/all?fields=name', { timeout: 5000 });
+                    if (!response.ok) throw new Error('API Error');
+                    const data = await response.json();
+                    data.sort((a, b) => a.name.common.localeCompare(b.name.common));
+
+                    const optionsHtml = data
+                        .filter(c => c.name.common !== 'Indonesia')
+                        .map(c => `<option value="${c.name.common}" class="bg-[#1E293B]">${c.name.common}</option>`)
+                        .join('');
+
+                    if (userSelect) {
+                        userSelect.innerHTML = '<option value="" class="bg-[#1E293B]">Pilih Negara</option><option value="Indonesia" class="bg-[#1E293B]">Indonesia</option>' + optionsHtml;
+                        const oldVal = userSelect.dataset.old;
+                        if (oldVal) userSelect.value = oldVal;
+                    }
+                    if (orgSelect) {
+                        orgSelect.innerHTML = '<option value="Indonesia" class="bg-[#1E293B]" selected>Indonesia</option>' + optionsHtml;
+                        const oldVal = orgSelect.dataset.old || 'Indonesia';
+                        if (oldVal) {
+                            orgSelect.value = oldVal;
+                            // Trigger logic if it matches loaded value? 
+                            // Actually relying on init logic below
+                        }
+                    }
+                } catch (error) {
+                    console.error('Failed to load countries:', error);
+                    const fallbackCountries = ["Malaysia", "Singapore", "Thailand", "Vietnam", "Philippines", "Brunei", "Cambodia", "Laos", "Myanmar", "Timor-Leste", "Japan", "South Korea", "China", "United States", "United Kingdom", "Australia", "Saudi Arabia", "United Arab Emirates", "Other"];
+                    fallbackCountries.sort((a, b) => a.localeCompare(b));
+                    const optionsHtml = fallbackCountries.map(c => `<option value="${c}" class="bg-[#1E293B]">${c}</option>`).join('');
+
+                    if (userSelect) {
+                        userSelect.innerHTML = '<option value="" class="bg-[#1E293B]">Pilih Negara</option><option value="Indonesia" class="bg-[#1E293B]">Indonesia</option>' + optionsHtml;
+                        const oldVal = userSelect.dataset.old;
+                        if (oldVal) userSelect.value = oldVal;
+                    }
+                    if (orgSelect) {
+                        orgSelect.innerHTML = '<option value="Indonesia" class="bg-[#1E293B]" selected>Indonesia</option>' + optionsHtml;
+                        const oldVal = orgSelect.dataset.old || 'Indonesia';
+                        if (oldVal) orgSelect.value = oldVal;
+                    }
+                }
+            }
+
+            async function loadProvinces() {
+                const select = document.getElementById('org_select_province');
+                if (!select) return;
+                select.innerHTML = '<option value="" class="bg-[#1E293B]">Loading...</option>';
+                try {
+                    const response = await fetch(`${apiBaseUrl}/provinces.json`);
+                    if (!response.ok) throw new Error('API Error');
+                    const provinces = await response.json();
+                    select.innerHTML = '<option value="" class="bg-[#1E293B]">Pilih Provinsi</option>';
+                    provinces.forEach(prov => {
+                        const option = document.createElement('option');
+                        option.value = toTitleCase(prov.name);
+                        option.dataset.id = prov.id;
+                        option.textContent = toTitleCase(prov.name);
+                        option.className = 'bg-[#1E293B]';
+                        select.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error('Error loading provinces:', error);
+                    const fallbackProvinces = [
+                        { id: "11", name: "ACEH" }, { id: "12", name: "SUMATERA UTARA" }, { id: "13", name: "SUMATERA BARAT" },
+                        { id: "14", name: "RIAU" }, { id: "15", name: "JAMBI" }, { id: "16", name: "SUMATERA SELATAN" },
+                        { id: "17", name: "BENGKULU" }, { id: "18", name: "LAMPUNG" }, { id: "19", name: "KEPULAUAN BANGKA BELITUNG" },
+                        { id: "21", name: "KEPULAUAN RIAU" }, { id: "31", name: "DKI JAKARTA" }, { id: "32", name: "JAWA BARAT" },
+                        { id: "33", name: "JAWA TENGAH" }, { id: "34", name: "DI YOGYAKARTA" }, { id: "35", name: "JAWA TIMUR" },
+                        { id: "36", name: "BANTEN" }, { id: "51", name: "BALI" }, { id: "52", name: "NUSA TENGGARA BARAT" },
+                        { id: "53", name: "NUSA TENGGARA TIMUR" }, { id: "61", name: "KALIMANTAN BARAT" }, { id: "62", name: "KALIMANTAN TENGAH" },
+                        { id: "63", name: "KALIMANTAN SELATAN" }, { id: "64", name: "KALIMANTAN TIMUR" }, { id: "65", name: "KALIMANTAN UTARA" },
+                        { id: "71", name: "SULAWESI UTARA" }, { id: "72", name: "SULAWESI TENGAH" }, { id: "73", name: "SULAWESI SELATAN" },
+                        { id: "74", name: "SULAWESI TENGGARA" }, { id: "75", name: "GORONTALO" }, { id: "76", name: "SULAWESI BARAT" },
+                        { id: "81", name: "MALUKU" }, { id: "82", name: "MALUKU UTARA" }, { id: "91", name: "PAPUA BARAT" },
+                        { id: "94", name: "PAPUA" }
+                    ];
+                    select.innerHTML = '<option value="" class="bg-[#1E293B]">Pilih Provinsi</option>';
+                    fallbackProvinces.forEach(prov => {
+                        const option = document.createElement('option');
+                        option.value = toTitleCase(prov.name);
+                        option.dataset.id = prov.id;
+                        option.textContent = toTitleCase(prov.name);
+                        option.className = 'bg-[#1E293B]';
+                        select.appendChild(option);
+                    });
+                }
+            }
+
+            async function loadCities(provinceId) {
+                const select = document.getElementById('org_select_city');
+                if (!select || !provinceId) return;
+                select.innerHTML = '<option value="" class="bg-[#1E293B]">Loading...</option>';
+                resetSelect('district'); resetSelect('village'); resetSelect('postal_code');
+                try {
+                    const response = await fetchWithTimeout(`${apiBaseUrl}/regencies/${provinceId}.json`, { timeout: 5000 });
+                    const cities = await response.json();
+                    select.innerHTML = '<option value="" class="bg-[#1E293B]">Pilih Kota/Kabupaten</option>';
+                    cities.forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = toTitleCase(city.name);
+                        option.dataset.id = city.id;
+                        option.textContent = toTitleCase(city.name);
+                        option.className = 'bg-[#1E293B]';
+                        select.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error('Error loading cities:', error);
+                    select.innerHTML = '<option value="" class="bg-[#1E293B]">Gagal memuat data</option>';
+                }
+            }
+
+            async function loadDistricts(cityId) {
+                const select = document.getElementById('org_select_district');
+                if (!select || !cityId) return;
+                select.innerHTML = '<option value="" class="bg-[#1E293B]">Loading...</option>';
+                resetSelect('village'); resetSelect('postal_code');
+                try {
+                    const response = await fetchWithTimeout(`${apiBaseUrl}/districts/${cityId}.json`, { timeout: 5000 });
+                    const districts = await response.json();
+                    select.innerHTML = '<option value="" class="bg-[#1E293B]">Pilih Kecamatan</option>';
+                    districts.forEach(dist => {
+                        const option = document.createElement('option');
+                        option.value = toTitleCase(dist.name);
+                        option.dataset.id = dist.id;
+                        option.textContent = toTitleCase(dist.name);
+                        option.className = 'bg-[#1E293B]';
+                        select.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error('Error loading districts:', error);
+                    select.innerHTML = '<option value="" class="bg-[#1E293B]">Gagal memuat data</option>';
+                }
+            }
+
+            async function loadVillages(districtId) {
+                const select = document.getElementById('org_select_village');
+                if (!select || !districtId) return;
+                select.innerHTML = '<option value="" class="bg-[#1E293B]">Loading...</option>';
+                resetSelect('postal_code');
+                try {
+                    const response = await fetchWithTimeout(`${apiBaseUrl}/villages/${districtId}.json`, { timeout: 5000 });
+                    const villages = await response.json();
+                    select.innerHTML = '<option value="" class="bg-[#1E293B]">Pilih Kelurahan</option>';
+                    villages.forEach(vill => {
+                        const option = document.createElement('option');
+                        option.value = toTitleCase(vill.name);
+                        option.dataset.id = vill.id;
+                        option.textContent = toTitleCase(vill.name);
+                        option.className = 'bg-[#1E293B]';
+                        select.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error('Error loading villages:', error);
+                    select.innerHTML = '<option value="" class="bg-[#1E293B]">Gagal memuat data</option>';
+                }
+            }
+
+            async function fetchPostalCode(villageName) {
+                const select = document.getElementById('org_select_postal_code');
+                const input = document.getElementById('org_input_postal_code');
+
+                if(!select || !villageName) return;
+                
+                // Set loading state
+                select.innerHTML = '<option value="" class="bg-[#1E293B]">Mencari Kode Pos...</option>';
+
+                try {
+                    const districtName = document.getElementById('org_select_district').value;
+                    // Clean query: remove "Kecamatan" or "Kelurahan" if present to improve match rates
+                    const cleanVillage = villageName.replace(/^(Kelurahan|Desa)\s+/i, '');
+                    const cleanDistrict = districtName.replace(/^(Kecamatan|Distrik)\s+/i, '');
+                    
+                    const query = `${cleanVillage} ${cleanDistrict}`;
+                    const response = await fetch(`https://kodepos.vercel.app/search?q=${query}`);
+                    const data = await response.json();
+
+                    if (data.data && data.data.length > 0) {
+                        // Normalize postal code field (API can return 'code' or 'postal_code')
+                        // Filter out undefined/null
+                        let postalCodes = data.data
+                            .map(item => item.postal_code || item.code)
+                            .filter(code => code);
+                        
+                        // Deduplicate
+                        postalCodes = [...new Set(postalCodes)];
+
+                        if (postalCodes.length > 0) {
+                            // FOUND VALID CODES: Show Select
+                            if(input) {
+                                input.classList.add('hidden'); 
+                                input.disabled = true;
+                            }
+                            select.classList.remove('hidden');
+                            select.disabled = false;
+
+                            select.innerHTML = '<option value="" class="bg-[#1E293B]">Pilih Kode Pos</option>';
+                            postalCodes.forEach(code => {
+                                const option = document.createElement('option');
+                                option.value = code;
+                                option.textContent = code;
+                                option.className = 'bg-[#1E293B]';
+                                select.appendChild(option);
+                            });
+                            
+                            // Auto select if only one
+                            if(postalCodes.length === 1) select.value = postalCodes[0];
+                        } else {
+                            // DATA EXISTS BUT NO VALID CODES: Fallback
+                            throw new Error('No valid postal codes found in data');
+                        }
+                    } else {
+                        // NOT FOUND: Show Input, Hide Select
+                        console.warn('Postal code not found, switching to manual input');
+                        if(input) {
+                            input.classList.remove('hidden');
+                            input.disabled = false;
+                            input.placeholder = "Kode Pos (Tidak ditemukan, isi manual)";
+                            input.focus();
+                        }
+                        select.classList.add('hidden');
+                        select.disabled = true;
+                    }
+                } catch (e) {
+                    console.error("Postal code search failed", e);
+                    // ERROR: Fallback to Input
+                    if(input) {
+                        input.classList.remove('hidden');
+                        input.disabled = false;
+                    }
+                    select.classList.add('hidden');
+                    select.disabled = true;
+                }
+            }
+
+            function handleOrgCountryChange(e) {
+                const country = e.target.value;
+                const inputs = ['province', 'city', 'district', 'village', 'postal_code'];
+                inputs.forEach(field => {
+                    const inputEl = document.getElementById(`org_input_${field}`);
+                    const selectEl = document.getElementById(`org_select_${field}`);
+                    if (country === 'Indonesia') {
+                        inputEl.classList.add('hidden'); inputEl.disabled = true;
+                        selectEl.classList.remove('hidden'); selectEl.disabled = false;
+                    } else {
+                        inputEl.classList.remove('hidden'); inputEl.disabled = false;
+                        selectEl.classList.add('hidden'); selectEl.disabled = true;
+                    }
+                });
+                if (country === 'Indonesia') {
+                    const provinceSelect = document.getElementById('org_select_province');
+                    if (provinceSelect.options.length <= 1) loadProvinces();
+                }
+            }
+
+            // Init Logic for Location
+            document.addEventListener('DOMContentLoaded', () => {
+                loadCountries();
+                const orgCountry = document.querySelector('select[name="country"][data-org-step="2"]');
+                if (orgCountry) {
+                    orgCountry.addEventListener('change', handleOrgCountryChange);
+                    if (orgCountry.value === 'Indonesia') {
+                        handleOrgCountryChange({ target: orgCountry });
+                    }
+                }
+                
+                // Change Listeners for Region Selects
+                document.addEventListener('change', function(e) {
+                    const target = e.target;
+                    if (!target) return;
+                    if (target.id === 'org_select_province') {
+                        const id = target.options[target.selectedIndex]?.dataset.id;
+                        if (id) loadCities(id);
+                    } else if (target.id === 'org_select_city') {
+                        const id = target.options[target.selectedIndex]?.dataset.id;
+                        if (id) loadDistricts(id);
+                    } else if (target.id === 'org_select_district') {
+                        const id = target.options[target.selectedIndex]?.dataset.id;
+                        if (id) loadVillages(id);
+                    } else if (target.id === 'org_select_village') {
+                        const val = target.value;
+                        if(val) fetchPostalCode(val);
+                    }
+                });
+            });
+
+        })();
     </script>
 </x-layouts.app>

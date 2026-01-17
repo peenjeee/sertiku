@@ -304,10 +304,10 @@
                         {{-- Submit button for personal form --}}
                         <div id="personalSubmit"
                             class="mt-6 flex items-center justify-between border-t border-white/10 pt-6">
-                            <a href="{{ route('onboarding.skip', ['type' => 'personal']) }}"
+                            <!-- <a href="{{ route('onboarding.skip', ['type' => 'personal']) }}"
                                 class="text-sm text-[#BEDBFF]/70 hover:text-white transition">
-                                Lewati untuk sekarang →
-                            </a>
+                                Lewati untuk sekarang
+                            </a> -->
                             <button type="submit"
                                 class="inline-flex items-center rounded-lg bg-[#3B82F6] px-6 py-2.5 text-sm font-medium shadow-[0_10px_15px_-3px_rgba(43,127,255,0.5)] hover:bg-[#2563EB] transition">
                                 Simpan & Lanjutkan
@@ -317,10 +317,10 @@
 
                     {{-- Skip link for institution --}}
                     <div id="institutionSkip" class="hidden mt-6 text-center border-t border-white/10 pt-6">
-                        <a href="{{ route('onboarding.skip', ['type' => 'institution']) }}"
+                        <!-- <a href="{{ route('onboarding.skip', ['type' => 'institution']) }}"
                             class="text-sm text-[#BEDBFF]/70 hover:text-white transition">
-                            Lewati untuk sekarang →
-                        </a>
+                            Lewati untuk sekarang
+                        </a> -->
                     </div>
                 </div>
             </div>
