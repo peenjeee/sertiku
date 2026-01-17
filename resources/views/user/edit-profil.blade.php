@@ -301,9 +301,9 @@
     </div>
 
     {{-- ============================================= --}}
-    {{-- SECTION 3: Keamanan (Hidden for Google users) --}}
+    {{-- SECTION 3: Keamanan (Hidden for Google & Wallet users) --}}
     {{-- ============================================= --}}
-    @if(!$user->google_id)
+    @if(!$user->google_id && !$user->wallet_address)
         <div class="glass-card rounded-2xl p-5 lg:p-6 animate-fade-in-up">
             <h3 class="text-lg font-semibold text-white mb-6 flex items-center gap-2">
                 <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
