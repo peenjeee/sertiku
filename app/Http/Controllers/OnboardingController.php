@@ -108,7 +108,7 @@ class OnboardingController extends Controller
             $docs = [];
             foreach (['doc_npwp', 'doc_akta', 'doc_siup'] as $field) {
                 if ($request->hasFile($field)) {
-                    $docs[$field] = $request->file($field)->store('lembaga_docs', 'public');
+                    $docs[$field] = $request->file($field)->store('documents/' . $user->id, 'local');
                 }
             }
 

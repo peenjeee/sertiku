@@ -409,7 +409,7 @@
                     </div>
                     <div class="flex items-center gap-2">
                         @if($user->doc_npwp_path)
-                            <a href="{{ asset('storage/' . $user->doc_npwp_path) }}" target="_blank"
+                            <a href="{{ route('lembaga.settings.document.download', ['type' => 'doc_npwp']) }}" target="_blank"
                                 class="px-3 py-1.5 rounded-lg bg-gray-200 text-gray-700 text-sm hover:bg-gray-300 transition">
                                 Lihat
                             </a>
@@ -468,7 +468,7 @@
                     </div>
                     <div class="flex items-center gap-2">
                         @if($user->doc_akta_path)
-                            <a href="{{ asset('storage/' . $user->doc_akta_path) }}" target="_blank"
+                            <a href="{{ route('lembaga.settings.document.download', ['type' => 'doc_akta']) }}" target="_blank"
                                 class="px-3 py-1.5 rounded-lg bg-gray-200 text-gray-700 text-sm hover:bg-gray-300 transition">
                                 Lihat
                             </a>
@@ -527,7 +527,7 @@
                     </div>
                     <div class="flex items-center gap-2">
                         @if($user->doc_siup_path)
-                            <a href="{{ asset('storage/' . $user->doc_siup_path) }}" target="_blank"
+                            <a href="{{ route('lembaga.settings.document.download', ['type' => 'doc_siup']) }}" target="_blank"
                                 class="px-3 py-1.5 rounded-lg bg-gray-200 text-gray-700 text-sm hover:bg-gray-300 transition">
                                 Lihat
                             </a>

@@ -1068,13 +1068,17 @@ class LembagaController extends Controller
         $documentType = $request->document_type;
         $pathField = $documentType . '_path';
 
-        // Delete old file if exists
+        // Delete old file if exists (Check both disks)
         if ($user->$pathField) {
-            Storage::disk('public')->delete($user->$pathField);
+            if (Storage::disk('local')->exists($user->$pathField)) {
+                Storage::disk('local')->delete($user->$pathField);
+            } elseif (Storage::disk('public')->exists($user->$pathField)) {
+                Storage::disk('public')->delete($user->$pathField);
+            }
         }
 
         // Store new file
-        $path = $request->file('document')->store('documents/' . $user->id, 'public');
+        $path = $request->file('document')->store('documents/' . $user->id, 'local');
 
         // Update user
         $user->update([
@@ -1103,9 +1107,13 @@ class LembagaController extends Controller
         $documentType = $request->document_type;
         $pathField = $documentType . '_path';
 
-        // Delete file if exists
+        // Delete file if exists (Check both disks)
         if ($user->$pathField) {
-            Storage::disk('public')->delete($user->$pathField);
+            if (Storage::disk('local')->exists($user->$pathField)) {
+                Storage::disk('local')->delete($user->$pathField);
+            } elseif (Storage::disk('public')->exists($user->$pathField)) {
+                Storage::disk('public')->delete($user->$pathField);
+            }
         }
 
         // Update user
@@ -1120,6 +1128,48 @@ class LembagaController extends Controller
         ];
 
         return back()->with('success', 'Dokumen ' . $documentNames[$documentType] . ' berhasil dihapus!');
+    }
+
+    /**
+     * Download secure document (NPWP, Akta, SIUP).
+     */
+    public function downloadDocument($type)
+    {
+        $validTypes = ['doc_npwp', 'doc_akta', 'doc_siup'];
+
+        if (!in_array($type, $validTypes)) {
+            abort(404);
+        }
+
+        $user = Auth::user();
+        $pathField = $type . '_path';
+        $path = $user->$pathField;
+
+        if (!$path) {
+            abort(404);
+        }
+
+        // Check if file exists in local (private) storage
+        if (Storage::disk('local')->exists($path)) {
+            return Storage::disk('local')->response($path);
+        }
+
+        // Check if file exists in public storage (Legacy fallback)
+        if (Storage::disk('public')->exists($path)) {
+            // OPTIONAL: Move to local storage for better security in future
+            try {
+                $content = Storage::disk('public')->get($path);
+                Storage::disk('local')->put($path, $content);
+                Storage::disk('public')->delete($path);
+
+                return Storage::disk('local')->response($path);
+            } catch (\Exception $e) {
+                // If move fails, just serve from public for now
+                return Storage::disk('public')->response($path);
+            }
+        }
+
+        abort(404);
     }
 
     /**
@@ -1163,13 +1213,13 @@ class LembagaController extends Controller
 
         // 3. Delete document files
         if ($user->doc_npwp_path) {
-            Storage::disk('public')->delete($user->doc_npwp_path);
+            Storage::disk('local')->delete($user->doc_npwp_path);
         }
         if ($user->doc_akta_path) {
-            Storage::disk('public')->delete($user->doc_akta_path);
+            Storage::disk('local')->delete($user->doc_akta_path);
         }
         if ($user->doc_siup_path) {
-            Storage::disk('public')->delete($user->doc_siup_path);
+            Storage::disk('local')->delete($user->doc_siup_path);
         }
 
         // 4. Delete avatar if exists

@@ -304,6 +304,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/pengaturan/avatar', [\App\Http\Controllers\LembagaController::class, 'updateAvatar'])->name('settings.avatar');
         Route::delete('/pengaturan/avatar', [\App\Http\Controllers\LembagaController::class, 'removeAvatar'])->name('settings.avatar.remove');
         Route::put('/pengaturan/password', [\App\Http\Controllers\LembagaController::class, 'updatePassword'])->name('settings.password');
+        // Settings - Documents (Secure)
+        Route::get('/pengaturan/document/{type}', [\App\Http\Controllers\LembagaController::class, 'downloadDocument'])->name('settings.document.download');
         Route::post('/pengaturan/document', [\App\Http\Controllers\LembagaController::class, 'updateDocument'])->name('settings.document.update');
         Route::delete('/pengaturan/document', [\App\Http\Controllers\LembagaController::class, 'deleteDocument'])->name('settings.document.delete');
         Route::delete('/pengaturan/account', [\App\Http\Controllers\LembagaController::class, 'deleteAccount'])->name('settings.delete');

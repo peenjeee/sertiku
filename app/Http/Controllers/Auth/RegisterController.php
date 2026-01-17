@@ -115,8 +115,8 @@ class RegisterController extends Controller
         $docs = [];
         foreach (['doc_npwp', 'doc_akta', 'doc_siup'] as $field) {
             if ($request->hasFile($field)) {
-                // simpan ke storage/app/public/lembaga_docs
-                $docs[$field] = $request->file($field)->store('lembaga_docs', 'public');
+                // simpan ke storage/app/documents (private)
+                $docs[$field] = $request->file($field)->store('documents', 'local');
             }
         }
 
