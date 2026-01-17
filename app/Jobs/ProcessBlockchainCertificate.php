@@ -31,6 +31,12 @@ class ProcessBlockchainCertificate implements ShouldQueue
     protected Certificate $certificate;
 
     /**
+     * The number of seconds the job can run before timing out.
+     * 0 means unlimited.
+     */
+    public $timeout = 0;
+
+    /**
      * Whether IPFS upload was requested by user.
      */
     protected bool $ipfsEnabled;
@@ -49,8 +55,9 @@ class ProcessBlockchainCertificate implements ShouldQueue
      */
     public function handle(BlockchainService $blockchainService): void
     {
-        // Set reasonable memory limit for shared hosting (avoid OOM Killed)
-        ini_set('memory_limit', '256M');
+        // Set unlimited time and high memory for blockchain operations
+        ini_set('memory_limit', '1024M');
+        set_time_limit(0); // Unlimited
 
         Log::info("Processing blockchain for certificate: {$this->certificate->certificate_number}");
 

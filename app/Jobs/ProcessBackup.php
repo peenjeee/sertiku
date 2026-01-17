@@ -13,6 +13,8 @@ class ProcessBackup implements ShouldQueue
     protected $user;
     protected $backupPath;
 
+    public $timeout = 0; // Unlimited timeout for backup process
+
     /**
      * Create a new job instance.
      */
@@ -28,6 +30,10 @@ class ProcessBackup implements ShouldQueue
      */
     public function handle(): void
     {
+        // Increase limits for background process (Best Practice for heavy jobs)
+        ini_set('memory_limit', '2048M');
+        set_time_limit(0); // Unlimited
+
         // Ensure backup directory exists
         if (!\Illuminate\Support\Facades\File::exists($this->backupPath)) {
             \Illuminate\Support\Facades\File::makeDirectory($this->backupPath, 0755, true);
@@ -55,6 +61,7 @@ class ProcessBackup implements ShouldQueue
                     }
                 } catch (\Exception $e) {
                     $errors[] = "Database: " . $e->getMessage();
+                    \Illuminate\Support\Facades\Log::error("BackupJob: DB Error: " . $e->getMessage());
                 }
             }
 
@@ -74,6 +81,7 @@ class ProcessBackup implements ShouldQueue
                     }
                 } catch (\Exception $e) {
                     $errors[] = "Storage: " . $e->getMessage();
+                    \Illuminate\Support\Facades\Log::error("BackupJob: Storage Error: " . $e->getMessage());
                 }
             }
 
@@ -154,6 +162,22 @@ class ProcessBackup implements ShouldQueue
             $zipFilename = "database_{$timestamp}.sql.zip";
             $zipPath = $this->backupPath . '/' . $zipFilename;
 
+            // BEST PRACTICE: Try system zip first for compression
+            if (PHP_OS_FAMILY !== 'Windows') {
+                $zipCheck = shell_exec('which zip');
+                if (!empty($zipCheck)) {
+                    // -q: quiet, -j: junk paths (store just filename)
+                    $cmd = "zip -q -j " . escapeshellarg($zipPath) . " " . escapeshellarg($filepath);
+                    exec($cmd, $out, $ret);
+
+                    if ($ret === 0 && file_exists($zipPath)) {
+                        unlink($filepath); // Remove raw SQL
+                        return $zipFilename;
+                    }
+                }
+            }
+
+            // Fallback to PHP ZipArchive
             $zip = new \ZipArchive();
             if ($zip->open($zipPath, \ZipArchive::CREATE) === true) {
                 $zip->addFile($filepath, $filename);
@@ -204,40 +228,137 @@ class ProcessBackup implements ShouldQueue
         $filename = "storage_{$timestamp}.zip";
         $zipPath = $this->backupPath . '/' . $filename;
 
+        // Increase limits for this job
+        ini_set('memory_limit', '2048M');
+        set_time_limit(3600);
+
         $dirsToBackup = ['public', 'certificates', 'templates', 'invoices'];
         $basePath = storage_path('app');
 
+        \Illuminate\Support\Facades\Log::info("BackupStorage: Starting backup for {$filename}");
+
+        // Try using system zip command on Linux/Unix (Much faster & memory efficient)
+        if (PHP_OS_FAMILY !== 'Windows') {
+            try {
+                // Check if zip command exists
+                $zipCheck = shell_exec('which zip');
+
+                if (!empty($zipCheck)) {
+                    \Illuminate\Support\Facades\Log::info("BackupStorage: Using system zip command.");
+
+                    // Build command: cd to app root, then zip specific folders
+                    // -r: recursive
+                    // -q: quiet
+                    $foldersToZip = implode(' ', $dirsToBackup);
+
+                    // Verify folders exist before adding to command to avoid warnings
+                    $existingFolders = [];
+                    foreach ($dirsToBackup as $dir) {
+                        if (is_dir($basePath . '/' . $dir)) {
+                            $existingFolders[] = $dir;
+                        }
+                    }
+
+                    if (empty($existingFolders)) {
+                        \Illuminate\Support\Facades\Log::warning("BackupStorage: No directories found to backup.");
+                        return null;
+                    }
+
+                    $foldersStr = implode(' ', array_map('escapeshellarg', $existingFolders));
+                    $zipPathEscaped = escapeshellarg($zipPath);
+                    $basePathEscaped = escapeshellarg($basePath);
+
+                    $command = "cd {$basePathEscaped} && zip -r -q {$zipPathEscaped} {$foldersStr}";
+
+                    \Illuminate\Support\Facades\Log::info("BackupStorage: Executing: {$command}");
+
+                    exec($command, $output, $returnVar);
+
+                    if ($returnVar === 0 && file_exists($zipPath) && filesize($zipPath) > 0) {
+                        \Illuminate\Support\Facades\Log::info("BackupStorage: System zip successful.");
+                        return $filename;
+                    } else {
+                        \Illuminate\Support\Facades\Log::warning("BackupStorage: System zip failed (Code: {$returnVar}). Falling back to PHP ZipArchive.");
+                    }
+                }
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error("BackupStorage: System zip exception: " . $e->getMessage());
+            }
+        }
+
+        // Fallback to PHP ZipArchive (Standard method) - with Chunking for memory safety
+        \Illuminate\Support\Facades\Log::info("BackupStorage: Using PHP ZipArchive with Chunking.");
+
+        // Initialize Zip
         $zip = new \ZipArchive();
         if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
-            throw new \Exception('Cannot create zip file');
+            \Illuminate\Support\Facades\Log::error("BackupStorage: Failed to create zip at {$zipPath}");
+            throw new \Exception('Cannot create zip file at ' . $zipPath);
         }
 
         $fileCount = 0;
+        $chunkSize = 500; // Close and re-open zip every 500 files to flush memory buffer
 
         foreach ($dirsToBackup as $dir) {
             $fullPath = $basePath . '/' . $dir;
+            \Illuminate\Support\Facades\Log::info("BackupStorage: Checking directory {$fullPath}");
 
             if (\Illuminate\Support\Facades\File::exists($fullPath)) {
                 $files = new \RecursiveIteratorIterator(
-                    new \RecursiveDirectoryIterator($fullPath),
+                    new \RecursiveDirectoryIterator($fullPath, \RecursiveDirectoryIterator::SKIP_DOTS),
                     \RecursiveIteratorIterator::LEAVES_ONLY
                 );
 
                 foreach ($files as $file) {
                     if (!$file->isDir()) {
                         $filePath = $file->getRealPath();
-                        $relativePath = substr($filePath, strlen($basePath) + 1);
-                        $relativePath = str_replace('\\', '/', $relativePath);
+
+                        // Normalize paths
+                        $normalizedBase = str_replace('\\', '/', $basePath);
+                        $normalizedFile = str_replace('\\', '/', $filePath);
+
+                        if (strpos($normalizedFile, $normalizedBase) === 0) {
+                            $relativePath = substr($normalizedFile, strlen($normalizedBase) + 1);
+                        } else {
+                            $relativePath = $dir . '/' . $file->getFilename();
+                        }
+
                         $zip->addFile($filePath, $relativePath);
                         $fileCount++;
+
+                        // Chunking Logic
+                        if ($fileCount % $chunkSize === 0) {
+                            if (!$zip->close()) {
+                                throw new \Exception('Failed to close zip during chunking.');
+                            }
+                            // Re-open
+                            if ($zip->open($zipPath, \ZipArchive::CREATE) !== true) {
+                                throw new \Exception('Failed to re-open zip during chunking.');
+                            }
+                            // Force garbage collection
+                            gc_collect_cycles();
+                        }
                     }
                 }
+            } else {
+                \Illuminate\Support\Facades\Log::warning("BackupStorage: Directory not found: {$fullPath}");
             }
         }
 
-        $zip->close();
+        \Illuminate\Support\Facades\Log::info("BackupStorage: Total files added: {$fileCount}");
+
+        if (!$zip->close()) {
+            \Illuminate\Support\Facades\Log::error("BackupStorage: Failed to close/save zip file.");
+            throw new \Exception('Failed to save zip file.');
+        }
 
         if ($fileCount === 0) {
+            \Illuminate\Support\Facades\Log::warning("BackupStorage: No files found to backup.");
+            return null;
+        }
+
+        if (!file_exists($zipPath) || filesize($zipPath) < 10) {
+            \Illuminate\Support\Facades\Log::error("BackupStorage: Zip file is missing or empty after close.");
             return null;
         }
 

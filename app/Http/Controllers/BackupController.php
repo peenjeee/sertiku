@@ -88,22 +88,42 @@ class BackupController extends Controller
             // Use mysqldump for MySQL - redirect stderr to null to avoid warnings in SQL file
             if (PHP_OS_FAMILY === 'Windows') {
                 // Use cmd /c because PowerShell doesn't support > redirect properly
+                // Windows syntax
+                $ignoreTables = '';
+                $tablesToIgnore = ['jobs', 'failed_jobs', 'sessions', 'cache', 'cache_locks'];
+                foreach ($tablesToIgnore as $table) {
+                    $ignoreTables .= sprintf(' --ignore-table=%s.%s', $config['database'], $table);
+                }
+
                 $command = sprintf(
-                    'cmd /c "mysqldump --user=%s --password=%s --host=%s --port=%s %s 2>NUL > %s"',
+                    'cmd /c "mysqldump --user=%s --password=%s --host=%s --port=%s %s %s 2>NUL > %s"',
                     $config['username'],
                     $config['password'],
                     $config['host'],
                     $config['port'] ?? 3306,
+                    $ignoreTables,
                     $config['database'],
                     str_replace('/', '\\', $filepath)
                 );
             } else {
+                // Linux/Mac syntax
+                $ignoreTables = '';
+                $tablesToIgnore = ['jobs', 'failed_jobs', 'sessions', 'cache', 'cache_locks'];
+                foreach ($tablesToIgnore as $table) {
+                    $ignoreTables .= sprintf(
+                        ' --ignore-table=%s.%s',
+                        escapeshellarg($config['database']),
+                        escapeshellarg($table)
+                    );
+                }
+
                 $command = sprintf(
-                    'mysqldump --user=%s --password=%s --host=%s --port=%s %s 2>/dev/null > %s',
+                    'mysqldump --user=%s --password=%s --host=%s --port=%s %s %s 2>/dev/null > %s',
                     escapeshellarg($config['username']),
                     escapeshellarg($config['password']),
                     escapeshellarg($config['host']),
                     escapeshellarg($config['port'] ?? 3306),
+                    $ignoreTables,
                     escapeshellarg($config['database']),
                     escapeshellarg($filepath)
                 );
@@ -604,43 +624,13 @@ class BackupController extends Controller
             $fileId = $request->input('file_id');
             $fileName = $request->input('file_name');
 
-            // Download file from Google Drive
-            $tempPath = $this->googleDrive->downloadFile($fileId);
+            // Dispatch Job
+            \App\Jobs\ProcessRestore::dispatch($fileId, $fileName, auth()->user());
 
-            if (!$tempPath || !file_exists($tempPath)) {
-                throw new \Exception('Gagal download file dari Google Drive');
-            }
-
-            // Determine file type and restore
-            $extension = pathinfo($fileName, PATHINFO_EXTENSION);
-
-            if ($extension === 'zip') {
-                $result = $this->restoreFromZipPath($tempPath, $fileName);
-            } elseif ($extension === 'sql') {
-                $this->restoreDatabase($tempPath);
-                $result = 'database (SQL)';
-            } elseif ($extension === 'json') {
-                $this->restoreDatabaseJSON($tempPath);
-                $result = 'database (JSON)';
-            } else {
-                throw new \Exception('Format file tidak didukung: ' . $extension);
-            }
-
-            // Clean up temp file
-            if (file_exists($tempPath)) {
-                unlink($tempPath);
-            }
-
-            // Log activity
-            ActivityLog::log('restore', 'Restore dari Google Drive berhasil: ' . $fileName, null, [
-                'file_id' => $fileId,
-                'file_name' => $fileName,
-            ]);
-
-            return back()->with('success', 'Restore dari Google Drive berhasil: ' . $result);
+            return back()->with('success', 'Proses restore sedang berjalan di latar belakang (Background). Mohon tunggu beberapa saat sebelum mengakses data yang direstore.');
 
         } catch (\Exception $e) {
-            return back()->with('error', 'Gagal restore dari Google Drive: ' . $e->getMessage());
+            return back()->with('error', 'Gagal memulai restore: ' . $e->getMessage());
         }
     }
 

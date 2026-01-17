@@ -168,7 +168,7 @@ class BlockchainService
 
             // Broadcast transaction
             Log::info('BlockchainService signWithPhp: Broadcasting to ' . $this->rpcUrl);
-            $response = Http::timeout(30)->post($this->rpcUrl, [
+            $response = Http::timeout(0)->post($this->rpcUrl, [
                 'jsonrpc' => '2.0',
                 'method' => 'eth_sendRawTransaction',
                 'params' => ['0x' . $rawTx],
@@ -265,7 +265,8 @@ class BlockchainService
 
             // Encode the smart contract function call (HYBRID CONTRACT - 2 params only)
             // Function: storeCertificate(bytes32 _dataHash, string _certificateData)
-            $functionData = $this->encodeStoreCertificateHybrid($certHash, $certificateData);
+            // Add newline prefix to separate JSON from hash in block explorer view
+            $functionData = $this->encodeStoreCertificateHybrid($certHash, "\n" . $certificateData);
 
             Log::info('BlockchainService signWithContract: Encoded function data length = ' . strlen($functionData));
 
@@ -300,7 +301,7 @@ class BlockchainService
             Log::info('BlockchainService signWithContract: Raw transaction created, length = ' . strlen($rawTx));
 
             // Broadcast transaction
-            $response = Http::timeout(60)->post($this->rpcUrl, [
+            $response = Http::timeout(0)->post($this->rpcUrl, [
                 'jsonrpc' => '2.0',
                 'method' => 'eth_sendRawTransaction',
                 'params' => ['0x' . $rawTx],
@@ -475,7 +476,7 @@ class BlockchainService
             ];
 
             // Try eth_sendTransaction (works if wallet is unlocked on node)
-            $response = Http::timeout(30)->post($this->rpcUrl, [
+            $response = Http::timeout(0)->post($this->rpcUrl, [
                 'jsonrpc' => '2.0',
                 'method' => 'eth_sendTransaction',
                 'params' => [$txParams],
@@ -502,7 +503,7 @@ class BlockchainService
      */
     public function getNonce(): ?string
     {
-        $response = Http::timeout(30)->post($this->rpcUrl, [
+        $response = Http::timeout(0)->post($this->rpcUrl, [
             'jsonrpc' => '2.0',
             'method' => 'eth_getTransactionCount',
             'params' => [$this->walletAddress, 'latest'],
@@ -521,7 +522,7 @@ class BlockchainService
      */
     public function getGasPrice(): ?string
     {
-        $response = Http::timeout(30)->post($this->rpcUrl, [
+        $response = Http::timeout(0)->post($this->rpcUrl, [
             'jsonrpc' => '2.0',
             'method' => 'eth_gasPrice',
             'params' => [],
@@ -540,7 +541,7 @@ class BlockchainService
      */
     public function getTransactionStatus(string $txHash): ?string
     {
-        $response = Http::timeout(30)->post($this->rpcUrl, [
+        $response = Http::timeout(0)->post($this->rpcUrl, [
             'jsonrpc' => '2.0',
             'method' => 'eth_getTransactionReceipt',
             'params' => [$txHash],
@@ -563,7 +564,7 @@ class BlockchainService
      */
     public function verifyTransactionOnChain(string $txHash): ?array
     {
-        $response = Http::timeout(30)->post($this->rpcUrl, [
+        $response = Http::timeout(0)->post($this->rpcUrl, [
             'jsonrpc' => '2.0',
             'method' => 'eth_getTransactionByHash',
             'params' => [$txHash],
@@ -596,7 +597,7 @@ class BlockchainService
         }
 
         try {
-            $response = Http::timeout(10)->post($this->rpcUrl, [
+            $response = Http::timeout(0)->post($this->rpcUrl, [
                 'jsonrpc' => '2.0',
                 'method' => 'eth_getBalance',
                 'params' => [$this->walletAddress, 'latest'],
@@ -654,7 +655,7 @@ class BlockchainService
         }
 
         try {
-            $response = Http::timeout(10)->post($this->rpcUrl, [
+            $response = Http::timeout(0)->post($this->rpcUrl, [
                 'jsonrpc' => '2.0',
                 'method' => 'eth_getTransactionCount',
                 'params' => [$this->walletAddress, 'latest'],

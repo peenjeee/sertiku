@@ -11,6 +11,8 @@ class CertificateRevoked extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    public $timeout = 0; // Unlimited timeout
+
     /**
      * Create a new notification instance.
      */

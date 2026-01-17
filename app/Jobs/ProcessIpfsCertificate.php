@@ -25,6 +25,12 @@ class ProcessIpfsCertificate implements ShouldQueue
     public int $backoff = 30;
 
     /**
+     * The number of seconds the job can run before timing out.
+     * 0 means unlimited.
+     */
+    public $timeout = 0;
+
+    /**
      * Create a new job instance.
      */
     public function __construct(
@@ -37,8 +43,9 @@ class ProcessIpfsCertificate implements ShouldQueue
      */
     public function handle(IpfsService $ipfsService): void
     {
-        // Set reasonable memory limit for shared hosting (avoid OOM Killed)
-        ini_set('memory_limit', '256M');
+        // Set unlimited time and high memory for IPFS operations
+        ini_set('memory_limit', '1024M');
+        set_time_limit(0); // Unlimited
 
         Log::info("ProcessIpfsCertificate: Starting IPFS upload for certificate {$this->certificate->certificate_number}");
         $this->certificate->update(['ipfs_status' => 'processing']);

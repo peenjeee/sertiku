@@ -178,7 +178,7 @@ class GoogleDriveService
             $uploadResponse = Http::withHeaders([
                 'Content-Length' => $fileSize,
                 'Content-Type' => $mimeType,
-            ])->timeout(3600)->withBody(
+            ])->timeout(0)->withBody(
                     new \GuzzleHttp\Psr7\Stream($fileStream),
                     $mimeType
                 )->put($uploadUrl);
@@ -238,6 +238,7 @@ class GoogleDriveService
         $tempPath = storage_path('app/temp_drive_download_' . time());
 
         $response = Http::withToken($accessToken)
+            ->timeout(0)
             ->sink($tempPath)
             ->get("https://www.googleapis.com/drive/v3/files/{$fileId}?alt=media");
 

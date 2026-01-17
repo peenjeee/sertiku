@@ -7,9 +7,13 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ContactFormMail extends Mailable
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+class ContactFormMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
+
+    public $timeout = 0; // Unlimited timeout
 
     public $data;
 

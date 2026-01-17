@@ -310,6 +310,21 @@
     </div>
     <script>
         function confirmRevoke() {
+            const reasonInput = document.querySelector('#form-revoke textarea[name="reason"]');
+            const reason = reasonInput.value.trim();
+
+            if (!reason) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Wajib Diisi',
+                    text: 'Mohon isi alasan pencabutan sertifikat terlebih dahulu.',
+                    background: '#1f2937',
+                    color: '#fff',
+                    confirmButtonColor: '#3B82F6'
+                });
+                return;
+            }
+
             Swal.fire({
                 title: 'Apakah Anda yakin?',
                 text: "Sertifikat akan dicabut dan tidak valid lagi!",

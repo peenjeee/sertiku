@@ -9,9 +9,13 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class CertificateIssuedMail extends Mailable
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+class CertificateIssuedMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
+
+    public $timeout = 0; // Unlimited timeout
 
     public Certificate $certificate;
     public string $recipientName;
@@ -22,6 +26,7 @@ class CertificateIssuedMail extends Mailable
     public ?string $expireDate;
     public string $verificationUrl;
     public ?string $downloadUrl;
+    public bool $isRegistered = false;
 
     /**
      * Create a new message instance.
@@ -41,6 +46,8 @@ class CertificateIssuedMail extends Mailable
             : null;
         $this->verificationUrl = $certificate->verification_url;
         $this->downloadUrl = $certificate->pdf_url;
+        // Check if recipient is already registered
+        $this->isRegistered = \App\Models\User::where('email', $certificate->recipient_email)->exists();
     }
 
     /**

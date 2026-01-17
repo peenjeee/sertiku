@@ -11,6 +11,17 @@ class User extends Authenticatable
     use HasFactory, Notifiable, HasApiTokens;
 
     /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new \App\Notifications\ResetPasswordQueued($token));
+    }
+
+    /**
      * The attributes that are mass assignable.
      */
     protected $fillable = [

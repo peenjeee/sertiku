@@ -48,7 +48,7 @@ class IpfsService
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $this->pinataJwt,
                 'Content-Type' => 'application/json',
-            ])->timeout(60)->post('https://api.pinata.cloud/pinning/pinJSONToIPFS', [
+            ])->timeout(0)->post('https://api.pinata.cloud/pinning/pinJSONToIPFS', [
                         'pinataContent' => $data,
                         'pinataMetadata' => [
                             'name' => $name . '.json',
@@ -99,7 +99,7 @@ class IpfsService
         try {
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $this->pinataJwt,
-            ])->timeout(120)->attach(
+            ])->timeout(0)->attach(
                     'file',
                     file_get_contents($filePath),
                     $fileName

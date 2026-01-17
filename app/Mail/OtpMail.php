@@ -9,9 +9,13 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class OtpMail extends Mailable
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+class OtpMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
+
+    public $timeout = 0; // Unlimited timeout
 
     public string $otp;
     public string $userName;

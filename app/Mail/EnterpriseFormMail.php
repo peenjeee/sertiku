@@ -8,9 +8,13 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class EnterpriseFormMail extends Mailable
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+class EnterpriseFormMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
+
+    public $timeout = 0; // Unlimited timeout
 
     public $data;
 

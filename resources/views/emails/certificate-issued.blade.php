@@ -147,9 +147,15 @@
                                     <strong>Sertifikat ini dapat diverifikasi</strong> oleh siapa saja melalui
                                     link verifikasi atau dengan memindai QR code pada sertifikat.
                                     <br><br>
-                                    Silahkan <a href="{{ route('register') }}"
-                                        style="color: #3B82F6; text-decoration: underline;">buat akun</a> dengan email
-                                    ini untuk mengakses dashboard dan mengelola sertifikat Anda.
+                                    @if($isRegistered)
+                                        Silahkan <a href="{{ route('login') }}"
+                                            style="color: #3B82F6; text-decoration: underline;">login akun</a> dengan email
+                                        ini untuk mengakses dashboard dan mengelola sertifikat Anda.
+                                    @else
+                                        Silahkan <a href="{{ route('register') }}"
+                                            style="color: #3B82F6; text-decoration: underline;">buat akun</a> dengan email
+                                        ini untuk mengakses dashboard dan mengelola sertifikat Anda.
+                                    @endif
                                 </p>
                             </div>
 
