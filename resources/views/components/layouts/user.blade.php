@@ -341,7 +341,13 @@
                 </div>
                 <div class="user-info min-w-0">
                     <p class="text-white font-medium text-sm truncate">{{ auth()->user()->name ?? 'User' }}</p>
-                    <p class="text-white/50 text-xs">User</p>
+                    <p class="text-white/50 text-xs truncate">
+                        @if(auth()->user()->wallet_address)
+                            {{ substr(auth()->user()->wallet_address, 0, 6) }}...{{ substr(auth()->user()->wallet_address, -4) }}
+                        @else
+                            {{ auth()->user()->email }}
+                        @endif
+                    </p>
                 </div>
             </div>
             <a href="{{ route('user.profil.edit') }}"

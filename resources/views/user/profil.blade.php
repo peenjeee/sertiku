@@ -277,7 +277,7 @@
     </div>
 
     {{-- Zona Berbahaya (Hapus Akun) --}}
-    <div class="glass-card rounded-2xl p-5 lg:p-6 border-2 border-red-500/30 animate-fade-in-up">
+    <!-- <div class="glass-card rounded-2xl p-5 lg:p-6 border-2 border-red-500/30 animate-fade-in-up">
         <h3 class="text-lg font-semibold text-red-400 mb-4 flex items-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -295,7 +295,7 @@
             class="px-4 py-2.5 bg-red-500/20 border border-red-500/50 text-red-400 text-sm font-medium rounded-lg hover:bg-red-500/30 transition">
             Hapus Akun Saya
         </button>
-    </div>
+    </div> -->
 
     {{-- Delete Account Modal --}}
     <div id="delete-modal" class="hidden fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
