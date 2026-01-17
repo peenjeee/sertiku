@@ -44,7 +44,12 @@
                         </span>
                     @endif
                 </div>
-                <p class="text-white/50 text-sm font-mono">{{ $walletInfo['wallet_address'] ?: 'Belum dikonfigurasi' }}
+                <p class="text-white/50 text-sm font-mono" title="{{ $walletInfo['wallet_address'] }}">
+                    @if($walletInfo['wallet_address'])
+                        {{ substr($walletInfo['wallet_address'], 0, 6) }}...{{ substr($walletInfo['wallet_address'], -4) }}
+                    @else
+                        Belum dikonfigurasi
+                    @endif
                 </p>
                 <p class="text-white/40 text-xs mt-1">{{ $walletInfo['network'] }}</p>
             </div>
@@ -57,8 +62,8 @@
                 </p>
                 @if($walletInfo['balance'])
                     <!-- <p class="text-white/40 text-xs mt-1">
-                            ≈ Rp {{ number_format($walletInfo['balance']['matic'] * 10000, 0, ',', '.') }}
-                        </p> -->
+                                ≈ Rp {{ number_format($walletInfo['balance']['matic'] * 10000, 0, ',', '.') }}
+                            </p> -->
                 @endif
             </div>
         </div>

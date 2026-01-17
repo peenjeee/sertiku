@@ -25,9 +25,8 @@
         <div class="space-y-3">
             @forelse($admins as $admin)
                 <div class="flex items-center gap-4 p-4 rounded-xl bg-white/5">
-                    <div
-                        class="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden
-                                                {{ $admin->is_master ? 'bg-[#A855F7]' : 'bg-[#3B82F6]' }}">
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden
+                                                    {{ $admin->is_master ? 'bg-[#A855F7]' : 'bg-[#3B82F6]' }}">
                         @if($admin->avatar && (str_starts_with($admin->avatar, '/storage/') || str_starts_with($admin->avatar, 'http')))
                             <img src="{{ $admin->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                         @else
@@ -37,11 +36,18 @@
                     </div>
                     <div class="flex-1 min-w-0">
                         <p class="text-white font-medium">{{ $admin->name }}</p>
-                        <p class="text-white/50 text-sm">{{ $admin->email }}</p>
+                        <p class="text-white/50 text-sm" title="{{ $admin->email }}">
+                            @if(Str::startsWith($admin->email, '0x') && strlen($admin->email) > 20)
+                                {{ substr($admin->email, 0, 6) }}...{{ substr($admin->email, -4) }}
+                            @else
+                                {{ $admin->email }}
+                            @endif
+                        </p>
                     </div>
                     <div class="flex items-center gap-2">
                         @if($admin->is_master)
-                            <span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-sm font-medium">Master</span>
+                            <span
+                                class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-sm font-medium">Master</span>
                         @else
                             <span class="px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 text-sm">Admin</span>
                             <form action="{{ route('master.admins.demote', $admin) }}" method="POST" class="inline"
@@ -82,13 +88,19 @@
                         <div class="flex items-center gap-2 mb-0.5">
                             <p class="text-white font-medium text-sm truncate">{{ $user->name ?? 'Unnamed' }}</p>
                             <span class="px-1.5 py-0.5 rounded text-[10px] font-bold flex-shrink-0
-                                                   @if($user->account_type === 'lembaga' || $user->account_type === 'institution') bg-green-500/20 text-green-400
-                                                @else
-                                                            bg-yellow-500/20 text-yellow-400
-                                                        @endif
-                                                ">{{ ucfirst($user->account_type ?? 'user') }}</span>
+                                                       @if($user->account_type === 'lembaga' || $user->account_type === 'institution') bg-green-500/20 text-green-400
+                                                    @else
+                                                        bg-yellow-500/20 text-yellow-400
+                                                    @endif
+                                                    ">{{ ucfirst($user->account_type ?? 'user') }}</span>
                         </div>
-                        <p class="text-white/50 text-xs truncate">{{ $user->email }}</p>
+                        <p class="text-white/50 text-xs truncate" title="{{ $user->email }}">
+                            @if(Str::startsWith($user->email, '0x') && strlen($user->email) > 20)
+                                {{ substr($user->email, 0, 6) }}...{{ substr($user->email, -4) }}
+                            @else
+                                {{ $user->email }}
+                            @endif
+                        </p>
                     </div>
                     <form action="{{ route('master.admins.promote', $user) }}" method="POST" class="inline flex-shrink-0"
                         onsubmit="return confirmAction(event, 'Yakin ingin menjadikan {{ $user->name }} sebagai Admin?')">
