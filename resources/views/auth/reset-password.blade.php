@@ -33,8 +33,8 @@
 
                     <div class="space-y-2">
                         <label class="text-sm text-white">Email</label>
-                        <input type="email" name="email" value="{{ $email ?? old('email') }}" required
-                            class="w-full rounded-lg bg-white/5 border border-white/20 px-4 py-3 text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#3B82F6] @error('email') border-red-400 @enderror"
+                        <input type="email" name="email" value="{{ $email ?? old('email') }}" required readonly
+                            class="w-full rounded-lg bg-white/5 border border-white/20 px-4 py-3 text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#3B82F6] opacity-75 cursor-not-allowed @error('email') border-red-400 @enderror"
                             placeholder="nama@email.com">
                         @error('email')
                             <p class="text-xs text-red-400 mt-1">{{ $message }}</p>

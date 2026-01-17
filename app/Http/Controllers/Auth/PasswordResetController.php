@@ -37,9 +37,9 @@ class PasswordResetController extends Controller
             return back()->withErrors(['email' => 'Email tidak terdaftar dalam sistem kami.']);
         }
 
-        // Check if user has wallet login (no password)
-        if (!$user->password && $user->wallet_address) {
-            return back()->withErrors(['email' => 'Akun ini menggunakan login wallet. Tidak dapat reset password.']);
+        // Check if user has wallet login
+        if ($user->wallet_address) {
+            return back()->withErrors(['email' => 'Akun ini menggunakan login wallet. Silakan login dengan Wallet.']);
         }
 
         // Check if user logged in via Google OAuth

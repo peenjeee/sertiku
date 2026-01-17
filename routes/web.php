@@ -150,6 +150,11 @@ Route::post('/reset-password', [\App\Http\Controllers\Auth\PasswordResetControll
     ->middleware('guest')
     ->name('password.update');
 
+// Fix for 405 Method Not Allowed when accessing /reset-password directly
+Route::get('/reset-password', function () {
+    abort(404);
+});
+
 /*
 |--------------------------------------------------------------------------
 | EMAIL VERIFICATION OTP
