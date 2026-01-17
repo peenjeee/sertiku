@@ -150,4 +150,130 @@ return Application::configure(basePath: dirname(__DIR__))
                 ], 500);
             }
         });
+
+        // Handle Database Connection Errors for Web Requests
+        $exceptions->render(function (\Illuminate\Database\ConnectionException $e, \Illuminate\Http\Request $request) {
+            if (!$request->is('api') && !$request->is('api/*')) {
+                return response()->view('errors.db_error', [], 503);
+            }
+        });
+
+        $exceptions->render(function (\Illuminate\Database\QueryException $e, \Illuminate\Http\Request $request) {
+            if (!$request->is('api') && !$request->is('api/*')) {
+                return response()->view('errors.db_error', [], 503);
+            }
+        });
+
+        $exceptions->render(function (\PDOException $e, \Illuminate\Http\Request $request) {
+            if (!$request->is('api') && !$request->is('api/*')) {
+                return response()->view('errors.db_error', [], 503);
+            }
+        });
+
+        // Handle Redis Connection Errors for Web Requests
+        $exceptions->render(function (\Predis\Connection\ConnectionException $e, \Illuminate\Http\Request $request) {
+            if (!$request->is('api') && !$request->is('api/*')) {
+                return response()->view('errors.db_error', [], 503);
+            }
+        });
+
+        $exceptions->render(function (\RedisException $e, \Illuminate\Http\Request $request) {
+            if (!$request->is('api') && !$request->is('api/*')) {
+                return response()->view('errors.db_error', [], 503);
+            }
+        });
+
+        // Specific handling for the error seen in screenshot
+        $exceptions->render(function (\Predis\Connection\Resource\Exception\StreamInitException $e, \Illuminate\Http\Request $request) {
+            if (!$request->is('api') && !$request->is('api/*')) {
+                return response()->view('errors.db_error', [], 503);
+            }
+        });
+
+        // Handle Doctrine DBAL Errors (if used for some database operations)
+        $exceptions->render(function (\Doctrine\DBAL\Exception\ConnectionException $e, \Illuminate\Http\Request $request) {
+            if (!$request->is('api') && !$request->is('api/*')) {
+                return response()->view('errors.db_error', [], 503);
+            }
+        });
+
+        $exceptions->render(function (\Doctrine\DBAL\Exception\ServerException $e, \Illuminate\Http\Request $request) {
+            if (!$request->is('api') && !$request->is('api/*')) {
+                return response()->view('errors.db_error', [], 503);
+            }
+        });
+
+        // General Predis Exception (Parent of all Predis errors)
+        $exceptions->render(function (\Predis\PredisException $e, \Illuminate\Http\Request $request) {
+            if (!$request->is('api') && !$request->is('api/*')) {
+                return response()->view('errors.db_error', [], 503);
+            }
+        });
+
+        // Catch-all for "Connection refused" in generic Exceptions if not caught above
+        $exceptions->render(function (\Throwable $e, \Illuminate\Http\Request $request) {
+            $msg = strtolower($e->getMessage());
+            $keywords = [
+                'connection refused',
+                'actively refused',
+                'sqlstate[hy000]',
+                'server has gone away',
+                'no connection could be made',
+                'target machine actively refused',
+                'failed to connect',
+                'network is unreachable',
+                'timed out',
+                'timeout',
+                'connection timed out',
+                'connection reset by peer',
+                'topology was destroyed',
+                'unknown database',
+                'host mismatch',
+                'no connection to the server',
+                'lost connection',
+                'is dead',
+                'error while sending',
+                'decryption failed',
+                'server closed the connection',
+                'ssl connection has been closed',
+                'error writing data',
+                'resource deadlock avoided',
+                'transaction() on null',
+                'child connection forced to terminate',
+                'query_wait_timeout',
+                'reset by peer',
+                'physical connection is not usable',
+                'tcp provider: error code',
+                'communication link failure',
+                'connection is no longer valid',
+                'sqlstate[08006]', // Postgres connection failure
+                'could not find driver',
+                'writetimeout',
+                'readtimeout',
+                'php_network_getaddresses',
+                'temporary failure in name resolution',
+                'name or service not known',
+                'getaddrinfo failed',
+                'nodename nor servname provided',
+                'socket error',
+                'remote host closed connection',
+                'unexpected eof',
+                'error reading result set',
+            ];
+
+            if (!$request->is('api') && !$request->is('api/*')) {
+                // Check Message String
+                foreach ($keywords as $keyword) {
+                    if (str_contains($msg, $keyword)) {
+                        return response()->view('errors.db_error', [], 503);
+                    }
+                }
+
+                // Check Error Codes for common DB connection issues (MySQL 2002)
+                if ($e->getCode() === 2002) {
+                    return response()->view('errors.db_error', [], 503);
+                }
+            }
+        });
+
     })->create();
