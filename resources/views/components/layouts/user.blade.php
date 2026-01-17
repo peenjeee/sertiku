@@ -484,6 +484,7 @@
             return false;
         }
     </script>
+    <x-back-to-top />
 </body>
 
 </html>

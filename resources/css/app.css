@@ -9,6 +9,10 @@
   --font-sans: 'Poppins', system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
   --color-sertiku-bg: #020617;
+}
 
-
+/* Global Smooth Scroll */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* Offset for sticky header */
 }
