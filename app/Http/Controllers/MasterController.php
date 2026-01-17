@@ -56,6 +56,8 @@ class MasterController extends Controller
             abort(403);
         }
 
+        // Save original account type before promoting
+        $user->original_account_type = $user->account_type;
         $user->is_admin = true;
         $user->account_type = 'admin';
         $user->save();
@@ -90,7 +92,9 @@ class MasterController extends Controller
         }
 
         $user->is_admin = false;
-        $user->account_type = 'pengguna';
+        // Restore original account type or default to 'pengguna'
+        $user->account_type = $user->original_account_type ?? 'pengguna';
+        $user->original_account_type = null;
         $user->save();
 
         // Log activity

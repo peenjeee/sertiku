@@ -81,6 +81,17 @@ class LoginController extends Controller
         $password = $request->input('password');
         $credentials = ['email' => $email, 'password' => $password];
 
+        // Cek apakah user terdaftar dengan metode lain (Google/Wallet)
+        $existingUser = User::where('email', $email)->first();
+        if ($existingUser) {
+            if ($existingUser->google_id) {
+                return back()->with('login_error_google', 'Akun ini terdaftar menggunakan Google. Silakan login dengan tombol Google.');
+            }
+            if ($existingUser->wallet_address) {
+                return back()->with('login_error_wallet', 'Akun ini terdaftar menggunakan Wallet. Silakan login lewat tab Wallet.');
+            }
+        }
+
         /**
          * 1) CEK 3 AKUN DUMMY DULU
          * ----------------------------------------------------

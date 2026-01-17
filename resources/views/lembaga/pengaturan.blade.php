@@ -59,7 +59,7 @@
                     @if($user->avatar && (str_starts_with($user->avatar, '/storage/') || str_starts_with($user->avatar, 'http')))
                         <img src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                     @else
-                        <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&email={{ urlencode($user->email) }}&background=3B82F6&color=fff&bold=true&size=128"
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode($user->institution_name ?? $user->name) }}&email={{ urlencode($user->email) }}&background=3B82F6&color=fff&bold=true&size=128"
                             alt="Avatar" class="w-full h-full object-cover">
                     @endif
                 </div>
@@ -145,82 +145,67 @@
                                     accept="image/jpeg,image/png,image/gif" class="hidden">
 
                                 <template x-if="!previewUrl">
-                                    <div class="flex items-center gap-6">
-                                        <div class="relative">
-                                            @if(Auth::user()->avatar && (str_starts_with(Auth::user()->avatar, '/storage/') || str_starts_with(Auth::user()->avatar, 'http')))
-                                                <img src="{{ Auth::user()->avatar }}" alt="Avatar"
-                                                    class="w-24 h-24 rounded-full object-cover border-4 border-[#1E3A8F]">
-                                            @else
-                                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->institution_name ?? Auth::user()->name) }}&email={{ urlencode(Auth::user()->email) }}&background=3B82F6&color=fff&bold=true&size=96"
-                                                    alt="Avatar"
-                                                    class="w-24 h-24 rounded-full object-cover border-4 border-[#1E3A8F]">
-                                            @endif
-
-                                            {{-- Edit Button overlay --}}
-                                            <label for="avatar-upload"
-                                                class="absolute bottom-0 right-0 bg-white p-1.5 rounded-full shadow-lg border border-gray-200 cursor-pointer hover:bg-gray-50 transition">
-                                                <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                                </svg>
-                                            </label>
+                                    <div>
+                                        <div
+                                            class="w-16 h-16 mx-auto mb-4 rounded-full bg-blue-500/20 flex items-center justify-center">
+                                            <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                            </svg>
                                         </div>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                        </svg>
+                                        <p class="text-white font-medium">Drag & drop foto di sini</p>
+                                        <p class="text-white/50 text-sm mt-1">atau klik untuk memilih file</p>
+                                        <p class="text-white/30 text-xs mt-3">JPG, PNG, GIF • Maks 2MB</p>
                                     </div>
-                                    <p class="text-white font-medium">Drag & drop foto di sini</p>
-                                    <p class="text-white/50 text-sm mt-1">atau klik untuk memilih file</p>
-                                    <p class="text-white/30 text-xs mt-3">JPG, PNG, GIF • Maks 2MB</p>
-                            </div>
-        </template>
+                                </template>
 
-        <template x-if="previewUrl">
-            <div>
-                <img :src="previewUrl" alt="Preview"
-                    class="w-32 h-32 mx-auto rounded-full object-cover border-4 border-blue-500/30">
-                <p class="text-white font-medium mt-4" x-text="fileName"></p>
-                <p class="text-white/50 text-sm" x-text="fileSize"></p>
-                <button type="button" @click.stop="clearFile()" class="mt-3 text-red-400 text-sm hover:text-red-300">
-                    Pilih foto lain
-                </button>
+                                <template x-if="previewUrl">
+                                    <div>
+                                        <img :src="previewUrl" alt="Preview"
+                                            class="w-32 h-32 mx-auto rounded-full object-cover border-4 border-blue-500/30">
+                                        <p class="text-white font-medium mt-4" x-text="fileName"></p>
+                                        <p class="text-white/50 text-sm" x-text="fileSize"></p>
+                                        <button type="button" @click.stop="clearFile()"
+                                            class="mt-3 text-red-400 text-sm hover:text-red-300">
+                                            Pilih foto lain
+                                        </button>
+                                    </div>
+                                </template>
+                            </div>
+
+                            {{-- Error Message --}}
+                            <template x-if="error">
+                                <div class="mt-3 p-2 rounded-lg bg-red-500/20 border border-red-500/30 text-red-400 text-xs"
+                                    x-text="error"></div>
+                            </template>
+                        </div>
+
+                        {{-- Modal Footer --}}
+                        <div class="flex items-center justify-end gap-3 p-5 border-t border-white/10">
+                            <button type="button" @click="showModal = false; clearFile()"
+                                class="px-4 py-2 rounded-lg bg-white/10 text-white font-medium hover:bg-white/20 transition">
+                                Batal
+                            </button>
+                            <button type="submit" :disabled="!previewUrl || uploading"
+                                :class="previewUrl && !uploading ? 'bg-[#3B82F6] hover:bg-[#2563EB]' : 'bg-white/10 cursor-not-allowed'"
+                                class="px-4 py-2 rounded-lg text-white font-medium transition flex items-center gap-2">
+                                <template x-if="uploading">
+                                    <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                            stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor"
+                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                        </path>
+                                    </svg>
+                                </template>
+                                <span x-text="uploading ? 'Mengupload...' : 'Upload Foto'"></span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </template>
-    </div>
-
-    {{-- Error Message --}}
-    <template x-if="error">
-        <div class="mt-4 p-3 rounded-lg bg-red-500/20 border border-red-500/30 text-red-400 text-sm" x-text="error">
-        </div>
-    </template>
-    </div>
-
-    {{-- Modal Footer --}}
-    <div class="flex items-center justify-end gap-3 p-5 border-t border-white/10">
-        <button type="button" @click="showModal = false; clearFile()"
-            class="px-4 py-2 rounded-lg bg-white/10 text-white font-medium hover:bg-white/20 transition">
-            Batal
-        </button>
-        <button type="submit" :disabled="!previewUrl || uploading"
-            :class="previewUrl && !uploading ? 'bg-[#3B82F6] hover:bg-[#2563EB]' : 'bg-white/10 cursor-not-allowed'"
-            class="px-4 py-2 rounded-lg text-white font-medium transition flex items-center gap-2">
-            <template x-if="uploading">
-                <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                    </path>
-                </svg>
-            </template>
-            <span x-text="uploading ? 'Mengupload...' : 'Upload Foto'"></span>
-        </button>
-    </div>
-    </form>
-    </div>
-    </div>
-    </template>
     </div>
 
     {{-- ============================================= --}}
@@ -239,57 +224,207 @@
             @csrf
             @method('PUT')
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {{-- Nama Lengkap --}}
-                <div>
-                    <label class="block text-sm text-gray-600 font-medium mb-2">Nama Lengkap <span
-                            class="text-red-500">*</span></label>
-                    <input type="text" name="name" value="{{ old('name', $user->name) }}"
-                        class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500">
-                    @error('name')
-                        <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
+            {{-- Info Lembaga --}}
+            <div class="mb-6">
+                <h4 class="text-sm font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-100">Data Lembaga</h4>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {{-- Nama Lembaga --}}
+                    <div>
+                        <label class="block text-sm text-gray-600 font-medium mb-2">Nama Lembaga <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" name="institution_name"
+                            value="{{ old('institution_name', $user->institution_name) }}"
+                            class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                            placeholder="Nama resmi lembaga">
+                        @error('institution_name')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                {{-- Nama Lembaga --}}
-                <div>
-                    <label class="block text-sm text-gray-600 font-medium mb-2">Nama Lembaga</label>
-                    <input type="text" name="institution_name"
-                        value="{{ old('institution_name', $user->institution_name) }}"
-                        class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
-                        placeholder="Nama institusi/perusahaan">
-                </div>
+                    {{-- Jenis Lembaga --}}
+                    <div>
+                        <label class="block text-sm text-gray-600 font-medium mb-2">Jenis Lembaga</label>
+                        <input type="text" name="institution_type"
+                            value="{{ old('institution_type', $user->institution_type) }}"
+                            class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                            placeholder="Contoh: Universitas, Sekolah, Perusahaan">
+                    </div>
 
-                {{-- Email --}}
-                <div>
-                    <label class="block text-sm text-gray-600 font-medium mb-2">Email</label>
-                    <input type="email" value="{{ $user->email }}" disabled
-                        class="w-full rounded-xl bg-gray-100 border border-gray-200 px-4 py-3 text-gray-500 cursor-not-allowed">
-                    <p class="mt-1 text-xs text-gray-400">Email tidak dapat diubah</p>
-                </div>
+                    {{-- Sektor --}}
+                    <div>
+                        <label class="block text-sm text-gray-600 font-medium mb-2">Sektor / Bidang</label>
+                        <input type="text" name="sector" value="{{ old('sector', $user->sector) }}"
+                            class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                            placeholder="Contoh: Pendidikan, Teknologi, Pemerintahan">
+                    </div>
 
-                {{-- No. Telepon --}}
-                <div>
-                    <label class="block text-sm text-gray-600 font-medium mb-2">No. Telepon</label>
-                    <input type="tel" name="phone" value="{{ old('phone', $user->phone) }}"
-                        class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
-                        placeholder="08123456789">
-                </div>
+                    {{-- Website --}}
+                    <div>
+                        <label class="block text-sm text-gray-600 font-medium mb-2">Website</label>
+                        <input type="text" name="website" value="{{ old('website', $user->website) }}"
+                            class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                            placeholder="https://contoh.ac.id">
+                    </div>
 
-                {{-- Pekerjaan --}}
-                <div>
-                    <label class="block text-sm text-gray-600 font-medium mb-2">Bidang/Industri</label>
-                    <input type="text" name="occupation" value="{{ old('occupation', $user->occupation) }}"
-                        class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
-                        placeholder="Contoh: Pendidikan">
+                    {{-- Deskripsi --}}
+                    <div class="lg:col-span-2">
+                        <label class="block text-sm text-gray-600 font-medium mb-2">Deskripsi Lembaga</label>
+                        <textarea name="description" rows="3"
+                            class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                            placeholder="Ceritakan singkat tentang lembaga Anda">{{ old('description', $user->description) }}</textarea>
+                    </div>
                 </div>
+            </div>
 
-                {{-- Kota --}}
-                <div>
-                    <label class="block text-sm text-gray-600 font-medium mb-2">Kota</label>
-                    <input type="text" name="city" value="{{ old('city', $user->city) }}"
-                        class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
-                        placeholder="Contoh: Jakarta">
+            {{-- Alamat Lembaga --}}
+            <div class="mb-6">
+                <h4 class="text-sm font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-100">Alamat Lembaga</h4>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {{-- Alamat Lengkap --}}
+                    <div class="lg:col-span-2">
+                        <label class="block text-sm text-gray-600 font-medium mb-2">Alamat Lengkap</label>
+                        <input type="text" name="address_line" value="{{ old('address_line', $user->address_line) }}"
+                            class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                            placeholder="Jalan, nomor, gedung">
+                    </div>
+
+                    {{-- Provinsi --}}
+                    <div>
+                        <label class="block text-sm text-gray-600 font-medium mb-2">Provinsi</label>
+                        <select name="province" id="lembaga_select_province"
+                            data-old="{{ old('province', $user->province) }}"
+                            class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500">
+                            <option value="">Pilih Provinsi</option>
+                            @if($user->province)
+                                <option value="{{ $user->province }}" selected>{{ $user->province }}</option>
+                            @endif
+                        </select>
+                        <input type="text" name="province_text" id="lembaga_input_province"
+                            value="{{ old('province', $user->province) }}"
+                            class="hidden w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                            placeholder="Masukkan provinsi/state">
+                    </div>
+
+                    {{-- Kota --}}
+                    <div>
+                        <label class="block text-sm text-gray-600 font-medium mb-2">Kota / Kabupaten</label>
+                        <select name="city" id="lembaga_select_city" data-old="{{ old('city', $user->city) }}"
+                            class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500">
+                            <option value="">Pilih Kota/Kabupaten</option>
+                            @if($user->city)
+                                <option value="{{ $user->city }}" selected>{{ $user->city }}</option>
+                            @endif
+                        </select>
+                        <input type="text" name="city_text" id="lembaga_input_city"
+                            value="{{ old('city', $user->city) }}"
+                            class="hidden w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                            placeholder="Masukkan kota">
+                    </div>
+
+                    {{-- Kecamatan --}}
+                    <div>
+                        <label class="block text-sm text-gray-600 font-medium mb-2">Kecamatan</label>
+                        <select name="district" id="lembaga_select_district"
+                            data-old="{{ old('district', $user->district) }}"
+                            class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500">
+                            <option value="">Pilih Kecamatan</option>
+                            @if($user->district)
+                                <option value="{{ $user->district }}" selected>{{ $user->district }}</option>
+                            @endif
+                        </select>
+                        <input type="text" name="district_text" id="lembaga_input_district"
+                            value="{{ old('district', $user->district) }}"
+                            class="hidden w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                            placeholder="Masukkan kecamatan/district">
+                    </div>
+
+                    {{-- Kelurahan --}}
+                    <div>
+                        <label class="block text-sm text-gray-600 font-medium mb-2">Kelurahan / Desa</label>
+                        <select name="village" id="lembaga_select_village"
+                            data-old="{{ old('village', $user->village) }}"
+                            class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500">
+                            <option value="">Pilih Kelurahan</option>
+                            @if($user->village)
+                                <option value="{{ $user->village }}" selected>{{ $user->village }}</option>
+                            @endif
+                        </select>
+                        <input type="text" name="village_text" id="lembaga_input_village"
+                            value="{{ old('village', $user->village) }}"
+                            class="hidden w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                            placeholder="Masukkan kelurahan/village">
+                    </div>
+
+                    {{-- Kode Pos --}}
+                    <div>
+                        <label class="block text-sm text-gray-600 font-medium mb-2">Kode Pos</label>
+                        <select name="postal_code" id="lembaga_select_postal_code"
+                            data-old="{{ old('postal_code', $user->postal_code) }}"
+                            class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500">
+                            <option value="">Pilih Kelurahan dulu</option>
+                            @if($user->postal_code)
+                                <option value="{{ $user->postal_code }}" selected>{{ $user->postal_code }}</option>
+                            @endif
+                        </select>
+                        <input type="text" name="postal_code_fallback" id="lembaga_input_postal_code"
+                            value="{{ old('postal_code', $user->postal_code) }}"
+                            class="hidden w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                            placeholder="Masukkan kode pos">
+                    </div>
+
+                    {{-- Negara --}}
+                    <div>
+                        <label class="block text-sm text-gray-600 font-medium mb-2">Negara</label>
+                        <select name="country" id="lembaga_select_country"
+                            data-old="{{ old('country', $user->country ?? 'Indonesia') }}"
+                            class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500">
+                            <option value="">Pilih Negara</option>
+                            <option value="Indonesia">Indonesia</option>
+                            <option value="" disabled>Loading other countries...</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Kontak Lembaga --}}
+            <div class="mb-6">
+                <h4 class="text-sm font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-100">Kontak Lembaga</h4>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {{-- Nama Admin --}}
+                    <div>
+                        <label class="block text-sm text-gray-600 font-medium mb-2">Nama Penanggung Jawab <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" name="name" value="{{ old('name', $user->name) }}"
+                            class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500">
+                        @error('name')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Email --}}
+                    <div>
+                        <label class="block text-sm text-gray-600 font-medium mb-2">Email</label>
+                        <input type="email" value="{{ $user->email }}" disabled
+                            class="w-full rounded-xl bg-gray-100 border border-gray-200 px-4 py-3 text-gray-500 cursor-not-allowed">
+                        <p class="mt-1 text-xs text-gray-400">Email tidak dapat diubah</p>
+                    </div>
+
+                    {{-- No. Telepon --}}
+                    <div>
+                        <label class="block text-sm text-gray-600 font-medium mb-2">No. Telepon</label>
+                        <input type="tel" name="phone" value="{{ old('phone', $user->phone) }}"
+                            class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                            placeholder="08123456789">
+                    </div>
+
+                    {{-- Jabatan --}}
+                    <div>
+                        <label class="block text-sm text-gray-600 font-medium mb-2">Jabatan</label>
+                        <input type="text" name="admin_position"
+                            value="{{ old('admin_position', $user->admin_position) }}"
+                            class="w-full rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                            placeholder="Contoh: Kepala Divisi IT">
+                    </div>
                 </div>
             </div>
 
@@ -716,6 +851,425 @@
                         this.$refs.fileInput.value = '';
                     }
                 }
+            }
+
+            // ===== LOCATION API FOR LEMBAGA SETTINGS =====
+            const apiBaseUrl = 'https://www.emsifa.com/api-wilayah-indonesia/api';
+
+            async function fetchWithTimeout(resource, options = {}) {
+                const { timeout = 5000 } = options;
+                const controller = new AbortController();
+                const id = setTimeout(() => controller.abort(), timeout);
+                try {
+                    const response = await fetch(resource, { ...options, signal: controller.signal });
+                    clearTimeout(id);
+                    return response;
+                } catch (error) {
+                    clearTimeout(id);
+                    throw error;
+                }
+            }
+
+            function toTitleCase(str) {
+                return str.replace(/\w\S*/g, function (txt) {
+                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                });
+            }
+
+            // Load countries from API
+            async function loadCountriesForLembaga() {
+                const select = document.getElementById('lembaga_select_country');
+                if (!select) return;
+
+                try {
+                    const response = await fetchWithTimeout('https://restcountries.com/v3.1/all?fields=name', { timeout: 5000 });
+                    if (!response.ok) throw new Error('API Error');
+                    const data = await response.json();
+                    data.sort((a, b) => a.name.common.localeCompare(b.name.common));
+
+                    const optionsHtml = data
+                        .filter(c => c.name.common !== 'Indonesia')
+                        .map(c => `<option value="${c.name.common}">${c.name.common}</option>`)
+                        .join('');
+
+                    select.innerHTML = '<option value="">Pilih Negara</option><option value="Indonesia">Indonesia</option>' + optionsHtml;
+                    const oldVal = select.dataset.old;
+                    if (oldVal) select.value = oldVal;
+                } catch (error) {
+                    console.warn('Failed to load countries:', error);
+                    const fallbackCountries = [
+                        'Indonesia', 'Malaysia', 'Singapore', 'Thailand', 'Vietnam', 'Philippines',
+                        'Brunei', 'Myanmar', 'Cambodia', 'Laos', 'Japan', 'South Korea', 'China',
+                        'Taiwan', 'Hong Kong', 'India', 'Pakistan', 'Bangladesh', 'Sri Lanka',
+                        'Australia', 'New Zealand', 'United States', 'United Kingdom', 'Canada',
+                        'Germany', 'France', 'Netherlands', 'Saudi Arabia', 'United Arab Emirates', 'Qatar'
+                    ];
+                    const optionsHtml = fallbackCountries
+                        .filter(c => c !== 'Indonesia')
+                        .map(c => `<option value="${c}">${c}</option>`)
+                        .join('');
+                    select.innerHTML = '<option value="">Pilih Negara</option><option value="Indonesia">Indonesia</option>' + optionsHtml;
+                    const oldVal = select.dataset.old;
+                    if (oldVal) select.value = oldVal;
+                }
+            }
+
+            // Load provinces
+            async function loadProvincesForLembaga() {
+                const select = document.getElementById('lembaga_select_province');
+                if (!select) return;
+
+                const oldVal = select.dataset.old;
+                select.innerHTML = '<option value="">Loading...</option>';
+
+                try {
+                    const response = await fetchWithTimeout(`${apiBaseUrl}/provinces.json`, { timeout: 5000 });
+                    if (!response.ok) throw new Error('API Error');
+                    const provinces = await response.json();
+
+                    select.innerHTML = '<option value="">Pilih Provinsi</option>';
+                    provinces.forEach(prov => {
+                        const option = document.createElement('option');
+                        option.value = toTitleCase(prov.name);
+                        option.dataset.id = prov.id;
+                        option.textContent = toTitleCase(prov.name);
+                        select.appendChild(option);
+                    });
+
+                    // Restore old value if exists
+                    if (oldVal) {
+                        for (let opt of select.options) {
+                            if (opt.value.toLowerCase() === oldVal.toLowerCase()) {
+                                opt.selected = true;
+                                break;
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error loading provinces:', error);
+                    // Use fallback provinces
+                    const fallbackProvinces = [
+                        { id: "11", name: "ACEH" }, { id: "12", name: "SUMATERA UTARA" }, { id: "13", name: "SUMATERA BARAT" },
+                        { id: "31", name: "DKI JAKARTA" }, { id: "32", name: "JAWA BARAT" }, { id: "33", name: "JAWA TENGAH" },
+                        { id: "34", name: "DI YOGYAKARTA" }, { id: "35", name: "JAWA TIMUR" }, { id: "36", name: "BANTEN" },
+                        { id: "51", name: "BALI" }, { id: "61", name: "KALIMANTAN BARAT" }, { id: "73", name: "SULAWESI SELATAN" }
+                    ];
+                    select.innerHTML = '<option value="">Pilih Provinsi</option>';
+                    fallbackProvinces.forEach(prov => {
+                        const option = document.createElement('option');
+                        option.value = toTitleCase(prov.name);
+                        option.dataset.id = prov.id;
+                        option.textContent = toTitleCase(prov.name);
+                        select.appendChild(option);
+                    });
+                    if (oldVal) {
+                        for (let opt of select.options) {
+                            if (opt.value.toLowerCase() === oldVal.toLowerCase()) {
+                                opt.selected = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Load cities based on province
+            async function loadCitiesForLembaga(provinceId) {
+                const select = document.getElementById('lembaga_select_city');
+                if (!select || !provinceId) return;
+
+                const oldVal = select.dataset.old;
+                select.innerHTML = '<option value="">Loading...</option>';
+
+                // Reset dependent dropdowns
+                document.getElementById('lembaga_select_district').innerHTML = '<option value="">Pilih Kecamatan</option>';
+                document.getElementById('lembaga_select_village').innerHTML = '<option value="">Pilih Kelurahan</option>';
+
+                try {
+                    const response = await fetchWithTimeout(`${apiBaseUrl}/regencies/${provinceId}.json`, { timeout: 5000 });
+                    const cities = await response.json();
+
+                    select.innerHTML = '<option value="">Pilih Kota/Kabupaten</option>';
+                    cities.forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = toTitleCase(city.name);
+                        option.dataset.id = city.id;
+                        option.textContent = toTitleCase(city.name);
+                        select.appendChild(option);
+                    });
+
+                    if (oldVal) {
+                        for (let opt of select.options) {
+                            if (opt.value.toLowerCase() === oldVal.toLowerCase()) {
+                                opt.selected = true;
+                                break;
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error loading cities:', error);
+                    select.innerHTML = '<option value="">Gagal memuat data</option>';
+                }
+            }
+
+            // Load districts based on city
+            async function loadDistrictsForLembaga(cityId) {
+                const select = document.getElementById('lembaga_select_district');
+                if (!select || !cityId) return;
+
+                const oldVal = select.dataset.old;
+                select.innerHTML = '<option value="">Loading...</option>';
+
+                // Reset dependent dropdown
+                document.getElementById('lembaga_select_village').innerHTML = '<option value="">Pilih Kelurahan</option>';
+
+                try {
+                    const response = await fetchWithTimeout(`${apiBaseUrl}/districts/${cityId}.json`, { timeout: 5000 });
+                    const districts = await response.json();
+
+                    select.innerHTML = '<option value="">Pilih Kecamatan</option>';
+                    districts.forEach(dist => {
+                        const option = document.createElement('option');
+                        option.value = toTitleCase(dist.name);
+                        option.dataset.id = dist.id;
+                        option.textContent = toTitleCase(dist.name);
+                        select.appendChild(option);
+                    });
+
+                    if (oldVal) {
+                        for (let opt of select.options) {
+                            if (opt.value.toLowerCase() === oldVal.toLowerCase()) {
+                                opt.selected = true;
+                                break;
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error loading districts:', error);
+                    select.innerHTML = '<option value="">Gagal memuat data</option>';
+                }
+            }
+
+            // Load villages based on district
+            async function loadVillagesForLembaga(districtId) {
+                const select = document.getElementById('lembaga_select_village');
+                if (!select || !districtId) return;
+
+                const oldVal = select.dataset.old;
+                select.innerHTML = '<option value="">Loading...</option>';
+
+                try {
+                    const response = await fetchWithTimeout(`${apiBaseUrl}/villages/${districtId}.json`, { timeout: 5000 });
+                    const villages = await response.json();
+
+                    select.innerHTML = '<option value="">Pilih Kelurahan</option>';
+                    villages.forEach(vill => {
+                        const option = document.createElement('option');
+                        option.value = toTitleCase(vill.name);
+                        option.dataset.id = vill.id;
+                        option.textContent = toTitleCase(vill.name);
+                        select.appendChild(option);
+                    });
+
+                    if (oldVal) {
+                        for (let opt of select.options) {
+                            if (opt.value.toLowerCase() === oldVal.toLowerCase()) {
+                                opt.selected = true;
+                                break;
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error loading villages:', error);
+                    select.innerHTML = '<option value="">Gagal memuat data</option>';
+                }
+            }
+
+            // Fetch postal code based on village name
+            async function fetchPostalCodeForLembaga(villageName) {
+                const select = document.getElementById('lembaga_select_postal_code');
+                const input = document.getElementById('lembaga_input_postal_code');
+
+                if (!select || !villageName) return;
+
+                const oldVal = select.dataset.old;
+                select.innerHTML = '<option value="">Mencari Kode Pos...</option>';
+
+                try {
+                    const districtName = document.getElementById('lembaga_select_district')?.value || '';
+                    const cleanVillage = villageName.replace(/^(Kelurahan|Desa)\s+/i, '');
+                    const cleanDistrict = districtName.replace(/^(Kecamatan|Distrik)\s+/i, '');
+
+                    const query = `${cleanVillage} ${cleanDistrict}`;
+                    const response = await fetchWithTimeout(`https://kodepos.vercel.app/search?q=${encodeURIComponent(query)}`, { timeout: 5000 });
+                    const data = await response.json();
+
+                    if (data.data && data.data.length > 0) {
+                        let postalCodes = data.data
+                            .map(item => item.postal_code || item.code)
+                            .filter(code => code);
+
+                        postalCodes = [...new Set(postalCodes)];
+
+                        if (postalCodes.length > 0) {
+                            // Show select, hide input
+                            select.classList.remove('hidden');
+                            select.disabled = false;
+                            select.name = 'postal_code';
+                            if (input) {
+                                input.classList.add('hidden');
+                                input.disabled = true;
+                                input.name = 'postal_code_fallback';
+                            }
+
+                            select.innerHTML = '<option value="">Pilih Kode Pos</option>';
+                            postalCodes.forEach(code => {
+                                const option = document.createElement('option');
+                                option.value = code;
+                                option.textContent = code;
+                                select.appendChild(option);
+                            });
+
+                            // Auto-select if only one or restore old value
+                            if (postalCodes.length === 1) {
+                                select.value = postalCodes[0];
+                            } else if (oldVal && postalCodes.includes(oldVal)) {
+                                select.value = oldVal;
+                            }
+                        } else {
+                            throw new Error('No valid postal codes found');
+                        }
+                    } else {
+                        throw new Error('Not found');
+                    }
+                } catch (e) {
+                    console.warn('Postal code API failed, using fallback input:', e);
+                    // Fallback to input
+                    select.classList.add('hidden');
+                    select.disabled = true;
+                    select.name = 'postal_code_fallback';
+                    if (input) {
+                        input.classList.remove('hidden');
+                        input.disabled = false;
+                        input.name = 'postal_code';
+                        input.placeholder = 'Masukkan kode pos manual';
+                    }
+                }
+            }
+
+            // Initialize location dropdowns
+            document.addEventListener('DOMContentLoaded', function () {
+                loadCountriesForLembaga();
+                loadProvincesForLembaga();
+
+                // Province change handler
+                document.getElementById('lembaga_select_province')?.addEventListener('change', function () {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const provinceId = selectedOption?.dataset?.id;
+                    if (provinceId) {
+                        loadCitiesForLembaga(provinceId);
+                    }
+                    // Reset postal code
+                    document.getElementById('lembaga_select_postal_code').innerHTML = '<option value="">Pilih Kelurahan dulu</option>';
+                });
+
+                // City change handler
+                document.getElementById('lembaga_select_city')?.addEventListener('change', function () {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const cityId = selectedOption?.dataset?.id;
+                    if (cityId) {
+                        loadDistrictsForLembaga(cityId);
+                    }
+                    // Reset postal code
+                    document.getElementById('lembaga_select_postal_code').innerHTML = '<option value="">Pilih Kelurahan dulu</option>';
+                });
+
+                // District change handler
+                document.getElementById('lembaga_select_district')?.addEventListener('change', function () {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const districtId = selectedOption?.dataset?.id;
+                    if (districtId) {
+                        loadVillagesForLembaga(districtId);
+                    }
+                    // Reset postal code
+                    document.getElementById('lembaga_select_postal_code').innerHTML = '<option value="">Pilih Kelurahan dulu</option>';
+                });
+
+                // Village change handler - fetch postal code
+                document.getElementById('lembaga_select_village')?.addEventListener('change', function () {
+                    const villageName = this.value;
+                    if (villageName) {
+                        fetchPostalCodeForLembaga(villageName);
+                    }
+                });
+
+                // Country change handler - switch between dropdown and text input
+                document.getElementById('lembaga_select_country')?.addEventListener('change', function () {
+                    const country = this.value;
+                    if (country && country !== 'Indonesia') {
+                        switchToTextInputsForLembaga();
+                    } else if (country === 'Indonesia') {
+                        switchToDropdownsForLembaga();
+                    }
+                });
+
+                // Check initial country value on page load
+                const initialCountry = document.getElementById('lembaga_select_country')?.value;
+                if (initialCountry && initialCountry !== 'Indonesia' && initialCountry !== '') {
+                    switchToTextInputsForLembaga();
+                }
+            });
+
+            // Switch location fields to text inputs (for non-Indonesia countries)
+            function switchToTextInputsForLembaga() {
+                const fields = ['province', 'city', 'district', 'village', 'postal_code'];
+                
+                fields.forEach(field => {
+                    const selectEl = document.getElementById(`lembaga_select_${field}`);
+                    const inputEl = document.getElementById(`lembaga_input_${field}`);
+                    
+                    if (selectEl && inputEl) {
+                        // Hide dropdown
+                        selectEl.classList.add('hidden');
+                        selectEl.disabled = true;
+                        selectEl.name = `${field}_select_disabled`;
+                        
+                        // Show text input
+                        inputEl.classList.remove('hidden');
+                        inputEl.disabled = false;
+                        inputEl.name = field;
+                        
+                        // Copy value from select to input if exists
+                        if (selectEl.value && !inputEl.value) {
+                            inputEl.value = selectEl.value;
+                        }
+                    }
+                });
+            }
+
+            // Switch location fields back to dropdowns (for Indonesia)
+            function switchToDropdownsForLembaga() {
+                const fields = ['province', 'city', 'district', 'village', 'postal_code'];
+                
+                fields.forEach(field => {
+                    const selectEl = document.getElementById(`lembaga_select_${field}`);
+                    const inputEl = document.getElementById(`lembaga_input_${field}`);
+                    
+                    if (selectEl && inputEl) {
+                        // Show dropdown
+                        selectEl.classList.remove('hidden');
+                        selectEl.disabled = false;
+                        selectEl.name = field;
+                        
+                        // Hide text input
+                        inputEl.classList.add('hidden');
+                        inputEl.disabled = true;
+                        inputEl.name = `${field}_text_disabled`;
+                    }
+                });
+
+                // Reload provinces for Indonesia
+                loadProvincesForLembaga();
             }
         </script>
     @endpush

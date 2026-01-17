@@ -944,4 +944,49 @@
         }
     </script>
 
+    {{-- Validation Scripts --}}
+    @if(session('login_error_google'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Gunakan Login Google',
+                    text: "{{ session('login_error_google') }}",
+                    confirmButtonText: 'Login dengan Google',
+                    confirmButtonColor: '#4285F4',
+                    background: '#1f2937',
+                    color: '#fff',
+                    showCancelButton: true,
+                    cancelButtonText: 'Tutup'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "{{ route('google.redirect') }}";
+                    }
+                });
+            });
+        </script>
+    @endif
+
+    @if(session('login_error_wallet'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Gunakan Login Wallet',
+                    text: "{{ session('login_error_wallet') }}",
+                    confirmButtonText: 'Buka Tab Wallet',
+                    confirmButtonColor: '#3B82F6',
+                    background: '#1f2937',
+                    color: '#fff',
+                    showCancelButton: true,
+                    cancelButtonText: 'Tutup'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        switchTab('wallet');
+                    }
+                });
+            });
+        </script>
+    @endif
+
 </x-layouts.app>

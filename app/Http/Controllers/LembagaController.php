@@ -920,13 +920,39 @@ class LembagaController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'institution_name' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:20',
-            'occupation' => 'nullable|string|max:255',
+            'institution_type' => 'nullable|string|max:255',
+            'sector' => 'nullable|string|max:255',
+            'website' => 'nullable|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'address_line' => 'nullable|string|max:500',
+            'province' => 'nullable|string|max:100',
             'city' => 'nullable|string|max:255',
+            'district' => 'nullable|string|max:100',
+            'village' => 'nullable|string|max:100',
+            'postal_code' => 'nullable|string|max:20',
+            'country' => 'nullable|string|max:100',
+            'phone' => 'nullable|string|max:20',
+            'admin_position' => 'nullable|string|max:255',
         ]);
 
         $user = Auth::user();
-        $user->update($request->only(['name', 'institution_name', 'phone', 'occupation', 'city']));
+        $user->update($request->only([
+            'name',
+            'institution_name',
+            'institution_type',
+            'sector',
+            'website',
+            'description',
+            'address_line',
+            'province',
+            'city',
+            'district',
+            'village',
+            'postal_code',
+            'country',
+            'phone',
+            'admin_position',
+        ]));
 
         return back()->with('success', 'Profil berhasil diperbarui!');
     }

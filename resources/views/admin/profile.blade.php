@@ -84,8 +84,8 @@
                 </form>
             </div>
 
-            <!-- Change Password (Hidden for Google login users) -->
-            @if(!$admin->google_id)
+            {{-- Change Password (Hidden for Google/Wallet login users) --}}
+            @if(!$admin->google_id && !$admin->wallet_address)
                 <div class="glass-card rounded-2xl p-6 animate-fade-in-up stagger-3">
                     <h3 class="text-gray-800 font-bold text-lg mb-6 flex items-center gap-2">
                         <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

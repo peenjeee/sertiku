@@ -15,18 +15,18 @@ class SuperadminController extends Controller
     {
         // Get comprehensive stats
         $stats = [
-            'total_users'        => User::count(),
-            'total_admins'       => User::where('is_admin', true)->count(),
-            'total_superadmins'  => User::where('is_superadmin', true)->count(),
-            'total_lembaga'      => User::where('account_type', 'lembaga')->count(),
-            'total_pengguna'     => User::where('account_type', 'pengguna')->count(),
+            'total_users' => User::count(),
+            'total_admins' => User::where('is_admin', true)->count(),
+            'total_superadmins' => User::where('is_superadmin', true)->count(),
+            'total_lembaga' => User::where('account_type', 'lembaga')->count(),
+            'total_pengguna' => User::where('account_type', 'pengguna')->count(),
             'total_certificates' => Certificate::count(),
-            'total_orders'       => Order::count(),
-            'total_revenue'      => Order::where('status', 'paid')->sum('amount') ?? 0,
+            'total_orders' => Order::count(),
+            'total_revenue' => Order::where('status', 'paid')->sum('amount') ?? 0,
         ];
 
         // Recent activities
-        $recentUsers  = User::latest()->take(5)->get();
+        $recentUsers = User::latest()->take(5)->get();
         $recentOrders = Order::with('user', 'package')->latest()->take(5)->get();
 
         // All admins list
@@ -41,7 +41,7 @@ class SuperadminController extends Controller
     public function manageAdmins()
     {
         $admins = User::where('is_admin', true)->orderBy('is_superadmin', 'desc')->get();
-        $users  = User::where('is_admin', false)->get();
+        $users = User::where('is_admin', false)->get();
 
         return view('superadmin.admins', compact('admins', 'users'));
     }
@@ -51,11 +51,13 @@ class SuperadminController extends Controller
      */
     public function promoteToAdmin(Request $request, User $user)
     {
-        if (! auth()->user()->is_superadmin) {
+        if (!auth()->user()->is_superadmin) {
             abort(403);
         }
 
-        $user->is_admin     = true;
+        // Save original account type before promoting
+        $user->original_account_type = $user->account_type;
+        $user->is_admin = true;
         $user->account_type = 'admin';
         $user->save();
 
@@ -67,7 +69,7 @@ class SuperadminController extends Controller
      */
     public function demoteAdmin(Request $request, User $user)
     {
-        if (! auth()->user()->is_superadmin) {
+        if (!auth()->user()->is_superadmin) {
             abort(403);
         }
 
@@ -81,8 +83,10 @@ class SuperadminController extends Controller
             return back()->with('error', 'Tidak dapat menurunkan diri sendiri.');
         }
 
-        $user->is_admin     = false;
-        $user->account_type = 'pengguna';
+        $user->is_admin = false;
+        // Restore original account type or default to 'pengguna'
+        $user->account_type = $user->original_account_type ?? 'pengguna';
+        $user->original_account_type = null;
         $user->save();
 
         return back()->with('success', "Admin {$user->name} berhasil diturunkan ke User.");

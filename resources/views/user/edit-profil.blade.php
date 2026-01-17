@@ -277,17 +277,21 @@
                 {{-- Institusi/Perusahaan --}}
                 <div>
                     <label class="block text-sm text-white mb-2">Institusi/Perusahaan</label>
-                    <input type="text" name="institution" value="{{ old('institution', $user->institution) }}"
+                    <input type="text" name="institution" value="{{ old('institution', $user->user_institution) }}"
                         class="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                         placeholder="Contoh: PT. Tech Indonesia">
                 </div>
 
-                {{-- Lokasi --}}
+                {{-- Negara --}}
                 <div>
-                    <label class="block text-sm text-white mb-2">Lokasi</label>
-                    <input type="text" name="country" value="{{ old('country', $user->country) }}"
-                        class="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                        placeholder="Contoh: Jakarta, Indonesia">
+                    <label class="block text-sm text-white mb-2">Negara</label>
+                    <select name="country" id="edit_select_country"
+                        data-old="{{ old('country', $user->country ?? 'Indonesia') }}"
+                        class="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+                        <option value="" class="bg-[#1E293B]">Pilih Negara</option>
+                        <option value="Indonesia" class="bg-[#1E293B]">Indonesia</option>
+                        <option value="" class="bg-[#1E293B]" disabled>Loading other countries...</option>
+                    </select>
                 </div>
             </div>
 
@@ -510,6 +514,48 @@
                     }
                 }
             }
+
+            // Load Countries for Negara dropdown
+            async function loadCountriesForEdit() {
+                const select = document.getElementById('edit_select_country');
+                if (!select) return;
+
+                const fetchWithTimeout = (url, options = {}) => {
+                    const { timeout = 5000, ...rest } = options;
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), timeout);
+                    return fetch(url, { ...rest, signal: controller.signal })
+                        .finally(() => clearTimeout(timeoutId));
+                };
+
+                try {
+                    const response = await fetchWithTimeout('https://restcountries.com/v3.1/all?fields=name', { timeout: 5000 });
+                    if (!response.ok) throw new Error('API Error');
+                    const data = await response.json();
+                    data.sort((a, b) => a.name.common.localeCompare(b.name.common));
+
+                    const optionsHtml = data
+                        .filter(c => c.name.common !== 'Indonesia')
+                        .map(c => `<option value="${c.name.common}" class="bg-[#1E293B]">${c.name.common}</option>`)
+                        .join('');
+
+                    select.innerHTML = '<option value="" class="bg-[#1E293B]">Pilih Negara</option><option value="Indonesia" class="bg-[#1E293B]">Indonesia</option>' + optionsHtml;
+                    const oldVal = select.dataset.old;
+                    if (oldVal) select.value = oldVal;
+                } catch (error) {
+                    console.error('Failed to load countries:', error);
+                    const fallbackCountries = ["Malaysia", "Singapore", "Thailand", "Vietnam", "Philippines", "Brunei", "Cambodia", "Laos", "Myanmar", "Timor-Leste", "Japan", "South Korea", "China", "United States", "United Kingdom", "Australia", "Saudi Arabia", "United Arab Emirates", "Other"];
+                    fallbackCountries.sort((a, b) => a.localeCompare(b));
+                    const optionsHtml = fallbackCountries.map(c => `<option value="${c}" class="bg-[#1E293B]">${c}</option>`).join('');
+
+                    select.innerHTML = '<option value="" class="bg-[#1E293B]">Pilih Negara</option><option value="Indonesia" class="bg-[#1E293B]">Indonesia</option>' + optionsHtml;
+                    const oldVal = select.dataset.old;
+                    if (oldVal) select.value = oldVal;
+                }
+            }
+
+            // Load on page ready
+            document.addEventListener('DOMContentLoaded', loadCountriesForEdit);
         </script>
     @endpush
 

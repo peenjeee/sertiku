@@ -241,7 +241,16 @@ class UserController extends Controller
             'country' => 'nullable|string|max:100',
         ]);
 
-        $user->update($validated);
+        // Map form field to database column
+        $updateData = [
+            'name' => $validated['name'],
+            'phone' => $validated['phone'] ?? null,
+            'occupation' => $validated['occupation'] ?? null,
+            'user_institution' => $validated['institution'] ?? null,
+            'country' => $validated['country'] ?? null,
+        ];
+
+        $user->update($updateData);
 
         return redirect()->route('user.profil.edit')->with('success', 'Profil berhasil diperbarui!');
     }
