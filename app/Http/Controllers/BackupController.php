@@ -201,7 +201,7 @@ class BackupController extends Controller
 
         // Directories to backup (relative to storage/app)
         // Explicitly list them to avoid backing up 'backups' folder or system files
-        $dirsToBackup = ['public', 'certificates', 'templates', 'invoices'];
+        $dirsToBackup = ['public', 'certificates', 'templates', 'invoices', 'documents'];
         $basePath = storage_path('app');
 
         $zip = new ZipArchive();
@@ -336,7 +336,8 @@ class BackupController extends Controller
                     str_starts_with($name, 'public/') ||
                     str_starts_with($name, 'certificates/') ||
                     str_starts_with($name, 'templates/') ||
-                    str_starts_with($name, 'invoices/')
+                    str_starts_with($name, 'invoices/') ||
+                    str_starts_with($name, 'documents/')
                 ) {
                     $isLegacy = false;
                     break;
@@ -546,7 +547,7 @@ class BackupController extends Controller
     {
         // Use the actual storage path (consistent with backup/restore)
         $basePath = storage_path('app');
-        $dirsToCheck = ['public', 'certificates', 'templates', 'invoices'];
+        $dirsToCheck = ['public', 'certificates', 'templates', 'invoices', 'documents'];
 
         $totalSize = 0;
         $fileCount = 0;
@@ -663,7 +664,8 @@ class BackupController extends Controller
                     str_starts_with($name, 'public/') ||
                     str_starts_with($name, 'certificates/') ||
                     str_starts_with($name, 'templates/') ||
-                    str_starts_with($name, 'invoices/')
+                    str_starts_with($name, 'invoices/') ||
+                    str_starts_with($name, 'documents/')
                 ) {
                     $isLegacy = false;
                     break;
