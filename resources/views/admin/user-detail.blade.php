@@ -11,7 +11,13 @@
                 <span class="text-white">Detail Pengguna</span>
             </nav>
             <h1 class="text-white text-2xl lg:text-3xl font-bold">{{ $user->name }}</h1>
-            <p class="text-white/60 text-sm mt-1">{{ $user->email }}</p>
+            <p class="text-white/60 text-sm mt-1" title="{{ $user->email }}">
+                @if(Str::startsWith($user->email, '0x') && strlen($user->email) > 20)
+                    {{ substr($user->email, 0, 6) }}...{{ substr($user->email, -4) }}
+                @else
+                    {{ $user->email }}
+                @endif
+            </p>
         </div>
         <a href="{{ route('admin.users') }}"
             class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition inline-flex items-center gap-2">
@@ -36,7 +42,13 @@
                 </div>
                 <div>
                     <h2 class="text-gray-800 font-bold text-lg">{{ $user->name }}</h2>
-                    <p class="text-gray-500 text-sm">{{ $user->email }}</p>
+                    <p class="text-gray-500 text-sm" title="{{ $user->email }}">
+                        @if(Str::startsWith($user->email, '0x') && strlen($user->email) > 20)
+                            {{ substr($user->email, 0, 6) }}...{{ substr($user->email, -4) }}
+                        @else
+                            {{ $user->email }}
+                        @endif
+                    </p>
                 </div>
             </div>
 

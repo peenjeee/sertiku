@@ -78,7 +78,13 @@
                                             </div>
                                             <div>
                                                 <p class="text-white text-sm">{{ $log->user->name }}</p>
-                                                <p class="text-white/40 text-xs">{{ $log->user->email }}</p>
+                                                <p class="text-white/40 text-xs" title="{{ $log->user->email }}">
+                                                    @if(Str::startsWith($log->user->email, '0x') && strlen($log->user->email) > 20)
+                                                        {{ substr($log->user->email, 0, 6) }}...{{ substr($log->user->email, -4) }}
+                                                    @else
+                                                        {{ $log->user->email }}
+                                                    @endif
+                                                </p>
                                             </div>
                                         </div>
                                     @else

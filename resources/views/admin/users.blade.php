@@ -99,7 +99,13 @@
                                 </div>
                             </td>
                             <td class="py-4 px-4">
-                                <span class="text-gray-600 text-sm">{{ $user->email }}</span>
+                                <span class="text-gray-600 text-sm" title="{{ $user->email }}">
+                                    @if(Str::startsWith($user->email, '0x') && strlen($user->email) > 20)
+                                        {{ substr($user->email, 0, 6) }}...{{ substr($user->email, -4) }}
+                                    @else
+                                        {{ $user->email }}
+                                    @endif
+                                </span>
                             </td>
                             <td class="py-4 px-4">
                                 @if($user->account_type === 'admin')
@@ -195,7 +201,13 @@
                             <div class="flex items-start justify-between gap-2">
                                 <div class="min-w-0">
                                     <p class="text-gray-800 font-medium text-sm truncate">{{ $user->name }}</p>
-                                    <p class="text-gray-500 text-xs truncate">{{ $user->email }}</p>
+                                    <p class="text-gray-500 text-xs truncate" title="{{ $user->email }}">
+                                        @if(Str::startsWith($user->email, '0x') && strlen($user->email) > 20)
+                                            {{ substr($user->email, 0, 6) }}...{{ substr($user->email, -4) }}
+                                        @else
+                                            {{ $user->email }}
+                                        @endif
+                                    </p>
                                 </div>
                                 <div class="flex items-center gap-1 flex-shrink-0">
                                     <a href="{{ route('admin.users.show', $user) }}"
