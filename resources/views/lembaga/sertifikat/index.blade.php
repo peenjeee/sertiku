@@ -163,7 +163,7 @@
                                 @elseif($isExpired)
                                     <span class="px-2 py-1 bg-amber-500 text-white text-xs font-bold rounded"> Kadaluarsa</span>
                                 @elseif($certificate->status === 'active')
-                                    <span class="px-2 py-1 bg-emerald-500 text-white text-xs font-bold rounded">✓ Aktif</span>
+                                    <span class="px-2 py-1 bg-emerald-500 text-white text-xs font-bold rounded"> Aktif</span>
                                 @else
                                     <span class="px-2 py-1 bg-gray-500 text-white text-xs font-bold rounded">{{ $certificate->status }}</span>
                                 @endif

@@ -151,21 +151,22 @@
             </h2>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <div class="p-4 rounded-xl bg-green-500/10 border border-green-500/20 text-center">
-                    <p class="text-green-400 text-2xl font-bold">✓</p>
+                    <p class="text-green-400 text-2xl font-bold"></p>
                     <p class="text-white/70 text-sm mt-1">Database</p>
                 </div>
                 <div class="p-4 rounded-xl bg-green-500/10 border border-green-500/20 text-center">
-                    <p class="text-green-400 text-2xl font-bold">✓</p>
+                    <p class="text-green-400 text-2xl font-bold"></p>
                     <p class="text-white/70 text-sm mt-1">Cache</p>
                 </div>
                 <div
                     class="p-4 rounded-xl bg-{{ config('blockchain.enabled') ? 'green' : 'yellow' }}-500/10 border border-{{ config('blockchain.enabled') ? 'green' : 'yellow' }}-500/20 text-center">
                     <p class="text-{{ config('blockchain.enabled') ? 'green' : 'yellow' }}-400 text-2xl font-bold">
-                        {{ config('blockchain.enabled') ? '✓' : '!' }}</p>
+                        {{ config('blockchain.enabled') ? '' : '!' }}
+                    </p>
                     <p class="text-white/70 text-sm mt-1">Blockchain</p>
                 </div>
                 <div class="p-4 rounded-xl bg-green-500/10 border border-green-500/20 text-center">
-                    <p class="text-green-400 text-2xl font-bold">✓</p>
+                    <p class="text-green-400 text-2xl font-bold"></p>
                     <p class="text-white/70 text-sm mt-1">Storage</p>
                 </div>
             </div>

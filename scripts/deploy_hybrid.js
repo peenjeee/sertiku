@@ -70,7 +70,7 @@ function compileContract() {
 
     const contract = output.contracts['CertificateRegistryHybrid.sol']['CertificateRegistryHybrid'];
 
-    console.log('✓ Contract compiled successfully\n');
+    console.log(' Contract compiled successfully\n');
 
     return {
         abi: contract.abi,
@@ -170,7 +170,7 @@ async function deployContract() {
         }
 
         fs.writeFileSync(envPath, envContent);
-        console.log('✓ Contract address updated in .env file');
+        console.log(' Contract address updated in .env file');
     } catch (err) {
         console.log('Could not update .env file automatically. Please add manually.');
     }
@@ -178,7 +178,7 @@ async function deployContract() {
     // Save ABI for future use
     const abiPath = path.join(__dirname, 'CertificateRegistryHybrid.abi.json');
     fs.writeFileSync(abiPath, JSON.stringify(abi, null, 2));
-    console.log('✓ ABI saved to scripts/CertificateRegistryHybrid.abi.json');
+    console.log(' ABI saved to scripts/CertificateRegistryHybrid.abi.json');
 
     console.log('\n==========================================');
     console.log('GAS COMPARISON:');

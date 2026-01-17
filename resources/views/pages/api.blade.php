@@ -352,7 +352,7 @@ const data = await response.json();</pre>
                                         <tr>
                                             <td class="py-2"><code>recipient_name</code></td>
                                             <td>string</td>
-                                            <td class="text-[#10B981]">✓</td>
+                                            <td class="text-[#10B981]"></td>
                                             <td>Nama penerima sertifikat</td>
                                         </tr>
                                         <tr>
@@ -364,7 +364,7 @@ const data = await response.json();</pre>
                                         <tr>
                                             <td class="py-2"><code>course_name</code></td>
                                             <td>string</td>
-                                            <td class="text-[#10B981]">✓</td>
+                                            <td class="text-[#10B981]"></td>
                                             <td>Nama program/pelatihan/kursus</td>
                                         </tr>
                                         <tr>
@@ -382,7 +382,7 @@ const data = await response.json();</pre>
                                         <tr>
                                             <td class="py-2"><code>issue_date</code></td>
                                             <td>date</td>
-                                            <td class="text-[#10B981]">✓</td>
+                                            <td class="text-[#10B981]"></td>
                                             <td>Tanggal terbit (YYYY-MM-DD)</td>
                                         </tr>
                                         <tr>

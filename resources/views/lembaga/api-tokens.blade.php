@@ -380,7 +380,7 @@
                 const authRequiredEndpoints = ['certificates', 'create', 'revoke', 'reactivate', 'detail'];
                 if (authRequiredEndpoints.includes(endpoint) && !token.trim()) {
                     resultEl.textContent = 'Error: API Token wajib diisi untuk endpoint yang memerlukan autentikasi.\n\nBuat token baru di form di atas, lalu paste token-nya di sini.';
-                    statusEl.textContent = '✗ 401 Unauthorized';
+                    statusEl.textContent = ' 401 Unauthorized';
                     statusEl.classList.add('bg-red-500/20', 'text-red-400');
                     return;
                 }
@@ -391,7 +391,7 @@
                     case 'verify':
                         if (!hashValue) {
                             resultEl.textContent = 'Error: Masukkan hash atau nomor sertifikat';
-                            statusEl.textContent = '✗ Error';
+                            statusEl.textContent = ' Error';
                             statusEl.classList.add('bg-red-500/20', 'text-red-400');
                             return;
                         }
@@ -406,7 +406,7 @@
                     case 'detail':
                         if (!hashValue) {
                             resultEl.textContent = 'Error: Masukkan ID, Hash, atau Nomor Sertifikat';
-                            statusEl.textContent = '✗ Error';
+                            statusEl.textContent = ' Error';
                             statusEl.classList.add('bg-red-500/20', 'text-red-400');
                             return;
                         }
@@ -429,7 +429,7 @@
                         // Validate required fields
                         if (!courseName || !templateId || !issueDate || !recipientName || !recipientEmail) {
                             resultEl.textContent = 'Error: Semua field bertanda * wajib diisi (Kursus, Template, Tanggal, Nama, Email)';
-                            statusEl.textContent = '✗ Validation Error';
+                            statusEl.textContent = ' Validation Error';
                             statusEl.classList.add('bg-red-500/20', 'text-red-400');
                             return;
                         }
@@ -471,7 +471,7 @@
                             }
                         };
 
-                        statusEl.textContent = '✓ 200 OK (Simulasi)';
+                        statusEl.textContent = ' 200 OK (Simulasi)';
                         statusEl.classList.add('bg-yellow-500/20', 'text-yellow-400');
                         resultEl.textContent = JSON.stringify(simulatedResponse, null, 2);
                         return;
@@ -479,7 +479,7 @@
                     case 'revoke':
                         if (!hashValue) {
                             resultEl.textContent = 'Error: Masukkan ID atau nomor sertifikat';
-                            statusEl.textContent = '✗ Error';
+                            statusEl.textContent = ' Error';
                             statusEl.classList.add('bg-red-500/20', 'text-red-400');
                             return;
                         }
@@ -502,7 +502,7 @@
                             }
                         };
 
-                        statusEl.textContent = '✓ 200 OK (Simulasi)';
+                        statusEl.textContent = ' 200 OK (Simulasi)';
                         statusEl.classList.add('bg-yellow-500/20', 'text-yellow-400');
                         resultEl.textContent = JSON.stringify(revokeResponse, null, 2);
                         return;
@@ -510,7 +510,7 @@
                     case 'reactivate':
                         if (!hashValue) {
                             resultEl.textContent = 'Error: Masukkan ID atau nomor sertifikat';
-                            statusEl.textContent = '✗ Error';
+                            statusEl.textContent = ' Error';
                             statusEl.classList.add('bg-red-500/20', 'text-red-400');
                             return;
                         }
@@ -531,7 +531,7 @@
                             }
                         };
 
-                        statusEl.textContent = '✓ 200 OK (Simulasi)';
+                        statusEl.textContent = ' 200 OK (Simulasi)';
                         statusEl.classList.add('bg-yellow-500/20', 'text-yellow-400');
                         resultEl.textContent = JSON.stringify(reactivateResponse, null, 2);
                         return;
@@ -556,16 +556,16 @@
 
                     // Show status
                     if (response.ok) {
-                        statusEl.textContent = `✓ ${response.status} OK`;
+                        statusEl.textContent = ` ${response.status} OK`;
                         statusEl.classList.add('bg-[#10B981]/20', 'text-[#10B981]');
                     } else {
-                        statusEl.textContent = `✗ ${response.status} ${response.statusText}`;
+                        statusEl.textContent = ` ${response.status} ${response.statusText}`;
                         statusEl.classList.add('bg-red-500/20', 'text-red-400');
                     }
 
                     resultEl.textContent = JSON.stringify(data, null, 2);
                 } catch (error) {
-                    statusEl.textContent = '✗ Error';
+                    statusEl.textContent = ' Error';
                     statusEl.classList.add('bg-red-500/20', 'text-red-400');
                     resultEl.textContent = 'Error: ' + error.message;
                 }

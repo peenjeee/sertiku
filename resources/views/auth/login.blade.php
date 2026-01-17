@@ -290,7 +290,7 @@
 
             // Show success status
             if (statusEl) {
-                statusEl.innerHTML = `<span class="text-[#05DF72]">✓ Connected:</span> ${address.slice(0, 6)}...${address.slice(-4)}`;
+                statusEl.innerHTML = `<span class="text-[#05DF72]"> Connected:</span> ${address.slice(0, 6)}...${address.slice(-4)}`;
                 statusEl.classList.remove('hidden');
             }
 

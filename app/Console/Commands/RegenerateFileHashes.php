@@ -43,9 +43,9 @@ class RegenerateFileHashes extends Command
             $result = $this->regenerateHash($certificate, $force);
 
             if ($result) {
-                $this->info("✓ Certificate {$certificate->certificate_number}: Hash regenerated successfully.");
+                $this->info(" Certificate {$certificate->certificate_number}: Hash regenerated successfully.");
             } else {
-                $this->warn("✗ Certificate {$certificate->certificate_number}: No files found to hash.");
+                $this->warn(" Certificate {$certificate->certificate_number}: No files found to hash.");
             }
 
             return 0;
@@ -91,11 +91,11 @@ class RegenerateFileHashes extends Command
         $bar->finish();
         $this->newLine(2);
 
-        $this->info("✓ Successfully regenerated: {$success}");
+        $this->info(" Successfully regenerated: {$success}");
         $this->warn("⊘ Skipped (no files): {$skipped}");
 
         if ($failed > 0) {
-            $this->error("✗ Failed: {$failed}");
+            $this->error(" Failed: {$failed}");
         }
 
         return 0;

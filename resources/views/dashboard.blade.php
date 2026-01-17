@@ -94,9 +94,9 @@
                             berbagai lembaga.
                         </p>
                         <ul class="text-[#BEDBFF]/60 text-xs space-y-1">
-                            <li>✓ Simpan sertifikat di portofolio</li>
-                            <li>✓ Verifikasi sertifikat kapan saja</li>
-                            <li>✓ Bagikan ke LinkedIn & sosial media</li>
+                            <li> Simpan sertifikat di portofolio</li>
+                            <li> Verifikasi sertifikat kapan saja</li>
+                            <li> Bagikan ke LinkedIn & sosial media</li>
                         </ul>
                     </div>
 
@@ -127,9 +127,9 @@
                             Cocok untuk universitas, perusahaan, atau lembaga yang ingin menerbitkan sertifikat digital.
                         </p>
                         <ul class="text-[#BEDBFF]/60 text-xs space-y-1">
-                            <li>✓ Terbitkan sertifikat tanpa batas</li>
-                            <li>✓ Kelola template sertifikat</li>
-                            <li>✓ Pantau statistik verifikasi</li>
+                            <li> Terbitkan sertifikat tanpa batas</li>
+                            <li> Kelola template sertifikat</li>
+                            <li> Pantau statistik verifikasi</li>
                         </ul>
                     </div>
                 </div>

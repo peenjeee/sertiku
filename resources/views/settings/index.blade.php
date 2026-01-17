@@ -75,7 +75,7 @@
                                         </button>
                                         <button type="submit" id="upload-btn"
                                             class="hidden px-3 py-1.5 bg-emerald-500 text-white text-xs font-medium rounded-lg hover:bg-emerald-600 transition">
-                                            ✓ Upload
+                                            Upload
                                         </button>
                                     </form>
 
