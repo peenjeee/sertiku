@@ -26,6 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'pengguna.only' => \App\Http\Middleware\EnsureUserIsPengguna::class,
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
             'professional' => \App\Http\Middleware\CheckProfessionalPlan::class,
+            'onboarding.completed' => \App\Http\Middleware\EnsureOnboardingCompleted::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

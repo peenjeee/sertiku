@@ -49,11 +49,11 @@ class OnboardingController extends Controller
 
         if ($accountType === 'personal') {
             $rules = array_merge($rules, [
-                'name' => 'required|string|max:255',
-                'phone' => 'nullable|string|max:20',
-                'occupation' => 'nullable|string|max:255',
-                'user_institution' => 'nullable|string|max:255',
-                'city' => 'nullable|string|max:100',
+                'full_name' => 'required|string|max:255',
+                'occupation' => 'required|string|max:255',
+                'phone' => 'required|string|max:20',
+                'institution' => 'nullable|string|max:255',
+                'email' => 'required|email|max:255|unique:users,email,' . $user->id,
             ]);
         } else {
             $rules = array_merge($rules, [
@@ -67,20 +67,26 @@ class OnboardingController extends Controller
                 'address_line' => 'nullable|string|max:500',
                 'city' => 'required|string|max:100',
                 'province' => 'nullable|string|max:100',
+                'district' => 'nullable|string|max:100',
+                'village' => 'nullable|string|max:100',
                 'postal_code' => 'nullable|string|max:10',
                 'country' => 'nullable|string|max:100',
                 // Admin info
                 'admin_name' => 'required|string|max:255',
                 'admin_phone' => 'nullable|string|max:20',
                 'admin_position' => 'nullable|string|max:255',
+
+                // Documents (Optional in Onboarding/Update context, or nullable as per Register)
+                'doc_npwp' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
+                'doc_akta' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
+                'doc_siup' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
+                'agreement' => ['accepted'],
             ]);
         }
 
-        // Optional password (only if user wants to set/change it)
-        if ($request->filled('password')) {
+        if ($request->filled('password') && $accountType !== 'personal') {
             $rules['password'] = ['required', 'confirmed', Password::min(8)];
         }
-
         $validated = $request->validate($rules);
 
         // Update user data
@@ -91,13 +97,21 @@ class OnboardingController extends Controller
 
         if ($accountType === 'personal') {
             $updateData = array_merge($updateData, [
-                'name' => $validated['name'],
+                'name' => $validated['full_name'],
                 'phone' => $validated['phone'] ?? null,
                 'occupation' => $validated['occupation'] ?? null,
-                'user_institution' => $validated['user_institution'] ?? null,
-                'city' => $validated['city'] ?? null,
+                'user_institution' => $validated['institution'] ?? null,
+                'country' => $validated['country'] ?? 'Indonesia',
             ]);
         } else {
+            // Handle File Uploads
+            $docs = [];
+            foreach (['doc_npwp', 'doc_akta', 'doc_siup'] as $field) {
+                if ($request->hasFile($field)) {
+                    $docs[$field] = $request->file($field)->store('lembaga_docs', 'public');
+                }
+            }
+
             $updateData = array_merge($updateData, [
                 'institution_name' => $validated['institution_name'],
                 'institution_type' => $validated['institution_type'],
@@ -107,6 +121,8 @@ class OnboardingController extends Controller
                 'address_line' => $validated['address_line'] ?? null,
                 'city' => $validated['city'],
                 'province' => $validated['province'] ?? null,
+                'district' => $validated['district'] ?? null,
+                'village' => $validated['village'] ?? null,
                 'postal_code' => $validated['postal_code'] ?? null,
                 'country' => $validated['country'] ?? 'Indonesia',
                 'admin_name' => $validated['admin_name'],
@@ -114,9 +130,22 @@ class OnboardingController extends Controller
                 'admin_position' => $validated['admin_position'] ?? null,
                 'name' => $validated['admin_name'], // Use admin name as user name
             ]);
+
+            // Append doc paths if uploaded
+            if (isset($docs['doc_npwp']))
+                $updateData['doc_npwp_path'] = $docs['doc_npwp'];
+            if (isset($docs['doc_akta']))
+                $updateData['doc_akta_path'] = $docs['doc_akta'];
+            if (isset($docs['doc_siup']))
+                $updateData['doc_siup_path'] = $docs['doc_siup'];
+
+            // Handle Admin Password Change
+            if ($request->filled('admin_password')) {
+                $updateData['password'] = Hash::make($validated['admin_password']);
+            }
         }
 
-        // Handle optional password
+        // Handle optional password (Personal)
         if ($request->filled('password')) {
             $updateData['password'] = Hash::make($validated['password']);
         }

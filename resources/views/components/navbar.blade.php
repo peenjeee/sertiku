@@ -112,26 +112,38 @@
                                 </div>
                             </div>
                             <div class="py-1">
-                                <a href="@if(Auth::user()->is_master){{ route('master.dashboard') }}@elseif(Auth::user()->is_admin){{ route('admin.dashboard') }}@elseif(Auth::user()->isInstitution()){{ route('lembaga.dashboard') }}@else{{ route('user.dashboard') }}@endif"
-                                    class="flex items-center gap-2 px-4 py-2 text-sm text-[#0F172A] hover:bg-gray-100">
-                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
-                                        </path>
-                                    </svg>
-                                    Dashboard
-                                </a>
+                                @if(!Auth::user()->profile_completed)
+                                    <a href="{{ route('onboarding') }}"
+                                        class="flex items-center gap-2 px-4 py-2 text-sm text-[#0F172A] hover:bg-gray-100 font-semibold text-blue-600">
+                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                            </path>
+                                        </svg>
+                                        Lengkapi Profil
+                                    </a>
+                                @else
+                                    <a href="@if(Auth::user()->is_master){{ route('master.dashboard') }}@elseif(Auth::user()->is_admin){{ route('admin.dashboard') }}@elseif(Auth::user()->isInstitution()){{ route('lembaga.dashboard') }}@else{{ route('user.dashboard') }}@endif"
+                                        class="flex items-center gap-2 px-4 py-2 text-sm text-[#0F172A] hover:bg-gray-100">
+                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                                            </path>
+                                        </svg>
+                                        Dashboard
+                                    </a>
+                                @endif
                                 <!-- <a href="{{ route('settings') }}"
-                                                class="flex items-center gap-2 px-4 py-2 text-sm text-[#0F172A] hover:bg-gray-100">
-                                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
-                                                    </path>
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                                </svg>
-                                                Pengaturan
-                                            </a> -->
+                                                        class="flex items-center gap-2 px-4 py-2 text-sm text-[#0F172A] hover:bg-gray-100">
+                                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                                                            </path>
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                        </svg>
+                                                        Pengaturan
+                                                    </a> -->
                                 <div class="border-t border-gray-100 my-1"></div>
                                 <form method="POST" action="{{ route('logout') }}" id="logout-form-desktop">
                                     @csrf
@@ -225,14 +237,25 @@
                     </div>
 
                     {{-- Dashboard mobile --}}
-                    <a href="@if(Auth::user()->is_master){{ route('master.dashboard') }}@elseif(Auth::user()->is_admin){{ route('admin.dashboard') }}@elseif(Auth::user()->isInstitution()){{ route('lembaga.dashboard') }}@else{{ route('user.dashboard') }}@endif"
-                        class="inline-flex w-full items-center justify-center gap-2 rounded-[10px] border border-[#CBD5E1] bg-white px-4 py-2 text-center text-sm font-medium text-[#0F172A]">
-                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
-                            </path>
-                        </svg>Dashboard
-                    </a>
+                    @if(!Auth::user()->profile_completed)
+                        <a href="{{ route('onboarding') }}"
+                            class="inline-flex w-full items-center justify-center gap-2 rounded-[10px] border border-[#CBD5E1] bg-white px-4 py-2 text-center text-sm font-bold text-blue-600">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                </path>
+                            </svg>Lengkapi Profil
+                        </a>
+                    @else
+                        <a href="@if(Auth::user()->is_master){{ route('master.dashboard') }}@elseif(Auth::user()->is_admin){{ route('admin.dashboard') }}@elseif(Auth::user()->isInstitution()){{ route('lembaga.dashboard') }}@else{{ route('user.dashboard') }}@endif"
+                            class="inline-flex w-full items-center justify-center gap-2 rounded-[10px] border border-[#CBD5E1] bg-white px-4 py-2 text-center text-sm font-medium text-[#0F172A]">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                                </path>
+                            </svg>Dashboard
+                        </a>
+                    @endif
 
                     {{-- Logout mobile --}}
                     <form method="POST" action="{{ route('logout') }}" id="logout-form-mobile">

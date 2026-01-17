@@ -276,7 +276,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/settings/account', [\App\Http\Controllers\SettingsController::class, 'deleteAccount'])->name('settings.delete');
 
     // Lembaga (Institution) Routes - Only for lembaga accounts
-    Route::prefix('lembaga')->name('lembaga.')->middleware(['lembaga.only', 'verified'])->group(function () {
+    Route::prefix('lembaga')->name('lembaga.')->middleware(['lembaga.only', 'verified', 'onboarding.completed'])->group(function () {
         // Dashboard
         Route::get('/', [\App\Http\Controllers\LembagaController::class, 'dashboard'])->name('dashboard');
 
@@ -313,7 +313,7 @@ Route::middleware('auth')->group(function () {
     });
 
     // User (Personal) Routes - Only for personal (pengguna) accounts
-    Route::prefix('user')->name('user.')->middleware(['pengguna.only', 'verified'])->group(function () {
+    Route::prefix('user')->name('user.')->middleware(['pengguna.only', 'verified', 'onboarding.completed'])->group(function () {
         // Dashboard
         Route::get('/', [\App\Http\Controllers\UserController::class, 'dashboard'])->name('dashboard');
 
@@ -423,7 +423,7 @@ Route::get('/cookie', [\App\Http\Controllers\PageController::class, 'cookie'])->
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth'])->prefix('lembaga')->name('lembaga.')->group(function () {
+Route::middleware(['auth', 'onboarding.completed'])->prefix('lembaga')->name('lembaga.')->group(function () {
     // Dashboard
     Route::get('/', [\App\Http\Controllers\LembagaController::class, 'dashboard'])->name('dashboard');
 
