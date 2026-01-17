@@ -64,11 +64,8 @@
                         </div>
                         <div>
                             <label class="block text-gray-600 text-sm font-medium mb-2">Email</label>
-                            <input type="email" name="email" value="{{ old('email', $admin->email) }}"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 @error('email') border-red-500 @enderror">
-                            @error('email')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
+                            <input type="email" value="{{ $admin->email }}" disabled
+                                class="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm bg-gray-100 text-gray-500 cursor-not-allowed">
                         </div>
                     </div>
                     <div>
