@@ -28,6 +28,9 @@
     <!-- SweetAlert2 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <!-- Tailwind CSS -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -436,13 +439,13 @@
                         </div>
                     </a>
                     <!-- Desktop collapse button -->
-                    <button onclick="toggleSidebar()"
+                    <!-- <button onclick="toggleSidebar()"
                         class="hidden lg:flex text-white/70 hover:text-white p-2 toggle-btn" id="toggleBtn">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
                         </svg>
-                    </button>
+                    </button> -->
                     <!-- Mobile close button -->
                     <button onclick="toggleSidebar()" class="lg:hidden text-white/70 hover:text-white p-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -517,16 +520,16 @@
                 <!-- AI Template Generator - Professional Only -->
                 @if(Auth::user()->isProfessionalPlan() || Auth::user()->isEnterprisePlan())
                     <!-- <a href="{{ route('lembaga.template.ai') }}"
-                                class="nav-item flex items-center gap-3 px-4 py-4 rounded-xl {{ request()->routeIs('lembaga.template.ai') ? 'active' : '' }}"
-                                title="AI Template">
-                                <div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
-                                    <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                                    </svg>
-                                </div>
-                                <span class="text-white/70 text-base nav-text">AI Template</span>
-                            </a> -->
+                                            class="nav-item flex items-center gap-3 px-4 py-4 rounded-xl {{ request()->routeIs('lembaga.template.ai') ? 'active' : '' }}"
+                                            title="AI Template">
+                                            <div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+                                                <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                                </svg>
+                                            </div>
+                                            <span class="text-white/70 text-base nav-text">AI Template</span>
+                                        </a> -->
                 @endif
 
                 <!-- Upload Template (User) -->
@@ -547,14 +550,14 @@
                     @if(Auth::user()->canIssueCertificate())
                         <a href="{{ route('lembaga.sertifikat.bulk') }}"
                             class="nav-item flex items-center gap-3 px-4 py-4 rounded-xl {{ request()->routeIs('lembaga.sertifikat.bulk') ? 'active' : '' }}"
-                            title="Import Data (Bulk)">
+                            title="Upload Data (Bulk)">
                             <div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
                                 <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67"
                                         d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                                 </svg>
                             </div>
-                            <span class="text-white/70 text-base nav-text">Import Data (Bulk)</span>
+                            <span class="text-white/70 text-base nav-text">Upload Data (Bulk)</span>
                         </a>
                     @else
                         <div class="nav-item flex items-center gap-3 px-4 py-4 rounded-xl opacity-50 cursor-not-allowed group relative"
@@ -688,117 +691,12 @@
             </div>
         </main>
 
-        <!-- Chat Widget -->
-        <div id="chatWidget" class="fixed bottom-6 right-6 z-50">
-            <!-- Chat Popup -->
-            <div id="chatPopup"
-                class="hidden absolute bottom-16 right-0 w-80 max-h-[480px] bg-[#0F172A] rounded-2xl shadow-2xl border border-white/10 overflow-hidden flex flex-col">
-                <!-- Chat Header -->
-                <div class="bg-[#3B82F6] px-4 py-3 flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-white font-bold text-sm">SertiKu Support</p>
-                            <p class="text-white/70 text-xs">Bantuan Cepat 24/7</p>
-                        </div>
-                    </div>
-                    <button onclick="toggleChatPopup()" class="text-white/70 hover:text-white transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-
-                <!-- Chat Messages -->
-                <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-3"
-                    style="min-height: 200px; max-height: 280px;">
-                    <!-- Welcome Message -->
-                    <div class="flex gap-2">
-                        <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                            <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M10 2L3 7l7 5 7-5-7-5z" />
-                                <path d="M3 12l7 5 7-5" />
-                            </svg>
-                        </div>
-                        <div class="bg-white/10 rounded-lg rounded-tl-none px-3 py-2 max-w-[85%]">
-                            <p class="text-white text-sm">Halo! Saya asisten virtual SertiKu. Pilih topik di bawah
-                                atau ketik pertanyaan Anda.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Templates -->
-                <div id="quickTemplates" class="px-4 pb-3 space-y-2">
-                    <p class="text-white/50 text-xs mb-2">Pertanyaan Populer:</p>
-                    <div class="flex flex-wrap gap-2">
-                        <button onclick="askQuestion('cara_verifikasi')"
-                            class="chat-template-btn px-3 py-1.5 bg-blue-500/20 border border-blue-500/30 rounded-lg text-blue-300 text-xs hover:bg-blue-500/30 transition">
-                            Cara Verifikasi
-                        </button>
-                        <button onclick="askQuestion('upload_sertifikat')"
-                            class="chat-template-btn px-3 py-1.5 bg-green-500/20 border border-green-500/30 rounded-lg text-green-300 text-xs hover:bg-green-500/30 transition">
-                            Upload Sertifikat
-                        </button>
-                        <button onclick="askQuestion('upgrade_paket')"
-                            class="chat-template-btn px-3 py-1.5 bg-purple-500/20 border border-purple-500/30 rounded-lg text-purple-300 text-xs hover:bg-purple-500/30 transition">
-                            Upgrade Paket
-                        </button>
-                        <button onclick="askQuestion('qr_code')"
-                            class="chat-template-btn px-3 py-1.5 bg-cyan-500/20 border border-cyan-500/30 rounded-lg text-cyan-300 text-xs hover:bg-cyan-500/30 transition">
-                            QR Code
-                        </button>
-                        <button onclick="askQuestion('tips_keamanan')"
-                            class="chat-template-btn px-3 py-1.5 bg-yellow-500/20 border border-yellow-500/30 rounded-lg text-yellow-300 text-xs hover:bg-yellow-500/30 transition">
-                            Tips Keamanan
-                        </button>
-                        <button onclick="askQuestion('hubungi_admin')"
-                            class="chat-template-btn px-3 py-1.5 bg-red-500/20 border border-red-500/30 rounded-lg text-red-300 text-xs hover:bg-red-500/30 transition">
-                            Hubungi Admin
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Chat Input -->
-                <div class="p-3 border-t border-white/10 flex-shrink-0">
-                    <div class="flex gap-2 items-center">
-                        <input type="text" id="chatInput" placeholder="Ketik pesan..."
-                            onkeypress="if(event.key==='Enter')sendCustomMessage()"
-                            class="flex-1 min-w-0 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm placeholder:text-white/40 focus:outline-none focus:border-blue-500">
-                        <button onclick="sendCustomMessage()"
-                            class="bg-blue-600 hover:bg-blue-700 rounded-lg p-2 text-white transition flex-shrink-0 min-w-[40px] flex items-center justify-center">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Chat Button -->
-            <button onclick="toggleChatPopup()" id="chatButton"
-                class="chat-widget w-14 h-14 rounded-full flex items-center justify-center text-white hover:scale-105 transition group relative">
-                <svg id="chatIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-                <svg id="closeIcon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-                <span
-                    class="absolute bottom-full right-0 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none">
-                    Butuh bantuan? Chat dengan kami!
-                </span>
-                <!-- Notification dot -->
-                <!-- <span class="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-[#0F172A]"></span> -->
-            </button>
-        </div>
+        <!-- Chat Widget Component -->
+        <x-chat-widget role="lembaga" />
+        <!-- Notification dot -->
+        <!-- <span class="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-[#0F172A]"></span> -->
+        </button>
+    </div>
     </div>
 
     <script>
@@ -900,203 +798,7 @@
             // closeIcon.classList.toggle('hidden');
         }
 
-        function askQuestion(key) {
-            const response = chatResponses[key];
-            if (!response) return;
 
-            const messagesDiv = document.getElementById('chatMessages');
-
-            // Add user message
-            const userMsg = document.createElement('div');
-            userMsg.className = 'flex gap-2 justify-end';
-            userMsg.innerHTML = `
-                <div class="bg-blue-600 rounded-lg rounded-tr-none px-3 py-2 max-w-[85%]">
-                    <p class="text-white text-sm">${response.question}</p>
-                </div>
-            `;
-            messagesDiv.appendChild(userMsg);
-
-            // Scroll to bottom
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            // Add typing indicator
-            const typingIndicator = document.createElement('div');
-            typingIndicator.className = 'flex gap-2 typing-indicator';
-            typingIndicator.innerHTML = `
-                <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 2L3 7l7 5 7-5-7-5z"/>
-                    </svg>
-                </div>
-                <div class="bg-white/10 rounded-lg rounded-tl-none px-3 py-2">
-                    <div class="flex gap-1">
-                        <span class="w-2 h-2 bg-white/50 rounded-full animate-bounce" style="animation-delay: 0ms"></span>
-                        <span class="w-2 h-2 bg-white/50 rounded-full animate-bounce" style="animation-delay: 150ms"></span>
-                        <span class="w-2 h-2 bg-white/50 rounded-full animate-bounce" style="animation-delay: 300ms"></span>
-                    </div>
-                </div>
-            `;
-            messagesDiv.appendChild(typingIndicator);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            // Simulate typing delay then show response
-            setTimeout(() => {
-                messagesDiv.removeChild(typingIndicator);
-
-                const botMsg = document.createElement('div');
-                botMsg.className = 'flex gap-2';
-                botMsg.innerHTML = `
-                    <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 2L3 7l7 5 7-5-7-5z"/>
-                        </svg>
-                    </div>
-                    <div class="bg-white/10 rounded-lg rounded-tl-none px-3 py-2 max-w-[85%]">
-                        <p class="text-white text-sm leading-relaxed">${response.answer}</p>
-                    </div>
-                `;
-                messagesDiv.appendChild(botMsg);
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            }, 1000);
-        }
-
-        async function sendCustomMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
-            if (!message) return;
-
-            const messagesDiv = document.getElementById('chatMessages');
-
-            // Add user message
-            const userMsg = document.createElement('div');
-            userMsg.className = 'flex gap-2 justify-end';
-            userMsg.innerHTML = `
-                <div class="bg-blue-600 rounded-lg rounded-tr-none px-3 py-2 max-w-[85%]">
-                    <p class="text-white text-sm">${escapeHtml(message)}</p>
-                </div>
-            `;
-            messagesDiv.appendChild(userMsg);
-            input.value = '';
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            // Show typing indicator
-            const typingIndicator = document.createElement('div');
-            typingIndicator.id = 'lembagaTypingIndicator';
-            typingIndicator.className = 'flex gap-2';
-            typingIndicator.innerHTML = `
-                <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 2L3 7l7 5 7-5-7-5z"/>
-                    </svg>
-                </div>
-                <div class="bg-white/10 rounded-lg rounded-tl-none px-3 py-2">
-                    <div class="flex gap-1">
-                        <span class="w-2 h-2 bg-white/50 rounded-full animate-bounce" style="animation-delay: 0ms"></span>
-                        <span class="w-2 h-2 bg-white/50 rounded-full animate-bounce" style="animation-delay: 150ms"></span>
-                        <span class="w-2 h-2 bg-white/50 rounded-full animate-bounce" style="animation-delay: 300ms"></span>
-                    </div>
-                </div>
-            `;
-            messagesDiv.appendChild(typingIndicator);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            try {
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
-                        'Accept': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        message: message,
-                        role: 'lembaga',
-                    }),
-                });
-
-                // Remove typing indicator
-                const indicator = document.getElementById('lembagaTypingIndicator');
-                if (indicator) indicator.remove();
-
-                if (!response.ok) {
-                    console.error('Chat API error:', response.status, response.statusText);
-                    throw new Error('API response not ok');
-                }
-
-                const data = await response.json();
-                console.log('Chat response:', data);
-
-                // Add bot response
-                const botMsg = document.createElement('div');
-                botMsg.className = 'flex gap-2';
-                botMsg.innerHTML = `
-                    <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 2L3 7l7 5 7-5-7-5z"/>
-                        </svg>
-                    </div>
-                    <div class="bg-white/10 rounded-lg rounded-tl-none px-3 py-2 max-w-[85%]">
-                        <div class="text-white text-sm leading-relaxed">${formatMarkdown(data.reply) || 'Maaf, terjadi kesalahan.'}</div>
-                    </div>
-                `;
-                messagesDiv.appendChild(botMsg);
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            } catch (error) {
-                console.error('Chat error:', error);
-
-                // Remove typing indicator
-                const indicator = document.getElementById('lembagaTypingIndicator');
-                if (indicator) indicator.remove();
-
-                // Show error message
-                const botMsg = document.createElement('div');
-                botMsg.className = 'flex gap-2';
-                botMsg.innerHTML = `
-                    <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 2L3 7l7 5 7-5-7-5z"/>
-                        </svg>
-                    </div>
-                    <div class="bg-white/10 rounded-lg rounded-tl-none px-3 py-2 max-w-[85%]">
-                        <p class="text-white text-sm">Maaf, terjadi kesalahan koneksi. Silakan coba lagi.</p>
-                    </div>
-                `;
-                messagesDiv.appendChild(botMsg);
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            }
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // Format markdown untuk output AI yang lebih rapih
-        function formatMarkdown(text) {
-            if (!text) return '';
-
-            return text
-                // Bold: **text** atau __text__
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/__(.*?)__/g, '<strong>$1</strong>')
-                // Italic: *text* atau _text_
-                .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-                .replace(/_([^_]+)_/g, '<em>$1</em>')
-                // Numbered list: 1. item
-                .replace(/^\d+\.\s+(.*)$/gm, '<li class="ml-4 list-decimal">$1</li>')
-                // Bullet list: - item atau * item
-                .replace(/^[\-\*]\s+(.*)$/gm, '<li class="ml-4 list-disc">$1</li>')
-                // Headers: ## Header
-                .replace(/^###\s+(.*)$/gm, '<strong class="text-blue-300">$1</strong>')
-                .replace(/^##\s+(.*)$/gm, '<strong class="text-blue-300 text-base">$1</strong>')
-                // Line breaks
-                .replace(/\n\n/g, '<br><br>')
-                .replace(/\n/g, '<br>')
-                // Links
-                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-400 underline" target="_blank">$1</a>');
-        }
     </script>
     {{-- SweetAlert Session --}}
     <x-sweetalert-session />

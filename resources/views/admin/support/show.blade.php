@@ -56,27 +56,27 @@
                                         @endif
                                     </div>
                                 @endif
-                                <span class="text-white/50 text-xs">
+                                <span class="text-gray-500 text-xs">
                                     {{ $message->sender->name ?? 'User' }}
                                 </span>
                                 @if($message->is_from_admin)
                                     <div
-                                        class="w-6 h-6 rounded-full bg-[#8B5CF6] flex items-center justify-center overflow-hidden">
+                                        class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center overflow-hidden">
                                         @if($message->sender->avatar && (str_starts_with($message->sender->avatar, '/storage/') || str_starts_with($message->sender->avatar, 'http')))
                                             <img src="{{ $message->sender->avatar }}" alt="Avatar"
                                                 class="w-full h-full object-cover">
                                         @else
-                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($message->sender->name ?? 'A') }}&email={{ urlencode($message->sender->email ?? '') }}&background=A855F7&color=fff&bold=true&size=24"
+                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($message->sender->name ?? 'A') }}&email={{ urlencode($message->sender->email ?? '') }}&background=2563EB&color=fff&bold=true&size=24"
                                                 alt="Avatar" class="w-full h-full object-cover">
                                         @endif
                                     </div>
                                 @endif
                             </div>
                             <div
-                                class="rounded-2xl px-4 py-3 {{ $message->is_from_admin ? 'bg-[#8B5CF6] text-white' : 'bg-white/10 text-white' }}">
+                                class="rounded-2xl px-4 py-3 {{ $message->is_from_admin ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-900' }}">
                                 <p class="text-sm">{{ $message->message }}</p>
                             </div>
-                            <p class="text-white/30 text-xs mt-1 {{ $message->is_from_admin ? 'text-right' : '' }}">
+                            <p class="text-gray-400 text-xs mt-1 {{ $message->is_from_admin ? 'text-right' : '' }}">
                                 {{ $message->created_at->format('d M Y H:i') }}
                             </p>
                         </div>
@@ -87,13 +87,13 @@
             {{-- Reply Form --}}
             @if($ticket->status !== 'closed')
                 <form action="{{ route('admin.support.reply', $ticket) }}" method="POST"
-                    class="p-4 border-t border-white/10">
+                    class="p-4 border-t border-gray-100">
                     @csrf
                     <div class="flex gap-3">
                         <input type="text" name="message" placeholder="Ketik balasan..." required
-                            class="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-purple-500 transition">
+                            class="flex-1 px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition">
                         <button type="submit"
-                            class="px-6 py-3 rounded-xl bg-[#8B5CF6] text-white font-medium hover:bg-[#7C3AED] transition flex-shrink-0">
+                            class="px-6 py-3 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition flex-shrink-0">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
@@ -102,7 +102,7 @@
                     </div>
                 </form>
             @else
-                <div class="p-4 border-t border-white/10 text-center text-white/50">
+                <div class="p-4 border-t border-gray-100 text-center text-gray-500">
                     Tiket ini sudah ditutup
                 </div>
             @endif
@@ -111,7 +111,14 @@
 
     <script>
         // Auto scroll to bottom
-        document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+        document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(() => {
+                const messageContainer = document.getElementById('chatMessages');
+                if (messageContainer) {
+                    messageContainer.scrollTop = messageContainer.scrollHeight;
+                }
+            }, 100);
+        });
     </script>
 
 </x-layouts.admin>

@@ -364,7 +364,8 @@
             return false;
         }
     </script>
-    <x-back-to-top :hasChat="true" />
+    <x-admin-support-widget />
+    <x-back-to-top :hasAdminWidget="true" />
 </body>
 
 </html>

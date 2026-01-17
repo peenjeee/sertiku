@@ -61,16 +61,16 @@
                     {{ $walletInfo['balance']['formatted'] ?? '0 MATIC' }}
                 </p>
                 @if($walletInfo['balance'])
-                    <!-- <p class="text-white/40 text-xs mt-1">
-                                        ≈ Rp {{ number_format($walletInfo['balance']['matic'] * 10000, 0, ',', '.') }}
-                                    </p> -->
+                    <p class="text-white/40 text-xs mt-1">
+                                                   {{ substr($walletInfo['smart_contract_address'], 0, 6) }}...{{ substr($walletInfo['smart_contract_address'], -4) }}
+                                                </p>
                 @endif
             </div>
         </div>
     </div>
 
     {{-- Stats Cards --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
         {{-- Total Transactions --}}
         <div class="glass-card rounded-xl p-5 animate-fade-in-up">
             <div class="flex items-center justify-between">
@@ -110,12 +110,28 @@
                     <p class="text-white/50 text-sm">Estimasi Sisa</p>
                     <p class="text-2xl font-bold text-white mt-1">{{ number_format($walletInfo['remaining_certs']) }}
                     </p>
-                    <p class="text-white/40 text-xs">sertifikat</p>
+                    <p class="text-white/40 text-xs">Sertifikat</p>
                 </div>
                 <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center">
                     <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        {{-- Pending Transactions --}}
+        <div class="glass-card rounded-xl p-5 animate-fade-in-up">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-white/50 text-sm">Pending</p>
+                    <p class="text-2xl font-bold text-white mt-1">{{ $blockchainStats['pending'] }}</p>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-yellow-500/20 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
             </div>
@@ -216,7 +232,8 @@
                 Aksi Cepat
             </h3>
             <div class="space-y-3">
-                <a href="{{ $walletInfo['explorer_url'] }}/address/{{ $walletInfo['wallet_address'] }}" target="_blank"
+                <a href="{{ $walletInfo['explorer_url'] }}/address/{{ $walletInfo['smart_contract_address'] }}"
+                    target="_blank"
                     class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition">
                     <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
                         <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

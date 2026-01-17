@@ -4,7 +4,7 @@
     {{-- Welcome Banner --}}
     <div class="welcome-banner rounded-2xl lg:rounded-3xl p-5 lg:p-8 mb-6 animate-fade-in-up">
         <h1 class="text-xl lg:text-2xl font-bold text-white mb-4">
-            Selamat Datang Kembali, {{ auth()->user()->name ?? 'User' }}!
+            Selamat Datang, {{ auth()->user()->name ?? 'User' }}!
         </h1>
         <div class="flex flex-wrap gap-3">
             <a href="{{ route('user.sertifikat') }}"
@@ -23,9 +23,9 @@
     </div>
 
     {{-- Stats Cards --}}
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        {{-- Total Sertifikat --}}
-        <div class="stat-card-blue rounded-xl lg:rounded-2xl p-4 lg:p-5 animate-fade-in-up stagger-1">
+    <!-- <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6"> -->
+    {{-- Total Sertifikat --}}
+    <!-- <div class="stat-card-blue rounded-xl lg:rounded-2xl p-4 lg:p-5 animate-fade-in-up stagger-1">
             @if(isset($stats['growth_sertifikat']) && $stats['growth_sertifikat'] > 0)
                 <div class="flex items-start justify-between mb-3">
                     <div class="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
@@ -56,10 +56,10 @@
             @endif
             <p class="text-2xl lg:text-3xl font-bold text-white">{{ $stats['total_sertifikat'] }}</p>
             <p class="text-white/60 text-xs lg:text-sm mt-1">Total Sertifikat</p>
-        </div>
+        </div> -->
 
-        {{-- Terverifikasi --}}
-        <div class="stat-card-green rounded-xl lg:rounded-2xl p-4 lg:p-5 animate-fade-in-up stagger-2">
+    {{-- Terverifikasi --}}
+    <!-- <div class="stat-card-green rounded-xl lg:rounded-2xl p-4 lg:p-5 animate-fade-in-up stagger-2">
             <div class="flex items-start justify-between mb-3">
                 <div class="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-yellow-500/20 flex items-center justify-center">
                     <svg class="w-5 h-5 lg:w-6 lg:h-6 text-yellow-400" fill="none" stroke="currentColor"
@@ -71,10 +71,10 @@
             </div>
             <p class="text-2xl lg:text-3xl font-bold text-white">{{ $stats['terverifikasi'] }}</p>
             <p class="text-white/60 text-xs lg:text-sm mt-1">Terverifikasi</p>
-        </div>
+        </div> -->
 
-        {{-- Total Verifikasi --}}
-        <div class="stat-card rounded-xl lg:rounded-2xl p-4 lg:p-5 animate-fade-in-up stagger-3">
+    {{-- Total Verifikasi --}}
+    <!-- <div class="stat-card rounded-xl lg:rounded-2xl p-4 lg:p-5 animate-fade-in-up stagger-3">
             <div class="flex items-start justify-between mb-3">
                 <div class="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-green-500/20 flex items-center justify-center">
                     <svg class="w-5 h-5 lg:w-6 lg:h-6 text-green-400" fill="none" stroke="currentColor"
@@ -86,10 +86,10 @@
             </div>
             <p class="text-2xl lg:text-3xl font-bold text-white">{{ $stats['total_verifikasi'] }}</p>
             <p class="text-white/60 text-xs lg:text-sm mt-1">Total Verifikasi</p>
-        </div>
+        </div> -->
 
-        {{-- Pending --}}
-        <div class="stat-card-red rounded-xl lg:rounded-2xl p-4 lg:p-5 animate-fade-in-up stagger-4">
+    {{-- Pending --}}
+    <!-- <div class="stat-card-red rounded-xl lg:rounded-2xl p-4 lg:p-5 animate-fade-in-up stagger-4">
             <div class="flex items-start justify-between mb-3">
                 <div class="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-red-500/20 flex items-center justify-center">
                     <svg class="w-5 h-5 lg:w-6 lg:h-6 text-red-400" fill="none" stroke="currentColor"
@@ -101,8 +101,8 @@
             </div>
             <p class="text-2xl lg:text-3xl font-bold text-white">{{ $stats['pending'] }}</p>
             <p class="text-white/60 text-xs lg:text-sm mt-1">Pending</p>
-        </div>
-    </div>
+        </div> -->
+    <!-- </div> -->
 
     {{-- Charts & Activity --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
@@ -129,10 +129,10 @@
                 @forelse($recentActivity as $activity)
                     <div class="flex items-start gap-3">
                         <div class="w-2 h-2 rounded-full mt-2
-                                                @if($activity['type'] === 'new') bg-blue-400
-                                                @elseif($activity['type'] === 'view') bg-yellow-400
-                                                @else bg-purple-400 @endif
-                                            "></div>
+                                                    @if($activity['type'] === 'new') bg-blue-400
+                                                    @elseif($activity['type'] === 'view') bg-yellow-400
+                                                    @else bg-purple-400 @endif
+                                                "></div>
                         <div class="flex-1 min-w-0">
                             <p class="text-white text-sm font-medium">{{ $activity['title'] }}</p>
                             <p class="text-white/50 text-xs truncate">{{ $activity['subtitle'] }}</p>
@@ -162,7 +162,8 @@
         @if($recentCertificates->count() > 0)
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 @foreach($recentCertificates as $cert)
-                    <div class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                    <div
+                        class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
                         {{-- Certificate Icon --}}
                         <div class="shrink-0 w-12 h-12 rounded-lg bg-[#3B82F6] flex items-center justify-center">
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -173,31 +174,32 @@
                         {{-- Certificate Info --}}
                         <div class="flex-1 min-w-0">
                             <p class="text-white font-medium truncate">{{ $cert->course_name ?? 'Sertifikat' }}</p>
-                            <p class="text-white/50 text-sm truncate">{{ $cert->issuer->name ?? 'Lembaga' }} • {{ $cert->created_at->format('d M Y') }}</p>
+                            <p class="text-white/50 text-sm truncate">{{ $cert->issuer->name ?? 'Lembaga' }} •
+                                {{ $cert->created_at->format('d M Y') }}</p>
                         </div>
                         {{-- Status Badge & Actions --}}
                         <div class="shrink-0 flex items-center gap-3">
                             <span class="px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap
-                                @if($cert->status === 'revoked') bg-red-500/20 text-red-400
-                                @elseif($cert->expire_date && $cert->expire_date < now()) bg-amber-500/20 text-amber-400
-                                @elseif($cert->status === 'active') bg-green-500/20 text-green-400
-                                @else bg-gray-500/20 text-gray-400 @endif
-                            ">
+                                        @if($cert->status === 'revoked') bg-red-500/20 text-red-400
+                                        @elseif($cert->expire_date && $cert->expire_date < now()) bg-amber-500/20 text-amber-400
+                                        @elseif($cert->status === 'active') bg-green-500/20 text-green-400
+                                        @else bg-gray-500/20 text-gray-400 @endif
+                                    ">
                                 @if($cert->status === 'revoked') Dicabut
                                 @elseif($cert->expire_date && $cert->expire_date < now()) Kadaluarsa
                                 @elseif($cert->status === 'active') Aktif
                                 @else {{ ucfirst($cert->status) }} @endif
                             </span>
-                            @if($cert->pdf_url)
-                                <a href="{{ $cert->pdf_url }}" target="_blank"
-                                    class="p-2 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition"
-                                    title="Download PDF">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                    </svg>
-                                </a>
-                            @endif
+                            <!-- @if($cert->pdf_url)
+                                        <a href="{{ $cert->pdf_url }}" target="_blank"
+                                            class="p-2 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition"
+                                            title="Download PDF">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                            </svg>
+                                        </a>
+                                    @endif -->
                         </div>
                     </div>
                 @endforeach
@@ -222,21 +224,23 @@
             const ctx = document.getElementById('activityChart').getContext('2d');
             const chartData = @json($chartData);
 
+            // Create gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(59, 130, 246, 0.8)');
+            gradient.addColorStop(1, 'rgba(59, 130, 246, 0.3)');
+
             new Chart(ctx, {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: chartData.map(d => d.month),
                     datasets: [{
                         label: 'Sertifikat',
                         data: chartData.map(d => d.count),
-                        borderColor: '#3B82F6',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                        tension: 0.4,
-                        fill: true,
-                        pointBackgroundColor: '#3B82F6',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointRadius: 5,
+                        backgroundColor: gradient,
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        borderSkipped: false,
                     }]
                 },
                 options: {

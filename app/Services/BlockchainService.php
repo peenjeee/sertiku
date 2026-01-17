@@ -694,6 +694,7 @@ class BlockchainService
             'network' => $this->chainId === '80002' ? 'Polygon Amoy (Testnet)' : 'Polygon Mainnet',
             'explorer_url' => config('blockchain.explorer_url', 'https://amoy.polygonscan.com'),
             'rpc_url' => $this->rpcUrl,
+            'smart_contract_address' => $this->contractAddress,
         ];
     }
 

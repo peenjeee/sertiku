@@ -32,7 +32,7 @@
         @endif
 
         <!-- Stats -->
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-3 gap-4">
             <div class="bg-blue-500/20 border border-blue-500/30 rounded-xl p-4 flex items-center gap-3">
                 <div class="w-10 h-10 bg-blue-500/30 rounded-lg flex items-center justify-center">
                     <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -54,6 +54,17 @@
                 <div>
                     <p class="text-white text-xl font-bold">{{ $stats['active'] ?? 0 }}</p>
                     <p class="text-white/60 text-xs">Template Aktif</p>
+                </div>
+            </div>
+            <div class="bg-red-500/20 border border-red-500/30 rounded-xl p-4 flex items-center gap-3">
+                <div class="w-10 h-10 bg-red-500/30 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-white text-xl font-bold">{{ ($stats['total'] ?? 0) - ($stats['active'] ?? 0) }}</p>
+                    <p class="text-white/60 text-xs">Tidak Aktif</p>
                 </div>
             </div>
         </div>

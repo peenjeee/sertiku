@@ -57,6 +57,8 @@
                     <p class="text-gray-500 text-xs font-medium mb-1">Tipe Akun</p>
                     @if($user->account_type === 'institution' || $user->account_type === 'lembaga')
                         <span class="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full">Lembaga</span>
+                    @elseif($user->account_type === 'admin')
+                        <span class="px-3 py-1 bg-purple-100 text-purple-700 text-sm font-medium rounded-full">Admin</span>
                     @else
                         <span class="px-3 py-1 bg-blue-100 text-blue-700 text-sm font-medium rounded-full">Pengguna</span>
                     @endif

@@ -250,7 +250,7 @@
                                             <span class="font-semibold text-[#8EC5FF]">Status:</span>
                                             @if($isRevoked)
                                                 <span class="ml-1 text-[#EF4444] font-bold">
-                                                    ✕ Dicabut
+                                                    Dicabut
                                                 </span>
                                             @elseif($isExpired)
                                                 <span class="ml-1 text-[#F59E0B] font-bold">
@@ -555,12 +555,12 @@
 
                             {{-- Catatan kecil di bawah --}}
                             <!-- <div class="mt-2 flex items-center justify-center gap-2 text-xs text-[#64748B]">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
-                                    <circle cx="12" cy="12" r="10" stroke="#155DFC" stroke-width="1.5"/>
-                                    <path d="M12 8v1.5M12 11v5" stroke="#155DFC" stroke-width="1.5" stroke-linecap="round"/>
-                                </svg>
-                                <span>Kode hash terdapat pada sertifikat digital Anda.</span>
-                            </div> -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                                        <circle cx="12" cy="12" r="10" stroke="#155DFC" stroke-width="1.5"/>
+                                        <path d="M12 8v1.5M12 11v5" stroke="#155DFC" stroke-width="1.5" stroke-linecap="round"/>
+                                    </svg>
+                                    <span>Kode hash terdapat pada sertifikat digital Anda.</span>
+                                </div> -->
                         </div>
                     @endif
                 </div>

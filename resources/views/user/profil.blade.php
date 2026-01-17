@@ -65,9 +65,9 @@
     </div>
 
     {{-- Stats Cards --}}
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div class="grid grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
         {{-- Total Sertifikat --}}
-        <div class="stat-card-blue rounded-xl lg:rounded-2xl p-4 lg:p-5 animate-fade-in-up scroll-delay-1">
+        <!-- <div class="stat-card-blue rounded-xl lg:rounded-2xl p-4 lg:p-5 animate-fade-in-up scroll-delay-1">
             <div class="flex items-center justify-between mb-2">
                 <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
                     <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -78,10 +78,10 @@
             </div>
             <p class="text-2xl lg:text-3xl font-bold text-white">{{ $stats['total_sertifikat'] ?? 0 }}</p>
             <p class="text-white/60 text-xs lg:text-sm mt-1">Total Sertifikat</p>
-        </div>
+        </div> -->
 
         {{-- Terverifikasi --}}
-        <div class="stat-card-green rounded-xl lg:rounded-2xl p-4 lg:p-5 animate-fade-in-up scroll-delay-2">
+        <!-- <div class="stat-card-green rounded-xl lg:rounded-2xl p-4 lg:p-5 animate-fade-in-up scroll-delay-2">
             <div class="flex items-center justify-between mb-2">
                 <div class="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
                     <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -91,7 +91,7 @@
             </div>
             <p class="text-2xl lg:text-3xl font-bold text-white">{{ $stats['terverifikasi'] ?? 0 }}</p>
             <p class="text-white/60 text-xs lg:text-sm mt-1">Terverifikasi</p>
-        </div>
+        </div> -->
 
         {{-- Lembaga --}}
         <div class="stat-card rounded-xl lg:rounded-2xl p-4 lg:p-5 animate-fade-in-up scroll-delay-3">
@@ -141,7 +141,7 @@
                     <div class="p-4 rounded-xl bg-white/5 border border-white/10 text-center hover-lift transition group">
                         <div
                             class="w-12 h-12 mx-auto mb-2 rounded-full flex items-center justify-center
-                                                                    {{ $achievement['unlocked'] ? 'bg-[#F59E0B]' : 'bg-white/10' }}">
+                                                                            {{ $achievement['unlocked'] ? 'bg-[#F59E0B]' : 'bg-white/10' }}">
                             @if($achievement['unlocked'])
                                 <span class="flex items-center justify-center">{!! $achievement['icon'] !!}</span>
                             @else
@@ -211,7 +211,7 @@
             {{-- Institusi --}}
             <div class="p-4 rounded-xl bg-white/5 border border-white/10">
                 <p class="text-white/50 text-xs mb-1">Institusi/Perusahaan</p>
-                <p class="text-white font-medium">{{ $user->institution ?? '-' }}</p>
+                <p class="text-white font-medium">{{ $user->user_institution ?? '-' }}</p>
             </div>
 
             {{-- Lokasi --}}
@@ -250,10 +250,10 @@
                             </p>
                         </div>
                         <span class="px-3 py-1 rounded-full text-xs
-                                                                    @if($cert->status === 'revoked') bg-red-500/20 text-red-400
-                                                                    @elseif($cert->expire_date && $cert->expire_date < now()) bg-amber-500/20 text-amber-400
-                                                                    @elseif($cert->status === 'active') bg-green-500/20 text-green-400
-                                                                    @else bg-gray-500/20 text-gray-400 @endif">
+                                                                            @if($cert->status === 'revoked') bg-red-500/20 text-red-400
+                                                                            @elseif($cert->expire_date && $cert->expire_date < now()) bg-amber-500/20 text-amber-400
+                                                                            @elseif($cert->status === 'active') bg-green-500/20 text-green-400
+                                                                            @else bg-gray-500/20 text-gray-400 @endif">
                             @if($cert->status === 'revoked') Dicabut
                             @elseif($cert->expire_date && $cert->expire_date < now()) Kadaluarsa
                             @elseif($cert->status === 'active') Aktif

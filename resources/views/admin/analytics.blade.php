@@ -7,21 +7,15 @@
         </div>
         <div class="flex items-center gap-3">
             <form method="GET" class="flex items-center gap-3">
-                <select name="year" onchange="this.form.submit()"
-                    class="bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    @foreach($availableYears as $y)
-                        <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }} class="text-gray-800">{{ $y }}</option>
-                    @endforeach
-                </select>
-                <select name="period" onchange="this.form.submit()"
-                    class="bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="7" {{ request('period') == '7' ? 'selected' : '' }} class="text-gray-800">7 Hari
-                        Terakhir</option>
-                    <option value="30" {{ request('period', '30') == '30' ? 'selected' : '' }} class="text-gray-800">30
-                        Hari Terakhir</option>
-                    <option value="90" {{ request('period') == '90' ? 'selected' : '' }} class="text-gray-800">90 Hari
-                        Terakhir</option>
-                </select>
+                <div class="relative">
+                    <input type="date" name="start_date" value="{{ $startDateStr }}" onchange="this.form.submit()"
+                        class="bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 [&::-webkit-calendar-picker-indicator]:invert">
+                </div>
+                <span class="text-white/60 font-medium">-</span>
+                <div class="relative">
+                    <input type="date" name="end_date" value="{{ $endDateStr }}" onchange="this.form.submit()"
+                        class="bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 [&::-webkit-calendar-picker-indicator]:invert">
+                </div>
             </form>
             <div class="flex items-center gap-2 px-4 py-2 bg-emerald-500/20 border border-emerald-500/30 rounded-lg">
                 <span class="w-2 h-2 bg-emerald-500 rounded-full live-dot"></span>
@@ -65,83 +59,103 @@
             </div>
         </div>
 
-        <!-- Sertifikat Aktif -->
+        <!-- Verifikasi Hari Ini -->
         <div class="stat-card-green rounded-2xl p-5 hover-lift animate-fade-in-up stagger-2">
             <div class="flex items-center gap-2 mb-3">
                 <div class="w-10 h-10 icon-circle-green rounded-lg flex items-center justify-center">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                 </div>
-                <span class="text-gray-600 text-sm font-medium">Sertifikat Aktif</span>
+                <span class="text-gray-600 text-sm font-medium">Verifikasi Hari Ini</span>
             </div>
-            <p class="text-gray-800 text-3xl font-bold mb-2">{{ number_format($stats['sertifikat_aktif']['value']) }}
+            <p class="text-gray-800 text-3xl font-bold mb-2">{{ number_format($stats['verifikasi_hari_ini']['value']) }}
             </p>
             <div class="flex items-center gap-1">
-                @if($stats['sertifikat_aktif']['change'] >= 0)
-                    <span class="text-emerald-600 text-sm font-medium">+{{ $stats['sertifikat_aktif']['change'] }}%</span>
+                @if($stats['verifikasi_hari_ini']['change'] >= 0)
+                    <span
+                        class="text-emerald-600 text-sm font-medium">+{{ $stats['verifikasi_hari_ini']['change'] }}%</span>
                     <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M5 10l7-7m0 0l7 7m-7-7v18" />
                     </svg>
                 @else
-                    <span class="text-red-600 text-sm font-medium">{{ $stats['sertifikat_aktif']['change'] }}%</span>
+                    <span class="text-red-600 text-sm font-medium">{{ $stats['verifikasi_hari_ini']['change'] }}%</span>
+                    <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                    </svg>
                 @endif
-                <span class="text-gray-500 text-xs ml-1">vs periode lalu</span>
+                <span class="text-gray-500 text-xs ml-1">vs kemarin</span>
             </div>
         </div>
 
-        <!-- Lembaga Terdaftar -->
+        <!-- Total Verifikasi Blockchain -->
         <div class="stat-card-purple rounded-2xl p-5 hover-lift animate-fade-in-up stagger-3">
             <div class="flex items-center gap-2 mb-3">
                 <div class="w-10 h-10 icon-circle-purple rounded-lg flex items-center justify-center">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                     </svg>
                 </div>
-                <span class="text-gray-600 text-sm font-medium">Lembaga Terdaftar</span>
+                <span class="text-gray-600 text-sm font-medium">Total Verifikasi BC</span>
             </div>
-            <p class="text-gray-800 text-3xl font-bold mb-2">{{ number_format($stats['lembaga_terdaftar']['value']) }}
+            <p class="text-gray-800 text-3xl font-bold mb-2">
+                {{ number_format($stats['total_verifikasi_blockchain']['value']) }}
             </p>
             <div class="flex items-center gap-1">
-                @if($stats['lembaga_terdaftar']['change'] >= 0)
-                    <span class="text-emerald-600 text-sm font-medium">+{{ $stats['lembaga_terdaftar']['change'] }}%</span>
+                @if($stats['total_verifikasi_blockchain']['change'] >= 0)
+                    <span
+                        class="text-emerald-600 text-sm font-medium">+{{ $stats['total_verifikasi_blockchain']['change'] }}%</span>
                     <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M5 10l7-7m0 0l7 7m-7-7v18" />
                     </svg>
                 @else
-                    <span class="text-red-600 text-sm font-medium">{{ $stats['lembaga_terdaftar']['change'] }}%</span>
+                    <span
+                        class="text-red-600 text-sm font-medium">{{ $stats['total_verifikasi_blockchain']['change'] }}%</span>
+                    <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                    </svg>
                 @endif
                 <span class="text-gray-500 text-xs ml-1">vs periode lalu</span>
             </div>
         </div>
 
-        <!-- Pengguna Aktif -->
+        <!-- Verifikasi Blockchain Hari Ini -->
         <div class="stat-card-orange rounded-2xl p-5 hover-lift animate-fade-in-up stagger-4">
             <div class="flex items-center gap-2 mb-3">
                 <div class="w-10 h-10 icon-circle-orange rounded-lg flex items-center justify-center">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
                 </div>
-                <span class="text-gray-600 text-sm font-medium">Pengguna Aktif</span>
+                <span class="text-gray-600 text-sm font-medium">Verifikasi BC Hari Ini</span>
             </div>
-            <p class="text-gray-800 text-3xl font-bold mb-2">{{ number_format($stats['pengguna_aktif']['value']) }}</p>
+            <p class="text-gray-800 text-3xl font-bold mb-2">
+                {{ number_format($stats['verifikasi_blockchain_hari_ini']['value']) }}
+            </p>
             <div class="flex items-center gap-1">
-                @if($stats['pengguna_aktif']['change'] >= 0)
-                    <span class="text-emerald-600 text-sm font-medium">+{{ $stats['pengguna_aktif']['change'] }}%</span>
+                @if($stats['verifikasi_blockchain_hari_ini']['change'] >= 0)
+                    <span
+                        class="text-emerald-600 text-sm font-medium">+{{ $stats['verifikasi_blockchain_hari_ini']['change'] }}%</span>
                     <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M5 10l7-7m0 0l7 7m-7-7v18" />
                     </svg>
                 @else
-                    <span class="text-red-600 text-sm font-medium">{{ $stats['pengguna_aktif']['change'] }}%</span>
+                    <span
+                        class="text-red-600 text-sm font-medium">{{ $stats['verifikasi_blockchain_hari_ini']['change'] }}%</span>
+                    <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                    </svg>
                 @endif
-                <span class="text-gray-500 text-xs ml-1">vs periode lalu</span>
+                <span class="text-gray-500 text-xs ml-1">vs kemarin</span>
             </div>
         </div>
     </div>
@@ -161,6 +175,16 @@
             <h3 class="text-gray-800 font-bold text-lg mb-4">Aktivitas Verifikasi</h3>
             <div class="h-64">
                 <canvas id="verificationChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Trend Chart -->
+    <div class="mb-8">
+        <div class="glass-card rounded-2xl p-6 animate-fade-in">
+            <h3 class="text-gray-800 font-bold text-lg mb-4">Tren Pendapatan Bulanan</h3>
+            <div class="h-64">
+                <canvas id="revenueChart"></canvas>
             </div>
         </div>
     </div>
@@ -200,22 +224,57 @@
             </div>
 
             <div class="space-y-3 max-h-[340px] overflow-y-auto" id="realtimeLog">
-                @foreach($recentVerifications as $index => $item)
+                @foreach($recentVerifications as $index => $log)
+                    @php
+                        $isBlockchain = $log->action === 'blockchain_verification';
+                        $title = $isBlockchain ? 'Verifikasi Blockchain' : 'Verifikasi Standar';
+
+                        // Parse Certificate Number / Hash from description if subject is missing
+                        if ($isBlockchain) {
+                            $certNumber = str_replace('Verifikasi Blockchain: ', '', $log->description);
+                        } else {
+                            // Try to get HASH from subject relation first (User request: "hash kalo seperti kirim bagikan")
+                            $certNumber = $log->subject->hash ?? null;
+
+                            // Fallback: extract from description if subject/hash missing
+                            if (!$certNumber) {
+                                if (preg_match('/Sertifikat\s+(\S+)\s+diverifikasi/i', $log->description, $matches)) {
+                                    $certNumber = $matches[1];
+                                } else {
+                                    $certNumber = 'Unknown';
+                                }
+                            }
+                        }
+
+                        $iconBg = $isBlockchain ? 'bg-purple-100' : 'bg-blue-100';
+                        $iconColor = $isBlockchain ? 'text-purple-600' : 'text-blue-600';
+                    @endphp
                     <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg animate-slide-in-left"
                         style="animation-delay: {{ $index * 0.1 }}s">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                </svg>
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-8 h-8 {{ $iconBg }} rounded-lg flex items-center justify-center flex-shrink-0">
+                                @if($isBlockchain)
+                                    <!-- Cube Icon for Blockchain -->
+                                    <svg class="w-4 h-4 {{ $iconColor }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                    </svg>
+                                @else
+                                    <!-- Shield Icon for Standard -->
+                                    <svg class="w-4 h-4 {{ $iconColor }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                    </svg>
+                                @endif
                             </div>
-                            <div>
-                                <p class="text-gray-800 text-sm font-medium">Sertifikat Diverifikasi</p>
-                                <p class="text-gray-500 text-xs font-mono">{{ $item->certificate_number }}</p>
+                            <div class="min-w-0 flex-1">
+                                <p class="text-gray-800 text-sm font-medium truncate">{{ $title }}</p>
+                                <p class="text-gray-500 text-xs font-mono truncate max-w-[160px] md:max-w-xs lg:max-w-none">
+                                    {{ $certNumber }}</p>
                             </div>
                         </div>
-                        <span class="text-gray-400 text-xs">{{ $item->updated_at->diffForHumans() }}</span>
+                        <span
+                            class="text-gray-400 text-xs flex-shrink-0 ml-2">{{ $log->created_at->diffForHumans() }}</span>
                     </div>
                 @endforeach
 
@@ -235,21 +294,20 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Certificate Trend Chart
+            // Certificate Trend Chart (Image 2: Stepped Line)
             const certCtx = document.getElementById('certificateChart').getContext('2d');
             new Chart(certCtx, {
                 type: 'line',
                 data: {
-                    labels: {!! json_encode($certificatesTrend->pluck('month')) !!},
+                    labels: {!! json_encode(collect($certificatesTrend)->pluck('month')) !!},
                     datasets: [{
                         label: 'Sertifikat',
-                        data: {!! json_encode($certificatesTrend->pluck('count')) !!},
-                        borderColor: 'rgb(59, 130, 246)',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                        fill: true,
-                        tension: 0.4,
-                        pointRadius: 4,
-                        pointBackgroundColor: 'rgb(59, 130, 246)',
+                        data: {!! json_encode(collect($certificatesTrend)->pluck('count')) !!},
+                        borderColor: '#EF4444', // Red
+                        backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                        fill: false,
+                        stepped: true, // Stepped Line
+                        tension: 0
                     }]
                 },
                 options: {
@@ -270,29 +328,103 @@
                 }
             });
 
-            // Verification Activity Chart
+            // Verification Activity Chart (Image 1: Line Chart - Straight)
             const verifyCtx = document.getElementById('verificationChart').getContext('2d');
             new Chart(verifyCtx, {
-                type: 'bar',
+                type: 'line',
                 data: {
                     labels: {!! json_encode(collect($verificationActivity)->pluck('month')) !!},
+                    datasets: [
+                        {
+                            label: 'Verifikasi Standar',
+                            data: {!! json_encode(collect($verificationActivity)->pluck('standard')) !!},
+                            borderColor: '#3B82F6', // Blue
+                            backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                            tension: 0, // Straight lines
+                            fill: false
+                        },
+                        {
+                            label: 'Verifikasi Blockchain',
+                            data: {!! json_encode(collect($verificationActivity)->pluck('blockchain')) !!},
+                            borderColor: '#8B5CF6', // Purple
+                            backgroundColor: 'rgba(139, 92, 246, 0.5)',
+                            tension: 0, // Straight lines
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true, position: 'top' }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Revenue Trend Chart (Image 3: Point Styling)
+            const revCtx = document.getElementById('revenueChart').getContext('2d');
+            new Chart(revCtx, {
+                type: 'line',
+                data: {
+                    labels: {!! json_encode(collect($revenueTrend)->pluck('month')) !!},
                     datasets: [{
-                        label: 'Verifikasi',
-                        data: {!! json_encode(collect($verificationActivity)->pluck('count')) !!},
-                        backgroundColor: 'rgba(139, 92, 246, 0.8)',
-                        borderRadius: 6,
+                        label: 'Pendapatan (IDR)',
+                        data: {!! json_encode(collect($revenueTrend)->pluck('count')) !!},
+                        borderColor: '#10B981', // Green
+                        backgroundColor: 'rgba(16, 185, 129, 0.5)',
+                        borderWidth: 2,
+                        pointStyle: 'circle',
+                        pointRadius: 10,
+                        pointHoverRadius: 15
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { display: false }
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        try {
+                                            label += new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(context.parsed.y);
+                                        } catch (e) {
+                                            label += context.parsed.y;
+                                        }
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
-                            grid: { color: 'rgba(0,0,0,0.05)' }
+                            grid: { color: 'rgba(0,0,0,0.05)' },
+                            ticks: {
+                                callback: function (value) {
+                                    try {
+                                        return new Intl.NumberFormat('id-ID', { notation: "compact", compactDisplay: "short" }).format(value);
+                                    } catch (e) {
+                                        return value;
+                                    }
+                                }
+                            }
                         },
                         x: {
                             grid: { display: false }

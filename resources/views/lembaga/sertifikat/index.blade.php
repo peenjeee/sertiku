@@ -91,64 +91,75 @@
         </div>
 
         <!-- Search & Action -->
-        <div class="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
-            <form action="{{ route('lembaga.sertifikat.index') }}" method="GET" class="flex flex-wrap items-center gap-3 w-full md:w-auto flex-1">
-                <!-- Search Input -->
-                <div class="relative flex-1 min-w-[200px]">
-                    <svg class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-white/40" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    <input type="text" name="search" value="{{ request('search') }}"
-                        placeholder="Nama, Email, Course, ID..."
-                        class="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/20 rounded-lg text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <div class="flex flex-col gap-3">
+            <form action="{{ route('lembaga.sertifikat.index') }}" method="GET">
+                <!-- Desktop: All in one row -->
+                <div class="flex flex-col md:flex-row md:items-center gap-3 md:gap-2">
+                    <!-- Search Input -->
+                    <div class="relative flex-1">
+                        <svg class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-white/40" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <input type="text" name="search" value="{{ request('search') }}"
+                            placeholder="Nama, Email, Course, ID..."
+                            class="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/20 rounded-lg text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+
+                    <!-- Date Range -->
+                    <div class="flex items-center gap-1">
+                        <input type="date" name="start_date" value="{{ request('start_date') }}" title="Tanggal Mulai" class="flex-1 md:flex-none md:w-[130px] py-2.5 px-2 bg-white/5 border border-white/20 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 [color-scheme:dark]">
+                        <span class="text-white/40 text-xs">-</span>
+                        <input type="date" name="end_date" value="{{ request('end_date') }}" title="Tanggal Akhir" class="flex-1 md:flex-none md:w-[130px] py-2.5 px-2 bg-white/5 border border-white/20 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 [color-scheme:dark]">
+                    </div>
+
+                    <!-- Status + Category + Buttons -->
+                    <div class="flex items-center gap-2">
+                        <!-- Status -->
+                        <select name="status" class="flex-1 md:flex-none py-2.5 px-3 bg-white/5 border border-white/20 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 [&>option]:text-gray-900">
+                            <option value="">Semua Status</option>
+                            <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktif</option>
+                            <option value="revoked" {{ request('status') == 'revoked' ? 'selected' : '' }}>Dicabut</option>
+                            <option value="expired" {{ request('status') == 'expired' ? 'selected' : '' }}>Expired</option>
+                        </select>
+
+                        <!-- Category -->
+                        <select name="category" class="flex-1 md:flex-none py-2.5 px-3 bg-white/5 border border-white/20 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 [&>option]:text-gray-900">
+                            <option value="">Semua Kategori</option>
+                            <option value="Bootcamp" {{ request('category') == 'Bootcamp' ? 'selected' : '' }}>Bootcamp</option>
+                            <option value="Workshop" {{ request('category') == 'Workshop' ? 'selected' : '' }}>Workshop</option>
+                            <option value="Seminar" {{ request('category') == 'Seminar' ? 'selected' : '' }}>Seminar</option>
+                            <option value="Sertifikasi" {{ request('category') == 'Sertifikasi' ? 'selected' : '' }}>Sertifikasi</option>
+                            <option value="Pelatihan" {{ request('category') == 'Pelatihan' ? 'selected' : '' }}>Pelatihan</option>
+                            <option value="Webinar" {{ request('category') == 'Webinar' ? 'selected' : '' }}>Webinar</option>
+                        </select>
+
+                        <!-- Search Button -->
+                        <button type="submit" class="p-2.5 bg-blue-600 rounded-lg hover:bg-blue-700 text-white transition flex-shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Create Button -->
+                    <a href="{{ route('lembaga.sertifikat.create') }}"
+                        class="w-full md:w-auto flex items-center justify-center gap-2 px-5 py-2.5 bg-[#2563EB] rounded-lg text-white text-sm font-bold shadow-md shadow-blue-500/20 hover:bg-[#3B82F6] transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                        Terbitkan Baru
+                    </a>
                 </div>
-
-                <!-- Date Filter -->
-                <input type="date" name="issue_date" value="{{ request('issue_date') }}" class="py-2.5 px-3 bg-white/5 border border-white/20 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 [color-scheme:dark]">
-
-                <!-- Status Filter -->
-                <select name="status" class="py-2.5 px-3 bg-white/5 border border-white/20 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 [&>option]:text-gray-900">
-                    <option value="">Semua Status</option>
-                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktif</option>
-                    <option value="revoked" {{ request('status') == 'revoked' ? 'selected' : '' }}>Dicabut</option>
-                    <option value="expired" {{ request('status') == 'expired' ? 'selected' : '' }}>Expired</option>
-                </select>
-
-                <!-- Category Filter -->
-                <select name="category" class="py-2.5 px-3 bg-white/5 border border-white/20 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 [&>option]:text-gray-900">
-                    <option value="">Semua Kategori</option>
-                    <option value="Bootcamp" {{ request('category') == 'Bootcamp' ? 'selected' : '' }}>Bootcamp</option>
-                    <option value="Workshop" {{ request('category') == 'Workshop' ? 'selected' : '' }}>Workshop</option>
-                    <option value="Seminar" {{ request('category') == 'Seminar' ? 'selected' : '' }}>Seminar</option>
-                    <option value="Sertifikasi" {{ request('category') == 'Sertifikasi' ? 'selected' : '' }}>Sertifikasi</option>
-                    <option value="Pelatihan" {{ request('category') == 'Pelatihan' ? 'selected' : '' }}>Pelatihan</option>
-                    <option value="Webinar" {{ request('category') == 'Webinar' ? 'selected' : '' }}>Webinar</option>
-                </select>
-
-                <button type="submit" class="p-2.5 bg-blue-600 rounded-lg hover:bg-blue-700 text-white transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                </button>
             </form>
-
-            <a href="{{ route('lembaga.sertifikat.create') }}"
-                class="flex items-center gap-2 px-5 py-2.5 bg-[#2563EB] rounded-lg text-white text-sm font-bold shadow-md shadow-blue-500/20 hover:bg-[#3B82F6] transition flex-shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                        d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
-                Terbitkan Baru
-            </a>
         </div>
 
         <!-- Certificate Grid -->
         @if(isset($certificates) && $certificates->count() > 0)
             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                 @foreach($certificates as $certificate)
-                    <div class="glass-card rounded-2xl overflow-hidden hover:shadow-lg transition group">
+                    <div class="glass-card rounded-2xl overflow-hidden hover:shadow-lg transition group flex flex-col h-full">
                         <!-- Certificate Header -->
                         <div class="bg-[#2563EB] p-4 relative">
                             <!-- Status Badge -->
@@ -159,30 +170,29 @@
                                 @endphp
 
                                 @if($certificate->status === 'revoked')
-                                    <span class="px-2 py-1 bg-red-500 text-white text-xs font-bold rounded">✕ Dicabut</span>
+                                    <span class="px-2 py-1 bg-red-500 text-white text-xs font-bold rounded"> Dicabut</span>
                                 @elseif($isExpired)
                                     <span class="px-2 py-1 bg-amber-500 text-white text-xs font-bold rounded"> Kadaluarsa</span>
-                                @elseif($certificate->status === 'active')
-                                    <span class="px-2 py-1 bg-emerald-500 text-white text-xs font-bold rounded"> Aktif</span>
                                 @else
-                                    <span class="px-2 py-1 bg-gray-500 text-white text-xs font-bold rounded">{{ $certificate->status }}</span>
+                                    <span class="px-2 py-1 bg-green-500 text-white text-xs font-bold rounded">Aktif</span>
                                 @endif
                             </div>
 
+                            <!-- Recipient Info -->
                             <div class="flex items-center gap-3">
                                 @php
-                                    // Check if recipient is registered in system
-                                    $registeredUser = null;
                                     $avatarUrl = null;
-
                                     if ($certificate->recipient_email) {
-                                        $registeredUser = \App\Models\User::where('email', $certificate->recipient_email)->first();
-
-                                        if ($registeredUser && $registeredUser->avatar && (str_starts_with($registeredUser->avatar, '/storage/') || str_starts_with($registeredUser->avatar, 'http'))) {
-                                            // User is registered and has custom or Google avatar
-                                            $avatarUrl = $registeredUser->avatar;
+                                        // Has email - check if user exists
+                                        $recipientUser = \App\Models\User::where('email', $certificate->recipient_email)->first();
+                                        if ($recipientUser && $recipientUser->avatar) {
+                                            if (str_starts_with($recipientUser->avatar, 'http')) {
+                                                $avatarUrl = $recipientUser->avatar;
+                                            } else {
+                                                $avatarUrl = asset('storage/' . $recipientUser->avatar);
+                                            }
                                         } else {
-                                            // User not registered or no avatar - use UI Avatars
+                                            // Use UI Avatars with email
                                             $avatarUrl = 'https://ui-avatars.com/api/?name=' . urlencode($certificate->recipient_name) . '&email=' . urlencode($certificate->recipient_email) . '&background=random&color=fff&bold=true';
                                         }
                                     } else {
@@ -205,14 +215,14 @@
                             </div>
                         </div>
 
-                        <!-- Certificate Body -->
-                        <div class="p-4 space-y-3">
+                        <!-- Certificate Body - flex-1 to fill space -->
+                        <div class="p-4 space-y-3 flex-1">
                             <div class="space-y-1">
                                 <div>
                                     <p class="text-gray-500 text-xs">Program/Kursus</p>
                                     <p class="text-gray-800 font-medium truncate">{{ $certificate->course_name }}</p>
                                 </div>
-                                <div class="text-xs text-gray-500 line-clamp-2" title="{{ $certificate->description }}">
+                                <div class="text-xs text-gray-500 truncate" title="{{ $certificate->description }}">
                                     {{ $certificate->description ?? '-' }}
                                 </div>
                             </div>
@@ -236,69 +246,72 @@
                                 </span>
                             </div>
 
-                            {{-- Blockchain Badge - Always show if blockchain_enabled or has tx_hash --}}
-                            @if($certificate->blockchain_enabled || $certificate->blockchain_tx_hash)
-                                <div class="flex items-center gap-2 mt-2">
-                                    @if($certificate->blockchain_tx_hash)
-                                        <a href="{{ $certificate->blockchain_explorer_url }}" target="_blank"
-                                            class="flex items-center gap-1.5 px-3 py-1.5 bg-purple-500/15 border border-purple-500/30 text-purple-600 text-xs font-medium rounded-lg hover:bg-purple-500/25 transition group">
+                            {{-- Badges Container - Fixed height area for blockchain/IPFS --}}
+                            <div class="min-h-[60px]">
+                                {{-- Blockchain Badge - Always show if blockchain_enabled or has tx_hash --}}
+                                @if($certificate->blockchain_enabled || $certificate->blockchain_tx_hash)
+                                    <div class="flex items-center gap-2 mb-2">
+                                        @if($certificate->blockchain_tx_hash)
+                                            <a href="{{ $certificate->blockchain_explorer_url }}" target="_blank"
+                                                class="flex items-center gap-1.5 px-3 py-1.5 bg-purple-500/15 border border-purple-500/30 text-purple-600 text-xs font-medium rounded-lg hover:bg-purple-500/25 transition group">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                                </svg>
+                                                <span>Tersimpan di Blockchain</span>
+                                                <svg class="w-3 h-3 opacity-0 group-hover:opacity-100 transition" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                                </svg>
+                                            </a>
+                                        @elseif($certificate->blockchain_status === 'pending')
+                                            <span
+                                                class="flex items-center gap-1.5 px-3 py-1.5 bg-yellow-500/20 border border-yellow-500/30 text-yellow-600 text-xs font-medium rounded-lg">
+                                                <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                                        stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                                                </svg>
+                                                <span>Menunggu Blockchain...</span>
+                                            </span>
+                                        @elseif($certificate->blockchain_status === 'failed')
+                                            <span
+                                                class="flex items-center gap-1.5 px-3 py-1.5 bg-red-500/20 border border-red-500/30 text-red-600 text-xs font-medium rounded-lg">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                <span>Gagal Upload</span>
+                                            </span>
+                                        @endif
+                                    </div>
+                                @endif
+
+                                {{-- IPFS Badge - Show if ipfs_cid exists --}}
+                                @if($certificate->ipfs_cid)
+                                    <div class="flex items-center gap-2">
+                                        <a href="{{ config('ipfs.gateway_url', 'https://gateway.pinata.cloud/ipfs') }}/{{ $certificate->ipfs_cid }}"
+                                            target="_blank"
+                                            class="flex items-center gap-1.5 px-3 py-1.5 bg-teal-500/15 border border-teal-500/30 text-teal-600 text-xs font-medium rounded-lg hover:bg-teal-500/25 transition group">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
                                             </svg>
-                                            <span>Tersimpan di Blockchain</span>
+                                            <span>Tersimpan di IPFS</span>
                                             <svg class="w-3 h-3 opacity-0 group-hover:opacity-100 transition" fill="none"
                                                 stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                             </svg>
                                         </a>
-                                    @elseif($certificate->blockchain_status === 'pending')
-                                        <span
-                                            class="flex items-center gap-1.5 px-3 py-1.5 bg-yellow-500/20 border border-yellow-500/30 text-yellow-600 text-xs font-medium rounded-lg">
-                                            <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                                    stroke-width="4"></circle>
-                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-                                            </svg>
-                                            <span>Menunggu Blockchain...</span>
-                                        </span>
-                                    @elseif($certificate->blockchain_status === 'failed')
-                                        <span
-                                            class="flex items-center gap-1.5 px-3 py-1.5 bg-red-500/20 border border-red-500/30 text-red-600 text-xs font-medium rounded-lg">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                            <span>Gagal Upload</span>
-                                        </span>
-                                    @endif
-                                </div>
-                            @endif
-
-                            {{-- IPFS Badge - Show if ipfs_cid exists --}}
-                            @if($certificate->ipfs_cid)
-                                <div class="flex items-center gap-2 mt-2">
-                                    <a href="{{ config('ipfs.gateway_url', 'https://gateway.pinata.cloud/ipfs') }}/{{ $certificate->ipfs_cid }}"
-                                        target="_blank"
-                                        class="flex items-center gap-1.5 px-3 py-1.5 bg-teal-500/15 border border-teal-500/30 text-teal-600 text-xs font-medium rounded-lg hover:bg-teal-500/25 transition group">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
-                                        </svg>
-                                        <span>Tersimpan di IPFS</span>
-                                        <svg class="w-3 h-3 opacity-0 group-hover:opacity-100 transition" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                        </svg>
-                                    </a>
-                                </div>
-                            @endif
+                                    </div>
+                                @endif
+                            </div>
                         </div>
 
-                        <!-- Certificate Actions -->
-                        <div class="p-4 pt-0 flex items-center gap-2">
+                        <!-- Certificate Actions - mt-auto to push to bottom -->
+                        <div class="p-4 pt-0 flex items-center gap-2 mt-auto">
                             @if($certificate->pdf_path)
                                 <!-- <a href="{{ asset('storage/' . $certificate->pdf_path) }}" target="_blank"
                                    class="flex-1 flex items-center justify-center gap-1 py-2 bg-blue-100 rounded-lg text-blue-700 text-xs font-medium hover:bg-blue-200 transition">

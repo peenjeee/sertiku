@@ -11,7 +11,7 @@
 
     {{-- Filters --}}
     <div class="glass-card rounded-2xl p-4 mb-6 animate-fade-in-up">
-        <form method="GET" class="flex flex-wrap gap-4">
+        <form method="GET" action="{{ route('master.logs') }}" class="flex flex-wrap gap-4">
             <div class="flex-1 min-w-[200px]">
                 <select name="action" style="background-color: #1a1a2e !important; color: white !important;"
                     class="w-full px-4 py-2 rounded-xl border border-white/20 text-sm focus:outline-none focus:border-purple-500">
@@ -26,8 +26,12 @@
                 </select>
             </div>
             <div class="flex-1 min-w-[200px]">
-                <input type="date" name="date" value="{{ request('date') }}"
-                    class="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/10 text-white text-sm focus:outline-none focus:border-purple-500">
+                <input type="date" name="start_date" value="{{ request('start_date') }}" placeholder="Dari Tanggal"
+                    class="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/10 text-white text-sm focus:outline-none focus:border-purple-500 [color-scheme:dark]">
+            </div>
+            <div class="flex-1 min-w-[200px]">
+                <input type="date" name="end_date" value="{{ request('end_date') }}" placeholder="Sampai Tanggal"
+                    class="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/10 text-white text-sm focus:outline-none focus:border-purple-500 [color-scheme:dark]">
             </div>
             <button type="submit"
                 class="px-6 py-2 rounded-xl bg-purple-500 text-white text-sm hover:bg-purple-600 transition">

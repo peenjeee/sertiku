@@ -52,11 +52,12 @@
             <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center mb-3">
                 <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             </div>
-            <p class="text-3xl font-bold text-white">{{ $stats['total_lembaga'] }}</p>
-            <p class="text-white/60 text-sm mt-1">Total Lembaga</p>
+            <p class="text-3xl font-bold text-white">Rp {{ number_format($stats['pendapatan_bulan_ini'], 0, ',', '.') }}
+            </p>
+            <p class="text-white/60 text-sm mt-1">Pendapatan Bulan Ini</p>
         </div>
 
         <div class="stat-card-yellow rounded-xl p-5 animate-fade-in-up stagger-4">
@@ -82,8 +83,9 @@
             <div class="space-y-3">
                 @forelse($admins as $admin)
                     <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden
-                                                        {{ $admin->is_master ? 'bg-[#A855F7]' : 'bg-[#3B82F6]' }}">
+                        <div
+                            class="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden
+                                                                                    {{ $admin->is_master ? 'bg-[#A855F7]' : 'bg-[#3B82F6]' }}">
                             @if($admin->avatar && (str_starts_with($admin->avatar, '/storage/') || str_starts_with($admin->avatar, 'http')))
                                 <img src="{{ $admin->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                             @else
@@ -136,10 +138,10 @@
                             $isLembaga = in_array($accountType, ['lembaga', 'institution']);
                         @endphp
                         <span class="px-2 py-1 rounded-full text-xs
-                                            @if($accountType === 'admin') bg-blue-500/20 text-blue-400
-                                            @elseif($isLembaga) bg-green-500/20 text-green-400
-                                            @else bg-gray-500/20 text-gray-400 @endif
-                                        ">{{ $displayType }}</span>
+                                                                        @if($accountType === 'admin') bg-blue-500/20 text-blue-400
+                                                                        @elseif($isLembaga) bg-green-500/20 text-green-400
+                                                                        @else bg-gray-500/20 text-gray-400 @endif
+                                                                    ">{{ $displayType }}</span>
                     </div>
                 @empty
                     <p class="text-white/50 text-sm text-center py-4">Belum ada user</p>
@@ -148,15 +150,42 @@
         </div>
     </div>
 
+    {{-- Certificate Activity Chart --}}
+    <!-- <div class="glass-card rounded-2xl p-6 mb-6 animate-fade-in-up">
+        <h2 class="text-lg font-semibold text-white mb-4">Aktivitas Sertifikat {{ now()->year }}</h2>
+        <div class="h-64">
+            <canvas id="certificateChart"></canvas>
+        </div>
+    </div> -->
+
+    {{-- Account Type & Payment Status Charts --}}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        {{-- Account Type Chart --}}
+        <div class="glass-card rounded-2xl p-6 animate-fade-in-up">
+            <h2 class="text-lg font-semibold text-white mb-4">Tipe Akun Pengguna</h2>
+            <div class="h-64">
+                <canvas id="accountTypeChart"></canvas>
+            </div>
+        </div>
+
+        {{-- Payment Status Chart --}}
+        <div class="glass-card rounded-2xl p-6 animate-fade-in-up">
+            <h2 class="text-lg font-semibold text-white mb-4">Status Pembayaran</h2>
+            <div class="h-64">
+                <canvas id="paymentStatusChart"></canvas>
+            </div>
+        </div>
+    </div>
+
     {{-- Quick Stats --}}
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="glass-card rounded-xl p-4 text-center animate-fade-in-up">
-            <p class="text-2xl font-bold text-purple-400">{{ $stats['total_masters'] }}</p>
-            <p class="text-white/50 text-sm">Masters</p>
+            <p class="text-2xl font-bold text-purple-400">{{ $stats['total_pengguna'] }}</p>
+            <p class="text-white/50 text-sm">Pengguna</p>
         </div>
         <div class="glass-card rounded-xl p-4 text-center animate-fade-in-up">
-            <p class="text-2xl font-bold text-blue-400">{{ $stats['total_pengguna'] }}</p>
-            <p class="text-white/50 text-sm">Pengguna</p>
+            <p class="text-2xl font-bold text-blue-400">{{ $stats['total_lembaga'] }}</p>
+            <p class="text-white/50 text-sm">Lembaga</p>
         </div>
         <div class="glass-card rounded-xl p-4 text-center animate-fade-in-up">
             <p class="text-2xl font-bold text-green-400">{{ $stats['total_certificates'] }}</p>
@@ -167,5 +196,100 @@
             <p class="text-white/50 text-sm">Transaksi</p>
         </div>
     </div>
+
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Certificate Activity Chart
+                const certCanvas = document.getElementById('certificateChart');
+                if (certCanvas) {
+                    const ctx = certCanvas.getContext('2d');
+                    const chartData = @json($chartData);
+
+                    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+                    gradient.addColorStop(0, 'rgba(168, 85, 247, 0.8)');
+                    gradient.addColorStop(1, 'rgba(168, 85, 247, 0.3)');
+
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: chartData.map(d => d.month),
+                            datasets: [{
+                                label: 'Sertifikat',
+                                data: chartData.map(d => d.count),
+                                backgroundColor: gradient,
+                                borderColor: 'rgba(168, 85, 247, 1)',
+                                borderWidth: 2,
+                                borderRadius: 8,
+                                borderSkipped: false,
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: 'rgba(255,255,255,0.5)' } },
+                                y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: 'rgba(255,255,255,0.5)', stepSize: 1 }, beginAtZero: true }
+                            }
+                        }
+                    });
+                }
+
+                // Account Type Chart (Doughnut)
+                const accountCanvas = document.getElementById('accountTypeChart');
+                if (accountCanvas) {
+                    const accountTypeData = @json($accountTypeData);
+                    new Chart(accountCanvas.getContext('2d'), {
+                        type: 'doughnut',
+                        data: {
+                            labels: accountTypeData.map(d => d.type),
+                            datasets: [{
+                                data: accountTypeData.map(d => d.count),
+                                backgroundColor: ['rgba(168, 85, 247, 0.8)', 'rgba(234, 67, 53, 0.8)', 'rgba(59, 130, 246, 0.8)'],
+                                borderColor: ['rgba(168, 85, 247, 1)', 'rgba(234, 67, 53, 1)', 'rgba(59, 130, 246, 1)'],
+                                borderWidth: 2,
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: true, position: 'bottom', labels: { color: 'rgba(255,255,255,0.7)' } } }
+                        }
+                    });
+                }
+
+                // Payment Status Chart (Bar)
+                const paymentCanvas = document.getElementById('paymentStatusChart');
+                if (paymentCanvas) {
+                    const paymentStatusData = @json($paymentStatusData);
+                    new Chart(paymentCanvas.getContext('2d'), {
+                        type: 'bar',
+                        data: {
+                            labels: paymentStatusData.map(d => d.status),
+                            datasets: [{
+                                label: 'Jumlah',
+                                data: paymentStatusData.map(d => d.count),
+                                backgroundColor: ['rgba(251, 191, 36, 0.8)', 'rgba(34, 197, 94, 0.8)', 'rgba(239, 68, 68, 0.8)', 'rgba(107, 114, 128, 0.8)', 'rgba(156, 163, 175, 0.8)'],
+                                borderColor: ['rgba(251, 191, 36, 1)', 'rgba(34, 197, 94, 1)', 'rgba(239, 68, 68, 1)', 'rgba(107, 114, 128, 1)', 'rgba(156, 163, 175, 1)'],
+                                borderWidth: 2,
+                                borderRadius: 8,
+                                borderSkipped: false,
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: 'rgba(255,255,255,0.5)' } },
+                                y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: 'rgba(255,255,255,0.5)', stepSize: 1 }, beginAtZero: true }
+                            }
+                        }
+                    });
+                }
+            });
+        </script>
+    @endpush
 
 </x-layouts.master>

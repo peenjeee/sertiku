@@ -17,13 +17,18 @@ class MasterController extends Controller
         // Get comprehensive stats
         $stats = [
             'total_users' => User::count(),
+            'total_accounts' => User::count(),
             'total_admins' => User::where('is_admin', true)->count(),
             'total_masters' => User::where('is_master', true)->count(),
-            'total_lembaga' => User::where('account_type', 'lembaga')->count(),
-            'total_pengguna' => User::where('account_type', 'pengguna')->count(),
+            'total_lembaga' => User::whereIn('account_type', ['lembaga', 'institution'])->count(),
+            'total_pengguna' => User::whereIn('account_type', ['pengguna', 'personal'])->count(),
             'total_certificates' => Certificate::count(),
             'total_orders' => Order::count(),
             'total_revenue' => Order::where('status', 'paid')->sum('amount') ?? 0,
+            'pendapatan_bulan_ini' => Order::where('status', 'paid')
+                ->whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->sum('amount') ?? 0,
         ];
 
         // Get total blockchain transactions from wallet
@@ -36,21 +41,69 @@ class MasterController extends Controller
         $recentUsers = User::latest()->take(5)->get();
         $recentOrders = Order::with('user', 'package')->latest()->take(5)->get();
 
+        // Chart data - certificates by month (Jan to Dec current year)
+        $chartData = [];
+        $currentYear = now()->year;
+        for ($i = 1; $i <= 12; $i++) {
+            $month = \Carbon\Carbon::create($currentYear, $i, 1);
+            $count = Certificate::whereYear('created_at', $currentYear)
+                ->whereMonth('created_at', $i)
+                ->count();
+            $chartData[] = [
+                'month' => $month->format('M'),
+                'count' => $count,
+            ];
+        }
+
+        // Account type chart data (wallet, google, normal)
+        $accountTypeData = [
+            ['type' => 'Wallet', 'count' => User::whereNotNull('wallet_address')->count()],
+            ['type' => 'Google', 'count' => User::whereNotNull('google_id')->count()],
+            ['type' => 'Normal', 'count' => User::whereNull('wallet_address')->whereNull('google_id')->count()],
+        ];
+
+        // Payment status chart data
+        $paymentStatusData = [
+            ['status' => 'Pending', 'count' => Order::where('status', 'pending')->count()],
+            ['status' => 'Paid', 'count' => Order::where('status', 'paid')->count()],
+            ['status' => 'Failed', 'count' => Order::where('status', 'failed')->count()],
+            ['status' => 'Expired', 'count' => Order::where('status', 'expired')->count()],
+            ['status' => 'Cancelled', 'count' => Order::where('status', 'cancelled')->count()],
+        ];
+
         // All admins list
         $admins = User::where('is_admin', true)->orderBy('is_master', 'desc')->get();
 
-        return view('master.dashboard', compact('stats', 'recentUsers', 'recentOrders', 'admins'));
+        return view('master.dashboard', compact('stats', 'recentUsers', 'recentOrders', 'admins', 'chartData', 'accountTypeData', 'paymentStatusData'));
     }
 
     /**
      * Manage admins
      */
-    public function manageAdmins()
+    public function manageAdmins(Request $request)
     {
-        $admins = User::where('is_admin', true)->orderBy('is_master', 'desc')->get();
-        $users = User::where('is_admin', false)->get();
+        $search = $request->input('search');
 
-        return view('master.admins', compact('admins', 'users'));
+        $admins = User::where('is_admin', true)
+            ->when($search, function ($query, $search) {
+                return $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('is_master', 'desc')
+            ->get();
+
+        $users = User::where('is_admin', false)
+            ->when($search, function ($query, $search) {
+                return $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
+            ->get();
+
+        return view('master.admins', compact('admins', 'users', 'search'));
     }
 
     /**
@@ -139,9 +192,12 @@ class MasterController extends Controller
             $query->where('user_id', $request->user_id);
         }
 
-        // Filter by date
-        if ($request->date) {
-            $query->whereDate('created_at', $request->date);
+        // Filter by date range
+        if ($request->start_date) {
+            $query->whereDate('created_at', '>=', $request->start_date);
+        }
+        if ($request->end_date) {
+            $query->whereDate('created_at', '<=', $request->end_date);
         }
 
         $logs = $query->paginate(25);

@@ -7,26 +7,30 @@
         </div>
         <div class="flex items-center gap-2">
             <div class="px-4 py-2 bg-blue-500/20 border border-blue-500/30 rounded-lg">
-                <span class="text-blue-400 text-sm font-medium">{{ $userStats['total'] }} Total Pengguna</span>
+                <span class="text-blue-400 text-sm font-medium">{{ $userStats['total'] }} Total Akun</span>
             </div>
         </div>
     </div>
 
     <!-- Stats Cards -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 sm:gap-4 mb-6">
         <div class="glass-card rounded-xl p-3 sm:p-4 min-w-0 animate-fade-in-up stagger-1">
-            <p class="text-gray-500 text-xs font-medium mb-1">Total</p>
-            <p class="text-gray-800 text-xl sm:text-2xl font-bold">{{ number_format($userStats['total']) }}</p>
+            <p class="text-gray-500 text-xs font-medium mb-1">Tidak Aktif</p>
+            <p class="text-red-600 text-xl sm:text-2xl font-bold">{{ number_format($userStats['inactive']) }}</p>
         </div>
         <div class="glass-card rounded-xl p-3 sm:p-4 min-w-0 animate-fade-in-up stagger-2">
+            <p class="text-gray-500 text-xs font-medium mb-1">Admin</p>
+            <p class="text-indigo-600 text-xl sm:text-2xl font-bold">{{ number_format($userStats['admin']) }}</p>
+        </div>
+        <div class="glass-card rounded-xl p-3 sm:p-4 min-w-0 animate-fade-in-up stagger-3">
             <p class="text-gray-500 text-xs font-medium mb-1">Pengguna</p>
             <p class="text-blue-600 text-xl sm:text-2xl font-bold">{{ number_format($userStats['pengguna']) }}</p>
         </div>
-        <div class="glass-card rounded-xl p-3 sm:p-4 min-w-0 animate-fade-in-up stagger-3">
+        <div class="glass-card rounded-xl p-3 sm:p-4 min-w-0 animate-fade-in-up stagger-4">
             <p class="text-gray-500 text-xs font-medium mb-1">Lembaga</p>
             <p class="text-green-600 text-xl sm:text-2xl font-bold">{{ number_format($userStats['lembaga']) }}</p>
         </div>
-        <div class="glass-card rounded-xl p-3 sm:p-4 min-w-0 animate-fade-in-up stagger-4">
+        <div class="glass-card rounded-xl p-3 sm:p-4 min-w-0 animate-fade-in-up stagger-5">
             <p class="text-gray-500 text-xs font-medium mb-1">Aktif</p>
             <p class="text-purple-600 text-xl sm:text-2xl font-bold">{{ number_format($userStats['active']) }}</p>
         </div>

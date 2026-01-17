@@ -80,6 +80,19 @@
                         @else
                             Belum dikonfigurasi
                         @endif
+
+                    </span>
+                </div>
+
+                <div class="flex items-center justify-between py-2">
+                    <span class="text-white/70 text-sm">Smart Contract</span>
+                    <span class="text-white/50 text-xs font-mono" title="{{ config('blockchain.wallet_address') }}">
+                        @if(config('blockchain.contract_address'))
+                            {{ substr(config('blockchain.contract_address'), 0, 6) }}...{{ substr(config('blockchain.contract_address'), -4) }}
+                        @else
+                            Belum dikonfigurasi
+                        @endif
+
                     </span>
                 </div>
                 <a href="{{ route('master.blockchain') }}"
@@ -130,18 +143,18 @@
                     <span class="text-white text-sm">{{ ucfirst(config('filesystems.default')) }}</span>
                 </div>
                 <div class="flex items-center justify-between py-2 border-b border-white/10">
-                    <span class="text-white/70 text-sm">Total Sertifikat</span>
-                    <span class="text-white text-sm">{{ \App\Models\Certificate::count() }}</span>
+                    <span class="text-white/70 text-sm">Laravel</span>
+                    <span class="text-white text-sm">v{{ app()->version() }}</span>
                 </div>
                 <div class="flex items-center justify-between py-2">
-                    <span class="text-white/70 text-sm">Total User</span>
-                    <span class="text-white text-sm">{{ \App\Models\User::count() }}</span>
+                    <span class="text-white/70 text-sm">PHP</span>
+                    <span class="text-white text-sm">v{{ phpversion() }}</span>
                 </div>
             </div>
         </div>
 
         {{-- System Status --}}
-        <div class="glass-card rounded-2xl p-6 animate-fade-in-up lg:col-span-2">
+        <!-- <div class="glass-card rounded-2xl p-6 animate-fade-in-up lg:col-span-2">
             <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                 <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -173,7 +186,7 @@
             <p class="text-white/40 text-xs mt-4 text-center">
                 Laravel v{{ app()->version() }} • PHP {{ phpversion() }}
             </p>
-        </div>
+        </div> -->
     </div>
 
 </x-layouts.master>

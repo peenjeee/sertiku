@@ -19,6 +19,27 @@
         </div>
     @endif
 
+    {{-- Search Form --}}
+    <div class="mb-6 animate-fade-in-up">
+        <form action="{{ route('master.admins') }}" method="GET" class="relative">
+            <input type="text" name="search" value="{{ request('search') }}"
+                placeholder="Cari user berdasarkan nama atau email..."
+                class="w-full bg-[#1E1E2D] border border-gray-700 text-white rounded-xl px-5 py-3 pl-12 focus:outline-none focus:border-blue-500 transition shadow-lg">
+            <svg class="w-5 h-5 text-gray-400 absolute left-4 top-3.5" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            @if(request('search'))
+                <a href="{{ route('master.admins') }}" class="absolute right-4 top-3.5 text-gray-400 hover:text-white">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </a>
+            @endif
+        </form>
+    </div>
+
     {{-- Current Admins --}}
     <div class="glass-card rounded-2xl p-6 mb-6 animate-fade-in-up">
         <h2 class="text-lg font-semibold text-white mb-4">Admin Saat Ini ({{ $admins->count() }})</h2>
@@ -26,7 +47,7 @@
             @forelse($admins as $admin)
                 <div class="flex items-center gap-4 p-4 rounded-xl bg-white/5">
                     <div class="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden
-                                                    {{ $admin->is_master ? 'bg-[#A855F7]' : 'bg-[#3B82F6]' }}">
+                                                        {{ $admin->is_master ? 'bg-[#A855F7]' : 'bg-[#3B82F6]' }}">
                         @if($admin->avatar && (str_starts_with($admin->avatar, '/storage/') || str_starts_with($admin->avatar, 'http')))
                             <img src="{{ $admin->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                         @else
@@ -62,14 +83,20 @@
                     </div>
                 </div>
             @empty
-                <p class="text-white/50 text-sm text-center py-4">Belum ada admin</p>
+                <p class="text-white/50 text-sm text-center py-4">
+                    @if(request('search'))
+                        Tidak ada admin yang cocok dengan pencarian "{{ request('search') }}"
+                    @else
+                        Belum ada admin
+                    @endif
+                </p>
             @endforelse
         </div>
     </div>
 
     {{-- Promote Users --}}
     <div class="glass-card rounded-2xl p-6 animate-fade-in-up">
-        <h2 class="text-lg font-semibold text-white mb-4">Jadikan Admin Baru</h2>
+        <h2 class="text-lg font-semibold text-white mb-4">Jadikan Admin Baru ({{ $users->count() }})</h2>
         <p class="text-white/50 text-sm mb-4">Pilih user untuk dijadikan admin</p>
 
         <div class="space-y-3 max-h-96 overflow-y-auto">
@@ -88,11 +115,11 @@
                         <div class="flex items-center gap-2 mb-0.5">
                             <p class="text-white font-medium text-sm truncate">{{ $user->name ?? 'Unnamed' }}</p>
                             <span class="px-1.5 py-0.5 rounded text-[10px] font-bold flex-shrink-0
-                                                       @if($user->account_type === 'lembaga' || $user->account_type === 'institution') bg-green-500/20 text-green-400
-                                                    @else
-                                                        bg-yellow-500/20 text-yellow-400
-                                                    @endif
-                                                    ">{{ ucfirst($user->account_type ?? 'user') }}</span>
+                                                           @if($user->account_type === 'lembaga' || $user->account_type === 'institution') bg-green-500/20 text-green-400
+                                                        @else
+                                                            bg-yellow-500/20 text-yellow-400
+                                                        @endif
+                                                        ">{{ ucfirst($user->account_type ?? 'user') }}</span>
                         </div>
                         <p class="text-white/50 text-xs truncate" title="{{ $user->email }}">
                             @if(Str::startsWith($user->email, '0x') && strlen($user->email) > 20)

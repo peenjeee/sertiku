@@ -242,7 +242,9 @@
                     }
                 });
                 container.innerHTML = html;
-                container.scrollTop = container.scrollHeight;
+                setTimeout(() => {
+                    container.scrollTop = container.scrollHeight;
+                }, 100);
             }
         } catch (e) {
             console.error('Load messages error:', e);
@@ -268,7 +270,9 @@
                 </div>
             </div>
         `;
-        container.scrollTop = container.scrollHeight;
+        setTimeout(() => {
+            container.scrollTop = container.scrollHeight;
+        }, 100);
 
         try {
             await fetch(`/support/message`, {

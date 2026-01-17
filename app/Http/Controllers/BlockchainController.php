@@ -216,6 +216,16 @@ class BlockchainController extends Controller
                 } else {
                     $result = 'not_found';
                 }
+                // Log blockchain verification attempt ONLY if found
+            }
+            // Log blockchain verification attempt ONLY if found
+            if ($result === 'found') {
+                \App\Models\ActivityLog::log(
+                    'blockchain_verification',
+                    "Verifikasi Blockchain: {$query}",
+                    null,
+                    ['ip' => request()->ip(), 'user_agent' => request()->userAgent()]
+                );
             }
         }
 

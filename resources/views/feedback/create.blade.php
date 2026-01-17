@@ -38,7 +38,7 @@
                     <div>
                         <label class="block text-sm font-medium text-white/80 mb-2">Institusi (Opsional)</label>
                         <input type="text"
-                            value="{{ $existingFeedback->institution ?? Auth::user()->institution_name ?? '-' }}"
+                            value="{{ $existingFeedback->institution ?? Auth::user()->institution_name ?? Auth::user()->user_institution ?? '-' }}"
                             readonly
                             class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white/50 focus:outline-none cursor-not-allowed">
                     </div>

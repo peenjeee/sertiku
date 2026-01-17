@@ -352,13 +352,13 @@
                     </div>
                 </a>
                 <!-- Desktop collapse button -->
-                <button id="toggleBtn" onclick="toggleSidebar()"
+                <!-- <button id="toggleBtn" onclick="toggleSidebar()"
                     class="w-8 h-8 rounded-lg bg-white/10 items-center justify-center text-white hover:bg-white/20 transition hidden md:flex">
                     <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
                     </svg>
-                </button>
+                </button> -->
                 <!-- Mobile close button -->
                 <button onclick="toggleSidebar()"
                     class="md:hidden w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition">
@@ -408,6 +408,19 @@
                         </svg>
                     </div>
                     <span class="text-white/70 text-base nav-text">Kelola Pengguna</span>
+                </a>
+
+                <!-- Support Tickets -->
+                <a href="{{ route('admin.support.index') }}"
+                    class="nav-item flex items-center gap-3 px-4 py-4 rounded-xl {{ request()->routeIs('admin.support*') ? 'active' : '' }}"
+                    title="Support Tickets">
+                    <div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.67"
+                                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                        </svg>
+                    </div>
+                    <span class="text-white/70 text-base nav-text">Support Tickets</span>
                 </a>
 
                 <!-- Backup & Restore -->
@@ -614,7 +627,8 @@
             }
         }
     </script>
-    <x-back-to-top />
+    <x-admin-support-widget />
+    <x-back-to-top :hasAdminWidget="true" />
 </body>
 
 </html>

@@ -46,7 +46,7 @@ class ChatController extends Controller
 
                 return response()->json([
                     'success' => true,
-                    'reply' => $reply,
+                    'reply' => trim($reply),
                 ]);
             }
 

@@ -91,13 +91,13 @@
                         </div>
                     </div>
                     <!-- <a href="{{ route('checkout', $activePackage->slug) }}"
-                        class="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 lg:py-3 bg-yellow-500 text-white text-sm font-bold rounded-lg hover:bg-yellow-600 transition">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                        Perpanjang Sekarang
-                    </a> -->
+                                                                    class="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 lg:py-3 bg-yellow-500 text-white text-sm font-bold rounded-lg hover:bg-yellow-600 transition">
+                                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                                                    </svg>
+                                                                    Perpanjang Sekarang
+                                                                </a> -->
                 </div>
             </div>
         @endif
@@ -294,43 +294,43 @@
             @if($canAccessApi)
                 <!-- API Tokens - Only for Professional/Enterprise -->
                 <!-- <a href="{{ route('lembaga.api-tokens.index') }}"
-                    class="bg-cyan-50 border border-cyan-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-4">
-                    <div class="flex items-center gap-3 lg:gap-4">
-                        <div
-                            class="bg-cyan-500 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
-                            <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="text-[#0E7490] font-bold text-sm lg:text-lg">API Tokens</h3>
-                            <p class="text-[#0891B2] text-xs lg:text-sm">Integrasi API</p>
-                        </div>
-                    </div>
-                </a> -->
+                                                                class="bg-cyan-50 border border-cyan-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-4">
+                                                                <div class="flex items-center gap-3 lg:gap-4">
+                                                                    <div
+                                                                        class="bg-cyan-500 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
+                                                                        <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
+                                                                            viewBox="0 0 24 24">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                                                                        </svg>
+                                                                    </div>
+                                                                    <div>
+                                                                        <h3 class="text-[#0E7490] font-bold text-sm lg:text-lg">API Tokens</h3>
+                                                                        <p class="text-[#0891B2] text-xs lg:text-sm">Integrasi API</p>
+                                                                    </div>
+                                                                </div>
+                                                            </a> -->
             @endif
 
             @if($canAccessApi)
                 <!-- AI Template Generator -->
                 <!-- <a href="{{ route('lembaga.template.ai') }}"
-                                class="bg-purple-50 border border-purple-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-5">
-                                <div class="flex items-center gap-3 lg:gap-4">
-                                    <div
-                                        class="bg-purple-500 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
-                                        <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h3 class="text-[#7C3AED] font-bold text-sm lg:text-lg">AI Template</h3>
-                                        <p class="text-[#9333EA] text-xs lg:text-sm">Generate dengan AI</p>
-                                    </div>
-                                </div>
-                            </a> -->
+                                                                            class="bg-purple-50 border border-purple-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-5">
+                                                                            <div class="flex items-center gap-3 lg:gap-4">
+                                                                                <div
+                                                                                    class="bg-purple-500 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
+                                                                                    <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
+                                                                                        viewBox="0 0 24 24">
+                                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                                                                    </svg>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <h3 class="text-[#7C3AED] font-bold text-sm lg:text-lg">AI Template</h3>
+                                                                                    <p class="text-[#9333EA] text-xs lg:text-sm">Generate dengan AI</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </a> -->
 
                 <!-- Import Data (Bulk) -->
                 @if($user->canIssueCertificate())
@@ -379,9 +379,9 @@
         </div>
 
         <!-- Stats Cards -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mt-6">
+        <div class="grid grid-cols-2 lg:grid-cols-2 gap-4 lg:gap-6 mt-6">
             <!-- Total Sertifikat -->
-            <div class="stat-card-blue rounded-xl lg:rounded-2xl p-4 lg:p-6 hover-lift animate-fade-in-up stagger-1">
+            <!-- <div class="stat-card-blue rounded-xl lg:rounded-2xl p-4 lg:p-6 hover-lift animate-fade-in-up stagger-1">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-[#1E40AF] text-xs lg:text-sm font-medium">Total Sertifikat</p>
@@ -398,10 +398,10 @@
                         </svg>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Sertifikat Aktif -->
-            <div class="stat-card-green rounded-xl lg:rounded-2xl p-4 lg:p-6 hover-lift animate-fade-in-up stagger-2">
+            <!-- <div class="stat-card-green rounded-xl lg:rounded-2xl p-4 lg:p-6 hover-lift animate-fade-in-up stagger-2">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-[#166534] text-xs lg:text-sm font-medium">Sertifikat Aktif</p>
@@ -418,7 +418,7 @@
                         </svg>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Bulan Ini -->
             <div class="stat-card-orange rounded-xl lg:rounded-2xl p-4 lg:p-6 hover-lift animate-fade-in-up stagger-3">
@@ -457,6 +457,117 @@
                                 d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Usage Progress Cards -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 mt-6">
+            @php
+                $totalCerts = $stats['total_certificates'] ?? 0;
+                $blockchainLimit = $user->getBlockchainLimit();
+                $ipfsLimit = $user->getIpfsLimit();
+                $cycleStart = $user->getBillingCycleStart() ?? now()->startOfYear();
+                $blockchainCerts = $user->certificates()
+                    ->whereNotNull('blockchain_tx_hash')
+                    ->where('created_at', '>=', $cycleStart)
+                    ->count();
+                $ipfsCerts = $user->certificates()
+                    ->whereNotNull('ipfs_cid')
+                    ->where('created_at', '>=', $cycleStart)
+                    ->count();
+                $blockchainPercentage = $blockchainLimit > 0 ? round(($blockchainCerts / $blockchainLimit) * 100) : 0;
+                $ipfsPercentage = $ipfsLimit > 0 ? round(($ipfsCerts / $ipfsLimit) * 100) : 0;
+
+                $remainingBlockchain = max(0, $blockchainLimit - $blockchainCerts);
+                $remainingIpfs = max(0, $ipfsLimit - $ipfsCerts);
+            @endphp
+
+            <!-- Certificate Quota Progress -->
+            <div class="glass-card rounded-xl lg:rounded-2xl p-4 lg:p-6 animate-fade-in-up">
+                <div class="flex items-center gap-3 mb-4">
+                    <div
+                        class="w-10 h-10 lg:w-12 lg:h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 lg:w-6 lg:h-6 text-blue-600" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-gray-800 font-bold text-sm lg:text-base">Kuota Sertifikat</h3>
+                        <p class="text-gray-500 text-xs">Penggunaan bulan ini</p>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-600">{{ $certificatesUsed }} / {{ $certificateLimit }}</span>
+                        <span class="text-blue-600 font-bold">{{ $usagePercentage }}%</span>
+                    </div>
+                    <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-500"
+                            style="width: {{ min($usagePercentage, 100) }}%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500">Sisa {{ $remainingCerts }} sertifikat tersedia</p>
+                </div>
+            </div>
+
+            <!-- Blockchain Usage Progress -->
+            <div class="glass-card rounded-xl lg:rounded-2xl p-4 lg:p-6 animate-fade-in-up">
+                <div class="flex items-center gap-3 mb-4">
+                    <div
+                        class="w-10 h-10 lg:w-12 lg:h-12 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 lg:w-6 lg:h-6 text-purple-600" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-gray-800 font-bold text-sm lg:text-base">Blockchain</h3>
+                        <p class="text-gray-500 text-xs">Sertifikat tersimpan di blockchain</p>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-600">{{ $blockchainCerts }} / {{ $blockchainLimit }}</span>
+                        <span class="text-purple-600 font-bold">{{ $blockchainPercentage }}%</span>
+                    </div>
+                    <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-purple-500 to-purple-600 rounded-full transition-all duration-500"
+                            style="width: {{ $blockchainPercentage }}%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500">Sisa {{ $remainingBlockchain}} on-chain verifikasi
+                    </p>
+                </div>
+            </div>
+
+            <!-- IPFS Usage Progress -->
+            <div class="glass-card rounded-xl lg:rounded-2xl p-4 lg:p-6 animate-fade-in-up">
+                <div class="flex items-center gap-3 mb-4">
+                    <div
+                        class="w-10 h-10 lg:w-12 lg:h-12 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 lg:w-6 lg:h-6 text-teal-600" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-gray-800 font-bold text-sm lg:text-base">IPFS Storage</h3>
+                        <p class="text-gray-500 text-xs">Sertifikat tersimpan di IPFS</p>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-600">{{ $ipfsCerts }} / {{ $ipfsLimit }}</span>
+                        <span class="text-teal-600 font-bold">{{ $ipfsPercentage }}%</span>
+                    </div>
+                    <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-teal-500 to-teal-600 rounded-full transition-all duration-500"
+                            style="width: {{ $ipfsPercentage }}%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500">Sisa {{ $remainingIpfs }} desentralisasi metadata</p>
                 </div>
             </div>
         </div>
@@ -581,7 +692,7 @@
                                     <td class="py-4 px-4 text-[#1E293B]">{{ $cert->course_name }}</td>
                                     <td class="py-4 px-4">
                                         <code
-                                            class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm">{{ Str::limit($cert->certificate_number, 14) }}</code>
+                                            class="text-[#3B82F6] bg-[#EFF6FF] px-2 py-1 rounded text-sm whitespace-nowrap">{{ Str::limit($cert->certificate_number, 14) }}</code>
                                     </td>
                                     <td class="py-4 px-4 text-[#64748B]">{{ $cert->issue_date->format('d M Y') }}</td>
                                     <td class="py-4 px-4">
@@ -642,8 +753,115 @@
                     </table>
                 </div>
             </div>
+            <!-- Recent Certificates Table (Existing) -->
+            <div class="glass-card rounded-xl lg:rounded-2xl overflow-hidden animate-fade-in-up stagger-2">
+                <!-- ... existing content ... -->
+            </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="glass-card rounded-xl lg:rounded-2xl p-4 lg:p-6 mt-6 animate-fade-in-up stagger-3">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h2 class="text-lg lg:text-xl font-bold text-gray-800">Statistik Penerbitan</h2>
+                    <p class="text-sm text-gray-500">Jumlah sertifikat diterbitkan per bulan tahun {{ date('Y') }}
+                    </p>
+                </div>
+            </div>
+            <div class="relative h-64 lg:h-80 w-full">
+                <canvas id="certificateChart"></canvas>
+            </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('certificateChart').getContext('2d');
+
+            // Prepare data from PHP
+            const monthlyCounts = @json($stats['monthly_counts'] ?? []);
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+
+            // Map data to all 12 months (fill 0 for missing months)
+            const data = Array(12).fill(0).map((_, i) => monthlyCounts[i + 1] || 0);
+
+            // Create gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(59, 130, 246, 0.5)'); // Blue start
+            gradient.addColorStop(1, 'rgba(59, 130, 246, 0.0)'); // Transparent end
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: monthNames,
+                    datasets: [{
+                        label: 'Sertifikat Diterbitkan',
+                        data: data,
+                        borderColor: '#3B82F6', // Blue-500
+                        backgroundColor: gradient,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#FFFFFF',
+                        pointBorderColor: '#3B82F6',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: '#1E293B',
+                            titleColor: '#F8FAFC',
+                            bodyColor: '#F8FAFC',
+                            padding: 12,
+                            cornerRadius: 8,
+                            displayColors: false,
+                            callbacks: {
+                                label: function (context) {
+                                    return context.parsed.y + ' Sertifikat';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                font: {
+                                    family: "'Poppins', sans-serif",
+                                    size: 11
+                                },
+                                color: '#64748B'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    family: "'Poppins', sans-serif",
+                                    size: 11
+                                },
+                                color: '#64748B'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 
     {{-- Filter and Search JavaScript --}}
     <script>

@@ -72,7 +72,7 @@
             </div>
 
             {{-- Quick FAQ Buttons --}}
-            <div class="pl-10 space-y-2" id="faqButtons">
+            <!-- <div class="pl-10 space-y-2" id="faqButtons">
                 <p class="text-white/50 text-xs mb-2">Pertanyaan Umum
                     {{ $role === 'lembaga' ? 'Lembaga' : 'Pengguna' }}:
                 </p>
@@ -97,7 +97,7 @@
                         </svg>
                     </a>
                 @endauth
-            </div>
+            </div> -->
         </div>
 
         {{-- Input Area --}}
@@ -134,7 +134,7 @@
     // FAQ Data dari Blade
     const chatFaqs = @json($faqs);
     const chatRole = '{{ $role }}';
-    const CHAT_STORAGE_KEY = 'sertiku_chat_' + chatRole;
+    const CHAT_STORAGE_KEY = 'sertiku_chat_v3_' + chatRole;
     const CHAT_EXPIRY_MS = 5 * 60 * 1000; // 5 minutes
     let supportTicketId = null;
     let supportPollingInterval = null;
@@ -147,13 +147,17 @@
     function toggleChat() {
         const modal = document.getElementById('chatModal');
         const toggleBtn = document.getElementById('chatToggleBtn');
-        // const iconOpen = document.getElementById('chatIconOpen');
-        // const iconClose = document.getElementById('chatIconClose');
 
         modal.classList.toggle('hidden');
         toggleBtn.classList.toggle('hidden'); // Hide the launcher button
-        // iconOpen.classList.toggle('hidden');
-        // iconClose.classList.toggle('hidden');
+
+        // Scroll to bottom if opened
+        if (!modal.classList.contains('hidden')) {
+            setTimeout(() => {
+                const messages = document.getElementById('chatMessages');
+                messages.scrollTop = messages.scrollHeight;
+            }, 100);
+        }
     }
 
     function saveChatToStorage() {
@@ -181,7 +185,10 @@
             }
 
             // Restore messages
-            document.getElementById('chatMessages').innerHTML = data.messages;
+            const messages = document.getElementById('chatMessages');
+            messages.innerHTML = data.messages;
+            messages.scrollTop = messages.scrollHeight; // Scroll to bottom
+
             if (!data.faqVisible) {
                 const faqBtns = document.getElementById('faqButtons');
                 if (faqBtns) faqBtns.style.display = 'none';
@@ -483,7 +490,8 @@
 
     function formatMarkdown(text) {
         if (!text) return '';
-        return text
+        // Aggressively remove all leading/trailing whitespace including newlines
+        return text.replace(/^\s+|\s+$/g, '')
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
             .replace(/__(.*?)__/g, '<strong>$1</strong>')
             .replace(/\*([^*]+)\*/g, '<em>$1</em>')

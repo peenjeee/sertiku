@@ -30,12 +30,15 @@ class LandingController extends Controller
         $totalRatings = Testimonial::count();
         $averageRating = Testimonial::avg('rating') ?? 0;
 
+        // Total Users (non-institution)
+        $totalUsers = User::whereNotIn('account_type', ['lembaga', 'institution'])->count();
+        $totalAccounts = \App\Models\User::count();
         // Total Blockchain Transactions from wallet (real blockchain transaction count)
         $blockchainService = new \App\Services\BlockchainService();
         $walletInfo = $blockchainService->getWalletInfo();
         // Fallback to database count if API fails
         $totalBlockchainTransactions = $walletInfo['transaction_count'] ?? Certificate::whereNotNull('blockchain_tx_hash')->count();
 
-        return view('landing', compact('totalCertificates', 'totalLembaga', 'lembagas', 'testimonials', 'totalRatings', 'averageRating', 'totalBlockchainTransactions'));
+        return view('landing', compact('totalCertificates', 'totalLembaga', 'totalUsers', 'totalAccounts', 'lembagas', 'testimonials', 'totalRatings', 'averageRating', 'totalBlockchainTransactions'));
     }
 }

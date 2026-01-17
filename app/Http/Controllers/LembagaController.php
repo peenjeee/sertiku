@@ -30,6 +30,12 @@ class LembagaController extends Controller
                 ->whereHasMorph('subject', [\App\Models\Certificate::class], function ($query) use ($user) {
                     $query->where('user_id', $user->id);
                 })->count(),
+            'monthly_counts' => $user->certificates()
+                ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+                ->where('created_at', '>=', $user->getBillingCycleStart() ?? now()->startOfYear())
+                ->groupBy('month')
+                ->pluck('count', 'month')
+                ->toArray(),
         ];
 
         return view('lembaga.dashboard', compact('stats'));
@@ -223,9 +229,12 @@ class LembagaController extends Controller
             });
         }
 
-        // Filter by Date
-        if ($request->has('issue_date') && $request->issue_date) {
-            $query->whereDate('issue_date', $request->issue_date);
+        // Filter by Date Range
+        if ($request->has('start_date') && $request->start_date) {
+            $query->whereDate('issue_date', '>=', $request->start_date);
+        }
+        if ($request->has('end_date') && $request->end_date) {
+            $query->whereDate('issue_date', '<=', $request->end_date);
         }
 
         // Filter by Status

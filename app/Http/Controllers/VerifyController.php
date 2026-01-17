@@ -9,14 +9,14 @@ class VerifyController extends Controller
     public function index()
     {
         $totalCertificates = \App\Models\Certificate::count();
-        $totalLembaga = \App\Models\User::whereIn('account_type', ['lembaga', 'institution'])->count();
+        $totalAccounts = \App\Models\User::count();
 
         // Total Blockchain Transactions from wallet (real blockchain transaction count)
         $blockchainService = new \App\Services\BlockchainService();
         $walletInfo = $blockchainService->getWalletInfo();
         $totalBlockchainTransactions = $walletInfo['transaction_count'] ?? \App\Models\Certificate::whereNotNull('blockchain_tx_hash')->count();
 
-        return view('verifikasi.index', compact('totalCertificates', 'totalLembaga', 'totalBlockchainTransactions'));
+        return view('verifikasi.index', compact('totalCertificates', 'totalAccounts', 'totalBlockchainTransactions'));
     }
 
     public function check(Request $request)
@@ -175,8 +175,6 @@ class VerifyController extends Controller
                 $isValid = false;
                 $certificate->status = 'expired'; // Virtual status
             }
-
-            // Log verification activity
 
             // Log verification activity
             \App\Models\ActivityLog::log(

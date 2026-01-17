@@ -519,21 +519,13 @@
                     Informasi Smart Contract
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {{-- Row 1: Smart Contract & Network --}}
-                    <div class="bg-white/5 rounded-xl p-4 text-center">
-                        <p class="text-white/50 text-xs mb-1">Contract Address</p>
-                        <a href="{{ $walletInfo['explorer_url'] ?? 'https://amoy.polygonscan.com' }}/address/{{ config('blockchain.contract_address') }}"
-                            target="_blank" class="text-blue-400 text-xs font-mono hover:underline">
-                            {{ Str::limit(config('blockchain.contract_address'), 20) }}...{{ substr(config('blockchain.contract_address'), -4) }}
-                        </a>
-                    </div>
-
-                    <div class="bg-white/5 rounded-xl p-4 text-center">
+                    {{-- Row 1: Jaringan (Full Width) --}}
+                    <div class="bg-white/5 rounded-xl p-4 text-center md:col-span-2">
                         <p class="text-white/50 text-xs mb-1">Jaringan (On-Chain)</p>
                         <p class="text-white font-bold">{{ $walletInfo['network'] ?? 'Polygon Amoy' }}</p>
                     </div>
 
-                    {{-- Row 2: Wallet & Total Blockchain --}}
+                    {{-- Row 2: Wallet & Total Transactions --}}
                     <div class="bg-white/5 rounded-xl p-4 text-center">
                          <p class="text-white/50 text-xs mb-1">Wallet Address</p>
                          <a href="{{ $walletInfo['explorer_url'] ?? 'https://amoy.polygonscan.com' }}/address/{{ $walletInfo['wallet_address'] ?? '' }}"
@@ -542,21 +534,29 @@
                         </a>
                     </div>
 
+                    @if(isset($totalBlockchainTransactions))
+                        <div class="bg-white/5 rounded-xl p-4 text-center">
+                            <p class="text-white/50 text-xs mb-1">Total Transaksi Blockchain</p>
+                            <p class="text-purple-400 font-bold text-2xl">
+                                {{ number_format($totalBlockchainTransactions) }}
+                            </p>
+                        </div>
+                    @endif
+
+                    {{-- Row 3: Smart Contract & Total Onchain --}}
+                    <div class="bg-white/5 rounded-xl p-4 text-center">
+                        <p class="text-white/50 text-xs mb-1">Contract Address</p>
+                        <a href="{{ $walletInfo['explorer_url'] ?? 'https://amoy.polygonscan.com' }}/address/{{ config('blockchain.contract_address') }}"
+                            target="_blank" class="text-blue-400 text-xs font-mono hover:underline">
+                            {{ Str::limit(config('blockchain.contract_address'), 15) }}...{{ substr(config('blockchain.contract_address'), -4) }}
+                        </a>
+                    </div>
+
                     @if(isset($contractStats['totalCertificates']))
                         <div class="bg-white/5 rounded-xl p-4 text-center">
                             <p class="text-white/50 text-xs mb-1">Total Sertifikat On-Chain</p>
                             <p class="text-purple-400 font-bold text-2xl">
                                 {{ number_format($contractStats['totalCertificates']) }}
-                            </p>
-                        </div>
-                    @endif
-
-                    {{-- Total Blockchain Transactions Card --}}
-                    @if(isset($totalBlockchainTransactions))
-                        <div class="bg-white/5 rounded-xl p-4 text-center">
-                            <p class="text-white/50 text-xs mb-1">Total Transaksi Blockchain</p>
-                            <p class="text-blue-400 font-bold text-2xl">
-                                {{ number_format($totalBlockchainTransactions) }}
                             </p>
                         </div>
                     @endif

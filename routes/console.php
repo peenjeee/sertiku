@@ -19,3 +19,7 @@ Schedule::command('queue:work --stop-when-empty')
 Schedule::command('queue:prune-failed --hours=168')
     ->daily();
 
+// Check for expiring subscriptions and certificates
+Schedule::command('check:expiry-notifications')
+    ->dailyAt('09:00');
+

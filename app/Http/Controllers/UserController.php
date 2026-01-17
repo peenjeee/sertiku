@@ -30,10 +30,11 @@ class UserController extends Controller
             'pending' => $certificates->where('status', 'pending')->count(),
         ];
 
-        // Chart data - certificates by month
+        // Chart data - Jan to Dec current year
         $chartData = [];
-        for ($i = 5; $i >= 0; $i--) {
-            $month = now()->subMonths($i);
+        $currentYear = now()->year;
+        for ($i = 1; $i <= 12; $i++) {
+            $month = \Carbon\Carbon::create($currentYear, $i, 1);
             $count = $certificates->filter(function ($cert) use ($month) {
                 return $cert->created_at && $cert->created_at->format('Y-m') === $month->format('Y-m');
             })->count();

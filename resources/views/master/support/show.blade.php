@@ -43,15 +43,16 @@
                 @foreach($ticket->messages as $message)
                     <div class="flex {{ $message->is_from_admin ? 'justify-end' : 'justify-start' }}">
                         <div class="max-w-[70%]">
-                            <div class="flex items-center gap-2 mb-1 {{ $message->is_from_admin ? 'justify-end' : '' }}">
+                            <div
+                                class="flex items-center gap-2 mb-1 {{ $message->is_from_admin ? 'justify-end' : 'justify-start' }}">
                                 @if(!$message->is_from_admin)
                                     <div
-                                        class="w-6 h-6 rounded-full bg-[#3B82F6] flex items-center justify-center overflow-hidden">
+                                        class="w-6 h-6 rounded-full bg-[#8B5CF6] flex items-center justify-center overflow-hidden">
                                         @if($message->sender->avatar && (str_starts_with($message->sender->avatar, '/storage/') || str_starts_with($message->sender->avatar, 'http')))
                                             <img src="{{ $message->sender->avatar }}" alt="Avatar"
                                                 class="w-full h-full object-cover">
                                         @else
-                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($message->sender->name ?? 'U') }}&email={{ urlencode($message->sender->email ?? '') }}&background=3B82F6&color=fff&bold=true&size=24"
+                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($message->sender->name ?? 'U') }}&email={{ urlencode($message->sender->email ?? '') }}&background=8B5CF6&color=fff&bold=true&size=24"
                                                 alt="Avatar" class="w-full h-full object-cover">
                                         @endif
                                     </div>
@@ -111,7 +112,14 @@
 
     <script>
         // Auto scroll to bottom
-        document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+        document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(() => {
+                const messageContainer = document.getElementById('chatMessages');
+                if (messageContainer) {
+                    messageContainer.scrollTop = messageContainer.scrollHeight;
+                }
+            }, 100);
+        });
     </script>
 
 </x-layouts.master>

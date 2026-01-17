@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+use App\Models\Order;
+
 class AdminController extends Controller
 {
     /**
@@ -15,12 +17,27 @@ class AdminController extends Controller
     {
         // Get stats
         $stats = [
-            'total_users' => User::where('account_type', 'pengguna')->count(),
-            'total_lembaga' => User::where('account_type', 'lembaga')->count(),
+            'total_verifikasi' => \App\Models\ActivityLog::where('action', 'verify_certificate')->count(),
+            'verifikasi_hari_ini' => \App\Models\ActivityLog::where('action', 'verify_certificate')
+                ->whereDate('created_at', now())
+                ->count(),
+            'total_verifikasi_blockchain' => \App\Models\ActivityLog::where('action', 'blockchain_verification')->count(),
+            'verifikasi_blockchain_hari_ini' => \App\Models\ActivityLog::where('action', 'blockchain_verification')
+                ->whereDate('created_at', now())
+                ->count(),
+            'total_revenue' => Order::where('status', 'paid')->sum('amount'),
+            'pendapatan_bulan_ini' => Order::where('status', 'paid')
+                ->whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->sum('amount'),
             'total_sertifikat' => Certificate::count(),
-            'sertifikat_aktif' => Certificate::where('status', 'active')->count(),
+            'sertifikat_aktif' => Certificate::where('status', '!=', 'revoked')
+                ->where(function ($q) {
+                    $q->whereNull('expire_date')
+                        ->orWhereDate('expire_date', '>=', now());
+                })->count(),
             'sertifikat_dicabut' => Certificate::where('status', 'revoked')->count(),
-            'total_verifikasi' => Certificate::count(), // Using certificate count as verification proxy
+            'sertifikat_kedaluarsa' => Certificate::whereDate('expire_date', '<', now())->count(),
         ];
 
         // Get recent certificates
@@ -78,9 +95,11 @@ class AdminController extends Controller
 
         $userStats = [
             'total' => User::count(),
+            'admin' => User::where('account_type', 'admin')->count(),
             'pengguna' => User::whereIn('account_type', ['pengguna', 'user', 'personal'])->count(),
             'lembaga' => User::whereIn('account_type', ['lembaga', 'institution'])->count(),
             'active' => User::where('profile_completed', true)->count(),
+            'inactive' => User::where('profile_completed', false)->count(),
         ];
 
         return view('admin.users', compact('users', 'userStats'));
@@ -310,43 +329,90 @@ class AdminController extends Controller
      */
     public function analytics(Request $request)
     {
-        $period = $request->get('period', '30'); // days
-        $year = $request->get('year', now()->year); // year filter
+        // Default to last 30 days if no dates provided
+        $endDate = $request->get('end_date') ? \Carbon\Carbon::parse($request->get('end_date'))->endOfDay() : now()->endOfDay();
+        $startDate = $request->get('start_date') ? \Carbon\Carbon::parse($request->get('start_date'))->startOfDay() : now()->subDays(29)->startOfDay();
 
-        // Stats with percentage change (filtered by period ONLY, relative to now)
-        $stats = $this->getAnalyticsStats($period);
+        // Validated dates for view
+        $startDateStr = $startDate->format('Y-m-d');
+        $endDateStr = $endDate->format('Y-m-d');
 
-        // Get available years for filter (from earliest certificate to current year)
-        $earliestYear = Certificate::min('created_at');
-        $earliestYear = $earliestYear ? \Carbon\Carbon::parse($earliestYear)->year : now()->year;
-        $availableYears = range(now()->year, $earliestYear);
+        // Stats with percentage change based on custom range
+        $stats = $this->getAnalyticsStats($startDate, $endDate);
 
-        // Chart data - Certificates per month (all 12 months for selected year)
-        $certificatesTrend = $this->getCertificatesTrend($year);
+        // Chart data - Dynamic aggregation based on range duration
+        $certificatesTrend = $this->getCertificatesTrend($startDate, $endDate);
+        $verificationActivity = $this->getVerificationActivity($startDate, $endDate);
+        $revenueTrend = $this->getRevenueTrend($startDate, $endDate);
 
-        // Verification activity (all 12 months for selected year)
-        $verificationActivity = $this->getVerificationActivity($year);
-
-        // Package Distribution
-        $packageDistribution = User::whereIn('account_type', ['lembaga', 'institution'])
+        // Package Distribution (Ensure all packages are present)
+        $packageCounts = User::whereIn('account_type', ['lembaga', 'institution'])
             ->select('package_id', \Illuminate\Support\Facades\DB::raw('count(*) as count'))
             ->groupBy('package_id')
-            ->get()
-            ->map(function ($item) {
-                $pkg = \App\Models\Package::find($item->package_id);
-                return [
-                    'label' => $pkg ? $pkg->name : 'Starter (Free)',
-                    'count' => $item->count,
-                    'color' => $pkg ? ($pkg->slug == 'professional' ? '#8B5CF6' : ($pkg->slug == 'enterprise' ? '#F59E0B' : '#3B82F6')) : '#10B981'
-                ];
-            });
+            ->pluck('count', 'package_id');
+
+        $allPackages = \App\Models\Package::all();
+        // Add fake "Starter" package (users with null package_id)
+        $starterCount = User::whereIn('account_type', ['lembaga', 'institution'])->whereNull('package_id')->count();
+
+        $packageDistribution = collect([
+            [
+                'label' => 'Starter (Free)',
+                'count' => $starterCount,
+                'color' => '#10B981'
+            ]
+        ]);
+
+        foreach ($allPackages as $pkg) {
+            // Skip "Normal" package as it's equivalent to Starter/Free
+            if (strtolower($pkg->name) === 'normal') {
+                continue;
+            }
+
+            $color = match ($pkg->slug) {
+                'professional' => '#8B5CF6',
+                'enterprise' => '#F59E0B',
+                default => '#3B82F6'
+            };
+
+            $packageDistribution->push([
+                'label' => $pkg->name,
+                'count' => $packageCounts->get($pkg->id, 0),
+                'color' => $color
+            ]);
+        }
 
         // Real-time verifications (last 10)
-        $recentVerifications = Certificate::latest('updated_at')
+        // Fetch from ActivityLog to capture actual verification events, not just updates
+        $recentVerifications = \App\Models\ActivityLog::with('subject')
+            ->whereIn('action', ['verify_certificate', 'blockchain_verification'])
+            ->latest()
             ->take(10)
-            ->get(['certificate_number', 'updated_at']);
+            ->get()
+            ->map(function ($log) {
+                // If standard verification and subject is missing, try to find cert by number in description
+                if ($log->action === 'verify_certificate' && !$log->subject) {
+                    if (preg_match('/Sertifikat\s+(\S+)\s+diverifikasi/i', $log->description, $matches)) {
+                        $certNumber = $matches[1];
+                        $cert = \App\Models\Certificate::where('certificate_number', $certNumber)->first();
+                        if ($cert) {
+                            $log->setRelation('subject', $cert);
+                        }
+                    }
+                }
+                return $log;
+            });
 
-        return view('admin.analytics', compact('stats', 'certificatesTrend', 'verificationActivity', 'packageDistribution', 'recentVerifications', 'availableYears', 'year', 'period'));
+        return view('admin.analytics', compact(
+            'stats',
+            'certificatesTrend',
+            'verificationActivity',
+            'revenueTrend',
+            'packageDistribution',
+            'recentVerifications',
+            'startDateStr',
+            'endDateStr'
+        ));
     }
 
     /**
@@ -375,66 +441,66 @@ class AdminController extends Controller
     /**
      * Helper: Get analytics stats with percentage change
      */
-    private function getAnalyticsStats($days)
+    private function getAnalyticsStats($startDate, $endDate)
     {
-        // $year parameter removed to strictly follow "Last X Days" logic from today
-        $now = now();
-        $periodStart = $now->copy()->subDays($days);
-        $prevPeriodStart = $periodStart->copy()->subDays($days);
+        $durationInDays = $startDate->diffInDays($endDate) + 1;
+        // Previous period ends just before current start
+        $prevPeriodEnd = $startDate->copy()->subSecond();
+        $prevPeriodStart = $startDate->copy()->subDays($durationInDays);
 
-        // Current period counts (Last X Days from NOW)
-        $currentVerifications = Certificate::where('updated_at', '>=', $periodStart)->count();
-        $currentCertificates = Certificate::where('status', 'active')
-            ->where('created_at', '>=', $periodStart)
-            ->count();
-        $currentLembaga = User::where('account_type', 'lembaga')
-            ->where('created_at', '>=', $periodStart)
-            ->count();
-        $currentUsers = User::where('profile_completed', true)
-            ->where('created_at', '>=', $periodStart)
+        // --- Current Period Counts ---
+
+        // 1. Total Verifikasi (Web/Upload) in Period (Action: verify_certificate)
+        $currentVerifikasi = \App\Models\ActivityLog::where('action', 'verify_certificate')
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->count();
 
-        // Previous period counts (The X Days before that)
-        $prevVerifications = Certificate::whereBetween('updated_at', [$prevPeriodStart, $periodStart])->count();
-        $prevCertificates = Certificate::where('status', 'active')
-            ->whereBetween('created_at', [$prevPeriodStart, $periodStart])
+        // 2. Verifikasi Hari Ini (Relative to Real-time Today aka "Live")
+        $todayVerifikasi = \App\Models\ActivityLog::where('action', 'verify_certificate')
+            ->whereDate('created_at', today())
             ->count();
-        $prevLembaga = User::where('account_type', 'lembaga')
-            ->whereBetween('created_at', [$prevPeriodStart, $periodStart])
-            ->count();
-        $prevUsers = User::where('profile_completed', true)
-            ->whereBetween('created_at', [$prevPeriodStart, $periodStart])
+        $yesterdayVerifikasi = \App\Models\ActivityLog::where('action', 'verify_certificate')
+            ->whereDate('created_at', today()->subDay())
             ->count();
 
-        // Total counts (All time, or we can keep it strictly period related? Usually top cards show totals or specific period stats. 
-        // Based on user request "persen nan itu sesuai filter yang dipilih", the BIG number should probably be the Total in Period? 
-        // Or Total All Time? Usually Dashboard cards show Total All Time, and small text shows change in period.
-        // BUT, if the filter says "Last 7 Days", showing Total All Time might be confusing if the user expects to see count for 7 days.
-        // However, the variable is named $totalVerifikasi. Let's stick to Total All Time for the Big Number, and Period Change for the percentage.
-        // Wait, the previous code filtered Total by Year. That was definitely wrong if the label is "Total". 
-        // Let's make the Big Value = Total All Time (Cumulative) to match standard dashboards, OR make it Period Value?
-        // User said: "benarkan persen nan itu sesuai filter yang dipilih". This implies the PERCENTAGE calculation was wrong (likely because of year filter or empty interaction).
-        // Let's set the Big Value to be the PERIOD value so it matches the filter "Last 7 Days". 
-        // If I select "Last 7 Days", seeing "8" (Total) when I only did 1 this week is fine, but if the label is just "Total Verifikasi", it usually implies cumulative.
-        // However, standard analytics (GA4) with a time filter shows data for THAT period.
-        // Let's set the 'value' to '$currentVerifications' to be fully responsive to the filter. 
+        // 3. Total Verifikasi Blockchain in Period
+        $currentVerifikasiBC = \App\Models\ActivityLog::where('action', 'blockchain_verification')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->count();
+
+        // 4. Verifikasi Blockchain Hari Ini (Live)
+        $todayVerifikasiBC = \App\Models\ActivityLog::where('action', 'blockchain_verification')
+            ->whereDate('created_at', today())
+            ->count();
+        $yesterdayVerifikasiBC = \App\Models\ActivityLog::where('action', 'blockchain_verification')
+            ->whereDate('created_at', today()->subDay())
+            ->count();
+
+        // --- Previous Period Counts (for % change of Period stats) ---
+        $prevVerifikasi = \App\Models\ActivityLog::where('action', 'verify_certificate')
+            ->whereBetween('created_at', [$prevPeriodStart, $prevPeriodEnd])
+            ->count();
+
+        $prevVerifikasiBC = \App\Models\ActivityLog::where('action', 'blockchain_verification')
+            ->whereBetween('created_at', [$prevPeriodStart, $prevPeriodEnd])
+            ->count();
 
         return [
             'total_verifikasi' => [
-                'value' => $currentVerifications, // Changed to show count in period
-                'change' => $this->calculatePercentChange($prevVerifications, $currentVerifications),
+                'value' => $currentVerifikasi,
+                'change' => $this->calculatePercentChange($prevVerifikasi, $currentVerifikasi),
             ],
-            'sertifikat_aktif' => [
-                'value' => $currentCertificates,
-                'change' => $this->calculatePercentChange($prevCertificates, $currentCertificates),
+            'verifikasi_hari_ini' => [
+                'value' => $todayVerifikasi,
+                'change' => $this->calculatePercentChange($yesterdayVerifikasi, $todayVerifikasi),
             ],
-            'lembaga_terdaftar' => [
-                'value' => $currentLembaga,
-                'change' => $this->calculatePercentChange($prevLembaga, $currentLembaga),
+            'total_verifikasi_blockchain' => [
+                'value' => $currentVerifikasiBC,
+                'change' => $this->calculatePercentChange($prevVerifikasiBC, $currentVerifikasiBC),
             ],
-            'pengguna_aktif' => [
-                'value' => $currentUsers,
-                'change' => $this->calculatePercentChange($prevUsers, $currentUsers),
+            'verifikasi_blockchain_hari_ini' => [
+                'value' => $todayVerifikasiBC,
+                'change' => $this->calculatePercentChange($yesterdayVerifikasiBC, $todayVerifikasiBC),
             ],
         ];
     }
@@ -448,38 +514,98 @@ class AdminController extends Controller
         return round((($new - $old) / $old) * 100, 1);
     }
 
-    private function getVerificationActivity($year = null)
+    /**
+     * Get Revenue Trend (Dynamic consolidation)
+     */
+    private function getRevenueTrend($startDate, $endDate)
     {
-        $year = $year ?? now()->year;
-        $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        $diffDays = $startDate->diffInDays($endDate);
+        $isDaily = $diffDays <= 60;
+        // Format for DB Grouping
+        $dbFormat = $isDaily ? '%Y-%m-%d' : '%Y-%m';
+        // Format for PHP key matching
+        $keyFormat = $isDaily ? 'Y-m-d' : 'Y-m';
+
+        $query = Order::where('status', 'paid')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->selectRaw("DATE_FORMAT(created_at, '{$dbFormat}') as date, sum(amount) as aggregate")
+            ->groupBy('date')
+            ->orderBy('date')
+            ->pluck('aggregate', 'date');
 
         $data = [];
-        for ($i = 1; $i <= 12; $i++) {
+        $period = \Carbon\CarbonPeriod::create($startDate, $isDaily ? '1 day' : '1 month', $endDate);
+
+        foreach ($period as $dt) {
+            $key = $dt->format($keyFormat);
             $data[] = [
-                'month' => $months[$i - 1],
-                'count' => Certificate::whereMonth('updated_at', $i)
-                    ->whereYear('updated_at', $year)
-                    ->count(),
+                'month' => $isDaily ? $dt->format('d M') : $dt->format('M Y'),
+                'count' => (float) ($query[$key] ?? 0),
             ];
         }
-        return $data;
+        return collect($data);
     }
 
     /**
-     * Get certificates trend for all 12 months of a year
+     * Get Certificates Trend (Dynamic consolidation)
      */
-    private function getCertificatesTrend($year = null)
+    private function getCertificatesTrend($startDate, $endDate)
     {
-        $year = $year ?? now()->year;
-        $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        $diffDays = $startDate->diffInDays($endDate);
+        $isDaily = $diffDays <= 60;
+        $dbFormat = $isDaily ? '%Y-%m-%d' : '%Y-%m';
+        $keyFormat = $isDaily ? 'Y-m-d' : 'Y-m';
+
+        $query = Certificate::whereBetween('created_at', [$startDate, $endDate])
+            ->selectRaw("DATE_FORMAT(created_at, '{$dbFormat}') as date, count(*) as aggregate")
+            ->groupBy('date')
+            ->orderBy('date')
+            ->pluck('aggregate', 'date');
 
         $data = [];
-        for ($i = 1; $i <= 12; $i++) {
+        $period = \Carbon\CarbonPeriod::create($startDate, $isDaily ? '1 day' : '1 month', $endDate);
+
+        foreach ($period as $dt) {
+            $key = $dt->format($keyFormat);
             $data[] = [
-                'month' => $months[$i - 1],
-                'count' => Certificate::whereMonth('created_at', $i)
-                    ->whereYear('created_at', $year)
-                    ->count(),
+                'month' => $isDaily ? $dt->format('d M') : $dt->format('M Y'),
+                'count' => (int) ($query[$key] ?? 0),
+            ];
+        }
+        return collect($data);
+    }
+
+    /**
+     * Get Verification Activity (Dynamic consolidation)
+     */
+    private function getVerificationActivity($startDate, $endDate)
+    {
+        $diffDays = $startDate->diffInDays($endDate);
+        $isDaily = $diffDays <= 60;
+        $dbFormat = $isDaily ? '%Y-%m-%d' : '%Y-%m';
+        $keyFormat = $isDaily ? 'Y-m-d' : 'Y-m';
+
+        $verifyQuery = \App\Models\ActivityLog::where('action', 'verify_certificate')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->selectRaw("DATE_FORMAT(created_at, '{$dbFormat}') as date, count(*) as aggregate")
+            ->groupBy('date')
+            ->pluck('aggregate', 'date');
+
+        $bcQuery = \App\Models\ActivityLog::where('action', 'blockchain_verification')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->selectRaw("DATE_FORMAT(created_at, '{$dbFormat}') as date, count(*) as aggregate")
+            ->groupBy('date')
+            ->pluck('aggregate', 'date');
+
+        $data = [];
+        $period = \Carbon\CarbonPeriod::create($startDate, $isDaily ? '1 day' : '1 month', $endDate);
+
+        foreach ($period as $dt) {
+            $key = $dt->format($keyFormat);
+            $data[] = [
+                'month' => $isDaily ? $dt->format('d M') : $dt->format('M Y'),
+                'standard' => (int) ($verifyQuery[$key] ?? 0),
+                'blockchain' => (int) ($bcQuery[$key] ?? 0),
             ];
         }
         return collect($data);
