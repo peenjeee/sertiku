@@ -222,6 +222,8 @@ class BlockchainController extends Controller
         // Get contract stats
         $contractStats = $this->blockchain->getContractStats();
         $walletInfo = $this->blockchain->getWalletInfo();
+        // Fallback to database count if API fails
+        $totalBlockchainTransactions = $walletInfo['transaction_count'] ?? Certificate::whereNotNull('blockchain_tx_hash')->count();
 
         return view('blockchain.verify', compact(
             'query',
@@ -230,6 +232,7 @@ class BlockchainController extends Controller
             'onChainData',
             'contractStats',
             'walletInfo',
+            'totalBlockchainTransactions',
             'error'
         ));
     }

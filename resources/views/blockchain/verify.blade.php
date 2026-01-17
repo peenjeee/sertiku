@@ -550,6 +550,16 @@
                             </p>
                         </div>
                     @endif
+
+                    {{-- Total Blockchain Transactions Card --}}
+                    @if(isset($totalBlockchainTransactions))
+                        <div class="bg-white/5 rounded-xl p-4 text-center">
+                            <p class="text-white/50 text-xs mb-1">Total Transaksi Blockchain</p>
+                            <p class="text-blue-400 font-bold text-2xl">
+                                {{ number_format($totalBlockchainTransactions) }}
+                            </p>
+                        </div>
+                    @endif
                 </div>
             </div>
         @endif

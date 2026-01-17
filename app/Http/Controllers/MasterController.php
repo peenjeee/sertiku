@@ -26,6 +26,12 @@ class MasterController extends Controller
             'total_revenue' => Order::where('status', 'paid')->sum('amount') ?? 0,
         ];
 
+        // Get total blockchain transactions from wallet
+        $blockchainService = new \App\Services\BlockchainService();
+        $walletInfo = $blockchainService->getWalletInfo();
+        // Fallback to database count if API fails
+        $stats['total_blockchain_transactions'] = $walletInfo['transaction_count'] ?? Certificate::whereNotNull('blockchain_tx_hash')->count();
+
         // Recent activities
         $recentUsers = User::latest()->take(5)->get();
         $recentOrders = Order::with('user', 'package')->latest()->take(5)->get();

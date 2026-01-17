@@ -62,8 +62,8 @@
                 </p>
                 @if($walletInfo['balance'])
                     <!-- <p class="text-white/40 text-xs mt-1">
-                                ≈ Rp {{ number_format($walletInfo['balance']['matic'] * 10000, 0, ',', '.') }}
-                            </p> -->
+                                        ≈ Rp {{ number_format($walletInfo['balance']['matic'] * 10000, 0, ',', '.') }}
+                                    </p> -->
                 @endif
             </div>
         </div>

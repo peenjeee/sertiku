@@ -83,7 +83,7 @@
                 @forelse($admins as $admin)
                     <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5">
                         <div class="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden
-                                                    {{ $admin->is_master ? 'bg-[#A855F7]' : 'bg-[#3B82F6]' }}">
+                                                        {{ $admin->is_master ? 'bg-[#A855F7]' : 'bg-[#3B82F6]' }}">
                             @if($admin->avatar && (str_starts_with($admin->avatar, '/storage/') || str_starts_with($admin->avatar, 'http')))
                                 <img src="{{ $admin->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                             @else
@@ -136,10 +136,10 @@
                             $isLembaga = in_array($accountType, ['lembaga', 'institution']);
                         @endphp
                         <span class="px-2 py-1 rounded-full text-xs
-                                        @if($accountType === 'admin') bg-blue-500/20 text-blue-400
-                                        @elseif($isLembaga) bg-green-500/20 text-green-400
-                                        @else bg-gray-500/20 text-gray-400 @endif
-                                    ">{{ $displayType }}</span>
+                                            @if($accountType === 'admin') bg-blue-500/20 text-blue-400
+                                            @elseif($isLembaga) bg-green-500/20 text-green-400
+                                            @else bg-gray-500/20 text-gray-400 @endif
+                                        ">{{ $displayType }}</span>
                     </div>
                 @empty
                     <p class="text-white/50 text-sm text-center py-4">Belum ada user</p>
@@ -163,7 +163,7 @@
             <p class="text-white/50 text-sm">Sertifikat</p>
         </div>
         <div class="glass-card rounded-xl p-4 text-center animate-fade-in-up">
-            <p class="text-2xl font-bold text-yellow-400">{{ $stats['total_orders'] }}</p>
+            <p class="text-2xl font-bold text-yellow-400">{{ $stats['total_blockchain_transactions'] }}</p>
             <p class="text-white/50 text-sm">Transaksi</p>
         </div>
     </div>
