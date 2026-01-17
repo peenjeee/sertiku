@@ -5,8 +5,8 @@
             <h1 class="text-white text-2xl lg:text-3xl font-bold">Analytics</h1>
             <p class="text-white/60 text-sm mt-1">Monitor pertumbuhan dan aktivitas platform</p>
         </div>
-        <div class="flex items-center gap-3">
-            <form method="GET" class="flex items-center gap-3">
+        <div class="flex flex-wrap items-center gap-3">
+            <form method="GET" class="flex flex-wrap items-center gap-3">
                 <div class="relative">
                     <input type="date" name="start_date" value="{{ $startDateStr }}" onchange="this.form.submit()"
                         class="bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 [&::-webkit-calendar-picker-indicator]:invert">

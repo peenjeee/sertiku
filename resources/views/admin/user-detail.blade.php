@@ -32,7 +32,8 @@
         <!-- User Info -->
         <div class="glass-card rounded-2xl p-6 animate-fade-in-up">
             <div class="flex items-center gap-4 mb-6">
-                <div class="w-16 h-16 rounded-full bg-[#3B82F6] flex items-center justify-center overflow-hidden">
+                <div
+                    class="w-16 h-16 rounded-full bg-[#3B82F6] flex items-center justify-center overflow-hidden flex-shrink-0">
                     @if($user->avatar && (str_starts_with($user->avatar, '/storage/') || str_starts_with($user->avatar, 'http')))
                         <img src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
                     @else
@@ -40,9 +41,9 @@
                             alt="Avatar" class="w-full h-full object-cover">
                     @endif
                 </div>
-                <div>
+                <div class="flex-1 min-w-0">
                     <h2 class="text-gray-800 font-bold text-lg">{{ $user->name }}</h2>
-                    <p class="text-gray-500 text-sm" title="{{ $user->email }}">
+                    <p class="text-gray-500 text-sm break-all" title="{{ $user->email }}">
                         @if(Str::startsWith($user->email, '0x') && strlen($user->email) > 20)
                             {{ substr($user->email, 0, 6) }}...{{ substr($user->email, -4) }}
                         @else

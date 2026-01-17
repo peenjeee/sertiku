@@ -89,11 +89,11 @@
                 <form action="{{ route('admin.support.reply', $ticket) }}" method="POST"
                     class="p-4 border-t border-gray-100">
                     @csrf
-                    <div class="flex gap-3">
+                    <div class="flex gap-3 items-center">
                         <input type="text" name="message" placeholder="Ketik balasan..." required
-                            class="flex-1 px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition">
+                            class="flex-1 min-w-0 px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition">
                         <button type="submit"
-                            class="px-6 py-3 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition flex-shrink-0">
+                            class="px-4 sm:px-6 py-3 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition flex-shrink-0 min-w-[48px] flex items-center justify-center">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

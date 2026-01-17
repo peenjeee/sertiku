@@ -91,13 +91,13 @@
                         </div>
                     </div>
                     <!-- <a href="{{ route('checkout', $activePackage->slug) }}"
-                                                                    class="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 lg:py-3 bg-yellow-500 text-white text-sm font-bold rounded-lg hover:bg-yellow-600 transition">
-                                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                                                    </svg>
-                                                                    Perpanjang Sekarang
-                                                                </a> -->
+                                                                        class="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 lg:py-3 bg-yellow-500 text-white text-sm font-bold rounded-lg hover:bg-yellow-600 transition">
+                                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                                                        </svg>
+                                                                        Perpanjang Sekarang
+                                                                    </a> -->
                 </div>
             </div>
         @endif
@@ -294,43 +294,43 @@
             @if($canAccessApi)
                 <!-- API Tokens - Only for Professional/Enterprise -->
                 <!-- <a href="{{ route('lembaga.api-tokens.index') }}"
-                                                                class="bg-cyan-50 border border-cyan-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-4">
-                                                                <div class="flex items-center gap-3 lg:gap-4">
-                                                                    <div
-                                                                        class="bg-cyan-500 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
-                                                                        <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
-                                                                            viewBox="0 0 24 24">
-                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-                                                                        </svg>
+                                                                    class="bg-cyan-50 border border-cyan-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-4">
+                                                                    <div class="flex items-center gap-3 lg:gap-4">
+                                                                        <div
+                                                                            class="bg-cyan-500 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
+                                                                            <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
+                                                                                viewBox="0 0 24 24">
+                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                                    d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                                                                            </svg>
+                                                                        </div>
+                                                                        <div>
+                                                                            <h3 class="text-[#0E7490] font-bold text-sm lg:text-lg">API Tokens</h3>
+                                                                            <p class="text-[#0891B2] text-xs lg:text-sm">Integrasi API</p>
+                                                                        </div>
                                                                     </div>
-                                                                    <div>
-                                                                        <h3 class="text-[#0E7490] font-bold text-sm lg:text-lg">API Tokens</h3>
-                                                                        <p class="text-[#0891B2] text-xs lg:text-sm">Integrasi API</p>
-                                                                    </div>
-                                                                </div>
-                                                            </a> -->
+                                                                </a> -->
             @endif
 
             @if($canAccessApi)
                 <!-- AI Template Generator -->
                 <!-- <a href="{{ route('lembaga.template.ai') }}"
-                                                                            class="bg-purple-50 border border-purple-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-5">
-                                                                            <div class="flex items-center gap-3 lg:gap-4">
-                                                                                <div
-                                                                                    class="bg-purple-500 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
-                                                                                    <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
-                                                                                        viewBox="0 0 24 24">
-                                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                                                                                    </svg>
+                                                                                class="bg-purple-50 border border-purple-200 rounded-xl lg:rounded-2xl p-4 lg:p-6 hover:scale-[1.02] transition cursor-pointer hover-lift animate-fade-in-up stagger-5">
+                                                                                <div class="flex items-center gap-3 lg:gap-4">
+                                                                                    <div
+                                                                                        class="bg-purple-500 w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0">
+                                                                                        <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor"
+                                                                                            viewBox="0 0 24 24">
+                                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                                                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                                                                        </svg>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <h3 class="text-[#7C3AED] font-bold text-sm lg:text-lg">AI Template</h3>
+                                                                                        <p class="text-[#9333EA] text-xs lg:text-sm">Generate dengan AI</p>
+                                                                                    </div>
                                                                                 </div>
-                                                                                <div>
-                                                                                    <h3 class="text-[#7C3AED] font-bold text-sm lg:text-lg">AI Template</h3>
-                                                                                    <p class="text-[#9333EA] text-xs lg:text-sm">Generate dengan AI</p>
-                                                                                </div>
-                                                                            </div>
-                                                                        </a> -->
+                                                                            </a> -->
 
                 <!-- Import Data (Bulk) -->
                 @if($user->canIssueCertificate())
@@ -791,7 +791,7 @@
             gradient.addColorStop(1, 'rgba(59, 130, 246, 0.0)'); // Transparent end
 
             new Chart(ctx, {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: monthNames,
                     datasets: [{
