@@ -10,8 +10,9 @@ class VerifyController extends Controller
     {
         $totalCertificates = \App\Models\Certificate::count();
         $totalLembaga = \App\Models\User::whereIn('account_type', ['lembaga', 'institution'])->count();
+        $totalBlockchainTransactions = \App\Models\Certificate::whereNotNull('blockchain_tx_hash')->count();
 
-        return view('verifikasi.index', compact('totalCertificates', 'totalLembaga'));
+        return view('verifikasi.index', compact('totalCertificates', 'totalLembaga', 'totalBlockchainTransactions'));
     }
 
     public function check(Request $request)

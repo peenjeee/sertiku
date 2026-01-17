@@ -518,11 +518,30 @@
                     </svg>
                     Informasi Smart Contract
                 </h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {{-- Row 1: Smart Contract & Network --}}
                     <div class="bg-white/5 rounded-xl p-4 text-center">
-                        <p class="text-white/50 text-xs mb-1">Jaringan</p>
+                        <p class="text-white/50 text-xs mb-1">Contract Address</p>
+                        <a href="{{ $walletInfo['explorer_url'] ?? 'https://amoy.polygonscan.com' }}/address/{{ config('blockchain.contract_address') }}"
+                            target="_blank" class="text-blue-400 text-xs font-mono hover:underline">
+                            {{ Str::limit(config('blockchain.contract_address'), 20) }}...{{ substr(config('blockchain.contract_address'), -4) }}
+                        </a>
+                    </div>
+
+                    <div class="bg-white/5 rounded-xl p-4 text-center">
+                        <p class="text-white/50 text-xs mb-1">Jaringan (On-Chain)</p>
                         <p class="text-white font-bold">{{ $walletInfo['network'] ?? 'Polygon Amoy' }}</p>
                     </div>
+
+                    {{-- Row 2: Wallet & Total Blockchain --}}
+                    <div class="bg-white/5 rounded-xl p-4 text-center">
+                         <p class="text-white/50 text-xs mb-1">Wallet Address</p>
+                         <a href="{{ $walletInfo['explorer_url'] ?? 'https://amoy.polygonscan.com' }}/address/{{ $walletInfo['wallet_address'] ?? '' }}"
+                            target="_blank" class="text-blue-400 text-xs font-mono hover:underline">
+                            {{ Str::limit($walletInfo['wallet_address'] ?? 'N/A', 15) }}...{{ substr($walletInfo['wallet_address'] ?? '', -4) }}
+                        </a>
+                    </div>
+
                     @if(isset($contractStats['totalCertificates']))
                         <div class="bg-white/5 rounded-xl p-4 text-center">
                             <p class="text-white/50 text-xs mb-1">Total Sertifikat On-Chain</p>
@@ -531,13 +550,6 @@
                             </p>
                         </div>
                     @endif
-                    <div class="bg-white/5 rounded-xl p-4 text-center">
-                        <p class="text-white/50 text-xs mb-1">Contract Address</p>
-                        <a href="{{ $walletInfo['explorer_url'] ?? 'https://amoy.polygonscan.com' }}/address/{{ config('blockchain.contract_address') }}"
-                            target="_blank" class="text-blue-400 text-xs font-mono hover:underline">
-                            {{ Str::limit(config('blockchain.contract_address'), 20) }}
-                        </a>
-                    </div>
                 </div>
             </div>
         @endif

@@ -30,6 +30,9 @@ class LandingController extends Controller
         $totalRatings = Testimonial::count();
         $averageRating = Testimonial::avg('rating') ?? 0;
 
-        return view('landing', compact('totalCertificates', 'totalLembaga', 'lembagas', 'testimonials', 'totalRatings', 'averageRating'));
+        // Total Blockchain Transactions
+        $totalBlockchainTransactions = Certificate::whereNotNull('blockchain_tx_hash')->count();
+
+        return view('landing', compact('totalCertificates', 'totalLembaga', 'lembagas', 'testimonials', 'totalRatings', 'averageRating', 'totalBlockchainTransactions'));
     }
 }
