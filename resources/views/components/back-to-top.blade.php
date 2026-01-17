@@ -1,5 +1,8 @@
-<div x-data="{ showBackToTop: false }" @scroll.window="showBackToTop = (window.pageYOffset > 300)"
-    class="fixed bottom-6 left-8 z-[999] pointer-events-none">
+@props(['hasChat' => false])
+
+<div x-data="{ showBackToTop: false }"
+    @scroll.window="showBackToTop = (window.pageYOffset > 300)"
+    class="fixed {{ $hasChat ? 'bottom-24' : 'bottom-6' }} right-6 z-[90] pointer-events-none transition-all duration-300">
     <button x-show="showBackToTop" @click="window.scrollTo({top: 0, behavior: 'smooth'})"
         x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0 translate-y-10 scale-90"

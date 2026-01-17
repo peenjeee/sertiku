@@ -484,7 +484,7 @@
             return false;
         }
     </script>
-    <x-back-to-top />
+    <x-back-to-top :hasChat="true" />
 </body>
 
 </html>
