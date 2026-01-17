@@ -43,7 +43,7 @@
             <div class="space-y-4">
                 <div>
                     <p class="text-gray-500 text-xs font-medium mb-1">Tipe Akun</p>
-                    @if($user->account_type === 'lembaga')
+                    @if($user->account_type === 'institution' || $user->account_type === 'lembaga')
                         <span class="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full">Lembaga</span>
                     @else
                         <span class="px-3 py-1 bg-blue-100 text-blue-700 text-sm font-medium rounded-full">Pengguna</span>

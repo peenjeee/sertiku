@@ -62,7 +62,7 @@
                     @php
                         $isUserMessage = !$message->is_from_admin;
                         $senderName = $message->sender->name ?? ($message->is_from_admin ? 'Admin' : 'User');
-                        $senderEmail = $message->sender->email ?? 'admin@sertiku.com';
+                        $senderEmail = $message->sender->email ?? 'admin@sertiku.web.id';
                         $senderAvatar = $message->sender->avatar ?? null;
                         // Admin: Green, User: Blue
                         $avatarBg = $message->is_from_admin ? 'bg-[#10B981]' : 'bg-[#3B82F6]';
@@ -72,7 +72,7 @@
                     <div class="flex items-start gap-3 {{ $isUserMessage ? 'flex-row-reverse' : '' }}">
                         {{-- Avatar --}}
                         <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0
-                                                {{ $avatarBg }} overflow-hidden">
+                                                    {{ $avatarBg }} overflow-hidden">
                             @if($senderAvatar && (str_starts_with($senderAvatar, '/storage/') || str_starts_with($senderAvatar, 'http')))
                                 <img src="{{ $senderAvatar }}" alt="Avatar" class="w-full h-full object-cover">
                             @else

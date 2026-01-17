@@ -79,8 +79,8 @@
                 <section>
                     <h2 class="text-xl font-semibold text-white mb-4">Kontak</h2>
                     <p class="leading-relaxed">Jika Anda memiliki pertanyaan tentang penggunaan cookie, hubungi <a
-                            href="mailto:privacy@sertiku.com"
-                            class="text-[#3B82F6] hover:underline">privacy@sertiku.com</a>.</p>
+                            href="mailto:privacy@sertiku.web.id"
+                            class="text-[#3B82F6] hover:underline">privacy@sertiku.web.id</a>.</p>
                 </section>
             </div>
 

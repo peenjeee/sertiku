@@ -76,8 +76,8 @@
                 <section>
                     <h2 class="text-xl font-semibold text-white mb-4">5. Hak Anda</h2>
                     <p class="leading-relaxed">Anda memiliki hak untuk mengakses, memperbarui, atau menghapus data
-                        pribadi Anda. Hubungi kami di <a href="mailto:privacy@sertiku.com"
-                            class="text-[#3B82F6] hover:underline">privacy@sertiku.com</a> untuk permintaan terkait
+                        pribadi Anda. Hubungi kami di <a href="mailto:privacy@sertiku.web.id"
+                            class="text-[#3B82F6] hover:underline">privacy@sertiku.web.id</a> untuk permintaan terkait
                         privasi.</p>
                 </section>
 

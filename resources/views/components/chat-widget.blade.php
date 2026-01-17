@@ -403,7 +403,6 @@
                     </svg>
                 </div>
                 <div class="bg-green-500/20 border border-green-500/30 rounded-xl rounded-tl-none px-3 py-2 max-w-[85%]">
-                    <p class="text-green-300 text-xs font-medium mb-1">${escapeHtml(adminName)}</p>
                     <p class="text-white text-sm">${escapeHtml(text)}</p>
                     <p class="text-white/40 text-xs mt-1">${time}</p>
                 </div>

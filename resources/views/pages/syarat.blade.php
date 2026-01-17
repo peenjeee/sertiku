@@ -76,8 +76,8 @@
                 <section>
                     <h2 class="text-xl font-semibold text-white mb-4">8. Kontak</h2>
                     <p class="leading-relaxed">Untuk pertanyaan tentang syarat dan ketentuan, hubungi <a
-                            href="mailto:legal@sertiku.com"
-                            class="text-[#3B82F6] hover:underline">legal@sertiku.com</a>.</p>
+                            href="mailto:legal@sertiku.web.id"
+                            class="text-[#3B82F6] hover:underline">legal@sertiku.web.id</a>.</p>
                 </section>
             </div>
 

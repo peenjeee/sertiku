@@ -139,14 +139,14 @@
                 <!-- Actions -->
                 @if($certificate->status === 'active')
                     <div class="glass-card rounded-2xl p-6">
-                        <h3 class="text-gray-900 font-bold mb-4">Tidakan</h3>
+                        <h3 class="text-gray-900 font-bold mb-4">Tindakan</h3>
                         <form id="form-revoke" action="{{ route('lembaga.sertifikat.revoke', $certificate->id) }}"
                             method="POST">
                             @csrf
                             @method('PUT')
                             <div class="mb-3">
                                 <label class="block text-gray-600 text-xs mb-1">Alasan Pencabutan</label>
-                                <textarea name="reason" rows="2"
+                                <textarea name="reason" rows="2" required
                                     class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-gray-900 text-sm focus:outline-none focus:border-red-500"
                                     placeholder="Contoh: Kesalahan penulisan nama"></textarea>
                             </div>
@@ -158,7 +158,7 @@
                     </div>
                 @elseif($certificate->status === 'revoked')
                     <div class="glass-card rounded-2xl p-6">
-                        <h3 class="text-gray-900 font-bold mb-4">Tidakan</h3>
+                        <h3 class="text-gray-900 font-bold mb-4">Tindakan</h3>
                         <div class="mb-4">
                             <span
                                 class="text-xs font-semibold text-red-500 bg-red-50 px-2 py-1 rounded border border-red-100">
@@ -310,10 +310,11 @@
     </div>
     <script>
         function confirmRevoke() {
-            const reasonInput = document.querySelector('#form-revoke textarea[name="reason"]');
-            const reason = reasonInput.value.trim();
+            const form = document.getElementById('form-revoke');
+            const reasonInput = form.querySelector('textarea[name="reason"]');
+            const reason = reasonInput ? reasonInput.value.trim() : '';
 
-            if (!reason) {
+            if (reason === '') {
                 Swal.fire({
                     icon: 'error',
                     title: 'Wajib Diisi',
@@ -338,7 +339,7 @@
                 color: '#fff'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    document.getElementById('form-revoke').submit();
+                    form.submit();
                 }
             })
         }
